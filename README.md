@@ -42,10 +42,8 @@ _Prerequisites:_
     | targetrepouser  | Username for authentification with the Repo (e.g. `ehrbase-user`) |
     | targetrepopw    | Password for authentification with the Repo (e.g. `SuperSecretPassword`) |
     | targetflatapiadress | The endpoint where the FLAT-API resides (e.g. `/rest/ecis/v1/`) |
-    | targetopenehrapiadress| The endpoint where the openEHR-API resides (Standard: `/rest/openehr/v1/`)|
+    | targetopenehrapiadress| The endpoint where the openEHR-API resides (e.g. `/rest/openehr/v1/`)|
 
 ## Work in Progress:
-- Fix the MappingDetection of the CompositionBuilder
-- Dont query for targetopenehrapiadress since its in the standard..
 - Dealing with multiple Index-Entrys in FLAT-Paths (for the start just support up to 3)
 - GUI with good Usability

@@ -9,9 +9,6 @@
 # Developed and tested with Python 3.8.3
 #
 # Jendrik Richter (UMG)
-#
-# TODO List:
-# 1. Auslesen der Pfade aus dem WebTemplate statt aus der Example Comp (in HandleOPT)
 ##############################################################################
 import configparser
 import os.path

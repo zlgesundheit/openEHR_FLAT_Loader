@@ -11,7 +11,6 @@ import numpy as np
 import re
 import json
 import os.path
-import sys
 
 indent = "    "
 # Workaround because Pandas uses some panda data types that are NOT serializable..
@@ -30,11 +29,16 @@ def buildComp(workdir, templateName, inputCSV):
   xlsxPath = os.path.join(workdir, 'Manual Tasks', templateName + '_MAPPING.xlsx')
   mapTabDF = pd.read_excel(xlsxPath, "Mapping CSV2openEHR", header=0, usecols=[0,1,2], converters={'Index':str})
 
+  empty = "true"
+  # Checken ob das Mapping leer ist, also nur "nan"-Eintraege vorhanden sind
+  for i in mapTabDF['FLAT-Path']:
+    if str(i) != "nan":
+      empty =  "false"
+
   try:
-    if (str(mapTabDF['FLAT-Path'][0]) == str("nan")):
+    if (empty == "true"):
       raise Exception(indent + "The Mapping is empty.")
     else:
-      print(indent + "Test")
       dictArray = []
       dataDFRunner = 0
       # Fuer jeden Eintrag / Row in der Quelldaten-CSV
