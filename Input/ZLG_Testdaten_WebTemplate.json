@@ -1,0 +1,393 @@
+{
+    "templateId": "ZLG_Testdaten",
+    "version": "2.3",
+    "defaultLanguage": "de",
+    "languages": [
+        "de"
+    ],
+    "tree": {
+        "id": "bericht",
+        "name": "Bericht",
+        "localizedName": "Bericht",
+        "rmType": "COMPOSITION",
+        "nodeId": "openEHR-EHR-COMPOSITION.report.v1",
+        "min": 1,
+        "max": 1,
+        "localizedNames": {
+            "de": "Bericht"
+        },
+        "localizedDescriptions": {
+            "de": "Ein Dokument zur \u00dcbermittlung von Informationen an andere, meist als Antwort auf eine Anfrage."
+        },
+        "aqlPath": "",
+        "children": [
+            {
+                "id": "category",
+                "name": "category",
+                "localizedName": "category",
+                "rmType": "DV_CODED_TEXT",
+                "min": 1,
+                "max": 1,
+                "aqlPath": "/category",
+                "inputs": [
+                    {
+                        "suffix": "code",
+                        "type": "CODED_TEXT",
+                        "list": [
+                            {
+                                "value": "433",
+                                "label": "event",
+                                "localizedLabels": {
+                                    "de": "event"
+                                }
+                            }
+                        ],
+                        "terminology": "openehr"
+                    }
+                ],
+                "inContext": true
+            },
+            {
+                "id": "context",
+                "name": "context",
+                "localizedName": "context",
+                "rmType": "EVENT_CONTEXT",
+                "min": 1,
+                "max": 1,
+                "aqlPath": "/context",
+                "children": [
+                    {
+                        "id": "bericht_id",
+                        "name": "Bericht ID",
+                        "localizedName": "Bericht ID",
+                        "rmType": "DV_TEXT",
+                        "min": 0,
+                        "max": 1,
+                        "localizedNames": {
+                            "de": "Bericht ID"
+                        },
+                        "localizedDescriptions": {
+                            "de": "Identifizierungsmerkmal des Berichts."
+                        },
+                        "aqlPath": "/context/other_context[at0001]/items[at0002]/value",
+                        "inputs": [
+                            {
+                                "type": "TEXT"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "status",
+                        "name": "Status",
+                        "localizedName": "Status",
+                        "rmType": "DV_TEXT",
+                        "min": 0,
+                        "max": 1,
+                        "localizedNames": {
+                            "de": "Status"
+                        },
+                        "localizedDescriptions": {
+                            "de": "Der Status des gesamten Berichts. Hinweis: Dies ist nicht der Status einer Berichtskomponente."
+                        },
+                        "aqlPath": "/context/other_context[at0001]/items[at0005]/value",
+                        "inputs": [
+                            {
+                                "type": "TEXT"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "umg_geschlecht",
+                        "name": "UMG_Geschlecht",
+                        "localizedName": "UMG_Geschlecht",
+                        "rmType": "CLUSTER",
+                        "nodeId": "openEHR-EHR-CLUSTER.umg_geschlecht.v0",
+                        "min": 0,
+                        "max": -1,
+                        "localizedNames": {
+                            "de": "UMG_Geschlecht"
+                        },
+                        "localizedDescriptions": {
+                            "de": "Detaillierte Beschreibung des Geschlechts einer Person."
+                        },
+                        "aqlPath": "/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.umg_geschlecht.v0]",
+                        "children": [
+                            {
+                                "id": "administratives_geschlecht",
+                                "name": "Administratives Geschlecht",
+                                "localizedName": "Administratives Geschlecht",
+                                "rmType": "DV_CODED_TEXT",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Administratives Geschlecht"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Das Geschlecht einer Person, das f\u00fcr administrative Zwecke verwendet wird."
+                                },
+                                "aqlPath": "/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.umg_geschlecht.v0]/items[at0022]/value",
+                                "inputs": [
+                                    {
+                                        "suffix": "code",
+                                        "type": "CODED_TEXT",
+                                        "list": [
+                                            {
+                                                "value": "at0028",
+                                                "label": "Weiblich",
+                                                "localizedLabels": {
+                                                    "de": "Weiblich"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Weiblich"
+                                                }
+                                            },
+                                            {
+                                                "value": "at0029",
+                                                "label": "M\u00e4nnlich",
+                                                "localizedLabels": {
+                                                    "de": "M\u00e4nnlich"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "M\u00e4nnlich"
+                                                }
+                                            },
+                                            {
+                                                "value": "at0030",
+                                                "label": "Undifferenziert",
+                                                "localizedLabels": {
+                                                    "de": "Undifferenziert"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Undifferenziert"
+                                                }
+                                            }
+                                        ],
+                                        "terminology": "local"
+                                    }
+                                ],
+                                "annotations": {
+                                    "comment": "Dieses Element beschreibt das, was die meisten Systeme heutzutage als \"Geschlecht\" (vgl. engl.: \"Sex\" oder \"Gender\") bezeichnen. Zum Beispiel \"M\u00e4nnlich\", \"Weiblich\", \"Sonstiges\". In der Regel wird diese Beschreibung f\u00fcr praktische Zwecke, wie z.B. dem Melden oder Zuweisen eines Bettes in einer Krankenstation, verwendet. Dieser Archetyp entspricht dem HL7 FHIR Element \"Person.gender\"'. Die Kodierung mit einer Terminologie wird, wenn m\u00f6glich, empfohlen."
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "id": "start_time",
+                        "name": "start_time",
+                        "rmType": "DV_DATE_TIME",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/context/start_time",
+                        "inputs": [
+                            {
+                                "type": "DATETIME"
+                            }
+                        ],
+                        "inContext": true
+                    },
+                    {
+                        "id": "setting",
+                        "name": "setting",
+                        "rmType": "DV_CODED_TEXT",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/context/setting",
+                        "inputs": [
+                            {
+                                "suffix": "code",
+                                "type": "TEXT"
+                            },
+                            {
+                                "suffix": "value",
+                                "type": "TEXT"
+                            }
+                        ],
+                        "inContext": true
+                    }
+                ]
+            },
+            {
+                "id": "altersangaben",
+                "name": "Altersangaben",
+                "localizedName": "Altersangaben",
+                "rmType": "OBSERVATION",
+                "nodeId": "openEHR-EHR-OBSERVATION.altersangaben.v0",
+                "min": 0,
+                "max": -1,
+                "localizedNames": {
+                    "de": "Altersangaben"
+                },
+                "localizedDescriptions": {
+                    "de": "unknown"
+                },
+                "aqlPath": "/content[openEHR-EHR-OBSERVATION.altersangaben.v0]",
+                "children": [
+                    {
+                        "id": "alter_jahresanteil",
+                        "name": "Alter Jahresanteil",
+                        "localizedName": "Alter Jahresanteil",
+                        "rmType": "DV_COUNT",
+                        "min": 0,
+                        "max": 180,
+                        "localizedNames": {
+                            "de": "Alter Jahresanteil"
+                        },
+                        "localizedDescriptions": {
+                            "de": "Der Jahresanteil des Alters des Patienten."
+                        },
+                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.altersangaben.v0]/data[at0001]/events[at0002]/data[at0003]/items[at0004]/value",
+                        "inputs": [
+                            {
+                                "type": "INTEGER"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "alter_tagesanteil",
+                        "name": "Alter Tagesanteil",
+                        "localizedName": "Alter Tagesanteil",
+                        "rmType": "DV_COUNT",
+                        "min": 0,
+                        "max": 365,
+                        "localizedNames": {
+                            "de": "Alter Tagesanteil"
+                        },
+                        "localizedDescriptions": {
+                            "de": "Der Tagesanteil des Alters des Patienten. "
+                        },
+                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.altersangaben.v0]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/value",
+                        "inputs": [
+                            {
+                                "type": "INTEGER"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "berechnungsdatum",
+                        "name": "Berechnungsdatum",
+                        "localizedName": "Berechnungsdatum",
+                        "rmType": "DV_DATE_TIME",
+                        "min": 0,
+                        "max": 1,
+                        "localizedNames": {
+                            "de": "Berechnungsdatum"
+                        },
+                        "localizedDescriptions": {
+                            "de": "Datum, von dem ausgehend der Altersanteil in Tagen berechnet wird. "
+                        },
+                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.altersangaben.v0]/data[at0001]/events[at0002]/data[at0003]/items[at0006]/value",
+                        "inputs": [
+                            {
+                                "type": "DATETIME"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "time",
+                        "name": "time",
+                        "rmType": "DV_DATE_TIME",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.altersangaben.v0]/data[at0001]/events[at0002]/time",
+                        "inputs": [
+                            {
+                                "type": "DATETIME"
+                            }
+                        ],
+                        "inContext": true
+                    },
+                    {
+                        "id": "subject",
+                        "name": "subject",
+                        "rmType": "PARTY_PROXY",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.altersangaben.v0]/subject",
+                        "inputs": [
+                            {
+                                "suffix": "id",
+                                "type": "TEXT"
+                            },
+                            {
+                                "suffix": "id_scheme",
+                                "type": "TEXT"
+                            },
+                            {
+                                "suffix": "id_namespace",
+                                "type": "TEXT"
+                            },
+                            {
+                                "suffix": "name",
+                                "type": "TEXT"
+                            }
+                        ],
+                        "inContext": true
+                    },
+                    {
+                        "id": "language",
+                        "name": "language",
+                        "rmType": "CODE_PHRASE",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.altersangaben.v0]/language",
+                        "inContext": true
+                    },
+                    {
+                        "id": "encoding",
+                        "name": "encoding",
+                        "rmType": "CODE_PHRASE",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.altersangaben.v0]/encoding",
+                        "inContext": true
+                    }
+                ]
+            },
+            {
+                "id": "composer",
+                "name": "composer",
+                "rmType": "PARTY_PROXY",
+                "min": 1,
+                "max": 1,
+                "aqlPath": "/composer",
+                "inputs": [
+                    {
+                        "suffix": "id",
+                        "type": "TEXT"
+                    },
+                    {
+                        "suffix": "id_scheme",
+                        "type": "TEXT"
+                    },
+                    {
+                        "suffix": "id_namespace",
+                        "type": "TEXT"
+                    },
+                    {
+                        "suffix": "name",
+                        "type": "TEXT"
+                    }
+                ],
+                "inContext": true
+            },
+            {
+                "id": "language",
+                "name": "language",
+                "rmType": "CODE_PHRASE",
+                "min": 1,
+                "max": 1,
+                "aqlPath": "/language",
+                "inContext": true
+            },
+            {
+                "id": "territory",
+                "name": "territory",
+                "rmType": "CODE_PHRASE",
+                "min": 1,
+                "max": 1,
+                "aqlPath": "/territory",
+                "inContext": true
+            }
+        ]
+    }
+}
