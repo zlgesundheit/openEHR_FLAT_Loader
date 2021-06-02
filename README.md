@@ -15,27 +15,34 @@ _Prerequisites:_
 - An openEHR-Repo with the endpoints to supply a WebTemplate and to store Resources in FLAT-Format
 
 ## Usage
-- Place your .OPT-File in the Input-Folder
-- Run Tool via Command Line with `python cmd_run_Main.py`
+1. Place your .OPT-File in the Input-Folder
+2. Run Tool via Command Line with `python cmd_run_Main.py`
     - If the config-file is not presented you will be asked to provide infos
     - It is of course also possible to adjust them directly in the config-file
-    - The `.config.ini` holds the following information:
+    - You will be asked which step of the process you want to perform
+        - Step 1: Upload OPT and generate Mapping-(Excel-)File
+        - Step 2: Build Compositions based on the Mapping
+3. To perform Step 2: Building Compositions you have to supply mapping information in the Mapping-Table
+4. After performing Step 2 you will find the FLAT-Composition in the Output-Folder 
 
-        **Environment Infos:**
-        | config-variable | Description |
-        | --------------- | ------ |
-        | workdir         | Working Directory (e.g. `C:\Users\richter122\git-projects\openehr_flat_loader`) |
-        | templatename    | Name of the Template (e.g. `UMG_Stammdaten`) |
-        | inputcsv        | Name of the csv-file that holds the data (`source_data`) |
-        
-        **Repository Infos:**
-        | config-variable | Description |
-        | --------------- | ------ |
-        | targetrepoadress| Baseadress of the Target Repo (e.g. `http://141.5.100.199/ehrbase`) |
-        | targetrepouser  | Username for authentification with the Repo (e.g. `ehrbase-user`) |
-        | targetrepopw    | Password for authentification with the Repo (e.g. `SuperSecretPassword`) |
-        | targetflatapiadress | The endpoint where the FLAT-API resides (e.g. `/rest/ecis/v1/`) |
-        | targetopenehrapiadress| The endpoint where the openEHR-API resides (Standard: `/rest/openehr/v1/`)|
+## Config-File
+- The `.config.ini` holds the following information:
+
+    **Environment Infos:**
+    | config-variable | Description |
+    | --------------- | ------ |
+    | workdir         | Working Directory (e.g. `C:\Users\richter122\git-projects\openehr_flat_loader`) |
+    | templatename    | Name of the Template (e.g. `UMG_Stammdaten`) |
+    | inputcsv        | Name of the csv-file that holds the data (`source_data`) |
+    
+    **Repository Infos:**
+    | config-variable | Description |
+    | --------------- | ------ |
+    | targetrepoadress| Baseadress of the Target Repo (e.g. `http://141.5.100.199/ehrbase`) |
+    | targetrepouser  | Username for authentification with the Repo (e.g. `ehrbase-user`) |
+    | targetrepopw    | Password for authentification with the Repo (e.g. `SuperSecretPassword`) |
+    | targetflatapiadress | The endpoint where the FLAT-API resides (e.g. `/rest/ecis/v1/`) |
+    | targetopenehrapiadress| The endpoint where the openEHR-API resides (Standard: `/rest/openehr/v1/`)|
 
 ## Work in Progress:
 - Fix the MappingDetection of the CompositionBuilder
