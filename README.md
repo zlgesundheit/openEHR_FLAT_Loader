@@ -45,5 +45,5 @@ _Prerequisites:_
     | targetopenehrapiadress| The endpoint where the openEHR-API resides (e.g. `/rest/openehr/v1/`)|
 
 ## Work in Progress:
-- Dealing with multiple Index-Entrys in FLAT-Paths (for the start just support up to 3)
+- Some Pathes lost chars like ?,ä,etc. -> Needs to be fixed -> Encoding
 - GUI with good Usability
