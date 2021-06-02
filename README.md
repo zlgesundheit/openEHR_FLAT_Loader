@@ -12,10 +12,33 @@ _Process-Overview:_
 
 _Prerequisites:_
 - Project was developed and tested using Python 3.8.3
+- An openEHR-Repo with the endpoints to supply a WebTemplate and to store Resources in FLAT-Format
 
-## 
+## Usage
+- Place your .OPT-File in the Input-Folder
+- Run Tool via Command Line with `python cmd_run_Main.py`
+    - If the config-file is not presented you will be asked to provide infos
+    - It is of course also possible to adjust them directly in the config-file
+    - The `.config.ini` holds the following information:
+
+        **Environment Infos:**
+        | config-variable | Description |
+        | --------------- | ------ |
+        | workdir         | Working Directory (e.g. `C:\Users\richter122\git-projects\openehr_flat_loader`) |
+        | templatename    | Name of the Template (e.g. `UMG_Stammdaten`) |
+        | inputcsv        | Name of the csv-file that holds the data (`source_data`) |
+        
+        **Repository Infos:**
+        | config-variable | Description |
+        | --------------- | ------ |
+        | targetrepoadress| Baseadress of the Target Repo (e.g. `http://141.5.100.199/ehrbase`) |
+        | targetrepouser  | Username for authentification with the Repo (e.g. `ehrbase-user`) |
+        | targetrepopw    | Password for authentification with the Repo (e.g. `SuperSecretPassword`) |
+        | targetflatapiadress | The endpoint where the FLAT-API resides (e.g. `/rest/ecis/v1/`) |
+        | targetopenehrapiadress| The endpoint where the openEHR-API resides (Standard: `/rest/openehr/v1/`)|
 
 ## Work in Progress:
 - Fix the MappingDetection of the CompositionBuilder
+- Dont query for targetopenehrapiadress since its in the standard..
 - Dealing with multiple Index-Entrys in FLAT-Paths (for the start just support up to 3)
 - GUI with good Usability
