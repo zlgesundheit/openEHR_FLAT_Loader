@@ -2,6 +2,10 @@
 
 ETL-Tool to transform Source Data into openEHR-Resources.  
 
+_Prerequisites:_
+- Project was developed and tested using Python 3.8.3
+- An openEHR-Repo with the endpoints to supply a WebTemplate and to store Resources in FLAT-Format
+
 ## Usage
 1. Place your .OPT-File in the Input-Folder
 2. Run Tool via Command Line with `python runMain.py`
@@ -21,10 +25,6 @@ The idea of [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/-/tree/a58
 _Process-Overview:_
 
 ![BPMN-Process-Overview](/Dokumentation/Process_Overview_Screenshot.jpg)
-
-_Prerequisites:_
-- Project was developed and tested using Python 3.8.3
-- An openEHR-Repo with the endpoints to supply a WebTemplate and to store Resources in FLAT-Format
 
 ## Config-File
 - The `.config.ini` holds the following information:
