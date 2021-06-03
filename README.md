@@ -2,6 +2,16 @@
 
 ETL-Tool to transform Source Data into openEHR-Resources.  
 
+## Usage
+1. Place your .OPT-File in the Input-Folder
+2. Run Tool via Command Line with `python runMain.py`
+    - If the config-file is not presented you will be asked to provide infos. It is of course also possible to adjust them directly in the config-file -> See [Config-File](# Config-File)
+    - You will be asked which step of the process you want to perform
+        - Step 1: Upload OPT and generate Mapping-(Excel-)File
+        - Step 2: Build Compositions based on the Mapping
+3. To perform Step 2: Building Compositions you have to supply mapping information in the Mapping-Table
+4. After performing Step 2 you will find the FLAT-Composition in the Output-Folder 
+
 ## Context
 To transform data from different sources (e.g. SQL-DB, CSV, etc.) into openEHR-Resources a ETL-Job - for a specific Template / Operational Template - has to be built.
 The idea of [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/-/tree/a58c9f479ab9d5f6ebad10906963949a806ad7c4) as well as this **openEHR_FLAT_Loader** is to build these openEHR-Resource using a Mapping (manuall supplied by the user) from DataFields to TemplateFields.
@@ -13,17 +23,6 @@ _Process-Overview:_
 _Prerequisites:_
 - Project was developed and tested using Python 3.8.3
 - An openEHR-Repo with the endpoints to supply a WebTemplate and to store Resources in FLAT-Format
-
-## Usage
-1. Place your .OPT-File in the Input-Folder
-2. Run Tool via Command Line with `python cmd_run_Main.py`
-    - If the config-file is not presented you will be asked to provide infos
-    - It is of course also possible to adjust them directly in the config-file
-    - You will be asked which step of the process you want to perform
-        - Step 1: Upload OPT and generate Mapping-(Excel-)File
-        - Step 2: Build Compositions based on the Mapping
-3. To perform Step 2: Building Compositions you have to supply mapping information in the Mapping-Table
-4. After performing Step 2 you will find the FLAT-Composition in the Output-Folder 
 
 ## Config-File
 - The `.config.ini` holds the following information:
