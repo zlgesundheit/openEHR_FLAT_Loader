@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ############################### DEV: PATHS from WebTemplate
 # Notes:
 # Pfad-Teile stehen im Feld id
@@ -15,6 +16,8 @@
 
 import json
 import os
+
+indent = "    "
 
 def goLow(parentPath, pathArr, children):
   self = children
@@ -51,15 +54,24 @@ def goLow(parentPath, pathArr, children):
   return pathArr
 
 def getPathsFromWebTemplate(workdir, templateName):
-  filePath = os.path.join(workdir, 'Input', templateName +'_WebTemplate.json')
-  f = open(filePath, "r", encoding='utf-8')
-  webTemp = f.read()
-  f.close()
-  webTemp = json.loads(webTemp)
+  try:
+    filePath = os.path.join(workdir, 'Input', templateName +'_WebTemplate.json')
+    if os.path.isfile(filePath):
+      path = ''
+      pathArr = []
+      try:
+        webTemp = open(filePath, "r", encoding='utf-8').read()
+        webTemp = json.loads(webTemp)
 
-  path = ''
-  pathArr = []
-  path = webTemp['tree']['id']
-  pathArr = goLow(path, pathArr, webTemp['tree']['children'])
+        path = webTemp['tree']['id']
+        pathArr = goLow(path, pathArr, webTemp['tree']['children'])
+      except:
+        print(indent + templateName + "_Webtemplate ist fehlerhaft.")
+        raise SystemExit
+    else:
+      raise Exception(templateName + "_WebTemplate ist nicht vorhanden.")
+  except Exception as e:
+    print (indent + str(e))
+    raise SystemExit
 
   return pathArr

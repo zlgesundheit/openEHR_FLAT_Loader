@@ -110,6 +110,7 @@ def buildComp(workdir, templateName, inputCSV):
       print(indent + "buildComp finished.")
   except Exception as e:
     print(indent + str(e))
+    raise SystemExit
 
   answerString = ""
   return answerString
