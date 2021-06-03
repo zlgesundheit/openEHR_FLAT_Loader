@@ -102,10 +102,9 @@ def buildComp(workdir, templateName, inputCSV):
       i = 0
       for res in dictArray:
         filePath = os.path.join(workdir, 'Output', templateName + '_resource' + str(i) + ".json" )
-        f = open(filePath,"w")
-        f.write(json.dumps(res, default=convert, indent=4))
+        with open(filePath,"w", encoding = 'UTF-8') as resFile:
+          json.dump(res, resFile, default=convert, indent=4, ensure_ascii=False)
         i += 1
-        f.close()
 
       print(indent + "buildComp finished.")
   except Exception as e:

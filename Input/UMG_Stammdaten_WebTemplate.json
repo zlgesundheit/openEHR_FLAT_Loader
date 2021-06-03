@@ -17,7 +17,7 @@
             "de": "Bericht"
         },
         "localizedDescriptions": {
-            "de": "Ein Dokument zur \u00dcbermittlung von Informationen an andere, meist als Antwort auf eine Anfrage."
+            "de": "Ein Dokument zur Übermittlung von Informationen an andere, meist als Antwort auf eine Anfrage."
         },
         "aqlPath": "",
         "children": [
@@ -129,14 +129,14 @@
                                 "aqlPath": "/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0]/items[at0002]",
                                 "children": [
                                     {
-                                        "id": "pr\u00e4fix",
-                                        "name": "Pr\u00e4fix",
-                                        "localizedName": "Pr\u00e4fix",
+                                        "id": "präfix",
+                                        "name": "Präfix",
+                                        "localizedName": "Präfix",
                                         "rmType": "DV_TEXT",
                                         "min": 0,
                                         "max": 1,
                                         "localizedNames": {
-                                            "de": "Pr\u00e4fix"
+                                            "de": "Präfix"
                                         },
                                         "localizedDescriptions": {
                                             "de": "Namensteile vor dem Vornamen, z.B. akademischer Grad"
@@ -149,17 +149,17 @@
                                         ]
                                     },
                                     {
-                                        "id": "art_des_pr\u00e4fix",
-                                        "name": "Art des Pr\u00e4fix",
-                                        "localizedName": "Art des Pr\u00e4fix",
+                                        "id": "art_des_präfix",
+                                        "name": "Art des Präfix",
+                                        "localizedName": "Art des Präfix",
                                         "rmType": "DV_TEXT",
                                         "min": 0,
                                         "max": 1,
                                         "localizedNames": {
-                                            "de": "Art des Pr\u00e4fix"
+                                            "de": "Art des Präfix"
                                         },
                                         "localizedDescriptions": {
-                                            "de": "Art des Pr\u00e4fixes, z.B. \"AC\" f\u00fcr Akademische Titel"
+                                            "de": "Art des Präfixes, z.B. \"AC\" für Akademische Titel"
                                         },
                                         "aqlPath": "/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0]/items[at0002]/items[at0029]/value",
                                         "inputs": [
@@ -199,7 +199,7 @@
                                             "de": "Vorname"
                                         },
                                         "localizedDescriptions": {
-                                            "de": "Vollst\u00e4ndiger Vorname einer Person"
+                                            "de": "Vollständiger Vorname einer Person"
                                         },
                                         "aqlPath": "/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0]/items[at0002]/items[at0003]/value",
                                         "inputs": [
@@ -219,7 +219,7 @@
                                             "de": "Familienname"
                                         },
                                         "localizedDescriptions": {
-                                            "de": "Der vollst\u00e4ndige Familienname, einschlie\u00dflich aller Vorsatz- und Zusatzw\u00f6rter, mit Leerzeichen getrennt."
+                                            "de": "Der vollständige Familienname, einschließlich aller Vorsatz- und Zusatzwörter, mit Leerzeichen getrennt."
                                         },
                                         "aqlPath": "/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0]/items[at0002]/items[at0005]/value",
                                         "inputs": [
@@ -239,7 +239,7 @@
                                             "de": "Nachname"
                                         },
                                         "localizedDescriptions": {
-                                            "de": "Nachname einer Person ohne Vor- und Zus\u00e4tze. Dient z.B. der alphabetischen Einordnung des Namens."
+                                            "de": "Nachname einer Person ohne Vor- und Zusätze. Dient z.B. der alphabetischen Einordnung des Namens."
                                         },
                                         "aqlPath": "/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0]/items[at0002]/items[at0025]/value",
                                         "inputs": [
@@ -259,7 +259,7 @@
                                             "de": "Geburtsname"
                                         },
                                         "localizedDescriptions": {
-                                            "de": "Familienname einer Person zum Zeitpunkt\u00a0ihrer\u00a0Geburt. Kann sich danach z.B. durch Heirat und Annahme eines\u00a0anderen Familiennamens \u00e4ndern."
+                                            "de": "Familienname einer Person zum Zeitpunkt ihrer Geburt. Kann sich danach z.B. durch Heirat und Annahme eines anderen Familiennamens ändern."
                                         },
                                         "aqlPath": "/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0]/items[at0002]/items[at0024]/value",
                                         "inputs": [
@@ -279,7 +279,7 @@
                                             "de": "Namenszusatz"
                                         },
                                         "localizedDescriptions": {
-                                            "de": "Namenszusatz als Bestandteil das Nachnamens, wie in VSDM (Versichertenstammdatenmanagement, \"eGK\") definiert. Beispiele: Gr\u00e4fin, Prinz oder F\u00fcrst"
+                                            "de": "Namenszusatz als Bestandteil das Nachnamens, wie in VSDM (Versichertenstammdatenmanagement, \"eGK\") definiert. Beispiele: Gräfin, Prinz oder Fürst"
                                         },
                                         "aqlPath": "/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0]/items[at0002]/items[at0027]/value",
                                         "inputs": [
@@ -342,7 +342,7 @@
                             "de": "UMG_Todesangaben"
                         },
                         "localizedDescriptions": {
-                            "de": "Angaben \u00fcber den Tod einer Person, die mit \u00fcbergeordneten Datenelementen f\u00fcr die Registrierung \u00fcbereinstimmen zB. Sterberegister."
+                            "de": "Angaben über den Tod einer Person, die mit übergeordneten Datenelementen für die Registrierung übereinstimmen zB. Sterberegister."
                         },
                         "aqlPath": "/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.umg_todesangaben.v0]",
                         "children": [
@@ -400,7 +400,7 @@
                             "de": "Data Origin"
                         },
                         "localizedDescriptions": {
-                            "de": "Detaillierte Angaben zu der Organisations- und Funktionseinheit, auf der sich der Patient w\u00e4hrend seines Aufenthaltes in der Klinik befand."
+                            "de": "Detaillierte Angaben zu der Organisations- und Funktionseinheit, auf der sich der Patient während seines Aufenthaltes in der Klinik befand."
                         },
                         "aqlPath": "/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.umg_patientenst,'Data Origin']",
                         "children": [
@@ -415,7 +415,7 @@
                                     "de": "Organisationseinheit Name"
                                 },
                                 "localizedDescriptions": {
-                                    "de": "Der Name der jeweiligen Organisationseinheit, auf denen sich der Patient w\u00e4hrend seines Aufenthaltes aufgehalten hat."
+                                    "de": "Der Name der jeweiligen Organisationseinheit, auf denen sich der Patient während seines Aufenthaltes aufgehalten hat."
                                 },
                                 "aqlPath": "/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.umg_patientenst,'Data Origin']/items[at0005]/value",
                                 "inputs": [
@@ -470,7 +470,7 @@
                                                     "de": "ANAE"
                                                 },
                                                 "localizedDescriptions": {
-                                                    "de": "An\u00e4sthesiologie"
+                                                    "de": "Anästhesiologie"
                                                 }
                                             },
                                             {
@@ -640,7 +640,7 @@
                                                     "de": "HAEM"
                                                 },
                                                 "localizedDescriptions": {
-                                                    "de": "H\u00e4matologie / Onkologie"
+                                                    "de": "Hämatologie / Onkologie"
                                                 }
                                             },
                                             {
@@ -700,7 +700,7 @@
                                                     "de": "KFO"
                                                 },
                                                 "localizedDescriptions": {
-                                                    "de": "Kieferorthop\u00e4die"
+                                                    "de": "Kieferorthopädie"
                                                 }
                                             },
                                             {
@@ -910,7 +910,7 @@
                                                     "de": "KIND"
                                                 },
                                                 "localizedDescriptions": {
-                                                    "de": "P\u00e4diatrie I"
+                                                    "de": "Pädiatrie I"
                                                 }
                                             },
                                             {
@@ -920,7 +920,7 @@
                                                     "de": "NPAE"
                                                 },
                                                 "localizedDescriptions": {
-                                                    "de": "P\u00e4diatrie II"
+                                                    "de": "Pädiatrie II"
                                                 }
                                             },
                                             {
@@ -930,7 +930,7 @@
                                                     "de": "KCAR"
                                                 },
                                                 "localizedDescriptions": {
-                                                    "de": "P\u00e4diatrie III"
+                                                    "de": "Pädiatrie III"
                                                 }
                                             },
                                             {
@@ -980,7 +980,7 @@
                                                     "de": "PHO"
                                                 },
                                                 "localizedDescriptions": {
-                                                    "de": "Phoniatrie / P\u00e4daudiologie"
+                                                    "de": "Phoniatrie / Pädaudiologie"
                                                 }
                                             },
                                             {
@@ -1045,12 +1045,12 @@
                                             },
                                             {
                                                 "value": "at0161",
-                                                "label": "ARCHR\u00d6",
+                                                "label": "ARCHRÖ",
                                                 "localizedLabels": {
-                                                    "de": "ARCHR\u00d6"
+                                                    "de": "ARCHRÖ"
                                                 },
                                                 "localizedDescriptions": {
-                                                    "de": "R\u00f6ntgenaktenarchiv"
+                                                    "de": "Röntgenaktenarchiv"
                                                 }
                                             },
                                             {
@@ -1060,7 +1060,7 @@
                                                     "de": "ROE2"
                                                 },
                                                 "localizedDescriptions": {
-                                                    "de": "R\u00f6ntgendiagnostik 2"
+                                                    "de": "Röntgendiagnostik 2"
                                                 }
                                             },
                                             {
@@ -1120,7 +1120,7 @@
                                                     "de": "THG"
                                                 },
                                                 "localizedDescriptions": {
-                                                    "de": "Thorax-Herz-Gef\u00e4\u00dfchirurgie"
+                                                    "de": "Thorax-Herz-Gefäßchirurgie"
                                                 }
                                             },
                                             {
@@ -1160,7 +1160,7 @@
                                                     "de": "CUOP"
                                                 },
                                                 "localizedDescriptions": {
-                                                    "de": "Unfallchirurgie und Orthop\u00e4die"
+                                                    "de": "Unfallchirurgie und Orthopädie"
                                                 }
                                             },
                                             {
@@ -1237,7 +1237,7 @@
                                     "de": "Administratives Geschlecht"
                                 },
                                 "localizedDescriptions": {
-                                    "de": "Das Geschlecht einer Person, das f\u00fcr administrative Zwecke verwendet wird."
+                                    "de": "Das Geschlecht einer Person, das für administrative Zwecke verwendet wird."
                                 },
                                 "aqlPath": "/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.umg_geschlecht.v0]/items[at0022]/value",
                                 "inputs": [
@@ -1257,12 +1257,12 @@
                                             },
                                             {
                                                 "value": "at0029",
-                                                "label": "M\u00e4nnlich",
+                                                "label": "Männlich",
                                                 "localizedLabels": {
-                                                    "de": "M\u00e4nnlich"
+                                                    "de": "Männlich"
                                                 },
                                                 "localizedDescriptions": {
-                                                    "de": "M\u00e4nnlich"
+                                                    "de": "Männlich"
                                                 }
                                             },
                                             {
@@ -1280,7 +1280,7 @@
                                     }
                                 ],
                                 "annotations": {
-                                    "comment": "Dieses Element beschreibt das, was die meisten Systeme heutzutage als \"Geschlecht\" (vgl. engl.: \"Sex\" oder \"Gender\") bezeichnen. Zum Beispiel \"M\u00e4nnlich\", \"Weiblich\", \"Sonstiges\". In der Regel wird diese Beschreibung f\u00fcr praktische Zwecke, wie z.B. dem Melden oder Zuweisen eines Bettes in einer Krankenstation, verwendet. Dieser Archetyp entspricht dem HL7 FHIR Element \"Person.gender\"'. Die Kodierung mit einer Terminologie wird, wenn m\u00f6glich, empfohlen."
+                                    "comment": "Dieses Element beschreibt das, was die meisten Systeme heutzutage als \"Geschlecht\" (vgl. engl.: \"Sex\" oder \"Gender\") bezeichnen. Zum Beispiel \"Männlich\", \"Weiblich\", \"Sonstiges\". In der Regel wird diese Beschreibung für praktische Zwecke, wie z.B. dem Melden oder Zuweisen eines Bettes in einer Krankenstation, verwendet. Dieser Archetyp entspricht dem HL7 FHIR Element \"Person.gender\"'. Die Kodierung mit einer Terminologie wird, wenn möglich, empfohlen."
                                 }
                             }
                         ]
@@ -1302,17 +1302,17 @@
                         "aqlPath": "/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.umg_adresse.v0]",
                         "children": [
                             {
-                                "id": "stra\u00dfe",
-                                "name": "Stra\u00dfe",
-                                "localizedName": "Stra\u00dfe",
+                                "id": "straße",
+                                "name": "Straße",
+                                "localizedName": "Straße",
                                 "rmType": "DV_TEXT",
                                 "min": 0,
                                 "max": 1,
                                 "localizedNames": {
-                                    "de": "Stra\u00dfe"
+                                    "de": "Straße"
                                 },
                                 "localizedDescriptions": {
-                                    "de": "Stra\u00dfenname mit Hausnummer oder Postfach sowie weitere Angaben zur Zustellung."
+                                    "de": "Straßenname mit Hausnummer oder Postfach sowie weitere Angaben zur Zustellung."
                                 },
                                 "aqlPath": "/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.umg_adresse.v0]/items[at0001]/value",
                                 "inputs": [
@@ -1332,7 +1332,7 @@
                                     "de": "Postleitzahl"
                                 },
                                 "localizedDescriptions": {
-                                    "de": "Postleitzahl gem\u00e4\u00df der im jeweiligen Land g\u00fcltigen Konventionen."
+                                    "de": "Postleitzahl gemäß der im jeweiligen Land gültigen Konventionen."
                                 },
                                 "aqlPath": "/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.umg_adresse.v0]/items[at0002]/value",
                                 "inputs": [
@@ -1372,7 +1372,7 @@
                                     "de": "Land"
                                 },
                                 "localizedDescriptions": {
-                                    "de": "L\u00e4ndercode nach ISO 3166."
+                                    "de": "Ländercode nach ISO 3166."
                                 },
                                 "aqlPath": "/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.umg_adresse.v0]/items[at0005]/value",
                                 "inputs": [
@@ -1445,7 +1445,7 @@
                             "de": "Versicherungstyp"
                         },
                         "localizedDescriptions": {
-                            "de": "Versicherungstyp des Patienten (selbst; gesetzliche Krankenversicherung; private Krankenversicherung; Berufsgenossenschaft; unentgeltliche truppen\u00e4rztliche Versorgung)"
+                            "de": "Versicherungstyp des Patienten (selbst; gesetzliche Krankenversicherung; private Krankenversicherung; Berufsgenossenschaft; unentgeltliche truppenärztliche Versorgung)"
                         },
                         "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0002]/value",
                         "inputs": [
@@ -2000,7 +2000,7 @@
                     "de": "UMG_Pseudonym"
                 },
                 "localizedDescriptions": {
-                    "de": "Innerhalb der UMG wird mittels der Mainzelliste ein Pseudonym f\u00fcr den Patienten vergeben."
+                    "de": "Innerhalb der UMG wird mittels der Mainzelliste ein Pseudonym für den Patienten vergeben."
                 },
                 "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.pseudonym.v0]",
                 "children": [

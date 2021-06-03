@@ -17,7 +17,7 @@
             "de": "Bericht"
         },
         "localizedDescriptions": {
-            "de": "Ein Dokument zur \u00dcbermittlung von Informationen an andere, meist als Antwort auf eine Anfrage."
+            "de": "Ein Dokument zur Übermittlung von Informationen an andere, meist als Antwort auf eine Anfrage."
         },
         "aqlPath": "",
         "children": [
@@ -123,7 +123,7 @@
                                     "de": "Administratives Geschlecht"
                                 },
                                 "localizedDescriptions": {
-                                    "de": "Das Geschlecht einer Person, das f\u00fcr administrative Zwecke verwendet wird."
+                                    "de": "Das Geschlecht einer Person, das für administrative Zwecke verwendet wird."
                                 },
                                 "aqlPath": "/context/other_context[at0001]/items[openEHR-EHR-CLUSTER.umg_geschlecht.v0]/items[at0022]/value",
                                 "inputs": [
@@ -143,12 +143,12 @@
                                             },
                                             {
                                                 "value": "at0029",
-                                                "label": "M\u00e4nnlich",
+                                                "label": "Männlich",
                                                 "localizedLabels": {
-                                                    "de": "M\u00e4nnlich"
+                                                    "de": "Männlich"
                                                 },
                                                 "localizedDescriptions": {
-                                                    "de": "M\u00e4nnlich"
+                                                    "de": "Männlich"
                                                 }
                                             },
                                             {
@@ -166,7 +166,7 @@
                                     }
                                 ],
                                 "annotations": {
-                                    "comment": "Dieses Element beschreibt das, was die meisten Systeme heutzutage als \"Geschlecht\" (vgl. engl.: \"Sex\" oder \"Gender\") bezeichnen. Zum Beispiel \"M\u00e4nnlich\", \"Weiblich\", \"Sonstiges\". In der Regel wird diese Beschreibung f\u00fcr praktische Zwecke, wie z.B. dem Melden oder Zuweisen eines Bettes in einer Krankenstation, verwendet. Dieser Archetyp entspricht dem HL7 FHIR Element \"Person.gender\"'. Die Kodierung mit einer Terminologie wird, wenn m\u00f6glich, empfohlen."
+                                    "comment": "Dieses Element beschreibt das, was die meisten Systeme heutzutage als \"Geschlecht\" (vgl. engl.: \"Sex\" oder \"Gender\") bezeichnen. Zum Beispiel \"Männlich\", \"Weiblich\", \"Sonstiges\". In der Regel wird diese Beschreibung für praktische Zwecke, wie z.B. dem Melden oder Zuweisen eines Bettes in einer Krankenstation, verwendet. Dieser Archetyp entspricht dem HL7 FHIR Element \"Person.gender\"'. Die Kodierung mit einer Terminologie wird, wenn möglich, empfohlen."
                                 }
                             }
                         ]

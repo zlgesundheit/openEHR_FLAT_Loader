@@ -51,11 +51,10 @@ def handleOPT(workdir, templateName, inputCSV, targetAdress, targetUser, targetP
     raise SystemExit
 
   filePath = os.path.join(workdir, 'Input', templateName + '_WebTemplate.json')
-  f = open(filePath, 'w', encoding="utf-8")
-  f.write( json.dumps(json_resp['webTemplate'], indent = 4) )
+  with open(filePath, 'w', encoding="utf-8") as templateFile:
+    json.dump(json_resp['webTemplate'], templateFile, indent = 4, ensure_ascii=False)
   f.close()
   
-
   pathsArray = pathExport.getPathsFromWebTemplate(workdir, templateName)
 
   print(indent + "HandleOPT finished.")
