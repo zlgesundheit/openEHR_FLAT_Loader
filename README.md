@@ -7,7 +7,7 @@ ETL-Tool to transform Source Data into openEHR-Resources.
 2. Run Tool via Command Line with `python runMain.py`
     - If the config-file is not presented you will be asked to provide infos. 
     - It is of course also possible to adjust them directly in the config-file 
-      - -> See [Config-File](#Config-File)
+      - -> See [Config-File](#config-file)
     - You will be asked which step of the process you want to perform
         - Step 1: Upload OPT and generate Mapping-(Excel-)File
         - Step 2: Build Compositions based on the Mapping
@@ -16,7 +16,7 @@ ETL-Tool to transform Source Data into openEHR-Resources.
 
 ## Context
 To transform data from different sources (e.g. SQL-DB, CSV, etc.) into openEHR-Resources a ETL-Job - for a specific Template / Operational Template - has to be built.
-The idea of [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/-/tree/a58c9f479ab9d5f6ebad10906963949a806ad7c4) as well as this **openEHR_FLAT_Loader** is to build these openEHR-Resource using a Mapping (manuall supplied by the user) from DataFields to TemplateFields.
+The idea of [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/-/tree/a58c9f479ab9d5f6ebad10906963949a806ad7c4) as well as this  **openEHR_FLAT_Loader** is to build these openEHR-Resource using a Mapping (manuall supplied by the user) from DataFields to TemplateFields.
 
 _Process-Overview:_
 
