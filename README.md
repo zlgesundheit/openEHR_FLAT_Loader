@@ -45,6 +45,5 @@ _Prerequisites:_
     | targetopenehrapiadress| The endpoint where the openEHR-API resides (e.g. `/rest/openehr/v1/`)|
 
 ## Work in Progress:
-- Some Pathes lost chars like ?,ä,etc. -> Needs to be fixed -> Encoding
 - SQL-DB as Data Source? Let User provide a query and get data from there
 - GUI with good Usability
