@@ -46,4 +46,5 @@ _Prerequisites:_
 
 ## Work in Progress:
 - Some Pathes lost chars like ?,ä,etc. -> Needs to be fixed -> Encoding
+- SQL-DB as Data Source? Let User provide a query and get data from there
 - GUI with good Usability

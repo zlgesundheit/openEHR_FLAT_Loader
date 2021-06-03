@@ -8,13 +8,13 @@ import configparser
 config = configparser.ConfigParser()
 
 def readConf():
-  config.read('.config.ini')
+  config.read('config.ini')
   return config
 
 def storeConf():
   # otherwise create new conf-file and set defaults
   config['DEFAULT'] = {
-    'workdir': 'C:\\Users\\richter122\\ZL-G\\60_Work_Packages\\01_TP01\\AP1.4_Umsetzung_Konzept_Plattform\\TA1.4.2_Erste_Implementierung\\FLAT_Python_ETL-Job\\openEHR_FLAT_Loader\\',
+    'workdir': 'C:\\Users\\richter122\\git-projects\\openehr_flat_loader',
     'templateName': 'ZLG_Testdaten',
     'inputCSV':'test1'
     }
@@ -25,7 +25,7 @@ def storeConf():
     'targetflatAPIadress':'/rest/ecis/v1/',
     'targetopenEHRAPIadress':'/rest/openehr/v1/'
   }
-  with open('.config.ini', 'w') as configfile:
+  with open('config.ini', 'w') as configfile:
     config.write(configfile)
 
 def setLocalEnv(workdir, templateName, inputCSV):
@@ -34,8 +34,13 @@ def setLocalEnv(workdir, templateName, inputCSV):
   'templateName': templateName,
   'inputCSV':inputCSV
   }
-  with open('.config.ini', 'w') as configfile:
+  with open('config.ini', 'w') as configfile:
     config.write(configfile)
+
+def setTargetRepoAdress(targetRepoAdress):
+  config['targetRepo'] = {
+    'targetRepoAdress':targetRepoAdress,
+  }
 
 def setTargetRepo(targetRepoAdress, targetRepoUser, targetRepoPw, targetflatAPIadress, targetopenEHRAPIadress):
   config['targetRepo'] = {
@@ -45,7 +50,7 @@ def setTargetRepo(targetRepoAdress, targetRepoUser, targetRepoPw, targetflatAPIa
     'targetflatAPIadress':targetflatAPIadress,
     'targetopenEHRAPIadress':targetopenEHRAPIadress
   }
-  with open('.config.ini', 'w') as configfile:
+  with open('config.ini', 'w') as configfile:
     config.write(configfile)
 
 def queryConfEntry():
@@ -60,5 +65,5 @@ def queryConfEntry():
     targetflatAPIadress = input("FLAT-Endpunkt (Bsp.: /rest/ecis/v1/): ")
     targetopenEHRAPIadress = input("openEHR-API (Bsp.: /rest/openehr/v1/): ")
     setTargetRepo(targetRepoAdress, targetRepoUser, targetRepoPw, targetflatAPIadress, targetopenEHRAPIadress)
-    config.read('.config.ini')
+    config.read('config.ini')
     return config

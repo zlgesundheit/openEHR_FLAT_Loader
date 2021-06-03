@@ -56,7 +56,7 @@ def handleOPT(workdir, templateName, inputCSV, targetAdress, targetUser, targetP
 
   print(indent + "HandleOPT finished.")
 
-  import MappingListGen as gen
+  import mappingListGen as gen
   gen.generateList(workdir, templateName, inputCSV, pathsArray)
 
   answerString = ""

@@ -1,11 +1,10 @@
 #############################################################################
-# (Manual) ETL-Pipeline from CSV to openEHR-Compositions
+# ETL-Pipeline from CSV to openEHR-Compositions
 # 
-# 1. Upload Template and get FLAT-Example-Composition and WebTemplate (1_HandleOPT.py)
-# 2. (Manual Task) Adapt FLAT-Composition to include all needed Template-Fields  <-- This will be automated in the near future
-# 3. Generate Mapping List
-# 4. (Manual Task) Mapping-List ausfüllen
-# 5. Build Compositions
+# 1. Upload Template and get WebTemplate
+# 2. Generate Mapping List from WebTemplate
+# 3. (Manual Task) Mapping-List ausfüllen
+# 4. Build Compositions
 # Developed and tested with Python 3.8.3
 #
 # Jendrik Richter (UMG)
@@ -15,7 +14,7 @@ import os.path
 import configHandler
 
 # See if config already exists
-confFile_path = '.config.ini'
+confFile_path = 'config.ini'
 if os.path.isfile(confFile_path):
   # Load existing Config
   config = configHandler.readConf()
@@ -25,6 +24,8 @@ else:
   defaultInp = input("Möchten Sie die Default-Config verwenden? (y/n): " )
   if (defaultInp == "y"):
     # Store and Load Default-Conf
+    targetRepoAdress = input("Geben sie die Base-Adress des Target-Repos an (e.g. http://141.5.100.199/ehrbase): ")
+    configHandler.setTargetRepoAdress(targetRepoAdress)
     configHandler.storeConf()
     config = configHandler.readConf()
   else:
@@ -38,7 +39,7 @@ print("Schritt 2: Auf Basis des ausgefüllten Mappings und der Quelldaten-CSV di
 print("")
 chooseStep = input("Welcher Prozessschritt soll ausgeführt werden?"+ os.linesep +"(1=Mapping-Liste erzeugen,2=Compositions bauen): ")
 if (chooseStep == str(1)):
-  import HandleOPT as opt
+  import handleOPT as opt
   opt.handleOPT(
     config['targetRepo']['workdir'], 
     config['targetRepo']['templateName'], 
@@ -50,7 +51,7 @@ if (chooseStep == str(1)):
     config['targetRepo']['targetopenEHRAPIadress']
     )
 elif(chooseStep == str(2)):
-  import BuildComp as bob
+  import buildComp as bob
   bob.buildComp(
     config['targetRepo']['workdir'], 
     config['targetRepo']['templateName'],
