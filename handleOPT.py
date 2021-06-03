@@ -33,10 +33,12 @@ def handleOPT(workdir, templateName, inputCSV, targetAdress, targetUser, targetP
   queryPath = targetAdress + targetopenEHRAPIadress + "definition/template/adl1.4"
   authHeader = targetAuth
   try:
-    response = requests.post(queryPath, headers = {'Authorization':authHeader, 'Content-Type':'application/xml'} ,data = optFile) 
+    # Setting the wrong headers may lead to the server storing the opt in a wrong encoding! Added Accept and Accept-Encoding to deal with this. We want UTF-8 # encoding the data-part did the trick
+    response = requests.post(queryPath, headers = {'Authorization':authHeader, 'Content-Type':'application/xml', 'Accept':'*/*', 'Accept-Encoding':'gzip, deflate, br'} ,data = optFile.encode('UTF-8')) 
     print (indent + "Template Upload to Target-Repo: " + os.linesep + indent + "Target-Repo: " + targetAdress + os.linesep + indent + "Status: " + str(response.status_code) )
-  except:
-    print(indent + "Error while storing OPT at Target-Repo")
+  except Exception as e:
+    print(indent + "Error while storing OPT at Target-Repo" + "\n" + indent + str(e) )
+    raise SystemExit
   
   # Query and save WebTemplate
   queryPath = targetAdress + targetflatAPIadress + "template/" + templateName
@@ -44,13 +46,15 @@ def handleOPT(workdir, templateName, inputCSV, targetAdress, targetUser, targetP
   try:
     response = requests.get(queryPath, headers = {'Authorization':authHeader})
     json_resp = response.json()
+  except Exception as e:
+    print(indent + "Error while querying and saving WebTemplate from TargetRepo" + "\n" + indent + str(e))
+    raise SystemExit
 
-    filePath = os.path.join(workdir, 'Input', templateName + '_WebTemplate.json')
-    f = open(filePath, 'w')
-    f.write(json.dumps(json_resp['webTemplate'], indent = 4))
-    f.close()
-  except:
-    print(indent + "Error while querying and saving WebTemplate from TargetRepo")
+  filePath = os.path.join(workdir, 'Input', templateName + '_WebTemplate.json')
+  f = open(filePath, 'w', encoding="utf-8")
+  f.write( json.dumps(json_resp['webTemplate'], indent = 4) )
+  f.close()
+  
 
   pathsArray = pathExport.getPathsFromWebTemplate(workdir, templateName)
 
