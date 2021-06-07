@@ -9,13 +9,14 @@
 #
 # Jendrik Richter (UMG)
 ##############################################################################
-## Imports
 # Standard library imports
 import os.path
 # Third party imports
 import configparser
 # Local application imports
 from Scripts import configHandler
+from Scripts import handleOPT as opt
+from Scripts import buildComp as bob
 
 # See if config already exists
 confFile_path = 'config.ini'
@@ -43,7 +44,6 @@ print("Schritt 2: Auf Basis des ausgefüllten Mappings und der Quelldaten-CSV di
 print("")
 chooseStep = input("Welcher Prozessschritt soll ausgeführt werden?"+ os.linesep +"(1=Mapping-Liste erzeugen,2=Compositions bauen): ")
 if (chooseStep == str(1)):
-  import handleOPT as opt
   opt.handleOPT(
     config['targetRepo']['workdir'], 
     config['targetRepo']['templateName'], 
@@ -55,7 +55,6 @@ if (chooseStep == str(1)):
     config['targetRepo']['targetopenEHRAPIadress']
     )
 elif(chooseStep == str(2)):
-  import buildComp as bob
   bob.buildComp(
     config['targetRepo']['workdir'], 
     config['targetRepo']['templateName'],

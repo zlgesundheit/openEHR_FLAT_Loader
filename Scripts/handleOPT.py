@@ -1,14 +1,19 @@
+##################################################################
 # Upload an OPT-File to an ehrscape-instance and an EHRBase
 # Query a WebTemplate and an Example-Composition
 #
 # Jendrik Richter (UMG)
-
+##################################################################
+## Imports
+# Standard library imports
 import requests
 import base64
 import json
 import os.path
-import re
-import pathExport
+# Third party imports
+# Local application imports
+from Scripts import pathExport
+from Scripts import mappingListGen as gen
 
 indent = "    "
 
@@ -19,47 +24,51 @@ def getAuthHeader(user, pw):
   #print(authHeader)
   return authHeader
 
+def uploadOPT(targetAdress, targetopenEHRAPIadress, targetUser, targetPw, optFile):
+    queryPath = targetAdress + targetopenEHRAPIadress + "definition/template/adl1.4"
+    authHeader = getAuthHeader(targetUser, targetPw) 
+    try:
+        # Setting the wrong headers may lead to the server storing the opt in a wrong encoding! Added Accept and Accept-Encoding to deal with this. We want UTF-8 # encoding the data-part did the trick
+        response = requests.post(queryPath, headers = {'Authorization':authHeader, 'Content-Type':'application/xml', 'Accept':'*/*', 'Accept-Encoding':'gzip, deflate, br'} ,data = optFile.encode('UTF-8')) 
+        print (indent + "Template Upload to Target-Repo: " + os.linesep + indent + "Target-Repo: " + targetAdress + os.linesep + indent + "Status: " + str(response.status_code) )
+    except Exception as e:
+        print(indent + "Error while storing OPT at Target-Repo" + "\n" + indent + str(e) )
+        raise SystemExit
+
+def queryWebtemplate(targetAdress, targetflatAPIadress, targetUser, targetPw, workdir, templateName):
+    queryPath = targetAdress + targetflatAPIadress + "template/" + templateName
+    authHeader = getAuthHeader(targetUser, targetPw)
+    try:
+        response = requests.get(queryPath, headers = {'Authorization':authHeader})
+        json_resp = response.json()
+    except Exception as e:
+        print(indent + "Error while querying and saving WebTemplate from TargetRepo" + "\n" + indent + str(e))
+        raise SystemExit
+
+    filePath = os.path.join(workdir, 'Input', templateName + '_WebTemplate.json')
+    with open(filePath, 'w', encoding="utf-8") as templateFile:
+        json.dump(json_resp['webTemplate'], templateFile, indent = 4, ensure_ascii=False)
+
 def handleOPT(workdir, templateName, inputCSV, targetAdress, targetUser, targetPw, targetflatAPIadress, targetopenEHRAPIadress):
   print(os.linesep + "Step 1: HandleOPT is running.")
-  targetAuth = getAuthHeader(targetUser, targetPw) 
-
-  # Read OPT
+  
+  # Read OPT-File
   filePath = os.path.join(workdir, 'Input', templateName +'.opt')
   f = open(filePath, "r", encoding='utf-8')
   optFile = f.read()
   f.close()
 
   # Upload OPT to server
-  queryPath = targetAdress + targetopenEHRAPIadress + "definition/template/adl1.4"
-  authHeader = targetAuth
-  try:
-    # Setting the wrong headers may lead to the server storing the opt in a wrong encoding! Added Accept and Accept-Encoding to deal with this. We want UTF-8 # encoding the data-part did the trick
-    response = requests.post(queryPath, headers = {'Authorization':authHeader, 'Content-Type':'application/xml', 'Accept':'*/*', 'Accept-Encoding':'gzip, deflate, br'} ,data = optFile.encode('UTF-8')) 
-    print (indent + "Template Upload to Target-Repo: " + os.linesep + indent + "Target-Repo: " + targetAdress + os.linesep + indent + "Status: " + str(response.status_code) )
-  except Exception as e:
-    print(indent + "Error while storing OPT at Target-Repo" + "\n" + indent + str(e) )
-    raise SystemExit
+  uploadOPT(targetAdress, targetopenEHRAPIadress, targetUser, targetPw, optFile)
   
   # Query and save WebTemplate
-  queryPath = targetAdress + targetflatAPIadress + "template/" + templateName
-  authHeader = targetAuth
-  try:
-    response = requests.get(queryPath, headers = {'Authorization':authHeader})
-    json_resp = response.json()
-  except Exception as e:
-    print(indent + "Error while querying and saving WebTemplate from TargetRepo" + "\n" + indent + str(e))
-    raise SystemExit
-
-  filePath = os.path.join(workdir, 'Input', templateName + '_WebTemplate.json')
-  with open(filePath, 'w', encoding="utf-8") as templateFile:
-    json.dump(json_resp['webTemplate'], templateFile, indent = 4, ensure_ascii=False)
-  f.close()
+  queryWebtemplate(targetAdress, targetflatAPIadress, targetUser, targetPw, workdir, templateName)
   
+  # Get FLAT-Paths
   pathsArray = pathExport.getPathsFromWebTemplate(workdir, templateName)
 
   print(indent + "HandleOPT finished.")
 
-  import mappingListGen as gen
   gen.generateList(workdir, templateName, inputCSV, pathsArray)
 
   answerString = ""

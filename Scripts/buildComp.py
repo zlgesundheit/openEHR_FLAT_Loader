@@ -5,15 +5,18 @@
 # [Key=Path-Name, Value=data from csv from column that belongs to Path-Name]
 # 
 # Jendrik Richter (UMG)
-
+# Standard library imports
+import os.path
+import json
+import re
+# Third party imports
 import pandas as pd
 import numpy as np
 import openpyxl
-import re
-import json
-import os.path
+# Local application imports
 
 indent = "    "
+
 # Workaround because Pandas uses some panda data types that are NOT serializable..
 # Use like json.dumps(dictArray[0]), default=convert
 def convert(o):

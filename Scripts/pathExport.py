@@ -14,8 +14,11 @@
   # Pflicht felder haben min=max=1
   # Felder mit <<index>> haben min:0 max -1 !
 
+# Standard library imports
 import json
 import os
+# Third party imports
+# Local application imports
 
 indent = "    "
 

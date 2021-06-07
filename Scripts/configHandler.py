@@ -2,8 +2,10 @@
 #
 # Jendrik Richter (UMG)
 ####################################
-
+# Standard library imports
+# Third party imports
 import configparser
+# Local application imports
 
 config = configparser.ConfigParser()
 

@@ -2,11 +2,14 @@
 # Manually map CSV-Columns on FLAT-Paths
 #
 # Jendrik Richter (UMG)
-
-import pandas as pd
-import xlsxwriter
+############################################################
+# Standard library imports
 import os.path
 import re
+# Third party imports
+import xlsxwriter
+import pandas as pd
+# Local application imports
 
 indent = "    "
 
