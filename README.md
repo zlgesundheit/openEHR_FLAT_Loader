@@ -44,7 +44,3 @@ _Process-Overview:_
     | targetrepopw    | Password for authentification with the Repo (e.g. `SuperSecretPassword`) |
     | targetflatapiadress | The endpoint where the FLAT-API resides (e.g. `/rest/ecis/v1/`) |
     | targetopenehrapiadress| The endpoint where the openEHR-API resides (e.g. `/rest/openehr/v1/`)|
-
-## Work in Progress:
-- SQL-DB as Data Source? Let User provide a query and get data from there
-- GUI with good Usability
