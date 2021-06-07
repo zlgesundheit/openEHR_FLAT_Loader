@@ -2,6 +2,10 @@
 
 ETL-Tool to transform Source Data into openEHR-Resources.  
 
+_Prerequisites:_
+- Project was developed and tested using Python 3.8.3 with openpyxl
+- You need an openEHR-Repo that supports the FLAT-Format and WebTemplates (e.g. EHRBase)
+
 ## Usage
 1. Place your .OPT-File in the Input-Folder
 2. Run Tool via Command Line with `python runMain.py`
@@ -22,12 +26,8 @@ _Process-Overview:_
 
 ![BPMN-Process-Overview](/Dokumentation/Process_Overview_Screenshot.jpg)
 
-_Prerequisites:_
-- Project was developed and tested using Python 3.8.3
-- An openEHR-Repo with the endpoints to supply a WebTemplate and to store Resources in FLAT-Format
-
 ## Config-File
-- The `.config.ini` holds the following information:
+- The `config.ini` holds the following information:
 
     **Environment Infos:**
     | config-variable | Description |
@@ -44,7 +44,3 @@ _Prerequisites:_
     | targetrepopw    | Password for authentification with the Repo (e.g. `SuperSecretPassword`) |
     | targetflatapiadress | The endpoint where the FLAT-API resides (e.g. `/rest/ecis/v1/`) |
     | targetopenehrapiadress| The endpoint where the openEHR-API resides (e.g. `/rest/openehr/v1/`)|
-
-## Work in Progress:
-- SQL-DB as Data Source? Let User provide a query and get data from there
-- GUI with good Usability
