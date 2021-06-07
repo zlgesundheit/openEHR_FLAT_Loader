@@ -8,7 +8,8 @@ _Prerequisites:_
 
 ## Usage
 1. Place your .OPT-File in the Input-Folder
-2. Run Tool via Command Line with `python runMain.py`
+2. Run Tool using the runFlatLoader_win.bat on Windows or runFlatLoader_lin.sh if you are on Linux. 
+  If you use a MAC try starting the runMain.py in Scripts-Directory :)
     - If the config-file is not presented you will be asked to provide infos. 
     - It is of course also possible to adjust them directly in the config-file 
       - -> See [Config-File](#config-file)
