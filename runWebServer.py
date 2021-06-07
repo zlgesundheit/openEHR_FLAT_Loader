@@ -1,4 +1,4 @@
-from flask import Flask , render_template, request, redirect
+from flask import Flask, render_template, redirect, request  
 
 app = Flask(__name__) 
 
@@ -7,7 +7,7 @@ distance = 0.1
 @app.route("/") 
 def home(): 
     global distance
-    return render_template('helloWorld.html')
+    return render_template('helloWorld.html', distance=distance)
 
 @app.route("/setdistance", methods=["POST"])
 def setdistance():
