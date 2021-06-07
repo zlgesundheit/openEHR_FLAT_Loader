@@ -27,7 +27,7 @@ _Process-Overview:_
 ![BPMN-Process-Overview](/Dokumentation/Process_Overview_Screenshot.jpg)
 
 ## Config-File
-- The `.config.ini` holds the following information:
+- The `config.ini` holds the following information:
 
     **Environment Infos:**
     | config-variable | Description |
