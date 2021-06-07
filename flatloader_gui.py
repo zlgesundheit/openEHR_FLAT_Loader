@@ -73,7 +73,7 @@ class WindowManager(ScreenManager):
 
 class FLATLoader_GUI(App):
     def build(self):
-        kv_path = os.path.join('UI', 'flatloader_window.kv')
+        kv_path = os.path.join('KivyUI', 'flatloader_window.kv')
         return Builder.load_file(kv_path)
 
 if __name__ == "__main__":
