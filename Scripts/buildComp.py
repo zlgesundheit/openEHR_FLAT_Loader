@@ -9,12 +9,15 @@
 import os.path
 import json
 import re
+import warnings
 # Third party imports
 import pandas as pd
 import numpy as np
 import openpyxl
 # Local application imports
 
+# openpyxl does not support Validation in Excel-Files - but we do not want this to be printed out
+warnings.filterwarnings('ignore', category=UserWarning, module='openpyxl')
 indent = "    "
 
 # Workaround because Pandas uses some panda data types that are NOT serializable..
@@ -57,7 +60,7 @@ def buildComp(workdir, templateName, inputCSV):
 
   # Read Excel-File
   xlsxPath = os.path.join(workdir, 'Manual Tasks', templateName + '_MAPPING.xlsx')
-  mapTabDF = pd.read_excel(xlsxPath, "Mapping CSV2openEHR", header=0, engine='openpyxl')
+  mapTabDF = pd.read_excel(xlsxPath, "Mapping CSV2openEHR", header=0, engine='openpyxl') #engine openpyxl not xlrd since xlrd drop support for non-xls-files
   highestIndex = getHighestIndexNr(mapTabDF)
   # Cast Index Columns to String instead of float64
   mapTabDF = convertIndexCols(mapTabDF, highestIndex)
