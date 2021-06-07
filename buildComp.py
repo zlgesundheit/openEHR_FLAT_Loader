@@ -8,6 +8,7 @@
 
 import pandas as pd
 import numpy as np
+import openpyxl
 import re
 import json
 import os.path
@@ -53,7 +54,7 @@ def buildComp(workdir, templateName, inputCSV):
 
   # Read Excel-File
   xlsxPath = os.path.join(workdir, 'Manual Tasks', templateName + '_MAPPING.xlsx')
-  mapTabDF = pd.read_excel(xlsxPath, "Mapping CSV2openEHR", header=0)
+  mapTabDF = pd.read_excel(xlsxPath, "Mapping CSV2openEHR", header=0, engine='openpyxl')
   highestIndex = getHighestIndexNr(mapTabDF)
   # Cast Index Columns to String instead of float64
   mapTabDF = convertIndexCols(mapTabDF, highestIndex)
