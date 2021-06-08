@@ -36,15 +36,14 @@ print("Option 1: OPT-laden und Mapping-Liste für manuelle Ausfüllen erzeugen."
 print("Option 2: Auf Basis des ausgefüllten Mappings und der Quelldaten-CSV die Ressourcen erzeugen.")
 print("Option 3: Werte für Konfig-Datei eigeben.")
 print("")
-chooseStep = input("Auswahl:"+ os.linesep)
+chooseStep = input("Auswahl: ")
 if (chooseStep == str(1)):
     opt.handleOPT(
         config['targetRepo']['workdir'], 
         config['targetRepo']['templateName'], 
         config['targetRepo']['inputCSV'], 
         config['targetRepo']['targetRepoAdress'],
-        config['targetRepo']['targetRepoUser'],
-        config['targetRepo']['targetRepoPw'],
+        config['targetRepo']['targetAuthHeader'],
         config['targetRepo']['targetflatAPIadress'],
         config['targetRepo']['targetopenEHRAPIadress']
         )

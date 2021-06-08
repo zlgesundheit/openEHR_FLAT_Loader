@@ -6,6 +6,7 @@
 # Third party imports
 import configparser
 # Local application imports
+from Scripts import handleOPT
 
 config = configparser.ConfigParser()
 
@@ -22,8 +23,7 @@ def storeDefaultConf():
         }
     config['targetRepo'] = {
         'targetRepoAdress':'http://141.5.100.115/ehrbase',
-        'targetRepoUser':'ehrbase-user',
-        'targetRepoPw':'SuperSecretPassword',
+        'targetAuthHeader':'Basic ZWhyYmFzZS11c2VyOlN1cGVyU2VjcmV0UGFzc3dvcmQ=',
         'targetflatAPIadress':'/rest/ecis/v1/',
         'targetopenEHRAPIadress':'/rest/openehr/v1/'
     }
@@ -39,16 +39,20 @@ def setLocalEnv(workdir, templateName, inputCSV):
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
 
+def setLoginData(authHeader):
+    config['targetRepo'] = {
+        'targetAuthHeader':authHeader
+    }
+
 def setTargetRepoAdress(targetRepoAdress):
     config['targetRepo'] = {
         'targetRepoAdress':targetRepoAdress,
     }
 
-def setTargetRepo(targetRepoAdress, targetRepoUser, targetRepoPw, targetflatAPIadress, targetopenEHRAPIadress):
+def setTargetRepo(targetRepoAdress, targetAuthHeader, targetflatAPIadress, targetopenEHRAPIadress):
     config['targetRepo'] = {
         'targetRepoAdress':targetRepoAdress,
-        'targetRepoUser':targetRepoUser,
-        'targetRepoPw':targetRepoPw,
+        'targetAuthHeader':targetAuthHeader,
         'targetflatAPIadress':targetflatAPIadress,
         'targetopenEHRAPIadress':targetopenEHRAPIadress
     }
@@ -64,8 +68,9 @@ def queryConfEntry():
     targetRepoAdress = input("Repo-Adresse (Bsp.: https://IP/ehrbase): ")
     targetRepoUser = input("Nutzername: ")
     targetRepoPw = input("Passwort: ")
+    targetAuthHeader = handleOPT.getAuthHeader(targetRepoUser, targetRepoPw)
     targetflatAPIadress = input("FLAT-Endpunkt (Bsp.: /rest/ecis/v1/): ")
     targetopenEHRAPIadress = input("openEHR-API (Bsp.: /rest/openehr/v1/): ")
-    setTargetRepo(targetRepoAdress, targetRepoUser, targetRepoPw, targetflatAPIadress, targetopenEHRAPIadress)
+    setTargetRepo(targetRepoAdress, targetAuthHeader, targetflatAPIadress, targetopenEHRAPIadress)
     config.read('config.ini')
     return config

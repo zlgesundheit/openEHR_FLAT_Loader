@@ -49,8 +49,7 @@ if (chooseStep == str(1)):
     config['targetRepo']['templateName'], 
     config['targetRepo']['inputCSV'], 
     config['targetRepo']['targetRepoAdress'],
-    config['targetRepo']['targetRepoUser'],
-    config['targetRepo']['targetRepoPw'],
+    config['targetRepo']['targetAuthHeader'],
     config['targetRepo']['targetflatAPIadress'],
     config['targetRepo']['targetopenEHRAPIadress']
     )

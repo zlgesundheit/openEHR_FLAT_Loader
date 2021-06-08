@@ -24,22 +24,20 @@ def getAuthHeader(user, pw):
   #print(authHeader)
   return authHeader
 
-def uploadOPT(targetAdress, targetopenEHRAPIadress, targetUser, targetPw, optFile):
+def uploadOPT(targetAdress, targetopenEHRAPIadress, targetAuthHeader, optFile):
     queryPath = targetAdress + targetopenEHRAPIadress + "definition/template/adl1.4"
-    authHeader = getAuthHeader(targetUser, targetPw) 
     try:
         # Setting the wrong headers may lead to the server storing the opt in a wrong encoding! Added Accept and Accept-Encoding to deal with this. We want UTF-8 # encoding the data-part did the trick
-        response = requests.post(queryPath, headers = {'Authorization':authHeader, 'Content-Type':'application/xml', 'Accept':'*/*', 'Accept-Encoding':'gzip, deflate, br'} ,data = optFile.encode('UTF-8')) 
+        response = requests.post(queryPath, headers = {'Authorization':targetAuthHeader, 'Content-Type':'application/xml', 'Accept':'*/*', 'Accept-Encoding':'gzip, deflate, br'} ,data = optFile.encode('UTF-8')) 
         print (indent + "Template Upload to Target-Repo: " + os.linesep + indent + "Target-Repo: " + targetAdress + os.linesep + indent + "Status: " + str(response.status_code) )
     except Exception as e:
         print(indent + "Error while storing OPT at Target-Repo" + "\n" + indent + str(e) )
         raise SystemExit
 
-def queryWebtemplate(targetAdress, targetflatAPIadress, targetUser, targetPw, workdir, templateName):
+def queryWebtemplate(targetAdress, targetflatAPIadress, targetAuthHeader, workdir, templateName):
     queryPath = targetAdress + targetflatAPIadress + "template/" + templateName
-    authHeader = getAuthHeader(targetUser, targetPw)
     try:
-        response = requests.get(queryPath, headers = {'Authorization':authHeader})
+        response = requests.get(queryPath, headers = {'Authorization':targetAuthHeader})
         json_resp = response.json()
     except Exception as e:
         print(indent + "Error while querying and saving WebTemplate from TargetRepo" + "\n" + indent + str(e))
@@ -49,7 +47,7 @@ def queryWebtemplate(targetAdress, targetflatAPIadress, targetUser, targetPw, wo
     with open(filePath, 'w', encoding="utf-8") as templateFile:
         json.dump(json_resp['webTemplate'], templateFile, indent = 4, ensure_ascii=False)
 
-def handleOPT(workdir, templateName, inputCSV, targetAdress, targetUser, targetPw, targetflatAPIadress, targetopenEHRAPIadress):
+def handleOPT(workdir, templateName, inputCSV, targetAdress, targetAuthHeader, targetflatAPIadress, targetopenEHRAPIadress):
   print(os.linesep + "Step 1: HandleOPT is running.")
   
   # Read OPT-File
@@ -59,10 +57,10 @@ def handleOPT(workdir, templateName, inputCSV, targetAdress, targetUser, targetP
   f.close()
 
   # Upload OPT to server
-  uploadOPT(targetAdress, targetopenEHRAPIadress, targetUser, targetPw, optFile)
+  uploadOPT(targetAdress, targetopenEHRAPIadress, targetAuthHeader, optFile)
   
   # Query and save WebTemplate
-  queryWebtemplate(targetAdress, targetflatAPIadress, targetUser, targetPw, workdir, templateName)
+  queryWebtemplate(targetAdress, targetflatAPIadress, targetAuthHeader, workdir, templateName)
   
   # Get FLAT-Paths
   pathsArray = pathExport.getPathsFromWebTemplate(workdir, templateName)
