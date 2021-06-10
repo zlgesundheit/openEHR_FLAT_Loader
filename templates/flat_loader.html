@@ -180,13 +180,26 @@
                                     <div class="card col-lg-4" style="padding-right: 15px;">
                                         <h5>CSV-File Upload</h5>
                                         <form method="POST" action="getCSVFile" enctype = "multipart/form-data">
-                                            <div class="form-group">
-                                                <label for="csvUpload">Example file input</label>
-                                                <input type="file" class="form-control-file" id="csvUpload" name="csvUpload">
+                                            <div class="form-group" >
+                                                <!-- Nochmal ordentlich: Dropdown vor und nach dem Upload: Nach dem Upload kann eine Datei mit Name abgebildet sein -->
+                                                <label>Drop files here to upload</label>
+                                                <input  type="file" class="form-control" id="csvUpload" name="csvUpload" style="min-height: 150px;
+                                                border: 1px solid rgba(42, 42, 42, 0.05);
+                                                background: rgba(204, 204, 204, 0.15);
+                                                padding: 20px;
+                                                border-radius: 5px;
+                                                -webkit-box-shadow: inset 0 0 5px 0 rgba(43, 43, 43, 0.1);
+                                                box-shadow: inset 0 0 5px 0 rgba(43, 43, 43, 0.1);
+                                                cursor: pointer; 
+                                                background-image: url(https://i0.wp.com/css-tricks.com/wp-content/uploads/2015/11/drag-drop-upload-1.gif?ssl=1);
+                                                background-size: 100%;
+                                                background-repeat: no-repeat;"\>
                                             </div>
                                             <!--<p>Name of saved config: {{optName}}</p> Variable does not work in static fields that are not rebuilt when requested-->
-                                            <p>Name des aktuellen Templates: {{csvname}}</p>
-                                            <div class="input-group mb-3 justify-content-end">
+                                            <div class="input-group mb-3 justify-content-center">
+                                                <p>Name des aktuellen Datei: {{csvname}}.csv</p>
+                                            </div>
+                                            <div class="input-group mb-3 justify-content-center">
                                                 <button type="submit" class="btn btn-outline-secondary">Upload File</button>
                                             </div>
                                         </form>
@@ -210,17 +223,6 @@
                                 </div>
 
                                 <!-- DATA PREVIEW --> 
-                                <!--
-                                    {% for content in array %}
-                                    <tr>
-                                    <td align="center" width="10%">{{ content['number'] }}</a></td>
-                                    <td align="center" width="50%">{{ content.Description }}</td>
-                                    <td align="center" width="10%">{{ content['ID'] }} </td>
-                                    <td> blank</td>
-                                    <td> blank</td>
-                                    </tr>
-                                    {% endfor %}
-                                -->
                                 <!--Accordion wrapper-->
                                 <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true" style="margin-top:1.5%; margin-bottom: 1.5%;">
                                     <!-- Accordion card -->
@@ -245,7 +247,7 @@
                                                                     <i class="fa fa-user fa-5x"></i>
                                                                 </div>
                                                                 <h6 class="text-uppercase">Entrys in Data Set</h6>
-                                                                <h1 class="display-1">134</h1>
+                                                                <h1 class="display-1"> {% if datasetEntryNr == -1 %} - {% else %} {{datasetEntryNr}} {% endif %} </h1>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -256,7 +258,7 @@
                                                                     <i class="fa fa-twitter fa-5x"></i>
                                                                 </div>
                                                                 <h6 class="text-uppercase">Number of Data Items</h6>
-                                                                <h1 class="display-1">125</h1>
+                                                                <h1 class="display-1"> {% if dataItemNr == -1 %} - {% else %} {{dataItemNr}} {% endif %} </h1>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -267,53 +269,29 @@
                                                         <div class="table-responsive">
                                                             <table class="table table-striped">
                                                                 <thead class="thead-inverse">
+                                                                    <!-- Header Row Eintraege = Column Namen -->
                                                                     <tr>
-                                                                        <th>#</th>
-                                                                        <th>Label</th>
-                                                                        <th>Header</th>
-                                                                        <th>Column</th>
-                                                                        <th>Data</th>
+                                                                        {% for header in headerRowLabels %}
+                                                                        <th>{{header}}</th>
+                                                                        {% endfor %}
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
+                                                                    <!-- Eine Zeile fuer jede Spalte im Datensatz..klar -->
+                                                                    {% for row in dataRows %}
                                                                     <tr>
-                                                                        <td>1,001</td>
-                                                                        <td>responsive</td>
-                                                                        <td>bootstrap</td>
-                                                                        <td>cards</td>
-                                                                        <td>grid</td>
+                                                                        {% for i in range(0, dataItemNr) %}
+                                                                        <td>{{row[i]}}</td>
+                                                                        {% endfor %}
                                                                     </tr>
-                                                                    <tr>
-                                                                        <td>1,002</td>
-                                                                        <td>rwd</td>
-                                                                        <td>web designers</td>
-                                                                        <td>theme</td>
-                                                                        <td>responsive</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>1,003</td>
-                                                                        <td>free</td>
-                                                                        <td>open-source</td>
-                                                                        <td>download</td>
-                                                                        <td>template</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>1,003</td>
-                                                                        <td>frontend</td>
-                                                                        <td>developer</td>
-                                                                        <td>coding</td>
-                                                                        <td>card panel</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>1,004</td>
-                                                                        <td>migration</td>
-                                                                        <td>bootstrap 4</td>
-                                                                        <td>mobile-first</td>
-                                                                        <td>design</td>
-                                                                    </tr>
+                                                                    {% endfor %}
                                                                 </tbody>
                                                             </table>
                                                         </div>
+                                                        <!-- TODO: Dropdown zur Auswahl wieviele Eintraege angezeigt werden. 
+                                                            Anzahl der Eintraege dann beschraenken, indem dataItemNr vorher 
+                                                            uberprueft wird nur wenn dataItemNr ueber der angegebenen Begrenzung liegt 
+                                                        -->
                                                     </div>
                                                 </div>
                                             </div>

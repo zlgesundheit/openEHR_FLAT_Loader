@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, request  
 from werkzeug.utils import secure_filename
 import os.path
+import pandas as pd
 
 # Local application imports
 from Scripts import handleOPT as opt
@@ -24,6 +25,12 @@ csvname = "test1"
 successOfCSVUpload = "alert-secondary"
 rueckmeldungCSVUpload = "Laden sie eine CSV-Datei hoch" #TODO: Auswahl von bereits vorhanden CSV-FILES
 visibilityCSVUploadFeedback = "invisible .d-none"
+# CSV Preview
+df = "NaN"
+datasetEntryNr = -1
+dataItemNr = -1
+dataRows = []
+headerRowLabels = []
 # Navigation
 currentTab = "uploadOPT"
 
@@ -48,18 +55,25 @@ def flat_loader():
     global rueckmeldungCSVUpload
     global visibilityCSVUploadFeedback
     global visibilityOPTUploadFeedback
+    global datasetEntryNr
+    global dataItemNr
+    global dataRows
+    global headerRowLabels
     return render_template('flat_loader.html', 
                             username=username, 
                             optname=optname, 
                             successOfOPTUpload=successOfOPTUpload, 
                             rueckmeldungOPTUpload=rueckmeldungOPTUpload,
+                            visibilityOPTUploadFeedback = visibilityOPTUploadFeedback,
                             csvname = csvname,
                             successOfCSVUpload = successOfCSVUpload,
                             rueckmeldungCSVUpload = rueckmeldungCSVUpload,
                             visibilityCSVUploadFeedback = visibilityCSVUploadFeedback,
                             currentTab = currentTab,
-                            visibilityOPTUploadFeedback = visibilityOPTUploadFeedback
-                            
+                            datasetEntryNr = datasetEntryNr,
+                            dataItemNr = dataItemNr,
+                            dataRows = dataRows,
+                            headerRowLabels = headerRowLabels
                             )
 
 @app.route('/data_catalogue')
@@ -161,6 +175,10 @@ def getCSVFile():
     global rueckmeldungCSVUpload
     global visibilityCSVUploadFeedback
     global currentTab
+    global datasetEntryNr
+    global dataItemNr
+    global dataRows
+    global headerRowLabels
 
     currentTab = "selectData"
     f = request.files['csvUpload']
@@ -175,6 +193,21 @@ def getCSVFile():
         visibilityCSVUploadFeedback = "visible"
 
         #Read File for Rendering in Data Preview
+        # Read CSV as data frame
+        csvPath = os.path.join('Input', 'CSV', csvname)
+        dataDF = pd.read_csv(csvPath, header=0, delimiter=";")
+        headerRowLabels = dataDF.columns
+        dataItemNr = len(dataDF.columns)
+        datasetEntryNr = dataDF.shape[0]
+
+        # Array dataRows enthaelt alle zeilen -> fuer bauen in HTML der Tabelle verwenden
+        dataRows = []
+        i = 0
+        while i < dataDF.shape[0]:
+            row = dataDF.iloc[i,0:dataItemNr]
+            dataRows.append(row)
+            i += 1
+
 
         return redirect(request.referrer) 
     elif not f:
