@@ -23,7 +23,7 @@ def generateList(workdir, templateName, inputCSV, pathsArray):
   worksheetPaths = workbook.add_worksheet('FLAT_Paths')
 
   ####### Read CSV and put Items/CSV-Column-Names in sheet 1 in the excel file
-  csvPath = os.path.join(workdir, 'Input', inputCSV + '.csv')
+  csvPath = os.path.join(workdir, 'Input', 'CSV', inputCSV + '.csv')
   df = pd.read_csv(csvPath, header=0, delimiter=";")
 
   # Write Path-Values (for Dropdown-List)

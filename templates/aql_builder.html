@@ -32,7 +32,7 @@
                     <a class="nav-link" href="/data_catalogue">Data-Catalogue</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/aql_builder">AQL-Builder</a>
+                    <a class="nav-link active" href="/aql_builder">AQL-Builder</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="" data-target="#myModal" data-toggle="modal">About</a>
@@ -43,59 +43,30 @@
     <!--/ NAVBAR -->
 
     <div class="container-fluid" id="main">
-        <!-- WHOLE WINDOW -->
+        <!-- MAIN Window -->
         <div class="row">
             <!-- SIDEBAR -->  <!-- SCROLL SPY FOR LATER: https://www.w3schools.com/bootstrap4/tryit.asp?filename=trybs_scrollspy&stacked=h -->
             <div class="col-md-3 col-lg-2 pl-0" style="margin-top: 1%;" id="sidebar" role="navigation">
-                
+                <div class="sticky-top pt-5">
+                    <ul class="nav nav-pills flex-column">
+                        <li class="nav-item"><a class="nav-link" href="#uploadOPT">1. Upload OPT</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#selectData">2. Select Data</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#provideMapping">3. Provide Mapping</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#enterMetadata">4. Enter Metadata</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#uploadResources">5. Upload Resources</a></li>
+                    </ul>
+                </div>
             </div>
             <!--/col-->
             <!-- MAIN WINDOW -->
-            <div class="col-md-6 col-lg-8 main" style="margin-top: 3.5%;">
+            <div class="col-md-9 col-lg-10 main" style="margin-top: 3.5%;">
                 <!-- HEADING ROW-->
-                <h1 class="display-3"> ZLG - Platform </h1>
-                <h1 class="display-7"> Plattformfunktionen, Tools und Infos </h1>
+                <h1 class="display-3"> Data Catalogue </h1>
+                <h1 class="display-7"> CKAN based</h1>
                 <!--/row-->
-                <div class="row">
-                    <!-- FLAT_Loader Card -->
-                    <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="https://cdn.pixabay.com/photo/2014/05/02/21/49/laptop-336373_960_720.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">FLAT_Loader</h5>
-                            <p class="card-text">Map data items to a template and upload data to a repository.</p>
-                            <a href="/flat_loader" class="card-link">Web-GUI</a>
-                            <a href="https://gitlab.gwdg.de/medinfpub/openehr_flat_loader" class="card-link">Commandline-Tool</a>
-                        </div>
-                        </div>
-
-                    <!-- Data Catalogue Card -->
-                    <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="https://cdn.pixabay.com/photo/2015/04/20/13/18/notebook-731212_960_720.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">Data-Catalogue</h5>
-                            <p class="card-text">Explore available data sets and find out how you can access them.</p>
-                            <a href="/data_catalogue" class="card-link">Catalog</a>
-                            <a href="#" class="card-link">Other Link</a>
-                        </div>
-                        </div>
-
-                    <!-- AQL - Builder Card -->
-                    <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="https://cdn.pixabay.com/photo/2015/07/02/10/40/writing-828911_960_720.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">AQL Builder</h5>
-                            <p class="card-text">Query data and download it for analysis and such things</p>
-                            <a href="/aql_builder" class="card-link">AQL-Builder</a>
-                            <a href="#" class="card-link">Analysis-Info</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-             <!--/main col-->
-             <div class="col-md-3 col-lg-2 pl-0" style="margin-top: 1%;" id="sidebar" role="navigation">
-                
             </div>
         </div>
+        <!--/ MAIN WINDOW -->
     </div>
 </body>
 <!--/.container-->

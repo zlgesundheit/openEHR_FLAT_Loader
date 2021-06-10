@@ -58,7 +58,7 @@ def goLow(parentPath, pathArr, children):
 
 def getPathsFromWebTemplate(workdir, templateName):
   try:
-    filePath = os.path.join(workdir, 'Input', templateName +'_WebTemplate.json')
+    filePath = os.path.join(workdir, 'IntermFiles', templateName +'_WebTemplate.json')
     if os.path.isfile(filePath):
       path = ''
       pathArr = []

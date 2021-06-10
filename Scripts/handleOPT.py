@@ -43,7 +43,8 @@ def queryWebtemplate(targetAdress, targetflatAPIadress, targetAuthHeader, workdi
         print(indent + "Error while querying and saving WebTemplate from TargetRepo" + "\n" + indent + str(e))
         raise SystemExit
 
-    filePath = os.path.join(workdir, 'Input', templateName + '_WebTemplate.json')
+    #Store WebTemplate
+    filePath = os.path.join(workdir, 'IntermFiles', templateName + '_WebTemplate.json')
     with open(filePath, 'w', encoding="utf-8") as templateFile:
         json.dump(json_resp['webTemplate'], templateFile, indent = 4, ensure_ascii=False)
 
@@ -51,7 +52,7 @@ def handleOPT(workdir, templateName, inputCSV, targetAdress, targetAuthHeader, t
   print(os.linesep + "Step 1: HandleOPT is running.")
   
   # Read OPT-File
-  filePath = os.path.join(workdir, 'Input', templateName +'.opt')
+  filePath = os.path.join(workdir, 'Input', 'OPT', templateName +'.opt')
   f = open(filePath, "r", encoding='utf-8')
   optFile = f.read()
   f.close()

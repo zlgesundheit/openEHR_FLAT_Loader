@@ -55,7 +55,7 @@ def convertIndexCols(mapTabDF, highestIndex):
 def buildComp(workdir, templateName, inputCSV):
   print(os.linesep + "Step 3: BuildComp is running.")
   # Read CSV as data frame
-  csvPath = os.path.join(workdir, 'Input', inputCSV + '.csv')
+  csvPath = os.path.join(workdir, 'Input', 'CSV', inputCSV + '.csv')
   dataDF = pd.read_csv(csvPath, header=0, delimiter=";")
 
   # Read Excel-File

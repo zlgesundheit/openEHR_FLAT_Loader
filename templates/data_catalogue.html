@@ -28,7 +28,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/flat_loader">FLAT-Loader</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link" href="/data_catalogue">Data-Catalogue</a>
                 </li>
                 <li class="nav-item">
@@ -41,66 +41,76 @@
         </div>
     </nav>
     <!--/ NAVBAR -->
-
+    
+    <!--content container -->
     <div class="container-fluid" id="main">
-        <!-- WHOLE WINDOW -->
+        <!-- MAIN row -->
         <div class="row">
-            <!-- SIDEBAR -->  <!-- SCROLL SPY FOR LATER: https://www.w3schools.com/bootstrap4/tryit.asp?filename=trybs_scrollspy&stacked=h -->
-            <div class="col-md-3 col-lg-2 pl-0" style="margin-top: 1%;" id="sidebar" role="navigation">
-                
+            <!-- SIDEBAR -->
+            <div class="nav flex-column nav-pills col-md-3 col-lg-2" id="v-pills-tab" role="tablist" aria-orientation="vertical" style="margin-top: 3.5%;">
+                <a class="nav-link active" id="v-pills-Something-tab" data-toggle="pill" href="#v-pills-Something" role="tab" aria-controls="v-pills-Something" aria-selected="true">Something</a>
             </div>
             <!--/col-->
             <!-- MAIN WINDOW -->
-            <div class="col-md-6 col-lg-8 main" style="margin-top: 3.5%;">
+            <div class="col-md-9 col-lg-10 main" style="margin-top: 3.5%;">
                 <!-- HEADING ROW-->
-                <h1 class="display-3"> ZLG - Platform </h1>
-                <h1 class="display-7"> Plattformfunktionen, Tools und Infos </h1>
+                <h1 class="display-3"> Data Catalogue </h1>
+                <h1 class="display-7"> CKAN based </h1>
+                <hr>
                 <!--/row-->
-                <div class="row">
-                    <!-- FLAT_Loader Card -->
-                    <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="https://cdn.pixabay.com/photo/2014/05/02/21/49/laptop-336373_960_720.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">FLAT_Loader</h5>
-                            <p class="card-text">Map data items to a template and upload data to a repository.</p>
-                            <a href="/flat_loader" class="card-link">Web-GUI</a>
-                            <a href="https://gitlab.gwdg.de/medinfpub/openehr_flat_loader" class="card-link">Commandline-Tool</a>
-                        </div>
-                        </div>
 
-                    <!-- Data Catalogue Card -->
-                    <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="https://cdn.pixabay.com/photo/2015/04/20/13/18/notebook-731212_960_720.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">Data-Catalogue</h5>
-                            <p class="card-text">Explore available data sets and find out how you can access them.</p>
-                            <a href="/data_catalogue" class="card-link">Catalog</a>
-                            <a href="#" class="card-link">Other Link</a>
-                        </div>
-                        </div>
-
-                    <!-- AQL - Builder Card -->
-                    <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="https://cdn.pixabay.com/photo/2015/07/02/10/40/writing-828911_960_720.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">AQL Builder</h5>
-                            <p class="card-text">Query data and download it for analysis and such things</p>
-                            <a href="/aql_builder" class="card-link">AQL-Builder</a>
-                            <a href="#" class="card-link">Analysis-Info</a>
+                <!-- TAB CONTENT -->
+                <div class="tab-content" id="v-pills-tabContent">
+                    <!-- uploadOPT -->
+                    <div class="tab-pane fade show active" id="v-pills-Something" role="tabpanel" aria-labelledby="v-pills-Something-tab">
+                        <a id="Something"></a>
+                        <div class="row">
+                            <div class="card col-lg-12 w-100">
+                                <div class="card-body">
+                                    <p class="lead"> Some Content -> Get CKAN Web Content in here?</p>
+                                </div>
+                                <div class="row" style="padding-left: 15px; padding-right: 15px;">
+                                    <!--   -->
+                                    <div class="card col-lg-4" style="padding-right: 15px;">
+                                        {% if test == "true" %}
+                                        <p>test = true</p>
+                                        {% else %}
+                                        <p>test = nicht true</p>
+                                        {% endif %}
+                                    </div>
+                                    <!--   -->
+                                    <div class="card col-lg-4">
+                                        
+                                    </div>
+                                    <!--  -->
+                                    <div class="card col-lg-4">
+                                        
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <!--/xxx TAB -->
                 </div>
+                <!--/tab content -->
             </div>
-             <!--/main col-->
-             <div class="col-md-3 col-lg-2 pl-0" style="margin-top: 1%;" id="sidebar" role="navigation">
-                
-            </div>
+            <!--/main window -->
         </div>
+        <!--/main row -->
     </div>
+    <!--/content container -->
 </body>
+<!--/body -->
+
 <!--/.container-->
-<footer class="container-fluid" style="margin-top: 2%;">
-    <p class="text-left small">2021 Zukunftslabor Gesundheit (ZL-G) - Zentrum für digitale Innovation Niedersachsen (ZDIN) by Ministerium für Wissenschaft und Kultur (MWK) </p>
+<footer class="container-fluid w-100" style="margin-top: 2%;">
+    <div class="row">
+        <div col="col-md-3 col-lg-2"></div>
+        <div class="col-md-6 col-lg-8">
+            <p class="text-left small">2021 Zukunftslabor Gesundheit (ZL-G) - Zentrum für digitale Innovation Niedersachsen (ZDIN) by Ministerium für Wissenschaft und Kultur (MWK) </p>
+        </div>
+        <div col="col-md-3 col-lg-2"></div>
+    </div>
 </footer>
 
 <!-- Modal -->

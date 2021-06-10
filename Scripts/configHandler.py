@@ -49,10 +49,14 @@ def setTargetRepoAdress(targetRepoAdress):
         'targetRepoAdress':targetRepoAdress,
     }
 
-def setTargetRepo(targetRepoAdress, targetAuthHeader, targetflatAPIadress, targetopenEHRAPIadress):
+def settemplateName(templateName):
+    config['DEFAULT'] = {
+        'templateName':templateName,
+    }
+
+def setTargetRepo(targetRepoAdress, targetflatAPIadress, targetopenEHRAPIadress):
     config['targetRepo'] = {
         'targetRepoAdress':targetRepoAdress,
-        'targetAuthHeader':targetAuthHeader,
         'targetflatAPIadress':targetflatAPIadress,
         'targetopenEHRAPIadress':targetopenEHRAPIadress
     }
@@ -60,17 +64,21 @@ def setTargetRepo(targetRepoAdress, targetAuthHeader, targetflatAPIadress, targe
         config.write(configfile)
 
 def queryConfEntry():
-    #Query entrys for new Conf
-    workdir = input("Pfad zum Work-Dir: ")
-    templateName = input("Name des Templates: ")
-    inputCSV = input("Name der CSV: ")
-    setLocalEnv(workdir, templateName, inputCSV)
-    targetRepoAdress = input("Repo-Adresse (Bsp.: https://IP/ehrbase): ")
-    targetRepoUser = input("Nutzername: ")
-    targetRepoPw = input("Passwort: ")
-    targetAuthHeader = handleOPT.getAuthHeader(targetRepoUser, targetRepoPw)
-    targetflatAPIadress = input("FLAT-Endpunkt (Bsp.: /rest/ecis/v1/): ")
-    targetopenEHRAPIadress = input("openEHR-API (Bsp.: /rest/openehr/v1/): ")
-    setTargetRepo(targetRepoAdress, targetAuthHeader, targetflatAPIadress, targetopenEHRAPIadress)
-    config.read('config.ini')
-    return config
+    if input("Default-Conf benutzen? (y/n): ") == "y":
+        storeDefaultConf()
+        return config
+    else:
+        #Query entrys for new Conf
+        workdir = input("Pfad zum Work-Dir: ")
+        templateName = input("Name des Templates: ")
+        inputCSV = input("Name der CSV: ")
+        setLocalEnv(workdir, templateName, inputCSV)
+        targetRepoAdress = input("Repo-Adresse (Bsp.: https://IP/ehrbase): ")
+        targetRepoUser = input("Nutzername: ")
+        targetRepoPw = input("Passwort: ")
+        targetAuthHeader = handleOPT.getAuthHeader(targetRepoUser, targetRepoPw)
+        targetflatAPIadress = input("FLAT-Endpunkt (Bsp.: /rest/ecis/v1/): ")
+        targetopenEHRAPIadress = input("openEHR-API (Bsp.: /rest/openehr/v1/): ")
+        setTargetRepo(targetRepoAdress, targetAuthHeader, targetflatAPIadress, targetopenEHRAPIadress)
+        config.read('config.ini')
+        return config
