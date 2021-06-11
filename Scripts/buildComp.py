@@ -92,7 +92,7 @@ def buildComp(workdir, templateName, inputCSV):
             if pattern.search(path):
               n = 1
               x = mapTabDF[str(n) + '. Index'][mapTabRunner]
-              while n <= highestIndex:
+              while n <= highestIndex: 
                 path = replacenth(path, str( int(  float(mapTabDF[str(n) + '. Index'][mapTabRunner]))), n-1)
                 n += 1
             # Erstelle einen Dicteintrag mit KEY=PATH und VALUE=WERT in der dem KEY zugeordneten Spalte
@@ -120,7 +120,3 @@ def buildComp(workdir, templateName, inputCSV):
 
   answerString = ""
   return answerString
-
-# Old Code
-  #pattern = "<<index>>"
-  #path = re.sub(pattern, str(mapTabDF['Index'][mapTabRunner]), path)

@@ -10,6 +10,8 @@
   # Blätter mit nur einem Input haben manchmal Suffix
   # Inputs haben oft Suffix-Angaben die mit |suffix and den Pfad angehängt werden
 
+# Achtung! Suffixe können in Listen sein. In dem Fall Liste durchgehen und Pfade rausschreiben TODO
+
 # Kardinalität:
   # Pflicht felder haben min=max=1
   # Felder mit <<index>> haben min:0 max -1 !

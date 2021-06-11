@@ -1,0 +1,44 @@
+===================================
+Bugs:
+
+- buildComp:
+
+	5. Tlw. falsche Formatierung -> Input muss UTF-8 kodiert sein. Hier nochmal nachschauen.
+
+	WICHTIG aber EINFACH
+!	1. Bei leeren CSV-Datenfeldern wird in der Ressource "NaN" eingetragen. 
+        Siehe 2. -> Überarbeitung des Pfad Auslesens, darauf basierend dann dem Nutzer beim Mapping anzeigen, was Pflicht ist und welches Format der Input haben muss. 
+
+	4. Sprechende Fehlermeldung bei Missing <<index>>-Angaben im Mapping!
+
+- pathExport:
+
+	WICHTIG aber AUFWÄNDIGER
+	2. Bei Pflichtpfaden dies mitschleppen und in GUI/beim Mapping deutlich machen
+		- Übersicht über alle PFLICHT-PFade -> Diese Daten müssen dann auch in Quelldaten vorhanden sein und gemappt werden
+		- Datentyp UND Pflichtfeld-Wert des Felds mit dem Pfad speichern und mitschleppen (oder aus WebTemplate zu einer id abrufen?)
+			- Aufbau eines schönen Pfad Dictionaries mit 
+				- Pfad
+				- Pflicht-Bool
+				- Datentyp
+
+!	SUPER WICHTIG TODO
+!	3. Suffixe können in Listen stehen (Bsp. DV_Ordinal Sturz im NATARS_Tzusatz.opt) -> Hierzu alle Suffixe/Pfade ermitteln und erzeugen
+
+- Aus dem WebTemplate lese ich keine Pfade wie die folgenden aus. Die stehen da auch nicht drin. Was bedeutet das für uns?
+	_other_participation:0
+	_uid
+
+===================================
+Neu:
+
+KERNFUNKTION
+- Mapping GUI mit 
+	- Autovervollständigung
+	- Übersicht, welche Pfade bereits gemappt wurde + verhindern, dass Pfade doppelt zugeordnet werden
+
+WICHTIG
+- Uploader (ehr_id|composition/daten) steht noch aus
+
+NETT
+- SQL-Connector für SQL-Abfrage bei DB als Input-Möglichkeit

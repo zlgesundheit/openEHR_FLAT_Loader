@@ -167,6 +167,12 @@ def getOPTFile():
 
     return redirect(request.referrer) 
 
+# Select an csv-file from existing files in Input/CSV-Dir 
+@app.route("/selectCSVFile", methods=["POST"])
+def selectCSVFile():
+    pass
+    # TODO
+
 # getCSVFile  ##TODO What if the user has multiple files or lots of files? Can we assume: one csv file = one mapping = one data set = one template
 @app.route("/getCSVFile", methods=["POST"])
 def getCSVFile():
