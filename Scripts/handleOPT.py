@@ -64,36 +64,13 @@ def handleOPT(workdir, templateName, inputCSV, targetAdress, targetAuthHeader, t
   queryWebtemplate(targetAdress, targetflatAPIadress, targetAuthHeader, workdir, templateName)
   
   # Get FLAT-Paths
-  pathsArray = pathExport.getPathsFromWebTemplate(workdir, templateName)
+  pathsDict, mandatoryPathArr = pathExport.getPathsFromWebTemplate(workdir, templateName)
 
   print(indent + "HandleOPT finished.")
 
-  gen.generateList(workdir, templateName, inputCSV, pathsArray)
+  gen.generateList(workdir, templateName, inputCSV, pathsDict, mandatoryPathArr)
 
   answerString = ""
   return answerString
-  # Done
-
-#######################################################
-'''
-# OLD PATH CAPTURE FROM EXAMPLE COMPOSITION
-  # Read Composition-String from File (Example-Composition-String.json)
-  exampleCompPath = os.path.join(workdir, 'Input', templateName + '_ExampleComp.json')
-  f = open(exampleCompPath, "r")
-  string = f.read()
-  f.close()
-
-  # Find all FLAT-Paths
-  pattern = '\"[a-z,\/,_,|,:,0-9]*\":'
-  pathsArray = re.findall(pattern, string)
-
-  # Extract only path-Part of the Pathes
-  count = 0
-  for path in pathsArray:
-    pathsArray[count] = path[1:-2]
-    pathsArray[count] = pathsArray[count].replace('0', '<<index>>')
-    count += 1
-'''
-#######################################################
 
   
