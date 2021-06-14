@@ -34,15 +34,19 @@ Bugs:
 - Aus dem WebTemplate lese ich keine Pfade wie die folgenden aus. Die stehen da auch nicht drin. Was bedeutet das für uns?
 	_other_participation:0
 	_uid
+  Welche Pfade gibt es dort noch bzgl. Audit etc., brauchen wir die?
 
 ===================================
 Neu:
 
 KERNFUNKTION
+- WebTemplate to Path-Dict (or Array of Dicts with Cardinality and Suffixes and DataType!)
+
 - Mapping GUI mit 
 	- Autovervollständigung
 	- Übersicht, welche Pfade bereits gemappt wurde + verhindern, dass Pfade doppelt zugeordnet werden
 
+===================================
 WICHTIG
 - Uploader (ehr_id|composition/daten) steht noch aus
 
@@ -50,7 +54,7 @@ NETT
 - SQL-Connector für SQL-Abfrage bei DB als Input-Möglichkeit
 
 
-
+===================================
 Idee:
 Erstellen eines Composition-Template mit Platzhalter für den Datenwert.
 {
