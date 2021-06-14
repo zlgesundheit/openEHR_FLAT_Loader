@@ -9,9 +9,13 @@
 #
 # Jendrik Richter (UMG)
 ##############################################################################
-import configparser
+## Imports
+# Standard library imports
 import os.path
-import configHandler
+# Third party imports
+import configparser
+# Local application imports
+from Scripts import configHandler
 
 # See if config already exists
 confFile_path = 'config.ini'
@@ -45,8 +49,7 @@ if (chooseStep == str(1)):
     config['targetRepo']['templateName'], 
     config['targetRepo']['inputCSV'], 
     config['targetRepo']['targetRepoAdress'],
-    config['targetRepo']['targetRepoUser'],
-    config['targetRepo']['targetRepoPw'],
+    config['targetRepo']['targetAuthHeader'],
     config['targetRepo']['targetflatAPIadress'],
     config['targetRepo']['targetopenEHRAPIadress']
     )

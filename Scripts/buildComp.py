@@ -5,15 +5,21 @@
 # [Key=Path-Name, Value=data from csv from column that belongs to Path-Name]
 # 
 # Jendrik Richter (UMG)
-
+# Standard library imports
+import os.path
+import json
+import re
+import warnings
+# Third party imports
 import pandas as pd
 import numpy as np
 import openpyxl
-import re
-import json
-import os.path
+# Local application imports
 
+# openpyxl does not support Validation in Excel-Files - but we do not want this to be printed out
+warnings.filterwarnings('ignore', category=UserWarning, module='openpyxl')
 indent = "    "
+
 # Workaround because Pandas uses some panda data types that are NOT serializable..
 # Use like json.dumps(dictArray[0]), default=convert
 def convert(o):
@@ -49,12 +55,12 @@ def convertIndexCols(mapTabDF, highestIndex):
 def buildComp(workdir, templateName, inputCSV):
   print(os.linesep + "Step 3: BuildComp is running.")
   # Read CSV as data frame
-  csvPath = os.path.join(workdir, 'Input', inputCSV + '.csv')
+  csvPath = os.path.join(workdir, 'Input', 'CSV', inputCSV + '.csv')
   dataDF = pd.read_csv(csvPath, header=0, delimiter=";")
 
   # Read Excel-File
   xlsxPath = os.path.join(workdir, 'Manual Tasks', templateName + '_MAPPING.xlsx')
-  mapTabDF = pd.read_excel(xlsxPath, "Mapping CSV2openEHR", header=0, engine='openpyxl')
+  mapTabDF = pd.read_excel(xlsxPath, "Mapping CSV2openEHR", header=0, engine='openpyxl') #engine openpyxl not xlrd since xlrd drop support for non-xls-files
   highestIndex = getHighestIndexNr(mapTabDF)
   # Cast Index Columns to String instead of float64
   mapTabDF = convertIndexCols(mapTabDF, highestIndex)
@@ -86,7 +92,7 @@ def buildComp(workdir, templateName, inputCSV):
             if pattern.search(path):
               n = 1
               x = mapTabDF[str(n) + '. Index'][mapTabRunner]
-              while n <= highestIndex:
+              while n <= highestIndex: 
                 path = replacenth(path, str( int(  float(mapTabDF[str(n) + '. Index'][mapTabRunner]))), n-1)
                 n += 1
             # Erstelle einen Dicteintrag mit KEY=PATH und VALUE=WERT in der dem KEY zugeordneten Spalte
@@ -114,7 +120,3 @@ def buildComp(workdir, templateName, inputCSV):
 
   answerString = ""
   return answerString
-
-# Old Code
-  #pattern = "<<index>>"
-  #path = re.sub(pattern, str(mapTabDF['Index'][mapTabRunner]), path)

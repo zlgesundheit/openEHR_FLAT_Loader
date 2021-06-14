@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->  
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+    <!-- Bootstrap Popper + JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+    <!-- JQuery Stuff-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <title>ZLG - Platform</title>
+</head>
+
+<body>
+    <!-- NAVBAR AT TOP -->
+    <nav class="navbar fixed-top navbar-dark navbar-expand-md bg-primary">
+        <a class="navbar-brand" href="/">ZL-G Platform</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">☰ </button>
+        <div class="navbar-collapse collapse" id="collapsingNavbar">
+            <ul class="nav navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/flat_loader">FLAT-Loader</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/data_catalogue">Data-Catalogue</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/aql_builder">AQL-Builder</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="" data-target="#myModal" data-toggle="modal">About</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!--/ NAVBAR -->
+
+    <!--content container -->
+    <div class="container-fluid" id="main">
+        <!-- MAIN row -->
+        <div class="row">
+            <!-- SIDEBAR -->
+            <div class="nav flex-column nav-pills col-md-3 col-lg-2" id="v-pills-tab" role="tablist" aria-orientation="vertical" style="margin-top: 3.5%;">
+                <a {% if currentTab == "uploadOPT" %}       class="nav-link active" {% else %} class="nav-link" {% endif %} id="v-pills-uploadOPT-tab" data-toggle="pill" href="#v-pills-uploadOPT" role="tab" aria-controls="v-pills-uploadOPT" aria-selected="true">1. Upload OPT</a>
+                <a {% if currentTab == "selectData" %}      class="nav-link active" {% else %} class="nav-link" {% endif %} id="v-pills-selectData-tab" data-toggle="pill" href="#v-pills-selectData" role="tab" aria-controls="v-pills-selectData" aria-selected="false">2. Select Data</a>
+                <a {% if currentTab == "provideMapping" %}  class="nav-link active" {% else %} class="nav-link" {% endif %} id="v-pills-provideMapping-tab" data-toggle="pill" href="#v-pills-provideMapping" role="tab" aria-controls="v-pills-provideMapping" aria-selected="false">3. Provide Mapping</a>
+                <a {% if currentTab == "enterMetadata" %}   class="nav-link active" {% else %} class="nav-link" {% endif %} id="v-pills-enterMetadata-tab" data-toggle="pill" href="#v-pills-enterMetadata" role="tab" aria-controls="v-pills-enterMetadata" aria-selected="false">4. Enter Metadata</a>
+                <a {% if currentTab == "uploadResources" %} class="nav-link active" {% else %} class="nav-link" {% endif %} id="v-pills-uploadResources-tab" data-toggle="pill" href="#v-pills-uploadResources" role="tab" aria-controls="v-pills-uploadResources" aria-selected="false">5. Upload Resources</a>
+            </div>
+            <!--/col-->
+            <!-- MAIN WINDOW -->
+            <div class="col-md-9 col-lg-10 main" style="margin-top: 3.5%;">
+                <!-- HEADING ROW-->
+                <h1 class="display-3"> FLAT_Loader </h1>
+                <h1 class="display-7"> Map Table data to openEHR Templates</h1>
+                <hr>
+                <!--/row-->
+
+                <!-- TAB CONTENT -->
+                <div class="tab-content" id="v-pills-tabContent">
+                    <!-- uploadOPT -->
+                    <div {% if currentTab == "uploadOPT" %} class="tab-pane fade show active" {% else %} class="tab-pane fade" {% endif %}  id="v-pills-uploadOPT" role="tabpanel" aria-labelledby="v-pills-uploadOPT-tab">
+                        <div class="row">
+                            <div class="card col-lg-12 w-100">
+                                <div class="card-body">
+                                    <p class="lead"> 1. Upload OPT</p>
+                                </div>
+                                <div class="row" style="padding-left: 15px; padding-right: 15px;">
+                                    <!-- file upload -->
+                                    <div class="card col-lg-4" style="padding-right: 15px;">
+                                        <h5>OPT-File Upload</h5>
+                                        <form method="POST" action="getOPTFile" enctype = "multipart/form-data">
+                                            <div class="form-group">
+                                                <label for="exampleFormControlFile1">Example file input</label>
+                                                <input type="file" class="form-control-file" id="exampleFormControlFile1" name="exampleFormControlFile1">
+                                            </div>
+                                            <!--<p>Name of saved config: {{optName}}</p> Variable does not work in static fields that are not rebuilt when requested-->
+                                            <p>Name des aktuellen Templates: {{optname}}</p>
+                                            <div class="input-group mb-3 justify-content-end">
+                                                <button type="submit" class="btn btn-outline-secondary">Save in Config</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!-- login info -->
+                                    <div class="card col-lg-4">
+                                        <div class="Container">
+                                            <h5>Login Info</h5>
+                                            <form method="POST" action="setUserInfo">
+                                                <div class="form-group input-group input-group-sm mb-3">
+                                                    <input type="text" class="form-control" id="exampleInputEmail1" name="exampleInputEmail1" aria-describedby="username" placeholder={{username}}>
+                                                    <span class="input-group-text" id="basic-addon1">Base Adress</span>
+                                                </div>
+                                                <div class="form-group input-group input-group-sm mb-3">
+                                                    <input type="password" class="form-control" id="exampleInputPassword1" name="exampleInputPassword1" placeholder="Password" aria-label="password" aria-describedby="basic-addon5">
+                                                    <span class="input-group-text" id="basic-addon5">Password</span>
+                                                </div>
+                                                <small id="passwordHelp" class="form-text text-muted">Stored as Base64-Encoding (unsafe)</small>
+                                                <!-- TODO Button auf die gleiche Hoehe wie der Button in der naechsten Card -->
+                                                <div class="invisible" style="height: 50%">abc</div>
+                                                <div class="input-group mb-3 justify-content-end">
+                                                    <button type="submit" class="btn btn-outline-secondary">Save in Config</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <!-- ehr-repo info -->
+                                    <div class="card col-lg-4">
+                                        <h5>EHR-Repo Info</h5>
+                                        <div class="input-group w-100">
+                                            <form method="POST" action="setRepoInfo">
+                                                <div class="input-group input-group-sm mb-3">
+                                                    <input type="text" class="form-control" placeholder="e.g. http://141.5.100.119/ehrbase" name="baseAdress" aria-label="Username" aria-describedby="basic-addon1">
+                                                    <span class="input-group-text" id="basic-addon1">Base Adress</span>
+                                                </div>
+                                                <div class="input-group input-group-sm mb-3">
+                                                    <input type="text" class="form-control" placeholder="e.g. /rest/openehr/v1" name="openEHREndpoint" aria-label="ehrendpoint" aria-describedby="basic-addon2">
+                                                    <span class="input-group-text" id="basic-addon2">openEHR-Endpoint</span>
+                                                </div>
+                                                <div class="input-group input-group-sm mb-3">
+                                                    <input type="text" class="form-control" placeholder="e.g. /rest/ecis/v1/" name="FLATEndpoint" aria-label="flatendpoint" aria-describedby="basic-addon3">
+                                                    <span class="input-group-text" id="basic-addon3">FLAT-Endpoint</span>
+                                                </div>
+                                                <!-- TODO Button nach rechts: justify-content-end not working -->
+                                                <div class="btn-group">
+                                                    <button type="submit" class="btn btn-outline-secondary">Save in Config</button>
+                                                    <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <span class="sr-only justify-content-end">Toggle Dropdown</span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="#">Load Recent 1</a>
+                                                        <a class="dropdown-item" href="#">Load Recent 2</a>
+                                                        <a class="dropdown-item" href="#">Load Recent 3</a>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Großer Mapping erstellen Button -->
+                                <div class="row">
+                                    <div class="col col-lg-12">
+                                        <form method="POST" action="buildMapping">
+                                            <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top: 4px;">Build Mapping</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!-- Alert Fenster fuer Feedback-->
+                                <div class="row">
+                                    <div class="col col-lg-12">
+                                        <div class="alert {{successOfOPTUpload}}" style="margin-top: 4px;" role="alert">
+                                            <p>{{rueckmeldungOPTUpload}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/UPLOAD OPT TAB -->
+
+                    <!-- Select Data -->
+                    <div {% if currentTab == "selectData" %} class="tab-pane fade show active" {% else %} class="tab-pane fade" {% endif %} id="v-pills-selectData" role="tabpanel" aria-labelledby="v-pills-selectData-tab">
+                        <div class="row">
+                            <div class="card col-lg-12 w-100">
+                                <!-- Header -->
+                                <div class="card-body">
+                                    <p class="lead"> 2. Select Data</p>
+                                </div>
+                                <!-- Setting Cards -->
+                                <div class="row" style="padding-left: 15px; padding-right: 15px;">
+                                    <!-- CSV-FILE Upload  -->
+                                    <div class="card col-lg-4" style="padding-right: 15px;">
+                                        <h5>CSV-File Upload</h5>
+                                        <form method="POST" action="getCSVFile" enctype = "multipart/form-data">
+                                            <div class="form-group" >
+                                                <!-- Nochmal ordentlich: Dropdown vor und nach dem Upload: Nach dem Upload kann eine Datei mit Name abgebildet sein -->
+                                                <label>Drop files here to upload</label>
+                                                <input  type="file" class="form-control" id="csvUpload" name="csvUpload" style="min-height: 150px;
+                                                border: 1px solid rgba(42, 42, 42, 0.05);
+                                                background: rgba(204, 204, 204, 0.15);
+                                                padding: 20px;
+                                                border-radius: 5px;
+                                                -webkit-box-shadow: inset 0 0 5px 0 rgba(43, 43, 43, 0.1);
+                                                box-shadow: inset 0 0 5px 0 rgba(43, 43, 43, 0.1);
+                                                cursor: pointer; 
+                                                background-image: url(https://i0.wp.com/css-tricks.com/wp-content/uploads/2015/11/drag-drop-upload-1.gif?ssl=1);
+                                                background-size: 100%;
+                                                background-repeat: no-repeat;"\>
+                                            </div>
+                                            <!--<p>Name of saved config: {{optName}}</p> Variable does not work in static fields that are not rebuilt when requested-->
+                                            <div class="input-group mb-3 justify-content-center">
+                                                <p>Name des aktuellen Datei: {{csvname}}.csv</p>
+                                            </div>
+                                            <div class="input-group mb-3 justify-content-center">
+                                                <button type="submit" class="btn btn-outline-secondary">Upload File</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!--   -->
+                                    <div class="card col-lg-4" style="padding-right: 15px;">
+                                        Select an already uploaded CSV-File 
+                                    </div>
+                                    <!--   -->
+                                    <div class="card col-lg-4" style="padding-right: 15px;">
+                                        content
+                                    </div>
+                                </div>
+                                <!-- Alert Fenster fuer Feedback-->
+                                <div class="row">
+                                    <div class="col col-lg-12 {{visibilityCSVUploadFeedback}}">
+                                        <div class="alert {{successOfCSVUpload}}" style="margin-top: 4px;" role="alert">
+                                            <p>{{rueckmeldungCSVUpload}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- DATA PREVIEW --> 
+                                <!--Accordion wrapper-->
+                                <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true" style="margin-top:1.5%; margin-bottom: 1.5%;">
+                                    <!-- Accordion card -->
+                                    <div class="card">
+                                        <!-- Card header -->
+                                        <div class="card-header" role="tab" id="headingOne1">
+                                            <a data-toggle="collapse" data-parent="#accordionEx" href="#collapseOne1" aria-expanded="true" aria-controls="collapseOne1">
+                                            <h5 class="mb-0">
+                                                Toggle Data Preview <i class="fas fa-angle-down rotate-icon"></i>
+                                            </h5>
+                                            </a>
+                                        </div>
+                                        <!-- Card body -->  <!-- TODO: Variable for class="collapse show" or not show e.g. depending on wether data is uplaoded or not -->
+                                        <div id="collapseOne1" class="collapse" role="tabpanel" aria-labelledby="headingOne1" data-parent="#accordionEx">
+                                            <div class="card-body">
+                                                <p class="lead"> Data Preview </p>
+                                                <div class="row">
+                                                    <div class="col-lg-6 col-md-6">
+                                                        <div class="card text-white bg-success overflow-hidden">
+                                                            <div class="card-body bg-success">
+                                                                <div class="rotate">
+                                                                    <i class="fa fa-user fa-5x"></i>
+                                                                </div>
+                                                                <h6 class="text-uppercase">Entrys in Data Set</h6>
+                                                                <h1 class="display-1"> {% if datasetEntryNr == -1 %} - {% else %} {{datasetEntryNr}} {% endif %} </h1>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-md-6">
+                                                        <div class="card text-white card-info overflow-hidden">
+                                                            <div class="card-body bg-info">
+                                                                <div class="rotate">
+                                                                    <i class="fa fa-twitter fa-5x"></i>
+                                                                </div>
+                                                                <h6 class="text-uppercase">Number of Data Items</h6>
+                                                                <h1 class="display-1"> {% if dataItemNr == -1 %} - {% else %} {{dataItemNr}} {% endif %} </h1>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped">
+                                                                <thead class="thead-inverse">
+                                                                    <!-- Header Row Eintraege = Column Namen -->
+                                                                    <tr>
+                                                                        {% for header in headerRowLabels %}
+                                                                        <th>{{header}}</th>
+                                                                        {% endfor %}
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <!-- Eine Zeile fuer jede Spalte im Datensatz..klar -->
+                                                                    {% for row in dataRows %}
+                                                                    <tr>
+                                                                        {% for i in range(0, dataItemNr) %}
+                                                                        <td>{{row[i]}}</td>
+                                                                        {% endfor %}
+                                                                    </tr>
+                                                                    {% endfor %}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <!-- TODO: Dropdown zur Auswahl wieviele Eintraege angezeigt werden. 
+                                                            Anzahl der Eintraege dann beschraenken, indem dataItemNr vorher 
+                                                            uberprueft wird nur wenn dataItemNr ueber der angegebenen Begrenzung liegt 
+                                                        -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/DATA PREVIEW -->
+                            </div>
+                        </div>
+                    </div>
+                    <!--/SELECT DATA TAB -->
+
+                    <!-- Provide Mapping -->
+                    <div {% if currentTab == "provideMapping" %} class="tab-pane fade show active" {% else %} class="tab-pane fade" {% endif %} id="v-pills-provideMapping" role="tabpanel" aria-labelledby="v-pills-provideMapping-tab">
+                        <div class="row">
+                            <div class="card col-lg-12 w-100">
+                                <!-- Header -->
+                                <div class="card-body">
+                                    <p class="lead"> 2. Select Data</p>
+                                </div>
+                                <!-- Setting Cards -->
+                                <div class="row" style="padding-left: 15px; padding-right: 15px;">
+                                    <!--   -->
+                                    <div class="card col-lg-4" style="padding-right: 15px;">
+                                        content
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/PROVIDE MAPPING TAB -->
+
+                    <!-- Enter Metadata (for a template) -->
+                    <div {% if currentTab == "enterMetadata" %} class="tab-pane fade show active" {% else %} class="tab-pane fade" {% endif %} id="v-pills-enterMetadata" role="tabpanel" aria-labelledby="v-pills-enterMetadata-tab">
+                        ...enterMetadata
+                    </div>
+                    <!--/ ENTER METADATA TAB -->
+
+                    <!-- Upload Resources -->
+                    <div {% if currentTab == "uploadResources" %} class="tab-pane fade show active" {% else %} class="tab-pane fade" {% endif %} id="v-pills-uploadResources" role="tabpanel" aria-labelledby="v-pills-uploadResources-tab">
+                        ...uploadResources
+                    </div>
+                    <!--/ UPLOAD RESOURCES TAB -->
+
+                </div>
+                <!--/tab content -->
+            </div>
+            <!--/main window -->
+        </div>
+        <!--/main row -->
+    </div>
+    <!--/content container -->
+</body>
+<!--/body -->
+
+<!-- footer -->
+<footer class="container-fluid" style="margin-top: 2%;">
+    <p class="text-left small">2021 Zukunftslabor Gesundheit (ZL-G) - Zentrum für digitale Innovation Niedersachsen (ZDIN) by Ministerium für Wissenschaft und Kultur (MWK) </p>
+</footer>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">About this web application</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body"> 
+                <p>The web application is in an early developemnt stage.</p>
+                <p>Contact:</p>
+                <p>For questions about the development contact Jendrik Richter from the Department of Medical Informatics at the UMG in Göttingen. </p>
+                <p>jendrik.richter@med.uni-goettingen.de</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

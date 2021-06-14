@@ -1,2 +1,2 @@
-python "%~dp0%\\Scripts\\runMain.py"
+python "%~dp0%\runMain.py"
 pause
