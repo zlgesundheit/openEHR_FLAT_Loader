@@ -27,9 +27,19 @@ def getAuthHeader(user, pw):
 def uploadOPT(targetAdress, targetopenEHRAPIadress, targetAuthHeader, optFile):
     queryPath = targetAdress + targetopenEHRAPIadress + "definition/template/adl1.4"
     try:
-        # Setting the wrong headers may lead to the server storing the opt in a wrong encoding! Added Accept and Accept-Encoding to deal with this. We want UTF-8 # encoding the data-part did the trick
-        response = requests.post(queryPath, headers = {'Authorization':targetAuthHeader, 'Content-Type':'application/xml', 'Accept':'*/*', 'Accept-Encoding':'gzip, deflate, br'} ,data = optFile.encode('UTF-8')) 
-        print (indent + "Template Upload to Target-Repo: " + os.linesep + indent + "Target-Repo: " + targetAdress + os.linesep + indent + "Status: " + str(response.status_code) )
+        # Check if OPT is already present at the server
+        respGet = requests.get(queryPath, headers = {'Authorization':targetAuthHeader})
+        print ( respGet.status_code )
+        if respGet.status_code != 200:
+            try:
+                # Send OPT to Server
+                response = requests.post(queryPath, headers = {'Authorization':targetAuthHeader, 'Content-Type':'application/xml', 'Accept':'*/*', 'Accept-Encoding':'gzip, deflate, br'} ,data = optFile.encode('UTF-8')) 
+                print (indent + "Template Upload to Target-Repo: " + os.linesep + indent + "Target-Repo: " + targetAdress + os.linesep + indent + "Status: " + str(response.status_code) )
+            except Exception as e:
+                print(indent + "Error while storing OPT at Target-Repo" + "\n" + indent + str(e) )
+                raise SystemExit
+        else:
+            print( indent + "OPT already exists at this server" )  
     except Exception as e:
         print(indent + "Error while storing OPT at Target-Repo" + "\n" + indent + str(e) )
         raise SystemExit
@@ -64,11 +74,11 @@ def handleOPT(workdir, templateName, inputCSV, targetAdress, targetAuthHeader, t
   queryWebtemplate(targetAdress, targetflatAPIadress, targetAuthHeader, workdir, templateName)
   
   # Get FLAT-Paths
-  pathsDict, mandatoryPathArr = pathExport.getPathsFromWebTemplate(workdir, templateName)
+  pathsDict = pathExport.getPathsFromWebTemplate(workdir, templateName)
 
   print(indent + "HandleOPT finished.")
 
-  gen.generateList(workdir, templateName, inputCSV, pathsDict, mandatoryPathArr)
+  gen.generateList(workdir, templateName, inputCSV, pathsDict)
 
   answerString = ""
   return answerString

@@ -53,7 +53,6 @@ WICHTIG
 NETT
 - SQL-Connector für SQL-Abfrage bei DB als Input-Möglichkeit
 
-
 ===================================
 Idee:
 Erstellen eines Composition-Template mit Platzhalter für den Datenwert.
@@ -61,3 +60,6 @@ Erstellen eines Composition-Template mit Platzhalter für den Datenwert.
     "natars_tzusatz/body_mass_index/beliebiges_ereignis:0/body_mass_index|magnitude": {{magnitude_aus_daten}},
     "natars_tzusatz/body_mass_index/beliebiges_ereignis:0/body_mass_index|unit": {{unit_wert_string_aus_daten}}
 }
+==================================
+About Web Templates
+- simplified IM Simplified Data template (simSDT) which is based on the web template format created by Marand for the Better platform (https://ehrbase.readthedocs.io/_/downloads/en/latest/pdf/)
