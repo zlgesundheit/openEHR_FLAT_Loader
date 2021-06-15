@@ -85,8 +85,18 @@ import traceback #debug
 indent = "    "
 
 def addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath):
+    # Pflichtelement
     if element['min'] == 1 and element['max'] == 1:
         pathDict[suffixPath] = { "rmType" : element['rmType'], "mandatory" : "1"  }
+    # Pflichtelement das >1 beliebig of vorkommen kann d.h. mit Index
+    elif element['max'] == -1 and element['min'] == 1:
+        suffixPath += "<<index>>"
+        pathDict[suffixPath] = { "rmType" : element['rmType'], "mandatory" : "1"  }
+    # Nicht Pflicht beliebig oft d.h. mit Index
+    elif element['max'] == -1 and element['min'] == 0:
+        suffixPath += "<<index>>"
+        pathDict[suffixPath] = { "rmType" : element['rmType'], "mandatory" : "0"  }
+    # Nicht Pflicht
     else:
         pathDict[suffixPath] = { "rmType" : element['rmType'], "mandatory" : "0"  }
     return pathDict
@@ -112,7 +122,7 @@ def goLow(parentPath, pathDict, children):
                 for inputElement in element['inputs']:
                     # Unterscheidung nach Aufbau statt nach rmType, um alles abzufangen und auch bei Aenderungen oder neuen Datentypen funktional zu bleiben 
                     keysOfInputsElement = []
-                    for key in keysOfInputsElement:
+                    for key in inputElement:
                         keysOfInputsElement.append(key)
 
                     # Falls DV_CODED_TEXT -> CODED_TEXT + |terminology
@@ -122,13 +132,13 @@ def goLow(parentPath, pathDict, children):
                     if ('list' in keysOfInputsElement and 'suffix' in keysOfInputsElement and 'terminology' in keysOfInputsElement) or (element['rmType'] == "DV_CODED_TEXT"):
                         # Suffix |value
                         suffixPath = parentPath + '/' + element['id'] + '|value'
-                        addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
                         # Suffix |code
                         suffixPath = parentPath + '/' + element['id'] + '|code'
                         pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
                         # Suffix | terminology
                         suffixPath = parentPath + '/' + element['id'] + '|terminology'
-                        addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
 
                     # Falls DV_QUANTITY
                     # +suffix 
@@ -137,10 +147,10 @@ def goLow(parentPath, pathDict, children):
                     elif ('suffix' in keysOfInputsElement and 'list' in keysOfInputsElement and 'terminology' not in keysOfInputsElement ) or (element['rmType'] == "DV_QUANTITY"):
                         # Suffix |magnitude
                         suffixPath = parentPath + '/' + element['id'] + '|magnitude'
-                        addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
                         # Suffix |unit
                         suffixPath = parentPath + '/' + element['id'] + '|unit'
-                        addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
 
                     # Falls DV_ORDINAL -> CODED_TEXT + |ordinal
                     # + list 
@@ -148,13 +158,13 @@ def goLow(parentPath, pathDict, children):
                     elif ('list' in keysOfInputsElement and 'suffix' not in keysOfInputsElement) or (element['rmType'] == "DV_ORDINAL"):
                         # Suffix |value
                         suffixPath = parentPath + '/' + element['id'] + '|value'
-                        addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
                         # Suffix |code
                         suffixPath = parentPath + '/' + element['id'] + '|code'
-                        addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
                         # Suffix |ordinal
                         suffixPath = parentPath + '/' + element['id'] + '|ordinal'
-                        addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
 
                     # Falls DV_COUNT
                     # -suffix 
@@ -162,7 +172,7 @@ def goLow(parentPath, pathDict, children):
                     # +type=Integer
                     elif ('list' not in keysOfInputsElement and 'suffix' not in keysOfInputsElement and inputElement['type'] == 'INTEGER') or (element['rmType'] == "DV_COUNT"):
                         suffixPath = parentPath + '/' + element['id'] + "|value"
-                        addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
 
                     # Falls DV_TEXT, DV_DATE_TIME -> kein Suffix
                     # -list 
@@ -170,14 +180,14 @@ def goLow(parentPath, pathDict, children):
                     # -type = Integer
                     elif ('list' not in keysOfInputsElement and 'suffix' not in keysOfInputsElement and not inputElement['type'] == 'INTEGER') or (element['rmType'] == "DV_TEXT" or element['rmType'] == "DV_DATE_TIME"):
                         suffixPath = parentPath + '/' + element['id']
-                        addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
 
                     # Falls PARTY_PROXY -> |id , |id_scheme , |id_namespace , |name
                     # +suffix 
                     # -list
                     elif ('suffix' in keysOfInputsElement and 'list' not in keysOfInputsElement) or (element['rmType'] == "PARTY_PROXY"):
                         suffixPath = parentPath + '/' + element['id'] + '|' + inputElement['suffix']
-                        addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
 
             # Wenn CODE_PHRASE -> |code und |terminology
             # -children 
@@ -187,8 +197,8 @@ def goLow(parentPath, pathDict, children):
             elif ('children' not in childArr and 'inputs' not in childArr) or (element['rmType'] == "CODE_PHRASE"):
                 keyCode = selfPath + '|code'
                 keyTerm = selfPath + '|terminology'
-                addPathAndSetRmTypeAndMandatory(pathDict, element, keyTerm)
-                addPathAndSetRmTypeAndMandatory(pathDict, element, keyCode)
+                pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, keyTerm)
+                pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, keyCode)
 
     return pathDict
 
@@ -209,6 +219,7 @@ def getPathsFromWebTemplate(workdir, templateName):
                 pathDict = goLow(path, pathDict, webTemp['tree']['children'])
 
                 ## TODO Hier sind noch ein paar die doppelt hinzugefügt werden! Hier weitermachen TODO
+                print ( indent + "Anzahl extrahierter Pfade: " + str( len(pathDict) ) )
                 for path in pathDict:
                     #print (path)
                     #print (pathDict[path])

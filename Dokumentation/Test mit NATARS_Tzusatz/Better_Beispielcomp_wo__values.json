@@ -1,0 +1,85 @@
+  "natars_tzusatz/context/assessment_block": "Assessment Block 74",
+  "natars_tzusatz/context/start_time": "2021-06-11T08:34:45.708Z",
+  "natars_tzusatz/context/setting|code": "238",
+  "natars_tzusatz/context/setting|value": "other care",
+  "natars_tzusatz/context/setting|terminology": "openehr",
+  "natars_tzusatz/prevention_of_falls_network_europe_profane/sturz|code": "at0025",
+  "natars_tzusatz/prevention_of_falls_network_europe_profane/sturz|value": "Nein",
+  "natars_tzusatz/prevention_of_falls_network_europe_profane/sturz|ordinal": 0,
+  "natars_tzusatz/prevention_of_falls_network_europe_profane/häufigkeit_des_sturzes|value": 308,
+  "natars_tzusatz/prevention_of_falls_network_europe_profane/zeit_des_sturzes": "2021-06-11T08:34:45.708Z",
+  "natars_tzusatz/prevention_of_falls_network_europe_profane/verletzung_erlitten|code": "at0028",
+  "natars_tzusatz/prevention_of_falls_network_europe_profane/verletzung_erlitten|value": "Nein",
+  "natars_tzusatz/prevention_of_falls_network_europe_profane/verletzung_erlitten|ordinal": 0,
+  "natars_tzusatz/prevention_of_falls_network_europe_profane/bruch|code": "at0032",
+  "natars_tzusatz/prevention_of_falls_network_europe_profane/bruch|value": "Ja",
+  "natars_tzusatz/prevention_of_falls_network_europe_profane/bruch|ordinal": 1,
+  "natars_tzusatz/prevention_of_falls_network_europe_profane/lokalisation_des_bruches": "Lokalisation des Bruches 45",
+  "natars_tzusatz/prevention_of_falls_network_europe_profane/weitere_verletzungen:0": "Weitere Verletzungen 99", // Achtung Index am Ende
+  "natars_tzusatz/prevention_of_falls_network_europe_profane/bemerkungen": "Bemerkungen 40",
+  "natars_tzusatz/prevention_of_falls_network_europe_profane/time": "2021-06-11T08:34:45.708Z",
+//Subject is missing in better example?
+//Subject is missing in better example?
+//Subject is missing in better example?
+//Subject is missing in better example?
+  "natars_tzusatz/prevention_of_falls_network_europe_profane/language|code": "de",
+  "natars_tzusatz/prevention_of_falls_network_europe_profane/language|terminology": "ISO_639-1",
+  "natars_tzusatz/prevention_of_falls_network_europe_profane/encoding|code": "UTF-8",
+  "natars_tzusatz/prevention_of_falls_network_europe_profane/encoding|terminology": "IANA_character-sets",
+  "natars_tzusatz/schmerzerfassung/schmerzlokalisation/schmerzen_vorhanden/haben_sie_schmerzen": "Haben Sie Schmerzen? 65",
+  "natars_tzusatz/schmerzerfassung/schmerzlokalisation/lokalisation_der_schmerzen/körperregion_organsystem": "Körperregion/Organsystem 44",
+  "natars_tzusatz/schmerzerfassung/schmerzlokalisation/dauer_und_verlauf_der_schmerzen/wie_lange_haben_sie_die_schmerzen_schon": "Wie lange haben Sie die Schmerzen schon? 53",
+  "natars_tzusatz/schmerzerfassung/schmerzlokalisation/time": "2021-06-11T08:34:45.708Z",
+//Subject is missing in better example?
+//Subject is missing in better example?
+//Subject is missing in better example?
+//Subject is missing in better example?
+  "natars_tzusatz/schmerzerfassung/schmerzlokalisation/language|code": "de",
+  "natars_tzusatz/schmerzerfassung/schmerzlokalisation/language|terminology": "ISO_639-1",
+  "natars_tzusatz/schmerzerfassung/schmerzlokalisation/encoding|code": "UTF-8",
+  "natars_tzusatz/schmerzerfassung/schmerzlokalisation/encoding|terminology": "IANA_character-sets",
+  "natars_tzusatz/schmerzerfassung/schmerzstärke/schmerzstärke_-_vas/beliebiges_ereignis:0/vas-wert|value": 8,
+  "natars_tzusatz/schmerzerfassung/schmerzstärke/schmerzstärke_-_vas/beliebiges_ereignis:0/kommentar": "Kommentar 61",
+  "natars_tzusatz/schmerzerfassung/schmerzstärke/schmerzstärke_-_vas/beliebiges_ereignis:0/time": "2021-06-11T08:34:45.709Z",
+  "natars_tzusatz/schmerzerfassung/schmerzstärke/schmerzstärke_-_vas/language|code": "de",
+  "natars_tzusatz/schmerzerfassung/schmerzstärke/schmerzstärke_-_vas/language|terminology": "ISO_639-1",
+  "natars_tzusatz/schmerzerfassung/schmerzstärke/schmerzstärke_-_vas/encoding|code": "UTF-8",
+  "natars_tzusatz/schmerzerfassung/schmerzstärke/schmerzstärke_-_vas/encoding|terminology": "IANA_character-sets",
+//Subject is missing in better example?
+//Subject is missing in better example?
+//Subject is missing in better example?
+//Subject is missing in better example?
+  "natars_tzusatz/schmerzerfassung/bewegungseinschränkung_durch_die_schmerzen/bewegungseinschränkung/beliebiges_ereignis:0/vas-wert|value": 5,
+  "natars_tzusatz/schmerzerfassung/bewegungseinschränkung_durch_die_schmerzen/bewegungseinschränkung/beliebiges_ereignis:0/kommentar": "Kommentar 66",
+  "natars_tzusatz/schmerzerfassung/bewegungseinschränkung_durch_die_schmerzen/bewegungseinschränkung/beliebiges_ereignis:0/time": "2021-06-11T08:34:45.709Z",
+//Subject is missing in better example?
+//Subject is missing in better example?
+//Subject is missing in better example?
+//Subject is missing in better example?
+  "natars_tzusatz/schmerzerfassung/bewegungseinschränkung_durch_die_schmerzen/bewegungseinschränkung/language|code": "de",
+  "natars_tzusatz/schmerzerfassung/bewegungseinschränkung_durch_die_schmerzen/bewegungseinschränkung/language|terminology": "ISO_639-1",
+  "natars_tzusatz/schmerzerfassung/bewegungseinschränkung_durch_die_schmerzen/bewegungseinschränkung/encoding|code": "UTF-8",
+  "natars_tzusatz/schmerzerfassung/bewegungseinschränkung_durch_die_schmerzen/bewegungseinschränkung/encoding|terminology": "IANA_character-sets",
+  "natars_tzusatz/body_mass_index/beliebiges_ereignis:0/body_mass_index|magnitude": 47.9,
+  "natars_tzusatz/body_mass_index/beliebiges_ereignis:0/body_mass_index|unit": "kg/m2",
+  "natars_tzusatz/body_mass_index/beliebiges_ereignis:0/bemerkungen": "Bemerkungen 40",
+  "natars_tzusatz/body_mass_index/beliebiges_ereignis:0/time": "2021-06-11T08:34:45.709Z",
+  "natars_tzusatz/body_mass_index/methode|code": "at0007",
+  "natars_tzusatz/body_mass_index/methode|value": "Automatische Eingabe",
+  "natars_tzusatz/body_mass_index/methode|terminology": "local",
+  "natars_tzusatz/body_mass_index/formel": "Formel 92",
+//Subject is missing in better example?
+//Subject is missing in better example?
+//Subject is missing in better example?
+//Subject is missing in better example?
+  "natars_tzusatz/body_mass_index/language|code": "de",
+  "natars_tzusatz/body_mass_index/language|terminology": "ISO_639-1",
+  "natars_tzusatz/body_mass_index/encoding|code": "UTF-8",
+  "natars_tzusatz/body_mass_index/encoding|terminology": "IANA_character-sets",
+  "natars_tzusatz/category|code": "433",
+  "natars_tzusatz/category|value": "event",
+  "natars_tzusatz/category|terminology": "openehr",
+  "natars_tzusatz/language|code": "de",
+  "natars_tzusatz/language|terminology": "ISO_639-1",
+  "natars_tzusatz/territory|code": "US",
+  "natars_tzusatz/territory|terminology": "ISO_3166-1"

@@ -29,7 +29,6 @@ def uploadOPT(targetAdress, targetopenEHRAPIadress, targetAuthHeader, optFile):
     try:
         # Check if OPT is already present at the server
         respGet = requests.get(queryPath, headers = {'Authorization':targetAuthHeader})
-        print ( respGet.status_code )
         if respGet.status_code != 200:
             try:
                 # Send OPT to Server
