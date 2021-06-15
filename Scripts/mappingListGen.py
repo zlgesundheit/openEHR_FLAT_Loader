@@ -14,7 +14,7 @@ import pandas as pd
 
 indent = "    "
 
-def generateList(workdir, templateName, inputCSV, pathsArray, mandatoryPathArr):
+def generateList(workdir, templateName, inputCSV, pathsArray):
     print(os.linesep + "Step 2: MappingListGen is running.")
 
     # Create Excel-File
@@ -54,11 +54,13 @@ def generateList(workdir, templateName, inputCSV, pathsArray, mandatoryPathArr):
         numberofPaths = i
         i += 1
 
-    # Alle Pfade die Mandatory sind
+    # Alle Pfade die Mandatory sind --> TODO stehen im dict als dict['pfad']['mandatory'] = 1
+    '''
     i = 1
     for mandatoryPath in mandatoryPathArr:
         worksheetPaths.write(i, 2, mandatoryPath)
         i += 1
+    '''
 
     #### Build Mapping Worksheet
     worksheetMapping.write('A1', 'CSV-Column')

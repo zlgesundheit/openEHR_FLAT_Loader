@@ -1,24 +1,79 @@
 # -*- coding: utf-8 -*-
-############################### DEV: PATHS from WebTemplate
-# Notes:
-# Pfad-Teile stehen im Feld id
-# Nachfolgende Pfad-Teile bis zu einem Blatt stehen in children
+###########################################################################
+# PATHS from WebTemplate
 
-# Suffixe
-  # Jeder Suffix ist ein eigenes Feld mit Pfad
+# Dieses Skript extrahiert FLAT-Pfade aus einem WebTemplate. Das WebTemplate basiert auf dem simSDT-WebTemplate Format der Firma Better, 
+# welches sowohl die Better Platform als auch die EHRBase unterstützt. 
+# 
+# Die EHRBase bietet FLAT-Funktionalitäten unter dem "ecis"-Endpunkt an. - Stand Version 0.16 (beta)
+# 
+# Die openEHR-Community plant die Übernahme des simSDT-Formats in den Standard. - https://specifications.openehr.org/releases/ITS-REST/Release-1.0.2/simplified_data_template.html
+#
+# FLAT-PFADE 
+# FLAT-Pfade erhält man, indem die ID Felder der Elemente des WebTemplate verkettet werden.
+# Feld id enthaelt den Namen des Elements
+# MIN und MAX geben an, wie oft das Element in einer Ressource vorhanden sein kann oder muss. -> Max: -1 = Element kann beliebig oft vorkommen
+# Suffixe werden an den Pfad am Ende angehängt. -> Element/Element2|suffix
+#
+# Output
+# Ausgabe ist ein Dictionary mit Pfadnamen als key
+# ala dict['Pfadname']['rmType'] und dict['Pfadname']['mandatory']
+# mandatory ist 0 oder 1, wobei 1 = Pflichtfeld bedeutet
+###########################################################################
 
-  # Blätter mit nur einem Input haben manchmal Suffix
-  # Inputs haben oft Suffix-Angaben die mit |suffix and den Pfad angehängt werden
 
-# Achtung! Suffixe können in Listen sein. In dem Fall Liste durchgehen und Pfade rausschreiben TODO
-# Pflichtangabe mit rausschreiben
-# Ordentliches Dictionary mit Pfadname, Pflichtangabe, Datentyp
+# List of Types and their attributes (X indicates that this one is **definitely** handled in this script)
+# https://specifications.openehr.org/releases/RM/latest/data_types.html
 
-# Kardinalität:
-  # Pflicht felder haben min=max=1
-  # Felder mit <<index>> haben min:0 max -1 !
-    # Wenn ein Element/Pfad ein Pflichtpfad ist, werden sie einer Liste/Array hinzugefuegt, die alle Pflichtpfade enthaelt
+# 6. Quantity Package
+#   DV_ORDERED: Abstract -> CODE_PHRASE, DV_INTERVAL, List of REFERENCE_RANGE
+#       DV_INTERVAL:        none
+#       REFERENCE_RANGE:    DV_TEXT, DV_INTERVAL
+#   X   DV_ORDINAL:         DV_CODED_TEXT, value=Integer  (+|ordinal)
+#       DV_SCALE:           DV_CODED_TEXT, value=Real
+#   DV_QUANTIFIED: Abstract -> magnitude_status, accuracy
+#       DV_AMOUNT:          accuracy_is_percent=Boolean, accuracy=Real
+#   X   DV_QUANTITY:        magnitude, unit=CODED_TEXT
+#   X   DV_COUNT:           value=magnitude
+#       DV_PROPORTION:      numerator, denominator, type
+#       PROPORTION_KIND:    ...
+#       DV_ABSOLUTE_QUANTITY: accuracy: DV_AMOUNT
 
+# 4. Basic Package
+#   DATA_VALUE: Abstract
+#   ?   DV_BOOLEAN:         value=Boolean  (maybe like DV_COUNT which would mean "no suffix-Case")
+#       DV_STATE:           value=DV_CODED_TEXT, is_terminal
+#       DV_IDENTIFIER:      id, ...
+
+# 5. Text Package
+#   X   DV_TEXT             value:String
+#       TERM_MAPPING        match=char, target=CODE_PHRASE
+#   X   CODE_PHRASE         code=code_string, terminology=terminology_id
+#   X   DV_CODED_TEXT       value, CODE_PHRASE
+#   x   DV_PARAGRAPH        This one is DEPRECATED, DV_TEXT (which is markdown formatted) is used instead
+
+# 7. Date Time Package
+#       DV_TEMPORAL         accuracy=DV_DUTRATION --> Specialised temporal variant of DV_ABSOLUTE_QUANTITY whose diff type is DV_DURATION.
+#   ?   DV_DATE             value=String -> ISO8601 date string         (Structure like DV_COUNT?)
+#   ?   DV_TIME             value=String -> ISO8601 time string         (Structure like DV_COUNT?)
+#   X   DV_DATE_TIME        value=String -> ISO8601 date/time string    
+#   ?   DV_DURATION         value=String -> ISO8601 duration string, including described deviations to support negative values and weeks.   (Structure like DV_COUNT?)
+
+# 8. Time_specification Package
+#   DV_TIME_SPECIFICATIONS  Abstract
+#       DV_PERIODIC_TIME_SPECIFICATION  --> Specifies periodic points in time, linked to the calendar (phase-linked), or a real world repeating event, such as breakfast (event-linked). Based on the HL7v3 data types PIVL<T> and EIVL<T>. Used in therapeutic prescriptions, expressed as INSTRUCTIONs in the openEHR model.
+#       DV_GENERAL_TIME_SPECIFICATION   --> Specifies points in time in a general syntax. Based on the HL7v3 GTS data type.
+
+# 9. Encapsulated Package
+#   DV_ENCAPSULATED     Abstract -> Common Metadata -> CODE_PHRASE for charset and language
+#       DV_MULTIMEDIA:      media_type=CODE_PHRASE, size: Integer
+#       DV_PARSABLE:        value=String, formalism=String
+
+# 10. Uri Package
+#       DV_URI              value=String        --> A reference to an object which structurally conforms to the Universal Resource Identifier (URI) RFC-3986 standard
+#       DV_EHR_URI                              --> A DV_EHR_URI is a DV_URI which has the scheme name 'ehr', and which can only reference items in EHRs.
+
+###########################################################################
 # Standard library imports
 import json
 import os
@@ -29,91 +84,123 @@ import traceback #debug
 
 indent = "    "
 
-global mandatoryPathArr
-mandatoryPathArr = []
-
-# Add Path-Parts of full Paths as Mandatory Elements
-def addToMandatoryPathsArr(path):
-    global mandatoryPathArr
-    mandatoryPathArr.append(path)
-
-def addRmTypeAndMandatory(pathDict, selfPath, element, suffixPath):
-    pathDict[suffixPath].append(element['rmType'])
-    if selfPath in mandatoryPathArr:
-        pathDict[suffixPath].append("mandatory")
+def addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath):
+    # Pflichtelement
+    if element['min'] == 1 and element['max'] == 1:
+        pathDict[suffixPath] = { "rmType" : element['rmType'], "mandatory" : "1"  }
+    # Pflichtelement das >1 beliebig of vorkommen kann d.h. mit Index
+    elif element['max'] == -1 and element['min'] == 1:
+        suffixPath += "<<index>>"
+        pathDict[suffixPath] = { "rmType" : element['rmType'], "mandatory" : "1"  }
+    # Nicht Pflicht beliebig oft d.h. mit Index
+    elif element['max'] == -1 and element['min'] == 0:
+        suffixPath += "<<index>>"
+        pathDict[suffixPath] = { "rmType" : element['rmType'], "mandatory" : "0"  }
+    # Nicht Pflicht
+    else:
+        pathDict[suffixPath] = { "rmType" : element['rmType'], "mandatory" : "0"  }
     return pathDict
 
 def goLow(parentPath, pathDict, children):
-  global mandatoryPathArr
-  self = children
-  for element in self:
-        # Fuer jeden Eintrag den Pfad erweitern
-        # Falls Kardinalitaet mehrfacheintraege zulaesst (Max: -1) dann <<index>>
-        if str(element['max']) == str(-1):
-            selfPath = parentPath + '/' + element['id'] + '<<index>>'
-        else:
-            selfPath = parentPath + '/' + element['id']
-        # Falls Element ein Pflichtelement ist füge des der Pflichtelement-Liste hinzu
-        if element['min'] == 1 and element['max'] == 1:
-            addToMandatoryPathsArr(selfPath)
-        # Array der Elemente der Kinder
-        childArr = []
-        for key in element:
-            childArr.append(key)
-        # Falls Element Kinder hat goLow
-        if 'children' in childArr:
-            pathDict = goLow(selfPath, pathDict, element['children'])
-        # Falls Element Inputs hat, speichere Pfad fuer jeden Suffix
-        elif 'inputs' in childArr:
-            # Fuer jeden Suffix in inputs speichere den Pfad mit Suffix, sonst wenn keiner da ist ohne suffix, oder falls der rmType DV_Ordinal ist gehe durch die Liste an Werten, oder wenn es ein DV_CODED_TEXT ist speichere noch |value und |terminology zum Code
-            for inputElement in element['inputs']:
-                # Erzeuge ein Array mit den Keys der Elmente der Kinder von 'Input'
-                childArr = []
-                for key in inputElement:
-                    childArr.append(key)
-                # Falls der rmType DV_CODED_TEXT ist, dann gibt es zwar ein 'suffix' in den inputs, aber danach folgt eine Liste 'list' mit den moeglichen Eintraegen, die dann |terminology und |value haben!
-                if 'suffix' in childArr and element['rmType'] == "DV_CODED_TEXT":
-                    # Suffix |code
-                    suffixPath = parentPath + '/' + element['id'] + '|code'
-                    addRmTypeAndMandatory(pathDict, selfPath, element, suffixPath)
-                    # Suffix |value
-                    suffixPath = parentPath + '/' + element['id'] + '|value'
-                    addRmTypeAndMandatory(pathDict, selfPath, element, suffixPath)
-                    # Suffix | terminology
-                    suffixPath = parentPath + '/' + element['id'] + '|terminology'
-                    addRmTypeAndMandatory(pathDict, selfPath, element, suffixPath)
-                # Falls suffixe auffindbar, speichere den bisherhigen Pfad mit der ID und dem Suffix
-                if 'suffix' in childArr and not element['rmType'] == "DV_CODED_TEXT" and not element['rmType'] == "DV_ORDINAL":
-                    # Alle vorhandenen Suffixe
-                    suffixPath = parentPath + '/' + element['id'] + '|' + inputElement['suffix']
-                    addRmTypeAndMandatory(pathDict, selfPath, element, suffixPath)
-                # Falls Liste in inputs und das ganze Ordinal ist -> Dann hole gib uns die Pfade mit |value , |ordinal , |code 
-                elif 'list' in childArr and element['rmType'] == "DV_ORDINAL":
-                    # Suffix |code
-                    suffixPath = parentPath + '/' + element['id'] + '|code'
-                    addRmTypeAndMandatory(pathDict, selfPath, element, suffixPath)
-                    # Suffix |value
-                    suffixPath = parentPath + '/' + element['id'] + '|value'
-                    addRmTypeAndMandatory(pathDict, selfPath, element, suffixPath)
-                    # Suffix |ordinal
-                    suffixPath = parentPath + '/' + element['id'] + '|ordinal'
-                    addRmTypeAndMandatory(pathDict, selfPath, element, suffixPath)
-                # Falls Element Input hat aber keine Suffixe oder Liste enthaelt fuege Pfad hinzu -> Dann steht dort nur der 'type' des Inputs
-                elif not 'suffix' in childArr and not element['rmType'] == "DV_CODED_TEXT" and not element['rmType'] == "DV_ORDINAL":
-                    # Ohne Suffix # TODO Mandatory?
-                    suffixPath = parentPath + '/' + element['id']
-                    pathDict[suffixPath].append(element['rmType'])
-        # Wenn Element weder Kinder noch inputs hat fuege pfad mit "Standard"-Suffixen hinzu
-        else:
-            keyCode = selfPath + '|code'
-            pathDict[keyCode].append(element['rmType'])
-            keyTerm = selfPath + '|terminology'
-            pathDict[keyTerm].append(element['rmType'])
-            if selfPath in mandatoryPathArr:
-                pathDict[keyCode].append(element['rmType'])
-                pathDict[keyTerm].append("mandatory")
+    self = children
+    for element in self:
+            # Fuer jeden Eintrag die ID an den Pfad anhaengen und tiefer gehen # Falls Kardinalitaet mehrfacheintraege zulaesst (Max: -1) dann <<index>>
+            if element['max'] == -1:
+                selfPath = parentPath + '/' + element['id'] + '<<index>>'
+            else:
+                selfPath = parentPath + '/' + element['id']
 
-  return pathDict
+            # Falls Element "children" hat goLow(er)
+            childArr = []
+            for key in element:
+                childArr.append(key)
+            if 'children' in childArr:
+                pathDict = goLow(selfPath, pathDict, element['children'])
+
+            # Falls Element "Inputs" hat -> Gehe jedes Inputs-Element durch und speichere Pfade
+            elif 'inputs' in childArr:
+                for inputElement in element['inputs']:
+                    # Unterscheidung nach Aufbau statt nach rmType, um alles abzufangen und auch bei Aenderungen oder neuen Datentypen funktional zu bleiben 
+                    keysOfInputsElement = []
+                    for key in inputElement:
+                        keysOfInputsElement.append(key)
+
+                    # Falls DV_CODED_TEXT -> CODED_TEXT + |terminology
+                    # +list 
+                    # +suffix 
+                    # +terminology
+                    if ('list' in keysOfInputsElement and 'suffix' in keysOfInputsElement and 'terminology' in keysOfInputsElement) or (element['rmType'] == "DV_CODED_TEXT"):
+                        # Suffix |value
+                        suffixPath = parentPath + '/' + element['id'] + '|value'
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+                        # Suffix |code
+                        suffixPath = parentPath + '/' + element['id'] + '|code'
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+                        # Suffix | terminology
+                        suffixPath = parentPath + '/' + element['id'] + '|terminology'
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+
+                    # Falls DV_QUANTITY
+                    # +suffix 
+                    # +list 
+                    # -terminology
+                    elif ('suffix' in keysOfInputsElement and 'list' in keysOfInputsElement and 'terminology' not in keysOfInputsElement ) or (element['rmType'] == "DV_QUANTITY"):
+                        # Suffix |magnitude
+                        suffixPath = parentPath + '/' + element['id'] + '|magnitude'
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+                        # Suffix |unit
+                        suffixPath = parentPath + '/' + element['id'] + '|unit'
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+
+                    # Falls DV_ORDINAL -> CODED_TEXT + |ordinal
+                    # + list 
+                    # -suffix
+                    elif ('list' in keysOfInputsElement and 'suffix' not in keysOfInputsElement) or (element['rmType'] == "DV_ORDINAL"):
+                        # Suffix |value
+                        suffixPath = parentPath + '/' + element['id'] + '|value'
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+                        # Suffix |code
+                        suffixPath = parentPath + '/' + element['id'] + '|code'
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+                        # Suffix |ordinal
+                        suffixPath = parentPath + '/' + element['id'] + '|ordinal'
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+
+                    # Falls DV_COUNT
+                    # -suffix 
+                    # -list
+                    # +type=Integer
+                    elif ('list' not in keysOfInputsElement and 'suffix' not in keysOfInputsElement and inputElement['type'] == 'INTEGER') or (element['rmType'] == "DV_COUNT"):
+                        suffixPath = parentPath + '/' + element['id'] + "|value"
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+
+                    # Falls DV_TEXT, DV_DATE_TIME -> kein Suffix
+                    # -list 
+                    # -suffix 
+                    # -type = Integer
+                    elif ('list' not in keysOfInputsElement and 'suffix' not in keysOfInputsElement and not inputElement['type'] == 'INTEGER') or (element['rmType'] == "DV_TEXT" or element['rmType'] == "DV_DATE_TIME"):
+                        suffixPath = parentPath + '/' + element['id']
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+
+                    # Falls PARTY_PROXY -> |id , |id_scheme , |id_namespace , |name
+                    # +suffix 
+                    # -list
+                    elif ('suffix' in keysOfInputsElement and 'list' not in keysOfInputsElement) or (element['rmType'] == "PARTY_PROXY"):
+                        suffixPath = parentPath + '/' + element['id'] + '|' + inputElement['suffix']
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+
+            # Wenn CODE_PHRASE -> |code und |terminology
+            # -children 
+            # -inputs
+            # -list
+            # -suffix
+            elif ('children' not in childArr and 'inputs' not in childArr) or (element['rmType'] == "CODE_PHRASE"):
+                keyCode = selfPath + '|code'
+                keyTerm = selfPath + '|terminology'
+                pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, keyTerm)
+                pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, keyCode)
+
+    return pathDict
 
 def getPathsFromWebTemplate(workdir, templateName):
     try:
@@ -132,13 +219,15 @@ def getPathsFromWebTemplate(workdir, templateName):
                 pathDict = goLow(path, pathDict, webTemp['tree']['children'])
 
                 ## TODO Hier sind noch ein paar die doppelt hinzugefügt werden! Hier weitermachen TODO
+                print ( indent + "Anzahl extrahierter Pfade: " + str( len(pathDict) ) )
                 for path in pathDict:
-                    print (path)
-                    print (pathDict[path])
-                    print ("")
+                    #print (path)
+                    #print (pathDict[path])
+                    #print ("")
+                    pass
 
             except Exception as e:
-                print(indent + templateName + "_Webtemplate ist fehlerhaft.")
+                print(indent + templateName + "_Webtemplate ist fehlerhaft." + str(e))
                 print (indent + str(e))
                 traceback.print_exc()
                 raise SystemExit
@@ -148,4 +237,4 @@ def getPathsFromWebTemplate(workdir, templateName):
         print (indent + str(e))
         raise SystemExit
 
-    return pathDict, mandatoryPathArr
+    return pathDict
