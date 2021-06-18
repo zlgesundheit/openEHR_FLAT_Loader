@@ -8,15 +8,16 @@ _Prerequisites:_
 
 ## Usage
 1. Place your .OPT-File in the Input-Folder
-2. Run Tool using the runFlatLoader_win.bat on Windows or runFlatLoader_lin.sh if you are on Linux. 
-  If you use a MAC try starting the runMain.py in Scripts-Directory :)
-    - If the config-file is not presented you will be asked to provide infos. 
-    - It is of course also possible to adjust them directly in the config-file 
+2. Run Tool using the runFlatLoader_win.bat on Windows or runFlatLoader_lin.sh if you are on Linux.
+   If you use a MAC try starting the runMain.py in Scripts-Directory...
+    - If the config-file is not existing you will be asked to provide some config-settings. 
+    - It is also possible to adjust these settings directly in the config-file 
       - -> See [Config-File](#config-file)
     - You will be asked which step of the process you want to perform
         - Step 1: Upload OPT and generate Mapping-(Excel-)File
-        - Step 2: Build Compositions based on the Mapping
-3. To perform Step 2: Building Compositions you have to supply mapping information in the Mapping-Table
+3. To build build Compositions you have to supply mapping information in the Mapping-Table and save the Excel-file
+4. Run the tool again and perform step 2:
+	- Step 2: Build Compositions based on the Mapping
 4. After performing Step 2 you will find the FLAT-Composition in the Output-Folder 
 
 ## Context
