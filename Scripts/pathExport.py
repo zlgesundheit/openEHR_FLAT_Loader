@@ -221,9 +221,9 @@ def getPathsFromWebTemplate(workdir, templateName):
                 ## TODO Hier sind noch ein paar die doppelt hinzugefügt werden! Hier weitermachen TODO
                 print ( indent + "Anzahl extrahierter Pfade: " + str( len(pathDict) ) )
                 for path in pathDict:
-                    #print (path)
-                    #print (pathDict[path])
-                    #print ("")
+                    print (path)
+                    print (pathDict[path])
+                    print ("")
                     pass
 
             except Exception as e:

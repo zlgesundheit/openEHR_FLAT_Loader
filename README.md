@@ -41,7 +41,6 @@ _Process-Overview:_
     | config-variable | Description |
     | --------------- | ------ |
     | targetrepoadress| Baseadress of the Target Repo (e.g. `http://141.5.100.199/ehrbase`) |
-    | targetrepouser  | Username for authentification with the Repo (e.g. `ehrbase-user`) |
-    | targetrepopw    | Password for authentification with the Repo (e.g. `SuperSecretPassword`) |
+    | targetauthheader| Base64 Representation of Username:Passwprd for authentification with the Repo (e.g. `ehrbase-user:uperSecretPassword = Basic ZWhyYmFzZS11c2VyOlN1cGVyU2VjcmV0UGFzc3dvcmQ=`) |
     | targetflatapiadress | The endpoint where the FLAT-API resides (e.g. `/rest/ecis/v1/`) |
     | targetopenehrapiadress| The endpoint where the openEHR-API resides (e.g. `/rest/openehr/v1/`)|
