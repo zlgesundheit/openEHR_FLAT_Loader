@@ -12,7 +12,7 @@
 # Standard library imports
 import os.path
 # Third party imports
-import configparser
+#import configparser
 # Local application imports
 from Scripts import configHandler
 from Scripts import handleOPT as opt
