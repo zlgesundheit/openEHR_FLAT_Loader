@@ -24,11 +24,12 @@ def getAuthHeader(user, pw):
   #print(authHeader)
   return authHeader
 
-def uploadOPT(targetAdress, targetopenEHRAPIadress, targetAuthHeader, optFile):
-    queryPath = targetAdress + targetopenEHRAPIadress + "definition/template/adl1.4"
+def uploadOPT(targetAdress, targetopenEHRAPIadress, targetAuthHeader, optFile, templateName):
+    queryPath = targetAdress + targetopenEHRAPIadress + "definition/template/adl1.4" 
     try:
         # Check if OPT is already present at the server
-        respGet = requests.get(queryPath, headers = {'Authorization':targetAuthHeader})
+        respGet = requests.get(queryPath + "/" + templateName, headers = {'Authorization':targetAuthHeader})
+        # print(respGet.status_code)
         if respGet.status_code != 200:
             try:
                 # Send OPT to Server
@@ -67,7 +68,7 @@ def handleOPT(workdir, templateName, inputCSV, targetAdress, targetAuthHeader, t
   f.close()
 
   # Upload OPT to server
-  uploadOPT(targetAdress, targetopenEHRAPIadress, targetAuthHeader, optFile)
+  uploadOPT(targetAdress, targetopenEHRAPIadress, targetAuthHeader, optFile, templateName)
   
   # Query and save WebTemplate
   queryWebtemplate(targetAdress, targetflatAPIadress, targetAuthHeader, workdir, templateName)

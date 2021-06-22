@@ -37,11 +37,19 @@ def generateList(workdir, templateName, inputCSV, pathsArray):
 
     # Alle Pfade mit rmType
     i = 1
+    nrMandatoryPaths = 0
     indexArr = []
     max_value = None
     for path in pathsArray:
         worksheetPaths.write(i, 0, path)
 
+        # Falls Pflichtfeld dann entsprechend kenntlich machen in Mandatory Spalte i,2 (dict['pfad']['mandatory'] = 1)
+        if pathsArray[path]['mandatory'] == str(1):
+            worksheetPaths.write(i, 2, "Pflicht/Mandatory")
+            nrMandatoryPaths += 1
+
+        # rmType ausgeben in rmType-Spalte i,1
+        worksheetPaths.write(i, 1, pathsArray[path]['rmType'])
 
         # Nach Vorkommen von <<index>> suchen und ermitteln wieviele Indexe im Pfad mit den meisten Indexen ist (max number of indexes)
         pattern = '<<index>>'
@@ -54,13 +62,7 @@ def generateList(workdir, templateName, inputCSV, pathsArray):
         numberofPaths = i
         i += 1
 
-    # Alle Pfade die Mandatory sind --> TODO stehen im dict als dict['pfad']['mandatory'] = 1
-    '''
-    i = 1
-    for mandatoryPath in mandatoryPathArr:
-        worksheetPaths.write(i, 2, mandatoryPath)
-        i += 1
-    '''
+    print( indent + "Anzahl der mindestens zu verwendenden Pfade: " + str(nrMandatoryPaths) )
 
     #### Build Mapping Worksheet
     worksheetMapping.write('A1', 'CSV-Column')

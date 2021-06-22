@@ -10,68 +10,37 @@
 # Die openEHR-Community plant die Übernahme des simSDT-Formats in den Standard. - https://specifications.openehr.org/releases/ITS-REST/Release-1.0.2/simplified_data_template.html
 #
 # FLAT-PFADE 
-# FLAT-Pfade erhält man, indem die ID Felder der Elemente des WebTemplate verkettet werden.
-# Feld id enthaelt den Namen des Elements
-# MIN und MAX geben an, wie oft das Element in einer Ressource vorhanden sein kann oder muss. -> Max: -1 = Element kann beliebig oft vorkommen
-# Suffixe werden an den Pfad am Ende angehängt. -> Element/Element2|suffix
+# - FLAT-Pfade erhält man, indem die ID Felder der Elemente des WebTemplate verkettet werden.
+# - Feld id enthaelt den Namen des Elements
+# - MIN und MAX geben an, wie oft das Element in einer Ressource vorhanden sein kann oder muss. -> Max: -1 = Element kann beliebig oft vorkommen
+# - Suffixe werden an den Pfad am Ende angehängt. -> Element/Element2|suffix
 #
 # Output
-# Ausgabe ist ein Dictionary mit Pfadnamen als key
-# ala dict['Pfadname']['rmType'] und dict['Pfadname']['mandatory']
-# mandatory ist 0 oder 1, wobei 1 = Pflichtfeld bedeutet
+# - Ausgabe ist ein Dictionary mit Pfadnamen als key ala dict['Pfadname']['rmType'] und dict['Pfadname']['mandatory']
+# - mandatory ist 0 oder 1, wobei 1 = Pflichtfeld bedeutet
 ###########################################################################
-
 
 # List of Types and their attributes (X indicates that this one is **definitely** handled in this script)
 # https://specifications.openehr.org/releases/RM/latest/data_types.html
 
-# 6. Quantity Package
-#   DV_ORDERED: Abstract -> CODE_PHRASE, DV_INTERVAL, List of REFERENCE_RANGE
-#       DV_INTERVAL:        none
-#       REFERENCE_RANGE:    DV_TEXT, DV_INTERVAL
-#   X   DV_ORDINAL:         DV_CODED_TEXT, value=Integer  (+|ordinal)
-#       DV_SCALE:           DV_CODED_TEXT, value=Real
-#   DV_QUANTIFIED: Abstract -> magnitude_status, accuracy
-#       DV_AMOUNT:          accuracy_is_percent=Boolean, accuracy=Real
-#   X   DV_QUANTITY:        magnitude, unit=CODED_TEXT
-#   X   DV_COUNT:           value=magnitude
-#       DV_PROPORTION:      numerator, denominator, type
-#       PROPORTION_KIND:    ...
-#       DV_ABSOLUTE_QUANTITY: accuracy: DV_AMOUNT
+# Documentation is here: https://pad.gwdg.de/nGok78r6SCK58rlZttKOAw?both
+""" rmType and suffixes that are needed and rough structure
+X 1	    PARTY_PROXY	        id, id_scheme, id_namespace, name	    suffix + type	
+X 2	    DV_IDENTIFIER	    id, type, issuer, assigner	            suffix + type	
+X 3	    DV_QUANTITY 	    magnitude, unit	                        suffix + type   und   suffix + type (+ list)	Intervals have specific Types for their Boundaries
+X 4	    DV_TEXT, DV_BOOLEAN, DV_URI, DV_EHR_URI,DV_DATE_TIME, DV_DATE, DV_TIME	none	type	
+X 5	    DV_MULTIMEDIA	    none + mediatype + alternatetext + size	    type	
+X 6	    DV_PROPORTION	    numerator, denominator, type	        inputs + proportionTypes (under element)	"Type is an Integer which takes the number of the type from the list of types.. 'ratio','unitary','percent','fraction','integer_fraction'
+X 7	    CODE_PHRASE	        terminology, code	                    No 'inputs' (under element)	
+X 8	    DV_COUNT	        value	                                type + (validation)	
+X 9	    DV_ORDINAL	        value, code, ordinal	                type + list	
+X 10	DV_CODED_TEXT	    value, code, terminology	            suffix + type	
+X 11	DV_PARSABLE	        value, formalism	                        suffix + type	
+X 12	DV_DURATION	        year,month,day,week,hour,minute,second		
+"""
 
-# 4. Basic Package
-#   DATA_VALUE: Abstract
-#   ?   DV_BOOLEAN:         value=Boolean  (maybe like DV_COUNT which would mean "no suffix-Case")
-#       DV_STATE:           value=DV_CODED_TEXT, is_terminal
-#       DV_IDENTIFIER:      id, ...
-
-# 5. Text Package
-#   X   DV_TEXT             value:String
-#       TERM_MAPPING        match=char, target=CODE_PHRASE
-#   X   CODE_PHRASE         code=code_string, terminology=terminology_id
-#   X   DV_CODED_TEXT       value, CODE_PHRASE
-#   x   DV_PARAGRAPH        This one is DEPRECATED, DV_TEXT (which is markdown formatted) is used instead
-
-# 7. Date Time Package
-#       DV_TEMPORAL         accuracy=DV_DUTRATION --> Specialised temporal variant of DV_ABSOLUTE_QUANTITY whose diff type is DV_DURATION.
-#   ?   DV_DATE             value=String -> ISO8601 date string         (Structure like DV_COUNT?)
-#   ?   DV_TIME             value=String -> ISO8601 time string         (Structure like DV_COUNT?)
-#   X   DV_DATE_TIME        value=String -> ISO8601 date/time string    
-#   ?   DV_DURATION         value=String -> ISO8601 duration string, including described deviations to support negative values and weeks.   (Structure like DV_COUNT?)
-
-# 8. Time_specification Package
-#   DV_TIME_SPECIFICATIONS  Abstract
-#       DV_PERIODIC_TIME_SPECIFICATION  --> Specifies periodic points in time, linked to the calendar (phase-linked), or a real world repeating event, such as breakfast (event-linked). Based on the HL7v3 data types PIVL<T> and EIVL<T>. Used in therapeutic prescriptions, expressed as INSTRUCTIONs in the openEHR model.
-#       DV_GENERAL_TIME_SPECIFICATION   --> Specifies points in time in a general syntax. Based on the HL7v3 GTS data type.
-
-# 9. Encapsulated Package
-#   DV_ENCAPSULATED     Abstract -> Common Metadata -> CODE_PHRASE for charset and language
-#       DV_MULTIMEDIA:      media_type=CODE_PHRASE, size: Integer
-#       DV_PARSABLE:        value=String, formalism=String
-
-# 10. Uri Package
-#       DV_URI              value=String        --> A reference to an object which structurally conforms to the Universal Resource Identifier (URI) RFC-3986 standard
-#       DV_EHR_URI                              --> A DV_EHR_URI is a DV_URI which has the scheme name 'ehr', and which can only reference items in EHRs.
+# TODO
+# Es wäre gut auch die Validation-Angaben mitzuschleppen. Bei Elementen, die diese haben. 
 
 ###########################################################################
 # Standard library imports
@@ -83,6 +52,11 @@ import traceback #debug
 # Local application imports
 
 indent = "    "
+case4 = ["DV_TEXT", "DV_BOOLEAN", "DV_URI", "DV_EHR_URI", "DV_DATE_TIME", "DV_DATE", "DV_TIME"]
+
+def addMultipleSuffixes(pathDict, element, suffixPath, suffixPathArr):
+    for suffix in suffixPathArr:
+        addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath+"|"+suffix)
 
 def addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath):
     # Pflichtelement
@@ -110,6 +84,9 @@ def goLow(parentPath, pathDict, children):
             else:
                 selfPath = parentPath + '/' + element['id']
 
+            #Pfad zum aktuellen Element
+            suffixPath = parentPath + '/' + element['id']
+
             # Falls Element "children" hat goLow(er)
             childArr = []
             for key in element:
@@ -125,80 +102,72 @@ def goLow(parentPath, pathDict, children):
                     for key in inputElement:
                         keysOfInputsElement.append(key)
 
-                    # Falls DV_CODED_TEXT -> CODED_TEXT + |terminology
-                    # +list 
-                    # +suffix 
-                    # +terminology
-                    if ('list' in keysOfInputsElement and 'suffix' in keysOfInputsElement and 'terminology' in keysOfInputsElement) or (element['rmType'] == "DV_CODED_TEXT"):
-                        # Suffix |value
-                        suffixPath = parentPath + '/' + element['id'] + '|value'
-                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
-                        # Suffix |code
-                        suffixPath = parentPath + '/' + element['id'] + '|code'
-                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
-                        # Suffix | terminology
-                        suffixPath = parentPath + '/' + element['id'] + '|terminology'
-                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
-
-                    # Falls DV_QUANTITY
-                    # +suffix 
-                    # +list 
-                    # -terminology
-                    elif ('suffix' in keysOfInputsElement and 'list' in keysOfInputsElement and 'terminology' not in keysOfInputsElement ) or (element['rmType'] == "DV_QUANTITY"):
-                        # Suffix |magnitude
-                        suffixPath = parentPath + '/' + element['id'] + '|magnitude'
-                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
-                        # Suffix |unit
-                        suffixPath = parentPath + '/' + element['id'] + '|unit'
-                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
-
-                    # Falls DV_ORDINAL -> CODED_TEXT + |ordinal
-                    # + list 
-                    # -suffix
-                    elif ('list' in keysOfInputsElement and 'suffix' not in keysOfInputsElement) or (element['rmType'] == "DV_ORDINAL"):
-                        # Suffix |value
-                        suffixPath = parentPath + '/' + element['id'] + '|value'
-                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
-                        # Suffix |code
-                        suffixPath = parentPath + '/' + element['id'] + '|code'
-                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
-                        # Suffix |ordinal
-                        suffixPath = parentPath + '/' + element['id'] + '|ordinal'
-                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
-
-                    # Falls DV_COUNT
-                    # -suffix 
-                    # -list
-                    # +type=Integer
-                    elif ('list' not in keysOfInputsElement and 'suffix' not in keysOfInputsElement and inputElement['type'] == 'INTEGER') or (element['rmType'] == "DV_COUNT"):
-                        suffixPath = parentPath + '/' + element['id'] + "|value"
-                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
-
-                    # Falls DV_TEXT, DV_DATE_TIME -> kein Suffix
-                    # -list 
-                    # -suffix 
-                    # -type = Integer
-                    elif ('list' not in keysOfInputsElement and 'suffix' not in keysOfInputsElement and not inputElement['type'] == 'INTEGER') or (element['rmType'] == "DV_TEXT" or element['rmType'] == "DV_DATE_TIME"):
-                        suffixPath = parentPath + '/' + element['id']
-                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
-
-                    # Falls PARTY_PROXY -> |id , |id_scheme , |id_namespace , |name
-                    # +suffix 
-                    # -list
-                    elif ('suffix' in keysOfInputsElement and 'list' not in keysOfInputsElement) or (element['rmType'] == "PARTY_PROXY"):
+                    # Case 1: PARTY_PROXY
+                    if (element['rmType'] == "PARTY_PROXY"):
                         suffixPath = parentPath + '/' + element['id'] + '|' + inputElement['suffix']
                         pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
 
-            # Wenn CODE_PHRASE -> |code und |terminology
-            # -children 
-            # -inputs
-            # -list
-            # -suffix
-            elif ('children' not in childArr and 'inputs' not in childArr) or (element['rmType'] == "CODE_PHRASE"):
-                keyCode = selfPath + '|code'
-                keyTerm = selfPath + '|terminology'
-                pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, keyTerm)
-                pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, keyCode)
+                    # Case 2: DV_IDENTIFIER -> id, type, issuer, assigner
+                    elif (element['rmType'] == "DV_IDENTIFIER"):
+                        suffixes = ['id','type','issuer','assigner']
+                        addMultipleSuffixes(pathDict, element, suffixPath, suffixes)
+
+                    # Case 3: DV_QUANTITY
+                    elif (element['rmType'] == "DV_QUANTITY"):
+                        suffixes = ['magnitude','unit']
+                        addMultipleSuffixes(pathDict, element, suffixPath, suffixes)
+
+                    # Case 4: DV_TEXT, DV_BOOLEAN, DV_URI, DV_EHR_URI,DV_DATE_TIME, DV_DATE, DV_TIME -> No Suffix
+                    elif element['rmType'] in case4:
+                        # No Suffix
+                        suffixPath = parentPath + '/' + element['id']
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+
+                    # Case 5: DV_MULTIMEDIA -> none + mediatype + alternatetext + size
+                    elif element['rmType'] == "DV_MULTIMEDIA":
+                        # No Suffix
+                        suffixPath = parentPath + '/' + element['id']
+                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+                        # Suffixes
+                        suffixes = ['mediatype','alternatetext','size']
+                        addMultipleSuffixes(pathDict, element, suffixPath, suffixes)
+
+                    # Case 6: DV_PROPORTION -> numerator, denominator, type
+                    elif element['rmType'] == "DV_PROPORTION":
+                        suffixes = ['numerator','denominator','type']
+                        addMultipleSuffixes(pathDict, element, suffixPath, suffixes)
+
+                    # Case 7 is below in the else-Part because there are no "inputs" present
+
+                    # Case 8: DV_COUNT
+                    elif (element['rmType'] == "DV_COUNT"):
+                        suffixes = ['value']
+                        addMultipleSuffixes(pathDict, element, suffixPath, suffixes)
+
+                    # Case 9: DV_ORDINAL
+                    elif (element['rmType'] == "DV_ORDINAL"):
+                        suffixes = ['value','code','ordinal']
+                        addMultipleSuffixes(pathDict, element, suffixPath, suffixes)
+
+                    # Case 10: DV_CODED_TEXT 
+                    elif (element['rmType'] == "DV_CODED_TEXT"):
+                        suffixes = ['value','code','terminology']
+                        addMultipleSuffixes(pathDict, element, suffixPath, suffixes)
+
+                    # Case 11: DV_PARSABLE -> value, formalism
+                    elif (element['rmType'] == "DV_PARSABLE"):
+                        suffixes = ['value','formalism']
+                        addMultipleSuffixes(pathDict, element, suffixPath, suffixes)
+
+                    # Case 12: DV_DURATION -> year,month,day,week,hour,minute,second	
+                    elif (element['rmType'] == "DV_PARSABLE"):
+                        suffixes = ['year','month','day','week','hour','minute','second']
+                        addMultipleSuffixes(pathDict, element, suffixPath, suffixes)
+
+            # Case 7: CODE_PHRASE
+            elif (element['rmType'] == "CODE_PHRASE"):
+                suffixes = ['code','terminology']
+                addMultipleSuffixes(pathDict, element, suffixPath, suffixes)
 
     return pathDict
 
@@ -207,7 +176,6 @@ def getPathsFromWebTemplate(workdir, templateName):
         # Greife auf WebTemplate zu
         filePath = os.path.join(workdir, 'IntermFiles', templateName +'_WebTemplate.json')
         if os.path.isfile(filePath):
-            path = ''
             pathDict = defaultdict(list)
             try:
                 # Lese WebTemplate ein
@@ -218,16 +186,11 @@ def getPathsFromWebTemplate(workdir, templateName):
                 path = webTemp['tree']['id']
                 pathDict = goLow(path, pathDict, webTemp['tree']['children'])
 
-                ## TODO Hier sind noch ein paar die doppelt hinzugefügt werden! Hier weitermachen TODO
+                # Gib some Output
                 print ( indent + "Anzahl extrahierter Pfade: " + str( len(pathDict) ) )
-                for path in pathDict:
-                    print (path)
-                    print (pathDict[path])
-                    print ("")
-                    pass
 
             except Exception as e:
-                print(indent + templateName + "_Webtemplate ist fehlerhaft." + str(e))
+                print(indent + templateName + "_Webtemplate ist fehlerhaft.")
                 print (indent + str(e))
                 traceback.print_exc()
                 raise SystemExit
