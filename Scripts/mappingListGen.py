@@ -20,6 +20,14 @@ def generateList(workdir, templateName, inputCSV, pathsArray):
     # Create Excel-File
     excelPath = os.path.join(workdir, 'Manual Tasks', templateName + '_MAPPING.xlsx')
     workbook = xlsxwriter.Workbook(excelPath)
+
+    mapping_item_cell_format = workbook.add_format()
+    mapping_item_cell_format.set_align('valign')
+    mapping_item_cell_format.set_text_wrap()
+
+    header_cell_format = workbook.add_format()
+    header_cell_format.set_bg_color('#808080')
+
     worksheetMapping = workbook.add_worksheet('Mapping CSV2openEHR')
     worksheetPaths = workbook.add_worksheet('FLAT_Paths')
 
@@ -29,11 +37,11 @@ def generateList(workdir, templateName, inputCSV, pathsArray):
 
     # Write Path-Values (for Dropdown-List) AND rmTypes for each path-element
     worksheetPaths.set_column('A:A', 100)
-    worksheetPaths.write('A1', 'FLAT-Path')
+    worksheetPaths.write('A1', 'FLAT-Path', header_cell_format)
     worksheetPaths.set_column('B:B', 60)
-    worksheetPaths.write('B1', 'rmType')
+    worksheetPaths.write('B1', 'rmType', header_cell_format)
     worksheetPaths.set_column('C:C', 100)
-    worksheetPaths.write('C1','Mandatory Paths')
+    worksheetPaths.write('C1','Mandatory Paths', header_cell_format)
 
     # Alle Pfade mit rmType
     i = 1
@@ -65,26 +73,41 @@ def generateList(workdir, templateName, inputCSV, pathsArray):
     print( indent + "Anzahl der mindestens zu verwendenden Pfade: " + str(nrMandatoryPaths) )
 
     #### Build Mapping Worksheet
-    worksheetMapping.write('A1', 'CSV-Column')
-    worksheetMapping.write('B1', 'FLAT-Path')
+    anzahlFixerSpalten = 3
+    worksheetMapping.write('A1', 'CSV-Column', header_cell_format)
+    worksheetMapping.write('B1', 'Example-Value', header_cell_format)
+    worksheetMapping.write('C1', 'FLAT-Path', header_cell_format)
+
+    worksheetMapping.set_column('A:A', 50)
+    worksheetMapping.set_column('B:B', 50)
+    worksheetMapping.set_column('C:C', 100)
+    worksheetMapping.set_column('D:D', 25)
+
+
     # Index-Spalten hinzufuegen
     ind = 0
     while ind < max_value:
-        worksheetMapping.write(0, ind+2, str(ind + 1) + '. Index' )
+        worksheetMapping.write(0, ind+anzahlFixerSpalten, str(ind + 1) + '. Index' , header_cell_format)
         ind += 1
-    # ind+2 ter Buchstaben des Alphabets, damit der Eintrag als Header im DataFrame in BuildComp genutzt werden kann
-    worksheetMapping.write(chr(ord('A') + ind+2 )+'1' , 'Hinweis:') 
-    worksheetMapping.write(1, ind+2 , 'Wählen Sie für jedes Feld einen entsprechenden FLAT-Pfad per Auswahl im Dropdown-Menü')
-    worksheetMapping.write(2, ind+2 , 'Bei FLAT-Pfaden mit dem Element "<<index>>" wählen Sie den Index (z.B. für eine best. Messung) beginnend mit 0')
-    worksheetMapping.set_column('A:A', 50)
-    worksheetMapping.set_column('B:B', 80)
-    worksheetMapping.set_column('D:D', 30)
+    # ind+anzahlFixerSpalten ter Buchstaben des Alphabets, damit der Eintrag als Header im DataFrame in BuildComp genutzt werden kann
+    worksheetMapping.write(chr(ord('A') + ind+anzahlFixerSpalten )+'1' , 'Hinweis:') 
+    worksheetMapping.write(1, ind+anzahlFixerSpalten , 'Wählen Sie für jedes Feld einen entsprechenden FLAT-Pfad per Auswahl im Dropdown-Menü')
+    worksheetMapping.write(2, ind+anzahlFixerSpalten , 'Bei FLAT-Pfaden mit dem Element "<<index>>" wählen Sie den Index (z.B. für eine best. Messung) beginnend mit 0')
+
     # Dropdown-Listen hinbzufuegen
     i = 1
     for col in df.columns:
-        worksheetMapping.write(i, 0, col)
-        worksheetMapping.data_validation('B'+str(i+1), {'validate': 'list','source': '=FLAT_Paths!$A$2:$A$' + str(numberofPaths +1)})
+        # In case of NaN Values
+        try:
+            worksheetMapping.write(i, 1, df[col].iloc[0], mapping_item_cell_format)
+        except:
+            worksheetMapping.write(i, 1, "NaN")
+        # Write CSV-Items in first row (0)
+        worksheetMapping.write(i, 0, col, mapping_item_cell_format)
+        worksheetMapping.data_validation('C'+str(i+1), {'validate': 'list','source': '=FLAT_Paths!$A$2:$A$' + str(numberofPaths +1)})
         i += 1
+
+
 
     workbook.close()
 
