@@ -77,8 +77,6 @@ def addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath, mandatoryChai
 
     return pathDict
 
-p = 0
-
 # Rekursiv den Baum durchlaufen
 def goLow(parentPath, pathDict, children, parentMandatoryChain):
     self = children
