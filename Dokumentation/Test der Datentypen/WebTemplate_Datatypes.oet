@@ -60,5 +60,7 @@
       </item>
     </other_details>
   </description>
-  <definition xsi:type="OBSERVATION" archetype_id="openEHR-EHR-OBSERVATION.webtemplate_datatypes.v0" concept_name="Webtemplate datatypes" />
+  <definition xsi:type="OBSERVATION" archetype_id="openEHR-EHR-OBSERVATION.webtemplate_datatypes.v0" concept_name="Webtemplate datatypes">
+    <Rule path="/data[at0001]/events[at0002]/data[at0003]/items[at0004]/items[at0030]" max="0" />
+  </definition>
 </template>

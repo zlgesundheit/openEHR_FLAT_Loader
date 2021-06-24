@@ -53,8 +53,10 @@ def generateList(workdir, templateName, inputCSV, pathsArray):
 
         # Falls Pflichtfeld dann entsprechend kenntlich machen in Mandatory Spalte i,2 (dict['pfad']['mandatory'] = 1)
         if pathsArray[path]['mandatory'] == str(1):
-            worksheetPaths.write(i, 2, "Pflicht/Mandatory")
+            worksheetPaths.write(i, 2, "Pflicht/Mandatory (Dieser Pfad muss in einer validen Ressource gegeben sein)")
             nrMandatoryPaths += 1
+        elif pathsArray[path]['mandatory'] == str(-1):
+            worksheetPaths.write(i, 2, "Bedingt Pflicht/Mandatory (Nur wenn vorangehende Elemente existiert)")
 
         # rmType ausgeben in rmType-Spalte i,1
         worksheetPaths.write(i, 1, pathsArray[path]['rmType'])

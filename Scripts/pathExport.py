@@ -54,120 +54,118 @@ import traceback #debug
 indent = "    "
 case4 = ["DV_TEXT", "DV_BOOLEAN", "DV_URI", "DV_EHR_URI", "DV_DATE_TIME", "DV_DATE", "DV_TIME"]
 
-def addMultipleSuffixes(pathDict, element, suffixPath, suffixPathArr):
+def addSuffixes(pathDict, element, suffixPath, suffixPathArr, mandatoryChain):
     for suffix in suffixPathArr:
-        addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath+"|"+suffix)
+        if suffix == "":
+            addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath, mandatoryChain)
+        else:
+            addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath+"|"+suffix, mandatoryChain)
 
-def addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath):
-    # Pflichtelement
-    if element['min'] == 1 and element['max'] == 1:
-        pathDict[suffixPath] = { "rmType" : element['rmType'], "mandatory" : "1"  }
-    # Pflichtelement das >1 beliebig of vorkommen kann d.h. mit Index
-    elif element['max'] == -1 and element['min'] == 1:
+def addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath, mandatoryChain):
+    # Pfade mit Index
+    if element['max'] == -1:
         suffixPath += "<<index>>"
-        pathDict[suffixPath] = { "rmType" : element['rmType'], "mandatory" : "1"  }
-    # Nicht Pflicht beliebig oft d.h. mit Index
-    elif element['max'] == -1 and element['min'] == 0:
-        suffixPath += "<<index>>"
+
+    # Pflichtelement oder nicht
+    if element['min'] == 1 and '0' in mandatoryChain:
+        # Bedingt Mandatory = -1
+        pathDict[suffixPath] = { 'rmType' : element['rmType'], 'mandatory' : "-1" }
+    elif element['min'] == 1 and not '0' in mandatoryChain:
+        pathDict[suffixPath] = { 'rmType' : element['rmType'], 'mandatory' : "1" }
+    elif element['min'] == 0:
         pathDict[suffixPath] = { "rmType" : element['rmType'], "mandatory" : "0"  }
-    # Nicht Pflicht
-    else:
-        pathDict[suffixPath] = { "rmType" : element['rmType'], "mandatory" : "0"  }
+
     return pathDict
 
-def goLow(parentPath, pathDict, children):
+p = 0
+
+# Rekursiv den Baum durchlaufen
+def goLow(parentPath, pathDict, children, parentMandatoryChain):
     self = children
     for element in self:
-            # Fuer jeden Eintrag die ID an den Pfad anhaengen und tiefer gehen # Falls Kardinalitaet mehrfacheintraege zulaesst (Max: -1) dann <<index>>
-            if element['max'] == -1:
-                selfPath = parentPath + '/' + element['id'] + '<<index>>'
-            else:
-                selfPath = parentPath + '/' + element['id']
-
-            #Pfad zum aktuellen Element
+        # Pfad zum aktuellen Element 
+        # Falls Kardinalitaet mehrfacheintraege zulaesst (Max: -1) dann <<index>>
+        if element['max'] == -1:
+            suffixPath = parentPath + '/' + element['id'] + '<<index>>'
+        else:
             suffixPath = parentPath + '/' + element['id']
 
-            # Falls Element "children" hat goLow(er)
-            childArr = []
-            for key in element:
-                childArr.append(key)
-            if 'children' in childArr:
-                pathDict = goLow(selfPath, pathDict, element['children'])
+        # Mandatory
+        if element['min'] == 1:
+            mandatoryChain = parentMandatoryChain + "/1"
+        else:
+            mandatoryChain = parentMandatoryChain + "/0"
 
-            # Falls Element "Inputs" hat -> Gehe jedes Inputs-Element durch und speichere Pfade
-            elif 'inputs' in childArr:
-                for inputElement in element['inputs']:
-                    # Unterscheidung nach Aufbau statt nach rmType, um alles abzufangen und auch bei Aenderungen oder neuen Datentypen funktional zu bleiben 
-                    keysOfInputsElement = []
-                    for key in inputElement:
-                        keysOfInputsElement.append(key)
+        # Bei weiteren 'children' tiefer gehen    
+        if 'children' in element:
+            pathDict = goLow(suffixPath, pathDict, element['children'], mandatoryChain)
+        # Falls Element "Inputs" hat -> Gehe jedes Inputs-Element durch und speichere Pfade
+        elif 'inputs' in element:
+            #print( element['rmType'] )
 
-                    # Case 1: PARTY_PROXY
-                    if (element['rmType'] == "PARTY_PROXY"):
-                        suffixPath = parentPath + '/' + element['id'] + '|' + inputElement['suffix']
-                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+            # Case 1: PARTY_PROXY -> id, id_scheme, id_namespace, name
+            if (element['rmType'] == "PARTY_PROXY"):
+                suffixes = ['id','id_scheme','id_namespace','name']
+                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
 
-                    # Case 2: DV_IDENTIFIER -> id, type, issuer, assigner
-                    elif (element['rmType'] == "DV_IDENTIFIER"):
-                        suffixes = ['id','type','issuer','assigner']
-                        addMultipleSuffixes(pathDict, element, suffixPath, suffixes)
+            # Case 2: DV_IDENTIFIER -> id, type, issuer, assigner
+            elif (element['rmType'] == "DV_IDENTIFIER"):
+                suffixes = ['id','type','issuer','assigner']
+                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
 
-                    # Case 3: DV_QUANTITY
-                    elif (element['rmType'] == "DV_QUANTITY"):
-                        suffixes = ['magnitude','unit']
-                        addMultipleSuffixes(pathDict, element, suffixPath, suffixes)
+            # Case 3: DV_QUANTITY
+            elif (element['rmType'] == "DV_QUANTITY"):
+                suffixes = ['magnitude','unit']
+                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
 
-                    # Case 4: DV_TEXT, DV_BOOLEAN, DV_URI, DV_EHR_URI,DV_DATE_TIME, DV_DATE, DV_TIME -> No Suffix
-                    elif element['rmType'] in case4:
-                        # No Suffix
-                        suffixPath = parentPath + '/' + element['id']
-                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
+            # Case 4: DV_TEXT, DV_BOOLEAN, DV_URI, DV_EHR_URI,DV_DATE_TIME, DV_DATE, DV_TIME -> No Suffix
+            elif element['rmType'] in case4:
+                # No Suffix
+                suffixes = ['']
+                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
 
-                    # Case 5: DV_MULTIMEDIA -> none + mediatype + alternatetext + size
-                    elif element['rmType'] == "DV_MULTIMEDIA":
-                        # No Suffix
-                        suffixPath = parentPath + '/' + element['id']
-                        pathDict = addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath)
-                        # Suffixes
-                        suffixes = ['mediatype','alternatetext','size']
-                        addMultipleSuffixes(pathDict, element, suffixPath, suffixes)
+            # Case 5: DV_MULTIMEDIA -> none + mediatype + alternatetext + size
+            elif element['rmType'] == "DV_MULTIMEDIA":
+                # Suffixes
+                suffixes = ['','mediatype','alternatetext','size']
+                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
 
-                    # Case 6: DV_PROPORTION -> numerator, denominator, type
-                    elif element['rmType'] == "DV_PROPORTION":
-                        suffixes = ['numerator','denominator','type']
-                        addMultipleSuffixes(pathDict, element, suffixPath, suffixes)
+            # Case 6: DV_PROPORTION -> numerator, denominator, type
+            elif element['rmType'] == "DV_PROPORTION":
+                suffixes = ['numerator','denominator','type']
+                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
 
-                    # Case 7 is below in the else-Part because there are no "inputs" present
+            # Case 7 is below in the else-Part because there are no "inputs" present
 
-                    # Case 8: DV_COUNT
-                    elif (element['rmType'] == "DV_COUNT"):
-                        suffixes = ['value']
-                        addMultipleSuffixes(pathDict, element, suffixPath, suffixes)
+            # Case 8: DV_COUNT
+            elif (element['rmType'] == "DV_COUNT"):
+                suffixes = ['value']
+                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
 
-                    # Case 9: DV_ORDINAL
-                    elif (element['rmType'] == "DV_ORDINAL"):
-                        suffixes = ['value','code','ordinal']
-                        addMultipleSuffixes(pathDict, element, suffixPath, suffixes)
+            # Case 9: DV_ORDINAL
+            elif (element['rmType'] == "DV_ORDINAL"):
+                suffixes = ['value','code','ordinal']
+                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
 
-                    # Case 10: DV_CODED_TEXT 
-                    elif (element['rmType'] == "DV_CODED_TEXT"):
-                        suffixes = ['value','code','terminology']
-                        addMultipleSuffixes(pathDict, element, suffixPath, suffixes)
+            # Case 10: DV_CODED_TEXT 
+            elif (element['rmType'] == "DV_CODED_TEXT"):
+                suffixes = ['value','code','terminology']
+                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
 
-                    # Case 11: DV_PARSABLE -> value, formalism
-                    elif (element['rmType'] == "DV_PARSABLE"):
-                        suffixes = ['value','formalism']
-                        addMultipleSuffixes(pathDict, element, suffixPath, suffixes)
+            # Case 11: DV_PARSABLE -> value, formalism
+            elif (element['rmType'] == "DV_PARSABLE"):
+                suffixes = ['value','formalism']
+                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
 
-                    # Case 12: DV_DURATION -> year,month,day,week,hour,minute,second	
-                    elif (element['rmType'] == "DV_PARSABLE"):
-                        suffixes = ['year','month','day','week','hour','minute','second']
-                        addMultipleSuffixes(pathDict, element, suffixPath, suffixes)
+            # Case 12: DV_DURATION -> year,month,day,week,hour,minute,second	
+            elif (element['rmType'] == "DV_DURATION"):
+                suffixes = ['year','month','day','week','hour','minute','second']
+                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
 
-            # Case 7: CODE_PHRASE
-            elif (element['rmType'] == "CODE_PHRASE"):
-                suffixes = ['code','terminology']
-                addMultipleSuffixes(pathDict, element, suffixPath, suffixes)
+        # Case 7: CODE_PHRASE
+        elif (element['rmType'] == "CODE_PHRASE"):
+            suffixes = ['code','terminology']
+            addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
 
     return pathDict
 
@@ -184,7 +182,8 @@ def getPathsFromWebTemplate(workdir, templateName):
 
                 # Durchlaufe den Baum
                 path = webTemp['tree']['id']
-                pathDict = goLow(path, pathDict, webTemp['tree']['children'])
+                parentMandatoryChain = ""
+                pathDict = goLow(path, pathDict, webTemp['tree']['children'],parentMandatoryChain)
 
                 # Gib some Output
                 print ( indent + "Anzahl extrahierter Pfade: " + str( len(pathDict) ) )
