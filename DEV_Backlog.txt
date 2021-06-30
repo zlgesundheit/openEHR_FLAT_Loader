@@ -1,22 +1,32 @@
 ===================================
 Bugs / ToDo:
 
-	4. Sprechende Fehlermeldung bei Missing <<index>>-Angaben im Mapping!
+	x. Sprechende Fehlermeldung bei Missing <<index>>-Angaben im Mapping!
 
-	1. Analyse des WebTemplate_Datatypes Templates und Ableitung/Test der verschiedenen Strukturen von Datentypen
-		- Dazu Import-Test mit Beispiel -> besonders interessant bei z.B. DV_MULTIMEDA
+	xx. Auch wenn ein Pfad Mandatory ist, sind nicht alle Suffixes dazu Mandatory! Derzeit werden alle Suffixes dieses Pfades als Mandatory betrachtet/angezeigt
+
+	1. Es müssen alle Pfade des Templates befüllt werden. Damit müssen die Pfade in Spalte 1 stehen und die CSV-Items per Dropdown zugeordnet werden 
+		(Wird wichtig, wenn mehrere Language-Felder zu befüllen sind. Dann kann eine Language/ein CSV-Item mehreren Pfade zugeordnet werden)
+
+	xxxx. Nicht alle Suffixe eines Min:1 Pfades sind notwendig, um Ressource zu speichern.......Wann nicht, wann doch? Beispiel jpeg_bild -> subject2
+
+	xxx. Sonderfall: "jpeg_bild" hat als mandatory eingetragen "subject2", ist aber nicht notwendig...
+
+	In GUI oder Mapping auf Infomaterial verweisen:
+		- Validation Info in Mapping-Datei?
+		- Link zu Code Sets (https://specifications.openehr.org/releases/TERM/latest/SupportTerminology.html#_code_sets) 
 
 ===================================
 KERNFUNKTION-Features
 
 - WebTemplate to Path-Dict 
-	- rmType
-	- Cardinality
-	- Validation?
+	- Validation mit exportieren?
+	- Auch wenn ein Pfad Mandatory ist, sind nicht alle Suffixes dazu Mandatory!
+	(Sonderfall: jpeg_bild hat als mandatory eingetragen "subject2", ist aber nicht notwendig...)
 
 - Mapping GUI mit 
 	- Autovervollständigung
-	- Übersicht, welche Pfade bereits gemappt wurde + verhindern, dass Pfade doppelt zugeordnet werden
+	- Übersicht, welche Pfade bereits gemappt wurde + verhindern, dass Pfade doppelt zugeordnet werden <-- logik soll umgedreht werden CSV-Items werden den Pfad zugeordnet nicht andersherum
 
 ===================================
 Zukünftige Features:
@@ -30,5 +40,6 @@ NETT
 ==================================
 
 Neue Features:
+- Bei Templates die keine wiederholbaren Elemente sprich Indexe haben, wird nun nicht mehr probiert den maximalen Index zu exportieren
 - Check ob Template bereits existiert -> Dann kein erneuter Upload (vermeidet Timeouts)
 - Besserer Output bei Fehlern
