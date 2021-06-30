@@ -34,13 +34,11 @@ def replacenth(string, indexNr, n):
     newString = before + after
     return newString
 
-def getHighestIndexNr(mapTabDF):
+def getHighestIndexNr(mapTabDF, colNr, colnr_of_hinweis):
   # Find out what the highest index is --> the first char in the last col left of the column named "Hinweis:" it is!
-  colNr = pd.Index( list(mapTabDF.columns.values) )
-  nr = colNr.get_loc( key='Hinweis:' )
   # Get String of the Header left of Hinweis
-  biggestIndexHeader = colNr[nr-1]
-  highestIndex = biggestIndexHeader[0]
+  biggestIndexHeader = colNr[colnr_of_hinweis-1]
+  highestIndex = biggestIndexHeader[0] # Erstes zeichen der x.Index Spalte = hoechster Index --> Nur wenn Indexe existieren!
   return int(highestIndex)
 
 def convertIndexCols(mapTabDF, highestIndex):
@@ -61,9 +59,14 @@ def buildComp(workdir, templateName, inputCSV):
   # Read Excel-File
   xlsxPath = os.path.join(workdir, 'Manual Tasks', templateName + '_MAPPING.xlsx')
   mapTabDF = pd.read_excel(xlsxPath, "Mapping CSV2openEHR", header=0, engine='openpyxl') #engine openpyxl not xlrd since xlrd drop support for non-xls-files
-  highestIndex = getHighestIndexNr(mapTabDF)
-  # Cast Index Columns to String instead of float64
-  mapTabDF = convertIndexCols(mapTabDF, highestIndex)
+  
+  colNr = pd.Index( list(mapTabDF.columns.values) )
+  colnr_of_hinweis = colNr.get_loc( key='Hinweis:' )
+  # Falls kein Index existiert, ist die colnr von Hinweis = 3 (wenn indexe existieren ist der hinweis weiter rechts, weil es Links davon x-Index Spalten gibt)
+  if colnr_of_hinweis != 3:
+    highestIndex = getHighestIndexNr(mapTabDF, colNr , colnr_of_hinweis)
+    # Cast Index Columns to String instead of float64
+    mapTabDF = convertIndexCols(mapTabDF, highestIndex)
 
   empty = True
   errorMsg = ""
