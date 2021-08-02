@@ -1,7 +1,10 @@
 # MANUAL_openEHR_FLAT_Loader
 
 `Zukunftslabor Gesundheit`  
-`Jendrik Richter (UMG), Jan Janosch Schneider (UMG), Mareike Joseph (MHH)`
+`Jendrik Richter (UMG), Jan Janosch Schneider (UMG), 
+
+`COFONI`
+`Mareike Joseph (MHH)`
 
 `jendrik.richter@med.uni-goettingen.de`
 
