@@ -128,7 +128,7 @@ A Webtemplate is an other format of a Template (Operational Template / .opt). We
     **Environment Infos:**
     | config-variable | Description |
     | --------------- | ------ |
-    | workdir         | Working Directory (e.g. `C:\Users\richter122\git-projects\openehr_flat_loader`) |
+    | workdir         | Working Directory (e.g. `C:\Users\richter\git-projects\openehr_flat_loader`) |
     | templatename    | Name of the Template (e.g. `UMG_Stammdaten`) |
     | inputcsv        | Name of the csv-file that holds the data (`source_data`) |
     
