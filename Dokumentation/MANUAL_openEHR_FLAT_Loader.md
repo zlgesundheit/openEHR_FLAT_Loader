@@ -7,8 +7,8 @@
 
 ## Contents
 - [Introduction](#introduction)
-- Features
-- Data Preparation
+- [Features](#features)
+- [Data Preparation](#data_preparation)
   - Formatting
   - Data Modelling (openEHR)
   - Identificators/Pseudonymisation
@@ -17,3 +17,7 @@
   - Provide a template as .opt 
 
 ## Introduction
+
+## Features
+
+## Data Preparation
