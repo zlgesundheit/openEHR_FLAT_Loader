@@ -55,6 +55,11 @@ We hope to stay (or become) compatible with the standard in the future.
 - Python 3.8 with modules "openpyxl" and "requests"
 
 ## Features
+- Extraction of FLAT-Paths from Webtemplates
+- Tips and Hints for Data Curation regarding the transformation
+- Generation of a Mapping-File (.xlsx)
+- Build Ressources using a provided .csv, .opt and filled Mapping-File
+- Upload Ressources using identifier-column .csv-data-file 
 
 ## Data Preparation
 There are some noteworthy aspects in preparing the data to be consumed by the FLAT_Loader. Aligning **data types** and **item/column names** and **some metadata** with the **data model / openEHR-Template** makes the transformation process easy.
