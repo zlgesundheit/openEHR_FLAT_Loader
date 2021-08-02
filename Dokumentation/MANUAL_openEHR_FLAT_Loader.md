@@ -3,10 +3,14 @@
 `Zukunftslabor Gesundheit`  
 `Jendrik Richter (UMG), Jan Janosch Schneider (UMG), Mareike Joseph (MHH)`
 
+`jendrik.richter@med.uni-goettingen.de`
+
 `08/2021`
 
 ## Contents
+- [Updates](#updates)
 - [Introduction](#introduction)
+  - [Requirements](#requirements)
 - [Features](#features)
 - [Data Preparation](#data-preparation)
   - [Data Curation](#data-curation)
@@ -20,8 +24,30 @@
   - [2. Fill in mapping information](#2-fill-in-mapping-information)
   - [3. Build Ressources](#3-build-ressources)
   - [4. Upload Ressources](#4-upload-ressources)
+- [Funding](#funding)
+
+## Updates
+#### xx/2021
+- Release of Version 1.0
 
 ## Introduction
+This manual describes how the **openEHR_FLAT_Loader** can be used to transform tabular data into openEHR-Resources / openEHR-Compositions.  
+  
+The **openEHR_FLAT_Loader** is a joint development by researchers from these projects:
+- _Zukunftslabor Gesundheit (ZL-G)_, 
+- _Covid-19 Forschungsnetzwerk Niedersachsen (COFONI)_ 
+- _A Learning and Interoperable Smart Expert System for Pediatric Intensive Care Medicine (ELISE)_
+
+The above mentioned projects needed researchers and end user to be able to generate valid openEHR-Resources from existing non-openEHR data.
+The **[HaMSTR-Builder-Tool](https://gitlab.plri.de/tute/HAMSTRETLBuilder)** developed by the _Hannover Medical School (MHH)_ already offered this functionality but needed a (commercial) Better / thinkEHR openEHR-Repository to work. The present FLAT_Loader tool, similar to the HaMSTR builder, builds on the idea of a user-supplied mapping. The **openEHR_FLAT_Loader** allows the user to generate resources using a mapping from data-items to openEHR-Template items. The openEHR-Template items are derived directly from Webtemplates for given Operational Templates.
+
+Webtemplates are part of the FLAT-API as it is used in Better, EHRBase and EtherCIS openEHR-Servers.
+In the future this will be adopted into the openEHR-Standard as a so called [Simplified Data Format](https://specifications.openehr.org/releases/ITS-REST/latest/simplified_data_template.html).
+We hope to stay (or become) compatible with the standard in the future.
+
+#### Requirements
+- openEHR-Server supporting the FLAT-API (e.g. EHRBase)
+- Python 3.8 with modules "openpyxl" and "requests"
 
 ## Features
 
@@ -40,3 +66,7 @@
 #### 2. Fill in mapping information
 #### 3. Build Ressources
 #### 4. Upload Ressources
+
+## Funding
+- Funded by the Lower Saxony Ministry of Science and within the Lower Saxony “Vorab“ of the Volkswagen Foundation and supported by the Center for Digital Innovations (ZDIN).
+- Funds of the participating institutes
