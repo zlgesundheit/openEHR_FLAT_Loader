@@ -26,7 +26,7 @@ The idea of [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/-/tree/a58
 
 _Process-Overview:_
 
-![BPMN-Process-Overview](/Dokumentation/Process_Overview_Screenshot.jpg)
+![BPMN-Process-Overview](/Dokumentation/Figures/Process_Overview_Screenshot.jpg)
 
 ## Config-File
 - The `config.ini` holds the following information:
