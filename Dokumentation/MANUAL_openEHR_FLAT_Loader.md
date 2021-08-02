@@ -20,7 +20,7 @@
 - [Tool Usage Steps](#Tool-Usage-Steps)
   - [0. Provide data as .csv](#0-provide-data-as-.csv)
   - [0. Provide a template as .opt](#0-provide-a-template-as-.opt)
-  - [0. Set config.ini-Values](#0-set-config-ini-values)
+  - [0. Set config.ini-Values](#0-set-configini-values)
   - [1. Generate an empty mapping file](#1-generate-an-empty-mapping-file)
   - [2. Fill in mapping information](#2-fill-in-mapping-information)
   - [3. Build Ressources](#3-build-ressources)
