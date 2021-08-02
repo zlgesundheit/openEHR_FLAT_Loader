@@ -43,7 +43,7 @@ The above mentioned projects needed researchers and end user to be able to gener
 The **[HaMSTR-Builder-Tool](https://gitlab.plri.de/tute/HAMSTRETLBuilder)** developed by the _Hannover Medical School (MHH)_ already offered this functionality but needed a (commercial) Better / thinkEHR openEHR-Repository to work. The present FLAT_Loader tool, similar to the HaMSTR builder, builds on the idea of a user-supplied mapping. The **openEHR_FLAT_Loader** allows the user to generate resources using a mapping from data-items to openEHR-Template items. The openEHR-Template items are derived directly from Webtemplates for given Operational Templates.
 
 Webtemplates are part of the FLAT-API as it is used in Better, EHRBase and EtherCIS openEHR-Servers.
-In the future this will be adopted into the openEHR-Standard as a so called [Simplified Data Format](https://specifications.openehr.org/releases/ITS-REST/latest/simplified_data_template.html).
+In the future this will be adopted into the openEHR-Standard as a so called [Simplified Data Template (simSDT)](https://specifications.openehr.org/releases/ITS-REST/latest/simplified_data_template.html).
 We hope to stay (or become) compatible with the standard in the future.
 
 #### Requirements
@@ -53,10 +53,33 @@ We hope to stay (or become) compatible with the standard in the future.
 ## Features
 
 ## Data Preparation
+There are some noteworthy aspects in preparing the data to be consumed by the FLAT_Loader. Aligning **data types** and **item/column names** and **some metadata** with the **data model / openEHR-Template** makes the transformation process easy.
 
 #### Data Curation
+Curate your data and make sure to only generate (and upload) data with high data quality that matches your needs and the needs of others working with the data in the future.
+
 #### Formatting
+The data formatting has to comply on one hand with constraints in the data model (e.g. Date and Time formatting according to standards defined in openEHR) and on the other hand with constraints of the FLAT_Loader (e.g. Id-Column name, metadata like language, status codes and encoding info to build valid resources). 
+
+How to format the data will be explained in the following:
+TODO
+
 #### Data Modelling (openEHR)
+- **openEHR-Specification**  
+The [specification of openEHR](https://specifications.openehr.org) holds nearly ALL important information about openEHR.
+This information is best used accompanied by information from [community discussions](https://discourse.openehr.org), examples and available open-source openEHR-Servers (e.g. [EHRBase](https://github.com/ehrbase/ehrbase)).
+
+- **Information Model / Reference Model**  
+The openEHR [information model](https://specifications.openehr.org/releases/RM/latest/ehr.html) describes how data is structured in the openEHR-World. Data is organized in EHRs (so it is patient-centered) holding information about the EHR(Access, Status) and the EHR that may contain folders / directorys which contain the compositions that hold the data, in form of defined data types and attributes taken from the Reference Model. The structure of compositions that hold the data is defined by Templates (that use Archetypes, which are the Core of openEHR)
+
+![Information Model - High Level Overview](/Dokumentation/Figures/openEHR_Information_Model_High_Level_Structure.jpg)
+
+- **Archetypes**  
+OpenEHR-Archetypes 
+
+- **Templates**  
+- **Webtemplates and FLAT-Paths**  
+
 #### Identificators/Pseudonymisation
 
 ## Tool Usage Steps
