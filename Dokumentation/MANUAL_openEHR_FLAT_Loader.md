@@ -1,8 +1,12 @@
 # MANUAL_openEHR_FLAT_Loader
 
 `Zukunftslabor Gesundheit`  
-`Jendrik Richter (UMG), Jan Janosch Schneider (UMG), Mareike Joseph (MHH)`
+`Jendrik Richter (UMG), Jan Janosch Schneider (UMG)`
 
+`COFONI`  
+`Mareike Joseph (MHH)`
+
+`Kontakt:`  
 `jendrik.richter@med.uni-goettingen.de`
 
 `08/2021`
@@ -51,6 +55,16 @@ We hope to stay (or become) compatible with the standard in the future.
 - Python 3.8 with modules "openpyxl" and "requests"
 
 ## Features
+- Extraction of FLAT-Paths 
+  - from Webtemplates
+- Tips and Hints for Data Curation 
+  - regarding the planned transformation
+- Generation of a Mapping-File 
+  - Excel-File (.xlsx)
+- Build Ressources 
+  - using a provided .csv, .opt and filled Mapping-File
+- Upload Ressources 
+  - using identifier-column .csv-data-file 
 
 ## Data Preparation
 There are some noteworthy aspects in preparing the data to be consumed by the FLAT_Loader. Aligning **data types** and **item/column names** and **some metadata** with the **data model / openEHR-Template** makes the transformation process easy.
@@ -75,10 +89,15 @@ The openEHR [information model](https://specifications.openehr.org/releases/RM/l
   <img src="/Dokumentation/Figures/openEHR_Information_Model_High_Level_Structure.jpg">
 
 - **Archetypes**  
-OpenEHR-Archetypes 
+[OpenEHR-Archetypes](https://specifications.openehr.org/releases/AM/latest/Overview.html) are defined in Archetype Definition Language (ADL). In the multi-level-modelling approach of openEHR they allow to distinct between domain semantics and the information model / reference model. An Archetype is a reusable definition of a semantic concept from a domain, which correspond to logical data points and groups. Archetypes / Semantic concepts should be designed and maintained by domain experts. Often the archetype and template development takes place in [Clinical Knowledge Managers (CKM)](https://ckm.openehr.org/ckm/).
 
 - **Templates**  
+An openEHR-Template defines an arrangement of items from one or more archetypes, possibly with further constraints on them (regarding cardinality, inputs, etc.). A Template defines how a composition of data looks like and is used at runtime to create data structures and validate inputs.
+
 - **Webtemplates and FLAT-Paths**  
+A Webtemplate is an other format of a Template (Operational Template / .opt). Webtemplates are Part of the [FLAT-API](https://ehrbase.readthedocs.io/en/latest/02_getting_started/05_load_data/index.html) at first used by EtherCIS and Better and later EHRBase. The FLAT-API allows to communicate with the server using Compositions in FLAT-Format, which means they are structured a non-hierarchical JSON-Strings using FLAT-Paths to define which data item is assigned which value. This format is easy to read, understand and easy to work with.
+
+  <img src="/Dokumentation/Figures/FLAT_Composition_Example.jpg">
 
 #### Identificators/Pseudonymisation
 
@@ -115,7 +134,7 @@ OpenEHR-Archetypes
     | config-variable | Description |
     | --------------- | ------ |
     | targetrepoadress| Baseadress of the Target Repo (e.g. `http://141.5.100.199/ehrbase`) |
-    | targetauthheader| Base64 Representation of Username:Passwprd for authentification with the Repo (e.g. `ehrbase-user:uperSecretPassword = Basic ZWhyYmFzZS11c2VyOlN1cGVyU2VjcmV0UGFzc3dvcmQ=`) |
+    | targetauthheader| Base64 Representation of Username:Password for authentification with the Repo (e.g. `ehrbase-user:uperSecretPassword = Basic ZWhyYmFzZS11c2VyOlN1cGVyU2VjcmV0UGFzc3dvcmQ=`) |
     | targetflatapiadress | The endpoint where the FLAT-API resides (e.g. `/rest/ecis/v1/`) |
     | targetopenehrapiadress| The endpoint where the openEHR-API resides (e.g. `/rest/openehr/v1/`)|
 #### 1. Generate an empty mapping file
