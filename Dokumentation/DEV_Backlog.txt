@@ -5,6 +5,10 @@ Bugs / ToDo:
 		Welche Dokumente brauchen wir für eine geordnete Weiterentwicklung? (Zielspezifikation/Lastenheft light/Feature List , Manual , Design-Architektur-Overview)
 		Wie händeln wir sensible Daten, wenn die erst auf den Webserver hochgeladen werden müssen -> Upload, Nutzung, Löschen! oder gibt es Alternativen?
 
+	Doppelter Index am Ende eines Pfades im Natars_Tzusatz Template
+
+	Händeln leerer Felder in CSV -> Derzeit NaN in Ressource am Ende
+
 	x. Sprechende Fehlermeldung bei Missing <<index>>-Angaben im Mapping!
 
 	xx. Auch wenn ein Pfad Mandatory ist, sind nicht alle Suffixes dazu Mandatory! Derzeit werden alle Suffixes dieses Pfades als Mandatory betrachtet/angezeigt
