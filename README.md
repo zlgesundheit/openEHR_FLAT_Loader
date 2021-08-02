@@ -3,7 +3,7 @@
 ETL-Tool to transform Source Data into openEHR-Resources.  
 
 _Prerequisites:_
-- Project was developed and tested using Python 3.8.3 with openpyxl
+- Project was developed and tested using Python 3.8.10 with "openpyxl" and "requests"
 - You need an openEHR-Repo that supports the FLAT-Format and WebTemplates (e.g. EHRBase)
 
 ## Usage

@@ -1,10 +1,19 @@
 ===================================
 Bugs / ToDo:
 
+	0. Für die Weiterentwicklung bzgl. GUI/Webserver:
+		Welche Dokumente brauchen wir für eine geordnete Weiterentwicklung? (Zielspezifikation/Lastenheft light/Feature List , Manual , Design-Architektur-Overview)
+		Wie händeln wir sensible Daten, wenn die erst auf den Webserver hochgeladen werden müssen -> Upload, Nutzung, Löschen! oder gibt es Alternativen?
+
+	Doppelter Index am Ende eines Pfades im Natars_Tzusatz Template
+
+	Händeln leerer Felder in CSV -> Derzeit NaN in Ressource am Ende
+
 	x. Sprechende Fehlermeldung bei Missing <<index>>-Angaben im Mapping!
 
 	xx. Auch wenn ein Pfad Mandatory ist, sind nicht alle Suffixes dazu Mandatory! Derzeit werden alle Suffixes dieses Pfades als Mandatory betrachtet/angezeigt
 
+	Umdrehen der Mapping-Logik!
 	1. Es müssen alle Pfade des Templates befüllt werden. Damit müssen die Pfade in Spalte 1 stehen und die CSV-Items per Dropdown zugeordnet werden 
 		(Wird wichtig, wenn mehrere Language-Felder zu befüllen sind. Dann kann eine Language/ein CSV-Item mehreren Pfade zugeordnet werden)
 
@@ -12,7 +21,7 @@ Bugs / ToDo:
 
 	xxx. Sonderfall: "jpeg_bild" hat als mandatory eingetragen "subject2", ist aber nicht notwendig...
 
-	In GUI oder Mapping auf Infomaterial verweisen:
+	In GUI oder Mapping auf Infomaterial (zu DateTime auf die ISO 8601 verweisen, zu ValueSets auf diese verlinken -> Funktion der GUI/Mapping-Datei? (in der Datei wäre nur für cmd-Version)) verweisen:
 		- Validation Info in Mapping-Datei?
 		- Link zu Code Sets (https://specifications.openehr.org/releases/TERM/latest/SupportTerminology.html#_code_sets) 
 
@@ -39,7 +48,7 @@ NETT
 
 ==================================
 
-Neue Features:
+Neue Features/Änderungen:
 - Bei Templates die keine wiederholbaren Elemente sprich Indexe haben, wird nun nicht mehr probiert den maximalen Index zu exportieren
 - Check ob Template bereits existiert -> Dann kein erneuter Upload (vermeidet Timeouts)
 - Besserer Output bei Fehlern

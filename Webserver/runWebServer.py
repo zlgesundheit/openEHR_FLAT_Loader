@@ -3,6 +3,10 @@ from werkzeug.utils import secure_filename
 import os.path
 import pandas as pd
 
+# Import of modules that are an directory above webserver: ugly construct to divide cmd and gui-version but keep one Script-Dir
+import sys
+sys.path.append("..")
+
 # Local application imports
 from Scripts import handleOPT as opt
 from Scripts import configHandler as conf
