@@ -75,10 +75,15 @@ The openEHR [information model](https://specifications.openehr.org/releases/RM/l
   <img src="/Dokumentation/Figures/openEHR_Information_Model_High_Level_Structure.jpg">
 
 - **Archetypes**  
-OpenEHR-Archetypes 
+[OpenEHR-Archetypes](https://specifications.openehr.org/releases/AM/latest/Overview.html) are defined in Archetype Definition Language (ADL). In the multi-level-modelling approach of openEHR they allow to distinct between domain semantics and the information model / reference model. An Archetype is a reusable definition of a semantic concept from a domain, which correspond to logical data points and groups. Archetypes / Semantic concepts should be designed and maintained by domain experts. Often the archetype and template development takes place in [Clinical Knowledge Managers (CKM)](https://ckm.openehr.org/ckm/).
 
 - **Templates**  
+An openEHR-Template defines an arrangement of items from one or more archetypes, possibly with further constraints on them (regarding cardinality, inputs, etc.). A Template defines how a composition of data looks like and is used at runtime to create data structures and validate inputs.
+
 - **Webtemplates and FLAT-Paths**  
+A Webtemplate is an other format of a Template (Operational Template / .opt). Webtemplates are Part of the [FLAT-API](https://ehrbase.readthedocs.io/en/latest/02_getting_started/05_load_data/index.html) at first used by EtherCIS and Better and later EHRBase. The FLAT-API allows to communicate with the server using Compositions in FLAT-Format, which means they are structured a non-hierarchical JSON-Strings using FLAT-Paths to define which data item is assigned which value. This format is easy to read, understand and easy to work with.
+
+  <img src="/Dokumentation/Figures/FLAT_Composition_Example.jpg">
 
 #### Identificators/Pseudonymisation
 
