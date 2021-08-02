@@ -120,7 +120,7 @@ A Webtemplate is an other format of a Template (Operational Template / .opt). We
     | config-variable | Description |
     | --------------- | ------ |
     | targetrepoadress| Baseadress of the Target Repo (e.g. `http://141.5.100.199/ehrbase`) |
-    | targetauthheader| Base64 Representation of Username:Passwprd for authentification with the Repo (e.g. `ehrbase-user:uperSecretPassword = Basic ZWhyYmFzZS11c2VyOlN1cGVyU2VjcmV0UGFzc3dvcmQ=`) |
+    | targetauthheader| Base64 Representation of Username:Password for authentification with the Repo (e.g. `ehrbase-user:uperSecretPassword = Basic ZWhyYmFzZS11c2VyOlN1cGVyU2VjcmV0UGFzc3dvcmQ=`) |
     | targetflatapiadress | The endpoint where the FLAT-API resides (e.g. `/rest/ecis/v1/`) |
     | targetopenehrapiadress| The endpoint where the openEHR-API resides (e.g. `/rest/openehr/v1/`)|
 #### 1. Generate an empty mapping file
