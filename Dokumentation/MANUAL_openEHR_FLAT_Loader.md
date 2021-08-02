@@ -72,7 +72,7 @@ This information is best used accompanied by information from [community discuss
 - **Information Model / Reference Model**  
 The openEHR [information model](https://specifications.openehr.org/releases/RM/latest/ehr.html) describes how data is structured in the openEHR-World. Data is organized in EHRs (so it is patient-centered) holding information about the EHR(Access, Status) and the EHR that may contain folders / directorys which contain the compositions that hold the data, in form of defined data types and attributes taken from the Reference Model. The structure of compositions that hold the data is defined by Templates (that use Archetypes, which are the Core of openEHR)
 
-![Information Model - High Level Overview](/Dokumentation/Figures/openEHR_Information_Model_High_Level_Structure.jpg)
+  <img src="/Dokumentation/Figures/openEHR_Information_Model_High_Level_Structure.jpg">
 
 - **Archetypes**  
 OpenEHR-Archetypes 
@@ -102,6 +102,22 @@ OpenEHR-Archetypes
 #### 0. Provide data as .csv
 #### 0. Provide a template as .opt
 #### 0. Set config.ini-Values
+- The `config.ini` holds the following information:
+
+    **Environment Infos:**
+    | config-variable | Description |
+    | --------------- | ------ |
+    | workdir         | Working Directory (e.g. `C:\Users\richter122\git-projects\openehr_flat_loader`) |
+    | templatename    | Name of the Template (e.g. `UMG_Stammdaten`) |
+    | inputcsv        | Name of the csv-file that holds the data (`source_data`) |
+    
+    **Repository Infos:**
+    | config-variable | Description |
+    | --------------- | ------ |
+    | targetrepoadress| Baseadress of the Target Repo (e.g. `http://141.5.100.199/ehrbase`) |
+    | targetauthheader| Base64 Representation of Username:Passwprd for authentification with the Repo (e.g. `ehrbase-user:uperSecretPassword = Basic ZWhyYmFzZS11c2VyOlN1cGVyU2VjcmV0UGFzc3dvcmQ=`) |
+    | targetflatapiadress | The endpoint where the FLAT-API resides (e.g. `/rest/ecis/v1/`) |
+    | targetopenehrapiadress| The endpoint where the openEHR-API resides (e.g. `/rest/openehr/v1/`)|
 #### 1. Generate an empty mapping file
 #### 2. Fill in mapping information
 #### 3. Build Ressources
