@@ -20,6 +20,7 @@
 - [Tool Usage Steps](#Tool-Usage-Steps)
   - [0. Provide data as .csv](#0-provide-data-as-.csv)
   - [0. Provide a template as .opt](#0-provide-a-template-as-.opt)
+  - [0. Set config.ini-Values](#0-set-config-ini-values)
   - [1. Generate an empty mapping file](#1-generate-an-empty-mapping-file)
   - [2. Fill in mapping information](#2-fill-in-mapping-information)
   - [3. Build Ressources](#3-build-ressources)
@@ -59,9 +60,25 @@ We hope to stay (or become) compatible with the standard in the future.
 #### Identificators/Pseudonymisation
 
 ## Tool Usage Steps
+``Work in progress`
+
+0. Place your .OPT-File in the Input-Folder
+1. Run Tool using the runFlatLoader_win.bat on Windows or runFlatLoader_lin.sh if you are on Linux.
+   If you use a MAC try starting the runMain.py in Scripts-Directory...
+    - If the config-file is not existing you will be asked to provide some config-settings. 
+    - It is also possible to adjust these settings directly in the config-file 
+      - -> See [Config-File](#config-file)
+    - You will be asked which step of the process you want to perform
+        - Step 1: Upload OPT and generate Mapping-(Excel-)File
+2. To build build Compositions you have to supply mapping information in the Mapping-Table and save the Excel-file
+3. Run the tool again and perform step 2:
+	- Step 2: Build Compositions based on the Mapping
+4. After performing Step 2 you will find the FLAT-Composition in the Output-Folder 
+5. Automated upload is not yet implemented
 
 #### 0. Provide data as .csv
 #### 0. Provide a template as .opt
+#### 0. Set config.ini-Values
 #### 1. Generate an empty mapping file
 #### 2. Fill in mapping information
 #### 3. Build Ressources
