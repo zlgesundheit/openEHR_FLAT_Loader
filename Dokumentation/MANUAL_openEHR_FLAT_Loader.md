@@ -12,24 +12,7 @@
 `08/2021`
 
 ## Contents
-- [Updates](#updates)
-- [Introduction](#introduction)
-  - [Requirements](#requirements)
-- [Features](#features)
-- [Data Preparation](#data-preparation)
-  - [Data Curation](#data-curation)
-  - [Formatting](#formatting)
-  - [Data Modelling (openEHR)](#data-modelling-(openehr))
-  - [Identificators/Pseudonymisation](#identificators/pseudonymisation)
-- [Tool Usage Steps](#Tool-Usage-Steps)
-  - [0. Provide data as .csv](#0-provide-data-as-.csv)
-  - [0. Provide a template as .opt](#0-provide-a-template-as-.opt)
-  - [0. Set config.ini-Values](#0-set-configini-values)
-  - [1. Generate an empty mapping file](#1-generate-an-empty-mapping-file)
-  - [2. Fill in mapping information](#2-fill-in-mapping-information)
-  - [3. Build Ressources](#3-build-ressources)
-  - [4. Upload Ressources](#4-upload-ressources)
-- [Funding](#funding)
+[[_TOC_]]
 
 ## Updates
 #### xx/2021
