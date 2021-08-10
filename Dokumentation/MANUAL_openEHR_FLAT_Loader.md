@@ -12,24 +12,7 @@
 `08/2021`
 
 ## Contents
-- [Updates](#updates)
-- [Introduction](#introduction)
-  - [Requirements](#requirements)
-- [Features](#features)
-- [Data Preparation](#data-preparation)
-  - [Data Curation](#data-curation)
-  - [Formatting](#formatting)
-  - [Data Modelling (openEHR)](#data-modelling-(openehr))
-  - [Identificators/Pseudonymisation](#identificators/pseudonymisation)
-- [Tool Usage Steps](#Tool-Usage-Steps)
-  - [0. Provide data as .csv](#0-provide-data-as-.csv)
-  - [0. Provide a template as .opt](#0-provide-a-template-as-.opt)
-  - [0. Set config.ini-Values](#0-set-configini-values)
-  - [1. Generate an empty mapping file](#1-generate-an-empty-mapping-file)
-  - [2. Fill in mapping information](#2-fill-in-mapping-information)
-  - [3. Build Ressources](#3-build-ressources)
-  - [4. Upload Ressources](#4-upload-ressources)
-- [Funding](#funding)
+[[_TOC_]]
 
 ## Updates
 #### xx/2021
@@ -66,17 +49,10 @@ We hope to stay (or become) compatible with the standard in the future.
 - Upload Ressources 
   - using identifier-column .csv-data-file 
 
-## Data Preparation
-There are some noteworthy aspects in preparing the data to be consumed by the FLAT_Loader. Aligning **data types** and **item/column names** and **some metadata** with the **data model / openEHR-Template** makes the transformation process easy.
+## Data Modeling / Template Creation
+Templates (and Archetypes) are created by domain experts either by selecting existing archetypes (which represented specific clinical concepts) or creating new archetypes in collaboration with the (openEHR-) Community. 
 
-#### Data Curation
-Curate your data and make sure to only generate (and upload) data with high data quality that matches your needs and the needs of others working with the data in the future.
-
-#### Formatting
-The data formatting has to comply on one hand with constraints in the data model (e.g. Date and Time formatting according to standards defined in openEHR) and on the other hand with constraints of the FLAT_Loader (e.g. Id-Column name, metadata like language, status codes and encoding info to build valid resources). 
-
-How to format the data will be explained in the following:
-TODO
+TODO: Hinweise zur Modellierung --> Darstellen wie Templates zustande kommen --> Siehe unten Template
 
 #### Data Modelling (openEHR)
 - **openEHR-Specification**  
@@ -91,6 +67,8 @@ The openEHR [information model](https://specifications.openehr.org/releases/RM/l
 - **Archetypes**  
 [OpenEHR-Archetypes](https://specifications.openehr.org/releases/AM/latest/Overview.html) are defined in Archetype Definition Language (ADL). In the multi-level-modelling approach of openEHR they allow to distinct between domain semantics and the information model / reference model. An Archetype is a reusable definition of a semantic concept from a domain, which correspond to logical data points and groups. Archetypes / Semantic concepts should be designed and maintained by domain experts. Often the archetype and template development takes place in [Clinical Knowledge Managers (CKM)](https://ckm.openehr.org/ckm/).
 
+  <img src="/Dokumentation/Figures/openehr_archetype_figure.jpg">
+
 - **Templates**  
 An openEHR-Template defines an arrangement of items from one or more archetypes, possibly with further constraints on them (regarding cardinality, inputs, etc.). A Template defines how a composition of data looks like and is used at runtime to create data structures and validate inputs.
 
@@ -98,6 +76,18 @@ An openEHR-Template defines an arrangement of items from one or more archetypes,
 A Webtemplate is an other format of a Template (Operational Template / .opt). Webtemplates are Part of the [FLAT-API](https://ehrbase.readthedocs.io/en/latest/02_getting_started/05_load_data/index.html) at first used by EtherCIS and Better and later EHRBase. The FLAT-API allows to communicate with the server using Compositions in FLAT-Format, which means they are structured a non-hierarchical JSON-Strings using FLAT-Paths to define which data item is assigned which value. This format is easy to read, understand and easy to work with.
 
   <img src="/Dokumentation/Figures/FLAT_Composition_Example.jpg">
+
+## Data Preparation
+There are some noteworthy aspects in preparing the data to be consumed by the FLAT_Loader. Aligning **data types** and **item/column names** and **some metadata** with the **data model / openEHR-Template** makes the transformation process easy.
+
+#### Data Curation
+Curate your data and make sure to only generate (and upload) data with high data quality that matches your needs and the needs of others working with the data in the future.
+
+#### Formatting
+The data formatting has to comply on one hand with constraints in the data model (e.g. Date and Time formatting according to standards defined in openEHR) and on the other hand with constraints of the FLAT_Loader (e.g. Id-Column name, metadata like language, status codes and encoding info to build valid resources). 
+
+How to format the data will be explained in the following:
+TODO
 
 #### Identificators/Pseudonymisation
 
@@ -126,7 +116,7 @@ A Webtemplate is an other format of a Template (Operational Template / .opt). We
     **Environment Infos:**
     | config-variable | Description |
     | --------------- | ------ |
-    | workdir         | Working Directory (e.g. `C:\Users\richter122\git-projects\openehr_flat_loader`) |
+    | workdir         | Working Directory (e.g. `C:\Users\richter\git-projects\openehr_flat_loader`) |
     | templatename    | Name of the Template (e.g. `UMG_Stammdaten`) |
     | inputcsv        | Name of the csv-file that holds the data (`source_data`) |
     
