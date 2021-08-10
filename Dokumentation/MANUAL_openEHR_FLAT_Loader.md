@@ -117,7 +117,7 @@ After Data Preparation, Curation and Formatting
 
 #### 0.2 Provide a template as .opt
 - Get the Operational Template for your Data Set 
-  - E.g. download the OPT-File (.opt) from a Clinical Knowledge Manager (CKM) using the Export-Functionality
+  - E.g. download the OPT-File (.opt) from a Clinical Knowledge Manager (CKM) using the Export-Functionality  
     <img src="/Dokumentation/Figures/ckm_template_mark.jpg">
 - Move the OPT-File to "<pathToTool>\openehr_flat_loader\Input\OPT\"
 - Set the Template that will be dealed with by the tool
