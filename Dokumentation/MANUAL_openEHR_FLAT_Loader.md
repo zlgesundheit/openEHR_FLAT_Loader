@@ -108,11 +108,27 @@ TODO
 4. After performing Step 2 you will find the FLAT-Composition in the Output-Folder 
 5. Automated upload is not yet implemented
 
-#### 0. Provide data as .csv
-#### 0. Provide a template as .opt
-#### 0. Set config.ini-Values
-- The `config.ini` holds the following information:
+#### 0.1 Provide data as .csv
+After Data Preparation, Curation and Formatting 
+- Move the CSV-File to "<pathToTool>\openehr_flat_loader\Input\CSV\"
+- Set the InputCSV-File that will be dealed with by the tool
+  - Change the "inputcsv"-Variable in the config to the current CSV-Filename
+  - See Step "0.3 Set config.ini-Values"
 
+#### 0.2 Provide a template as .opt
+- Get the Operational Template for your Data Set 
+  - E.g. download the OPT-File (.opt) from a Clinical Knowledge Manager (CKM) using the Export-Functionality
+    <img src="/Dokumentation/Figures/ckm_template_mark.jpg">
+- Move the OPT-File to "<pathToTool>\openehr_flat_loader\Input\OPT\"
+- Set the Template that will be dealed with by the tool
+  - Change the "templatename"-Variable in the config to the current Templatename
+  - See Step "0.3 Set config.ini-Values"
+
+#### 0.3 Set config.ini-Values
+- Set Workdir to the directory in which you have placed the "openehr_flat_loader"-Tool
+- Set templatename and inputcsv according to the names of the files the tool shall deal with
+- Set information about the openEHR-Repository you want to upload to (Adress,Auth,API-Adresses)
+- The `config.ini` holds the following information:
     **Environment Infos:**
     | config-variable | Description |
     | --------------- | ------ |
@@ -127,9 +143,27 @@ TODO
     | targetauthheader| Base64 Representation of Username:Password for authentification with the Repo (e.g. `ehrbase-user:uperSecretPassword = Basic ZWhyYmFzZS11c2VyOlN1cGVyU2VjcmV0UGFzc3dvcmQ=`) |
     | targetflatapiadress | The endpoint where the FLAT-API resides (e.g. `/rest/ecis/v1/`) |
     | targetopenehrapiadress| The endpoint where the openEHR-API resides (e.g. `/rest/openehr/v1/`)|
+
 #### 1. Generate an empty mapping file
+- Start the tool using "runFlatLoader_win.bat"
+- Select Step 1 by typing "1" + press "Enter"
+
+  <img src="/Dokumentation/Figures/cmd_step1.jpg">
+
 #### 2. Fill in mapping information
+- Find the (empty) mapping file in "openehr_flat_loader\Manual Tasks\" by looking for <<templatename>>_MAPPING.xlsx
+- Select CSV-Items from the Dropdown and map them to FLAT-Paths from the Template
+
+  <img src="/Dokumentation/Figures/mapping_file.jpg">
+
 #### 3. Build Ressources
+- Start the tool using "runFlatLoader_win.bat"
+- Select Step 2 by typing "2" + press "Enter"
+
+  <img src="/Dokumentation/Figures/cmd_step1.jpg">
+
+`Resources can be found in "openehr_flat_loader\Output\"`
+
 #### 4. Upload Ressources
 
 ## Funding
