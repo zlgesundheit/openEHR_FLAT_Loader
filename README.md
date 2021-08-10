@@ -3,7 +3,8 @@
 ETL-Tool to transform Source Data into openEHR-Resources.  
 
 ## Manual
-Eine Anleitung zur Benutzung des Tools und Erläuterung des Kontexts (openEHR, Datenkuration) befindet sich derzeit in der Entstehung.
+A guide on how to use the tool and explaination of the context (openEHR, data curation) is currently under development.
+You can find the manual in the folder "Documentation"
 
 -- Work in Progress --
 
