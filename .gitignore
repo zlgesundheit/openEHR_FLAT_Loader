@@ -1,0 +1,11 @@
+# Config
+# git update-index --assume-unchanged config.ini
+
+# Logs
+*.log
+*.logs
+
+# Input and Output-Directories
+/Manual Tasks/
+/IntermFiles/
+/Output/
