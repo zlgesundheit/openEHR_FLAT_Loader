@@ -6,6 +6,6 @@
 *.logs
 
 # Input and Output-Directories
-/Manual Tasks/
+/ManualTasks/
 /IntermFiles/
 /Output/

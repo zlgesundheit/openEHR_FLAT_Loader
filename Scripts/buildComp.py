@@ -57,7 +57,7 @@ def buildComp(workdir, templateName, inputCSV):
   dataDF = pd.read_csv(csvPath, header=0, delimiter=";")
 
   # Read Excel-File
-  xlsxPath = os.path.join(workdir, 'Manual Tasks', templateName + '_MAPPING.xlsx')
+  xlsxPath = os.path.join(workdir, 'ManualTasks', templateName + '_MAPPING.xlsx')
   mapTabDF = pd.read_excel(xlsxPath, "Mapping CSV2openEHR", header=0, engine='openpyxl') #engine openpyxl not xlrd since xlrd drop support for non-xls-files
   
   colNr = pd.Index( list(mapTabDF.columns.values) )

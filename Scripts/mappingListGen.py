@@ -18,7 +18,7 @@ def generateList(workdir, templateName, inputCSV, pathsArray):
     print(os.linesep + "Step 2: MappingListGen is running.")
 
     # Create Excel-File
-    excelPath = os.path.join(workdir, 'Manual Tasks', templateName + '_MAPPING.xlsx')
+    excelPath = os.path.join(workdir, 'ManualTasks', templateName + '_MAPPING.xlsx')
     workbook = xlsxwriter.Workbook(excelPath)
 
     mapping_item_cell_format = workbook.add_format()
