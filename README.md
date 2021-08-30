@@ -54,7 +54,7 @@ _Process-Overview:_
     | targetopenehrapiadress| The endpoint where the openEHR-API resides (e.g. `/rest/openehr/v1/`)|
 
 ## License
-Copyright (C) 2012-2019 openehr_flat_loader contributors, see [AUTHORS.md](/AUTHORS.md)  
+Copyright (C) 2020-2021 openehr_flat_loader contributors, see [AUTHORS.md](/AUTHORS.md)  
 
 The openehr_flat_loader project source code is licensed under [GNU General Public License 3.0](https://spdx.org/licenses/GPL-3.0-or-later.html), see [license file](/LICENSE)  
 
