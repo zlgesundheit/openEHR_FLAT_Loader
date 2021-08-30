@@ -49,6 +49,11 @@ NETT
 ==================================
 
 Neue Features/Änderungen:
+- Workdir is now set automatically which is nice
+- Added license (GNU GPL v3) to be a real open source project
+- Added ManualTasks and IntermFiles-Directory to Repo but also added a check on tool-startup that makes sure these directories exist
+
+Alte neue Features/Änderungen
 - Bei Templates die keine wiederholbaren Elemente sprich Indexe haben, wird nun nicht mehr probiert den maximalen Index zu exportieren
 - Check ob Template bereits existiert -> Dann kein erneuter Upload (vermeidet Timeouts)
 - Besserer Output bei Fehlern
