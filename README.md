@@ -4,7 +4,7 @@ ETL-Tool to transform Source Data into openEHR-Resources.
 
 ## Manual
 A guide on how to use the tool and explaination of the context (openEHR, data curation) is currently under development.
-You can find the manual in the folder "Documentation"
+The manual can be found [here](/Dokumentation/MANUAL_openEHR_FLAT_Loader.md) and is located in the "Documentation" folder.
 
 -- Work in Progress --
 
