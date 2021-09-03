@@ -40,7 +40,7 @@ def getHighestIndexNr(colNr, colnr_of_hinweis):
     highestIndex = biggestIndexHeader[0] # Erstes zeichen der x.Index Spalte = hoechster Index --> Nur wenn Indexe existieren!
     return int(highestIndex)
 
-def replaceIndexWithIndexNumber(path, highestIndex, mapTabDF, mapTabRunner):
+def replaceIndexStringWithIndexNumber(path, highestIndex, mapTabDF, mapTabRunner):
     pattern = re.compile("<<index>>")
     if pattern.search(path):
         n = 1
@@ -58,12 +58,22 @@ def replaceIndexWithIndexNumber(path, highestIndex, mapTabDF, mapTabRunner):
                 #raise SystemExit
     return path
 
-def buildComp(workdir, templateName, inputCSV):
+def mappingIsEmpty(mapTabDF):
+    # Checken ob das Mapping leer ist, also nur "nan"-Eintraege vorhanden sind
+    empty = True
+    for i in mapTabDF['CSV-Column']:
+        if str(i) != "nan":
+            empty = False
+    return empty
+
+def buildComp(templateName, inputCSV):
     print(os.linesep + "Step 3: BuildComp is running.")
+    
+    ################################# Read Data from Files #################################
+    workdir = os.getcwd()
     # Read CSV as data frame
     csvPath = os.path.join(workdir, 'Input', 'CSV', inputCSV + '.csv')
     dataDF = pd.read_csv(csvPath, header=0, delimiter=";")
-
     # Read Excel-File
     xlsxPath = os.path.join(workdir, 'ManualTasks', templateName + '_MAPPING.xlsx')
     mapTabDF = pd.read_excel(xlsxPath, "Mapping CSV2openEHR", header=0, engine='openpyxl', dtype=str) #engine openpyxl not xlrd since xlrd drop support for non-xls-files
@@ -72,18 +82,11 @@ def buildComp(workdir, templateName, inputCSV):
     colnr_of_csvcolumn = colNr.get_loc( key='CSV-Column' )
     highestIndex = getHighestIndexNr(colNr , colnr_of_csvcolumn)
 
-    empty = True
-    errorMsg = ""
-    # Checken ob das Mapping leer ist, also nur "nan"-Eintraege vorhanden sind
-    for i in mapTabDF['CSV-Column']:
-        if str(i) != "nan":
-            empty = False
-
     try:
-        if empty:
+        if mappingIsEmpty(mapTabDF):
             errorMsg = "The Mapping is empty."
             raise Exception(errorMsg)
-        elif not empty:
+        elif not mappingIsEmpty(mapTabDF):
             dictArray = []
             dataDFRunner = 0
             # Fuer jeden Eintrag / Row in der Quelldaten-CSV -> Jede Zeile = eine Ressource
@@ -96,7 +99,7 @@ def buildComp(workdir, templateName, inputCSV):
                     # Falls Path nicht NaN fuege Path und Wert hinzu, sonst naechste Zeile im Pfad-Mapping
                     pattern = re.compile("<<index>>")
                     if pattern.search(path):
-                        path = replaceIndexWithIndexNumber(path,highestIndex,mapTabDF,mapTabRunner)
+                        path = replaceIndexStringWithIndexNumber(path,highestIndex,mapTabDF,mapTabRunner)
                     #try:
                     # Wenn Mapping in Mapping-File vorhanden dann
                     if str(mapTabDF['CSV-Column'][mapTabRunner]) != "nan":

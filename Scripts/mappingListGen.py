@@ -24,9 +24,9 @@ def setTableAppearance(workbook):
 
     return workbook, header_cell_format, mapping_item_cell_format
 
-def generateList(workdir, templateName, inputCSV, pathsArray):
+def generateList(templateName, inputCSV, pathsArray):
     print(os.linesep + "Step 2: MappingListGen is running.")
-
+    workdir = os.getcwd()
     # Create Excel-File
     excelPath = os.path.join(workdir, 'ManualTasks', templateName + '_MAPPING.xlsx')
     workbook = xlsxwriter.Workbook(excelPath)

@@ -17,7 +17,6 @@ def readConf():
 def storeDefaultConf():
     # otherwise create new conf-file and set defaults
     configParser['DEFAULT'] = {
-        'workdir': 'C:\\Users\\richter122\\git-projects\\openehr_flat_loader',
         'templateName': 'ZLG_Testdaten',
         'inputCSV':'test1'
         }
@@ -30,16 +29,9 @@ def storeDefaultConf():
     with open('config.ini', 'w') as configfile:
         configParser.write(configfile)
 
-def setWorkdir(workdir):
-    config = readConf()
-    config.set('DEFAULT', 'workdir', workdir)
-    with open('config.ini', 'w') as configfile:
-        config.write(configfile)
-
-def setLocalEnv(workdir, templateName, inputCSV):
+def setLocalEnv(templateName, inputCSV):
     config = readConf()
     config['DEFAULT'] = {
-    'workdir': workdir,
     'templateName': templateName,
     'inputCSV':inputCSV
     }
@@ -62,10 +54,9 @@ def queryConfEntry():
         return configParser
     else:
         #Query entrys for new Conf
-        workdir = input("Pfad zum Work-Dir: ")
         templateName = input("Name des Templates: ")
         inputCSV = input("Name der CSV: ")
-        setLocalEnv(workdir, templateName, inputCSV)
+        setLocalEnv(templateName, inputCSV)
         targetRepoAdress = input("Repo-Adresse (Bsp.: https://IP/ehrbase): ")
         targetRepoUser = input("Nutzername: ")
         targetRepoPw = input("Passwort: ")

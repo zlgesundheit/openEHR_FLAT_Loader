@@ -44,7 +44,8 @@ def uploadOPT(targetAdress, targetopenEHRAPIadress, targetAuthHeader, optFile, t
         print(indent + "Error while storing OPT at Target-Repo" + "\n" + indent + str(e) )
         raise SystemExit
 
-def queryWebtemplate(targetAdress, targetflatAPIadress, targetAuthHeader, workdir, templateName):
+def queryWebtemplate(targetAdress, targetflatAPIadress, targetAuthHeader, templateName):
+    workdir = os.getcwd()
     queryPath = targetAdress + targetflatAPIadress + "template/" + templateName
     try:
         response = requests.get(queryPath, headers = {'Authorization':targetAuthHeader})
@@ -58,9 +59,9 @@ def queryWebtemplate(targetAdress, targetflatAPIadress, targetAuthHeader, workdi
     with open(filePath, 'w', encoding="utf-8") as templateFile:
         json.dump(json_resp['webTemplate'], templateFile, indent = 4, ensure_ascii=False)
 
-def handleOPT(workdir, templateName, inputCSV, targetAdress, targetAuthHeader, targetflatAPIadress, targetopenEHRAPIadress):
+def handleOPT(templateName, inputCSV, targetAdress, targetAuthHeader, targetflatAPIadress, targetopenEHRAPIadress):
   print(os.linesep + "Step 1: HandleOPT is running.")
-  
+  workdir = os.getcwd()
   # Read OPT-File
   filePath = os.path.join(workdir, 'Input', 'OPT', templateName +'.opt')
   f = open(filePath, "r", encoding='utf-8')
@@ -78,7 +79,7 @@ def handleOPT(workdir, templateName, inputCSV, targetAdress, targetAuthHeader, t
 
   print(indent + "HandleOPT finished.")
 
-  gen.generateList(workdir, templateName, inputCSV, pathsDict)
+  gen.generateList(templateName, inputCSV, pathsDict)
 
   answerString = ""
   return answerString
