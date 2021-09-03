@@ -72,7 +72,7 @@ def handleOPT(templateName, inputCSV, targetAdress, targetAuthHeader, targetflat
   uploadOPT(targetAdress, targetopenEHRAPIadress, targetAuthHeader, optFile, templateName)
   
   # Query and save WebTemplate
-  queryWebtemplate(targetAdress, targetflatAPIadress, targetAuthHeader, workdir, templateName)
+  queryWebtemplate(targetAdress, targetflatAPIadress, targetAuthHeader, templateName)
   
   # Get FLAT-Paths
   pathsDict = pathExport.getPathsFromWebTemplate(workdir, templateName)
