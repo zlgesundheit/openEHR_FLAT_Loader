@@ -71,9 +71,6 @@ def main():
                 for xlsxIndex, xlsxRow in mapTabDF.iterrows():
                     path = xlsxRow['FLAT-Path']
                     
-                    gemappteSpalteAusCSV = mapTabDF['CSV-Column'][xlsxIndex]
-                    #print(gemappteSpalteAusCSV)
-
                     ###### Index...TODO
                     # Ersetze <<Index>>-Chars mit Index (TODO: erstmal der Index der im Mapping eingetragen ist -> 
                     # siehe Issue 18 <- Wir wissen nicht wieviele Indexe reinkommen TODO Wie herum soll das Mapping geschen??)
@@ -82,9 +79,13 @@ def main():
                         path = replaceIndexStringWithIndexNumber(path,highestIndex,mapTabDF,xlsxIndex)
 
                     # Schaue ob Mapping in Mapping-File eingetragen / vorhanden ist
+                    gemappteSpalteAusCSV = mapTabDF['CSV-Column'][xlsxIndex]
                     if str(gemappteSpalteAusCSV) != "nan":
                         # Erstelle einen Dict-Eintrag mit KEY=PATH und VALUE=WERT in der dem KEY zugeordneten Spalte
                         dict[path] = dataDF[ gemappteSpalteAusCSV ][csvIndex]
+                        
+                        # Neues Dataframe erzeugen und mit Apply die Operation vornehmen? Ist das performanter auf großen Datensätzen? iterrow vermeiden
+                        # newFrame = dataDF.apply()
 
                 # Add Dict to Array of these Dicts
                 resArray.append(dict)
