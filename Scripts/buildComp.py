@@ -53,9 +53,9 @@ def main():
     highestIndex = getHighestIndexNr(columnNames , colnr_of_csvcolumn)
 
     # Get rid of "NaN"-Values in mapTabDF['CSV-Column']
-    mappedCSVItemsWOnan = [x for x in mapTabDF['CSV-Column'] if pd.isnull(x) == False]
+    # mappedCSVItemsWOnan = [x for x in mapTabDF['CSV-Column'] if pd.isnull(x) == False]
 
-    dictArray = []
+    resArray = []
     try:
         if mappingIsEmpty(mapTabDF):
             errorMsg = "The Mapping is empty."
@@ -66,24 +66,28 @@ def main():
             for csvIndex, csvRow in dataDF.iterrows():
                 # Erstelle ein Dict (pro Zeile) und befuelle es mit allen KEYS + Values
                 dict = {}
-                
+
                 # Fuer jeden FLAT_Pfad
                 for xlsxIndex, xlsxRow in mapTabDF.iterrows():
                     path = xlsxRow['FLAT-Path']
-                    # Falls Path nicht NaN fuege Path und Wert hinzu, sonst naechste Zeile im Pfad-Mapping
+                    
+                    gemappteSpalteAusCSV = mapTabDF['CSV-Column'][xlsxIndex]
+                    #print(gemappteSpalteAusCSV)
+
+                    ###### Index...TODO
+                    # Ersetze <<Index>>-Chars mit Index (TODO: erstmal der Index der im Mapping eingetragen ist -> 
+                    # siehe Issue 18 <- Wir wissen nicht wieviele Indexe reinkommen TODO Wie herum soll das Mapping geschen??)
                     pattern = re.compile("<<index>>")
                     if pattern.search(path):
                         path = replaceIndexStringWithIndexNumber(path,highestIndex,mapTabDF,xlsxIndex)
 
-                    print (path)
-                    # Wenn Mapping in Mapping-File vorhanden dann
-
-                    if str(mapTabDF['CSV-Column'][xlsxIndex]) != "nan":
+                    # Schaue ob Mapping in Mapping-File eingetragen / vorhanden ist
+                    if str(gemappteSpalteAusCSV) != "nan":
                         # Erstelle einen Dict-Eintrag mit KEY=PATH und VALUE=WERT in der dem KEY zugeordneten Spalte
-                        dict[path] = dataDF[ mapTabDF['CSV-Column'][xlsxIndex] ][csvIndex]
+                        dict[path] = dataDF[ gemappteSpalteAusCSV ][csvIndex]
 
                 # Add Dict to Array of these Dicts
-                dictArray.append(dict)
+                resArray.append(dict)
         # Dict Building is done
 
         print(indent + "buildComp finished.")
@@ -93,7 +97,7 @@ def main():
         raise SystemExit
 
     # Store ALL Entrys / Resources as .json-files for later use or upload
-    storeDictArrayAsRes(dictArray, templateName)
+    storeDictArrayAsRes(resArray, templateName)
 
 ############################### Methods ###############################
 
