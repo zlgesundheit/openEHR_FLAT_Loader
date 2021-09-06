@@ -53,16 +53,20 @@ def queryConfEntry():
         storeDefaultConf()
         return configParser
     else:
-        #Query entrys for new Conf
+        #Request input for new Conf
         templateName = input("Name des Templates: ")
         inputCSV = input("Name der CSV: ")
         setLocalEnv(templateName, inputCSV)
+
         targetRepoAdress = input("Repo-Adresse (Bsp.: https://IP/ehrbase): ")
         targetRepoUser = input("Nutzername: ")
         targetRepoPw = input("Passwort: ")
         targetAuthHeader = handleOPT.getAuthHeader(targetRepoUser, targetRepoPw)
+
         targetflatAPIadress = input("FLAT-Endpunkt (Bsp.: /rest/ecis/v1/): ")
         targetopenEHRAPIadress = input("openEHR-API (Bsp.: /rest/openehr/v1/): ")
         setTargetRepo(targetRepoAdress, targetAuthHeader, targetflatAPIadress, targetopenEHRAPIadress)
+
         configParser.read('config.ini')
+
         return configParser

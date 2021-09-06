@@ -20,6 +20,9 @@ from Scripts import buildComp
 
 ############################### Main ###############################
 def main():
+    #Read Config
+    config = configHandler.readConf()
+    
     # Check if all directories exist otherwise create them
     checkIfDirsExists()
 
@@ -39,21 +42,13 @@ def main():
 
 ############################### Methods ###############################
 def runStep(choosenStep):
-    config = loadConfig()
+
     if (choosenStep == str(1)):
-        handleOPT.handleOPT( 
-            config['targetRepo']['templateName'], 
-            config['targetRepo']['inputCSV'], 
-            config['targetRepo']['targetRepoAdress'],
-            config['targetRepo']['targetAuthHeader'],
-            config['targetRepo']['targetflatAPIadress'],
-            config['targetRepo']['targetopenEHRAPIadress']
-            )
+        handleOPT.main()
+
     elif(choosenStep == str(2)):
-        buildComp.buildComp(
-            config['targetRepo']['templateName'],
-            config['targetRepo']['inputCSV']
-            )
+        buildComp.main()
+
     elif(choosenStep == str(3)):
         configHandler.queryConfEntry()
         config = configHandler.readConf()
@@ -102,10 +97,6 @@ def checkIfConfExists():
     else:
         # Query Input from User
         configHandler.queryConfEntry()
-
-def loadConfig():
-    config = configHandler.readConf()
-    return config
 
 if __name__ == '__main__':
     main()

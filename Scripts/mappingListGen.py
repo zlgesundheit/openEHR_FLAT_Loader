@@ -6,27 +6,19 @@
 # Standard library imports
 import os.path
 import re
-
 # Third party imports
 import xlsxwriter
 import pandas as pd
 # Local application imports
 
 indent = "    "
+workdir = os.getcwd()
 
-def setTableAppearance(workbook):
-    mapping_item_cell_format = workbook.add_format()
-    mapping_item_cell_format.set_align('valign')
-    mapping_item_cell_format.set_text_wrap()
+############################### Main ###############################
 
-    header_cell_format = workbook.add_format()
-    header_cell_format.set_bg_color('#808080')
-
-    return workbook, header_cell_format, mapping_item_cell_format
-
-def generateList(templateName, inputCSV, pathsArray):
+def main(templateName, inputCSV, pathsDict):
     print(os.linesep + "Step 2: MappingListGen is running.")
-    workdir = os.getcwd()
+    
     # Create Excel-File
     excelPath = os.path.join(workdir, 'ManualTasks', templateName + '_MAPPING.xlsx')
     workbook = xlsxwriter.Workbook(excelPath)
@@ -52,18 +44,18 @@ def generateList(templateName, inputCSV, pathsArray):
     nrMandatoryPaths = 0
     indexArr = []
     max_value = None
-    for path in pathsArray:
+    for path in pathsDict:
         worksheetPaths.write(j, 0, path)
 
         # Falls Pflichtfeld dann entsprechend kenntlich machen in Mandatory Spalte i,2 (dict['pfad']['mandatory'] = 1)
-        if pathsArray[path]['mandatory'] == str(1):
+        if pathsDict[path]['mandatory'] == str(1):
             worksheetPaths.write(j, 2, "Pflicht (Pfad muss gegebensein, damit die Ressource valide ist!)")
             nrMandatoryPaths += 1
-        elif pathsArray[path]['mandatory'] == str(-1):
+        elif pathsDict[path]['mandatory'] == str(-1):
             worksheetPaths.write(j, 2, "Bedingt Pflicht (Muss gegeben sein, falls übergeordnete Elemente existieren)")
 
         # rmType ausgeben in rmType-Spalte i,1
-        worksheetPaths.write(j, 1, pathsArray[path]['rmType'])
+        worksheetPaths.write(j, 1, pathsDict[path]['rmType'])
 
         # Nach Vorkommen von <<index>> suchen und ermitteln wieviele Indexe im Pfad mit den meisten Indexen ist (max number of indexes)
         pattern = '<<index>>'
@@ -120,7 +112,7 @@ def generateList(templateName, inputCSV, pathsArray):
 
     # FLAT Paths in Spalte 1 und Dropdowns in Spalte 3 bzw. Rechts von der letzten Index-Spalte hinzufuegen
     i = 1
-    for path in pathsArray:
+    for path in pathsDict:
         worksheetMapping.write(i, 0, path)
         worksheetMapping.data_validation('C'+str(i+1), {'validate': 'list','source': '=CSV_Paths!$A$2:$A$' + str(numberofPaths +1)})
         i += 1
@@ -141,3 +133,19 @@ def generateList(templateName, inputCSV, pathsArray):
 
     answerString = ""
     return answerString
+
+############################### Methods ###############################
+
+def setTableAppearance(workbook):
+    mapping_item_cell_format = workbook.add_format()
+    mapping_item_cell_format.set_align('valign')
+    mapping_item_cell_format.set_text_wrap()
+
+    header_cell_format = workbook.add_format()
+    header_cell_format.set_bg_color('#808080')
+
+    return workbook, header_cell_format, mapping_item_cell_format
+
+
+if __name__ == '__main__':
+    main()

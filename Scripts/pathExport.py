@@ -44,8 +44,6 @@ X 12	DV_DURATION	        year,month,day,week,hour,minute,second
 
 ###########################################################################
 # Standard library imports
-import json
-import os
 from collections import defaultdict
 import traceback #debug
 # Third party imports
@@ -53,6 +51,29 @@ import traceback #debug
 
 indent = "    "
 case4 = ["DV_TEXT", "DV_BOOLEAN", "DV_URI", "DV_EHR_URI", "DV_DATE_TIME", "DV_DATE", "DV_TIME"]
+
+############################### Main ###############################
+
+def main(webTemp, templateName):
+
+    pathDict = defaultdict(list)
+    try:
+        # Durchlaufe den Baum
+        path = webTemp['tree']['id']
+        parentMandatoryChain = ""
+        pathDict = goLow(path, pathDict, webTemp['tree']['children'],parentMandatoryChain)
+
+        # Gib some Output
+        print ( indent + "Anzahl extrahierter Pfade: " + str( len(pathDict) ) )
+    except Exception as e:
+        print(indent + templateName + "_Webtemplate ist fehlerhaft.")
+        print (indent + str(e))
+        traceback.print_exc()
+        raise SystemExit
+
+    return pathDict
+
+############################### Methods ###############################
 
 def addSuffixes(pathDict, element, suffixPath, suffixPathArr, mandatoryChain):
     for suffix in suffixPathArr:
@@ -167,34 +188,5 @@ def goLow(parentPath, pathDict, children, parentMandatoryChain):
 
     return pathDict
 
-def getPathsFromWebTemplate(workdir, templateName):
-    try:
-        # Greife auf WebTemplate zu
-        filePath = os.path.join(workdir, 'IntermFiles', templateName +'_WebTemplate.json')
-        if os.path.isfile(filePath):
-            pathDict = defaultdict(list)
-            try:
-                # Lese WebTemplate ein
-                webTemp = open(filePath, "r", encoding='utf-8').read()
-                webTemp = json.loads(webTemp)
-
-                # Durchlaufe den Baum
-                path = webTemp['tree']['id']
-                parentMandatoryChain = ""
-                pathDict = goLow(path, pathDict, webTemp['tree']['children'],parentMandatoryChain)
-
-                # Gib some Output
-                print ( indent + "Anzahl extrahierter Pfade: " + str( len(pathDict) ) )
-
-            except Exception as e:
-                print(indent + templateName + "_Webtemplate ist fehlerhaft.")
-                print (indent + str(e))
-                traceback.print_exc()
-                raise SystemExit
-        else:
-            raise Exception(templateName + "_WebTemplate ist nicht vorhanden.")
-    except Exception as e:
-        print (indent + str(e))
-        raise SystemExit
-
-    return pathDict
+if __name__ == '__main__':
+    main()
