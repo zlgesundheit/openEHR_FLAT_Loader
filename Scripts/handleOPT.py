@@ -44,22 +44,14 @@ def main():
     # Query and save WebTemplate
     json_resp = queryWebtemplate(templateName, targetAdress, targetflatAPIadress, targetAuthHeader)
 
-    #Store WebTemplate
-    storeWebTemplate(templateName, json_resp)
+    # We load the webTemplate-Part of the Response in a nice tree structure
+    webTemplateResp = json.dumps(json_resp['webTemplate'], ensure_ascii=False)
+    webTemp = json.loads(webTemplateResp)
 
-    print(indent + "HandleOPT stored the WebTemplate.")
-
-    # Get FLAT-Paths
-    # Greife auf WebTemplate zu
-    filePath = os.path.join(workdir, 'IntermFiles', templateName +'_WebTemplate.json')
-    if os.path.isfile(filePath):
-        # Lese WebTemplate ein
-        webTemp = open(filePath, "r", encoding='utf-8').read()
-        webTemp = json.loads(webTemp)
-        # Extrahiere Pfade in Dict
-        pathsDict = pathExport.main(webTemp, templateName)
-    else:
-        raise Exception(templateName + "_WebTemplate ist nicht vorhanden.")
+    # Extrahiere Pfade in Dict
+    pathsDict = pathExport.main(webTemp, templateName)
+    #else:
+        #raise Exception(templateName + "_WebTemplate ist nicht vorhanden.")
     print(indent + "HandleOPT extracted FLAT-Paths from the WebTemplate")
 
     mappingListGen.main(templateName, inputCSV, pathsDict)
@@ -114,8 +106,8 @@ def queryWebtemplate(templateName, targetAdress, targetflatAPIadress, targetAuth
 
     return json_resp
 
-def storeWebTemplate(templateName, json_resp):
-    filePath = os.path.join(workdir, 'IntermFiles', templateName + '_WebTemplate.json')
+def storeWebTemplate(path, templateName, json_resp):
+    filePath = os.path.join(workdir, path, templateName + '_WebTemplate.json')
 
     with open(filePath, 'w', encoding="utf-8") as templateFile:
         json.dump(json_resp['webTemplate'], templateFile, indent = 4, ensure_ascii=False)

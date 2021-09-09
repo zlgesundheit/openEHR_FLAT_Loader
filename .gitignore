@@ -6,8 +6,8 @@
 *.logs
 
 # Input and Output-Directories
+/Input/
 /ManualTasks/
-/IntermFiles/
 /Output/
 
 # Byte-compiled / optimized / DLL files
