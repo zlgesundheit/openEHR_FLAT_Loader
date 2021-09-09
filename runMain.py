@@ -51,7 +51,7 @@ def runStep(choosenStep):
 
     elif(choosenStep == str(3)):
         configHandler.queryConfEntry()
-        config = configHandler.readConf()
+        #config = configHandler.readConf()
 
 def printInfoText():
     print("Mithilfe dieses Tools kann ein OPT hochgeladen und eine Mapping Liste, welche manuell auszufüllen ist, erzeugt werden." 
@@ -75,12 +75,8 @@ def createDir(path):
 
 def checkIfDirsExists():
     workdir  = os.getcwd()
-    intermFilesDir = os.path.join(workdir, "IntermFiles")
     manualTasksDir = os.path.join(workdir, "ManualTasks")
     outputDir = os.path.join(workdir, "Output")
-
-    if not os.path.isdir(intermFilesDir):
-        createDir(intermFilesDir)
 
     if not os.path.isdir(manualTasksDir):
         createDir(manualTasksDir)
