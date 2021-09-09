@@ -1,3 +1,8 @@
+## Disclaimer
+
+This Tool is not a finished product. Currently it is under heavy development and may not fit your particular use case.
+Use with caution.
+
 # openEHR_FLAT_Loader
 
 ETL-Tool to transform Source Data into openEHR-Resources.  
