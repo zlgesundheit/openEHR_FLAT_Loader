@@ -20,24 +20,10 @@
 # - mandatory ist 0 oder 1, wobei 1 = Pflichtfeld bedeutet
 ###########################################################################
 
-# List of Types and their attributes (X indicates that this one is **definitely** handled in this script)
+# List of Types
 # https://specifications.openehr.org/releases/RM/latest/data_types.html
 
-# Documentation is here: https://pad.gwdg.de/nGok78r6SCK58rlZttKOAw?both
-""" rmType and suffixes that are needed and rough structure
-X 1	    PARTY_PROXY	        id, id_scheme, id_namespace, name	    suffix + type	
-X 2	    DV_IDENTIFIER	    id, type, issuer, assigner	            suffix + type	
-X 3	    DV_QUANTITY 	    magnitude, unit	                        suffix + type   und   suffix + type (+ list)	Intervals have specific Types for their Boundaries
-X 4	    DV_TEXT, DV_BOOLEAN, DV_URI, DV_EHR_URI,DV_DATE_TIME, DV_DATE, DV_TIME	none	type	
-X 5	    DV_MULTIMEDIA	    none + mediatype + alternatetext + size	    type	
-X 6	    DV_PROPORTION	    numerator, denominator, type	        inputs + proportionTypes (under element)	"Type is an Integer which takes the number of the type from the list of types.. 'ratio','unitary','percent','fraction','integer_fraction'
-X 7	    CODE_PHRASE	        terminology, code	                    No 'inputs' (under element)	
-X 8	    DV_COUNT	        value	                                type + (validation)	
-X 9	    DV_ORDINAL	        value, code, ordinal	                type + list	
-X 10	DV_CODED_TEXT	    value, code, terminology	            suffix + type	
-X 11	DV_PARSABLE	        value, formalism	                        suffix + type	
-X 12	DV_DURATION	        year,month,day,week,hour,minute,second		
-"""
+# Notes are here: https://pad.gwdg.de/nGok78r6SCK58rlZttKOAw?both
 
 # TODO
 # Es wäre gut auch die Validation-Angaben mitzuschleppen. Bei Elementen, die diese haben. 
@@ -83,10 +69,6 @@ def addSuffixes(pathDict, element, suffixPath, suffixPathArr, mandatoryChain):
             addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath+"|"+suffix, mandatoryChain)
 
 def addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath, mandatoryChain):
-    # Pfade mit Index
-    if element['max'] == -1:
-        suffixPath += "<<index>>"
-
     # Pflichtelement oder nicht
     if element['min'] == 1 and '0' in mandatoryChain:
         # Bedingt Mandatory = -1
