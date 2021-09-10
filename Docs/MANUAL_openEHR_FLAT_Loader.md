@@ -166,6 +166,10 @@ After Data Preparation, Curation and Formatting
 
 #### 4. Upload Ressources
 
+## Pitfalls
+- Template-Names must not contain special characters like "/". Otherwise the filename of the .opt and the given Template-ID are not the same if downloaded from the CKM.
+- ...
+
 ## Funding
 - Funded by the Lower Saxony Ministry of Science and within the Lower Saxony “Vorab“ of the Volkswagen Foundation and supported by the Center for Digital Innovations (ZDIN).
 - Funds of the participating institutes
