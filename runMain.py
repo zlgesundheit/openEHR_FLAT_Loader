@@ -34,7 +34,7 @@ def main():
     printInfoText()
 
     # Query User Input
-    choosenStep = input("Auswahl: ")
+    choosenStep = input("Bitte Ziffer eingeben: ")
 
     # Run Script Part/Step that was choosen by the user
     runStep(choosenStep)
@@ -54,7 +54,7 @@ def runStep(choosenStep):
 
         # Baue Mapping
         mappingListGen.main(config.templateName, config.inputCSV, pathsDict)
-        print(indent + "Generated the (empty) Mapping-Table")
+        print("Generated the (empty) Mapping-Table")
 
     elif(choosenStep == str(2)):
         buildComp.main()
@@ -64,15 +64,25 @@ def runStep(choosenStep):
         #config = configHandler.readConf()
 
 def printInfoText():
-    print("Mithilfe dieses Tools kann ein OPT hochgeladen und eine Mapping Liste, welche manuell auszufüllen ist, erzeugt werden." 
-        + os.linesep + "Schritt 1: OPT hochladen und Mapping erzeugen" 
-        + os.linesep + "Schritt 2: Ressourcen erzeugen")
-
-    print(os.linesep + "Optionen:")
-    print("Option 1: OPT-laden und Mapping-Liste für manuelle Ausfüllen erzeugen.")
-    print("Option 2: Auf Basis des ausgefüllten Mappings und der Quelldaten-CSV die Ressourcen erzeugen.")
-    print("Option 3: Werte für Konfig-Datei eigeben.")
-    print("")
+    print(os.linesep)
+    print("Willkommen im openEHR_FLAT_Loader-Commandline-Tool")
+    print(os.linesep)
+    print("Mithilfe dieses Tools können beliebige tabellarische Daten in das interoperable openEHR-Format transformiert werden."
+        + os.linesep
+        + os.linesep + "Geben Sie in der Config-Datei entsprechend die Variablen für Template, CSV und Repository an. Führen Sie Schritt 1"
+        + os.linesep + "und Schritt 2 aus, um erst ein Mapping zu erzeugen, dass (nach manuellem Ausfüllen) für die automatisierte"
+        + os.linesep + "Erzeugung von openEHR-Ressourcen aus ihren tabellarischen Daten genutzt wird."
+        + os.linesep
+        # Auswahl von im OPT-Ordner existierenden Dateien + Abfrage welche genutzt werden soll
+        + os.linesep + indent +"Schritt 1: OPT hochladen und Mapping erzeugen" 
+        + os.linesep + indent +"Schritt 2: Ressourcen erzeugen"
+    )
+    print(os.linesep + "Auswahl:"
+        + os.linesep + indent +"'1': OPT-laden und Mapping-Liste für manuelle Ausfüllen erzeugen."
+        + os.linesep + indent +"'2': Auf Basis des ausgefüllten Mappings und der Quelldaten-CSV die Ressourcen erzeugen."
+        + os.linesep + indent +"'3': Werte für Konfig-Datei eigeben."
+    )
+    print(os.linesep)
 
 def createDir(path):
     access_rights = 0o755
