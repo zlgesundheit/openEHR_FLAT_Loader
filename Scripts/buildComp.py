@@ -23,7 +23,6 @@ import pandas as pd
 import numpy as np
 # import openpyxl
 # Local application imports
-from Scripts import configHandler
 
 # openpyxl does not support Validation in Excel-Files and sends a warning
 warnings.filterwarnings('ignore', category=UserWarning, module='openpyxl')
@@ -32,20 +31,14 @@ workdir = os.getcwd()
 
 ############################### Main ###############################
 
-def main():
-    
+def main(config):
     print(os.linesep + "Step 3: BuildComp is running.")
     
-    # Read Config-Values
-    config = configHandler.readConf()
-    templateName            = config['DEFAULT']['templateName']
-    inputCSV                = config['DEFAULT']['inputCSV']
-
     # Read CSV as data frame
-    dataDF = csvAsDataFrame(inputCSV)
+    dataDF = csvAsDataFrame(config.inputCSV)
 
     # Read Excel-File as data frame
-    mapTabDF = xlsxAsDataFrame(templateName)
+    mapTabDF = xlsxAsDataFrame(config.templateName)
   
     # Init some variables
     columnNames = pd.Index( list(mapTabDF.columns.values) )
@@ -98,7 +91,7 @@ def main():
         raise SystemExit
 
     # Store ALL Entrys / Resources as .json-files for later use or upload
-    storeDictArrayAsRes(resArray, templateName)
+    storeDictArrayAsRes(resArray, config.templateName)
 
 ############################### Methods ###############################
 

@@ -57,11 +57,10 @@ def runStep(choosenStep):
         print("Generated the (empty) Mapping-Table")
 
     elif(choosenStep == str(2)):
-        buildComp.main()
+        buildComp.main(config)
 
     elif(choosenStep == str(3)):
-        configHandler.queryConfEntry()
-        #config = configHandler.readConf()
+        config.queryConfEntry()
 
 def printInfoText():
     print(os.linesep)
