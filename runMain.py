@@ -17,19 +17,20 @@ import os.path
 from Scripts import configHandler
 from Scripts import handleOPT
 from Scripts import buildComp
+from Scripts import pathExport
+from Scripts import mappingListGen
+
+#Init Config-Object
+config = configHandler.config()
+indent = "\t"
 
 ############################### Main ###############################
 def main():
-    #Read Config
-    config = configHandler.readConf()
     
     # Check if all directories exist otherwise create them
     checkIfDirsExists()
 
-    # Check if config exists otherwise request input from user
-    checkIfConfExists()
-
-    # Show Explanatory Text to the User
+    # Show Explanatory Text on how to use the tool and what steps to perform to the User
     printInfoText()
 
     # Query User Input
@@ -42,9 +43,18 @@ def main():
 
 ############################### Methods ###############################
 def runStep(choosenStep):
-
     if (choosenStep == str(1)):
-        handleOPT.main()
+        # Upload OPT to openEHR-Repo if necessary
+        webTemp = handleOPT.main(config)
+        print("The OPT-File is uploaded to the openEHR-Repo") # TODO this print should be done by the other scripts after they performed, not in the runMain, also see others below
+        
+        # Extrahiere Pfade in Dict 
+        pathsDict = pathExport.main(webTemp, config.templateName)
+        print("Extracted FLAT-Paths from the WebTemplate")
+
+        # Baue Mapping
+        mappingListGen.main(config.templateName, config.inputCSV, pathsDict)
+        print(indent + "Generated the (empty) Mapping-Table")
 
     elif(choosenStep == str(2)):
         buildComp.main()
@@ -83,16 +93,6 @@ def checkIfDirsExists():
 
     if not os.path.isdir(outputDir):
         createDir(outputDir)
-
-def checkIfConfExists():
-    confFile_path = 'config.ini'
-    if os.path.isfile(confFile_path):
-        # Load existing Config
-        config = configHandler.readConf()
-        print("Loaded existing Config." + os.linesep)
-    else:
-        # Query Input from User
-        configHandler.queryConfEntry()
 
 if __name__ == '__main__':
     main()
