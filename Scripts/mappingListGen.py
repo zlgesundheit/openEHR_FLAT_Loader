@@ -27,6 +27,8 @@ def main(templateName, inputCSV, pathsDict):
     worksheetPaths = workbook.add_worksheet('FLAT_Paths')
     worksheetCSVPaths = workbook.add_worksheet('CSV_Paths')
 
+    worksheetAutoIndexedMapping = workbook.add_worksheet('Auto-indexed Mapping')
+
     # Set Appearance
     workbook, header_cell_format, mapping_item_cell_format = setTableAppearance(workbook)
 
@@ -58,7 +60,7 @@ def main(templateName, inputCSV, pathsDict):
         worksheetPaths.write(j, 1, pathsDict[path]['rmType'])
 
         # Nach Vorkommen von <<index>> suchen und ermitteln wieviele Indexe im Pfad mit den meisten Indexen ist (max number of indexes)
-        pattern = '<<index>>'
+        pattern = '<<index>>' # TODO refactor
         indexList = re.findall(pattern, path)
         indexArr.append( len(indexList) )
         for num in indexArr:
@@ -117,7 +119,21 @@ def main(templateName, inputCSV, pathsDict):
         worksheetMapping.data_validation('C'+str(i+1), {'validate': 'list','source': '=CSV_Paths!$A$2:$A$' + str(numberofPaths +1)})
         i += 1
 
-    # Dropdown-Listen hinzufuegen
+    addExampleValues(df, worksheetMapping, ind, mapping_item_cell_format)
+    addExampleValues(df, worksheetAutoIndexedMapping, ind, mapping_item_cell_format) #TODO in compose-method reinziehen
+
+    ################################ Compose auto-indiced Mapping Worksheet ###############################
+
+    composeAutoIndexedWS(worksheetAutoIndexedMapping, header_cell_format, pathsDict, numberofPaths)
+
+    workbook.close()
+
+    print(indent + "Mapping List is generated.")
+
+    answerString = ""
+    return answerString
+
+def addExampleValues(df, worksheetMapping, ind, mapping_item_cell_format):
     i = 1
     for col in df.columns:
         # Write example values from csv (first row) to column 2 in the Worksheet
@@ -126,13 +142,6 @@ def main(templateName, inputCSV, pathsDict):
         except:
             worksheetMapping.write(i, 1, "NaN")
         i += 1
-
-    workbook.close()
-
-    print(indent + "Mapping List is generated.")
-
-    answerString = ""
-    return answerString
 
 ############################### Methods ###############################
 
@@ -145,6 +154,39 @@ def setTableAppearance(workbook):
     header_cell_format.set_bg_color('#808080')
 
     return workbook, header_cell_format, mapping_item_cell_format
+
+
+def composeAutoIndexedWS(worksheetMapping, header_cell_format, pathsDict, numberOfPaths):
+    '''Composes mapping-worksheet based on index-values from userinput. \n
+        DISCLAIMER: this method can only work with paths containing ONE index value in the current state.'''
+
+    #### Build Mapping Worksheet
+    worksheetMapping.write('A1', 'FLAT-Path', header_cell_format)
+    worksheetMapping.write('B1', 'CSV-Column', header_cell_format) 
+    worksheetMapping.write('D1', 'Example-Value', header_cell_format)
+
+    worksheetMapping.set_column('A:A', 100)
+    worksheetMapping.set_column('B:B', 50)
+    worksheetMapping.set_column('D:D', 25)
+
+    # add paths + dropdown list
+    i = 1
+    for path in pathsDict:
+        if '<<index>>' in path:
+            print('Wie viele Messwerte zu dem Pfad: '+ path + ' sind in den Quelldaten vorhanden?')
+            index_value = int(input('Anzahl der Messwerte: ')) 
+            if index_value == 0:
+                continue #TODO handeln?
+            for j in range(0, index_value):
+                indexed_path = path.replace('<<index>>',str(j))
+                worksheetMapping.write(i+j,0,indexed_path)
+                worksheetMapping.data_validation('B'+str(i+j+1), {'validate': 'list','source': '=CSV_Paths!$A$2:$A$' + str(numberOfPaths +1)})
+            i += index_value
+            continue
+        worksheetMapping.write(i, 0, path)
+        worksheetMapping.data_validation('B'+str(i+1), {'validate': 'list','source': '=CSV_Paths!$A$2:$A$' + str(numberOfPaths +1)})
+        i += 1
+
 
 
 if __name__ == '__main__':
