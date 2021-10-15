@@ -6,6 +6,7 @@
 *.logs
 
 # Input and Output-Directories
+/.idea
 /Input/
 /ManualTasks/
 /Output/
