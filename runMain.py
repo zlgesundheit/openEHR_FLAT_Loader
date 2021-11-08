@@ -12,6 +12,7 @@
 #########################################################################
 # Standard library imports
 import os.path
+from os import getcwd
 from pathlib import Path
 # Third party imports
 import pandas as pd
@@ -26,6 +27,7 @@ from Scripts import ucc_uploader
 #Init Config-Object
 config = configHandler.config()
 indent = "\t"
+workdir = getcwd()
 
 ############################### Main ###############################
 def main():
@@ -65,7 +67,7 @@ def runStep(choosenStep):
         # Create EHRs
         patient_id_column_name = "sha1"
         subject_namespace_column_name = "upload_subject_namespace"
-        csvPath = Path("C:\\Users\\richter122\\Desktop\\UCC_EHRBase\\FLAT_Loader_UCC\\Input\\CSV\\ucc_score_gesamtdaten_erweitert_utf8.csv")
+        csvPath = Path(workdir + "\\Input\\CSV\\" + config.inputCSV + ".csv")
         csv_dataframe = pd.read_csv(csvPath, header=0, delimiter=";", dtype=str)
         anzahl_eintraege = len(csv_dataframe.index)
 

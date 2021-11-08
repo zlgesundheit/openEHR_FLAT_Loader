@@ -98,6 +98,7 @@ def storeDictArrayAsRes(dictArray, templateName):
         with open(filePath,"w", encoding = 'UTF-8') as resFile:
             json.dump(res, resFile, default=convert, indent=4, ensure_ascii=False)
         i += 1
+    print (indent + str(i) + f' Ressourcen erstellt und im Ordner "Output" gespeichert.')
 
 def xlsxAsDataFrame(templateName):
     xlsxPath = os.path.join(workdir, 'ManualTasks', templateName + '_MAPPING.xlsx')

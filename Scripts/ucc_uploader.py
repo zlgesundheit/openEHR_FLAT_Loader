@@ -129,7 +129,7 @@ def createNewEHRwithSpecificSubjectId(baseUrl, subject_id, subject_namespace):
     })
 
     header = {
-        'Authorization' : "Basic ZWhyYmFzZS11c2VyOmVuVGluVEFuZ2xBSw==",
+        'Authorization' : repo_auth,
         'Content-Type': 'application/json',
         'Prefer' : 'return=representation'
     }
