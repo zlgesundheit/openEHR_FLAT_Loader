@@ -8,7 +8,7 @@ import configparser
 # Third party imports
 # Local application imports
 
-configParser = configparser.ConfigParser()
+parser = configparser.ConfigParser()
 
 class config():
     targetAdress = 'http://141.5.100.115/ehrbase'
@@ -17,57 +17,20 @@ class config():
     targetflatAPIadress = '/rest/ecis/v1/'
     templateName = 'ZLG_Testdaten'
     inputCSV = 'test1'
+    createehrs = '1'
+    directupload = '0'
 
     def __init__(self):
-        # TODO Exception Handling if config not exist etc.? -> maybe query conf if non exists -> see def queryConfEntry(self): below
-        configParser.read('config.ini')
-        self.targetAdress            = configParser['targetRepo']['targetRepoAdress']
-        self.targetAuthHeader        = configParser['targetRepo']['targetAuthHeader']
-        self.targetopenEHRAPIadress  = configParser['targetRepo']['targetopenEHRAPIadress']
-        self.targetflatAPIadress     = configParser['targetRepo']['targetflatapiadress']
-        self.templateName            = configParser['DEFAULT']['templateName']
-        self.inputCSV                = configParser['DEFAULT']['inputCSV']
-
-    def loadNamesForOPTandCSV(self):
-        return self.templateName, self.inputCSV
-
-    def setFilenames(templateName, inputCSV):
-        configParser.read('config.ini')
-        configParser['DEFAULT'] = {
-            'templateName': templateName,
-            'inputCSV':inputCSV
-        }
-        with open('config.ini', 'w') as configfile:
-            configParser.write(configfile)
-
-    def setTargetRepo(targetRepoAdress, targetflatAPIadress, targetopenEHRAPIadress):
-        configParser.read('config.ini')
-        configParser['targetRepo'] = {
-            'targetRepoAdress':targetRepoAdress,
-            'targetflatAPIadress':targetflatAPIadress,
-            'targetopenEHRAPIadress':targetopenEHRAPIadress
-        }
-        with open('config.ini', 'w') as configfile:
-            configParser.write(configfile)
-
-    def queryConfEntry(self):
-        #Request input for new Conf
-        templateName = input("Name des Templates: ")
-        inputCSV = input("Name der CSV: ")
-        self.setFilenames(templateName, inputCSV)
-
-        targetRepoAdress = input("Repo-Adresse (Bsp.: https://IP/ehrbase): ")
-        targetRepoUser = input("Nutzername: ")
-        targetRepoPw = input("Passwort: ")
-        targetAuthHeader = getAuthHeader(targetRepoUser, targetRepoPw)
-
-        targetflatAPIadress = input("FLAT-Endpunkt (Bsp.: /rest/ecis/v1/): ")
-        targetopenEHRAPIadress = input("openEHR-API (Bsp.: /rest/openehr/v1/): ")
-        self.setTargetRepo(targetRepoAdress, targetAuthHeader, targetflatAPIadress, targetopenEHRAPIadress)
-
-        configParser.read('config.ini')
-
-        return configParser
+        # TODO Exception Handling if config not exist etc.?
+        parser.read('config.ini')
+        self.targetAdress            = parser['targetRepo']['targetRepoAdress']
+        self.targetAuthHeader        = parser['targetRepo']['targetAuthHeader']
+        self.targetopenEHRAPIadress  = parser['targetRepo']['targetopenEHRAPIadress']
+        self.targetflatAPIadress     = parser['targetRepo']['targetflatapiadress']
+        self.templateName            = parser['DEFAULT']['templateName']
+        self.inputCSV                = parser['DEFAULT']['inputCSV']
+        self.createehrs              = parser['DEFAULT']['createehrs']
+        self.directupload            = parser['DEFAULT']['directupload']
 
 # Get AuthHeaders
 def getAuthHeader(username, pw) -> str:

@@ -23,7 +23,6 @@ def main(templateName, inputCSV, pathsDict):
     excelPath = os.path.join(workdir, 'ManualTasks', templateName + '_MAPPING.xlsx')
     workbook = xlsxwriter.Workbook(excelPath)
 
-    worksheetMapping = workbook.add_worksheet('Mapping CSV2openEHR')
     worksheetPaths = workbook.add_worksheet('FLAT_Paths')
     worksheetCSVPaths = workbook.add_worksheet('CSV_Paths')
 
@@ -42,7 +41,7 @@ def main(templateName, inputCSV, pathsDict):
     worksheetPaths.write('C1','Mandatory Paths', header_cell_format)
 
     # Alle Pfade mit rmType
-    j = 1
+    j = 0
     nrMandatoryPaths = 0
     indexArr = []
     max_value = None
@@ -66,8 +65,6 @@ def main(templateName, inputCSV, pathsDict):
         for num in indexArr:
             if (max_value is None or num > max_value):
                 max_value = num
-        # Anzahl Pfade, um unten die Laenge der Dropdownauswahl festzulegen        
-        numberofPaths = j
         j += 1
 
     print( indent + "Anzahl der mindestens zu verwendenden Pfade: " + str(nrMandatoryPaths) )
@@ -95,35 +92,17 @@ def main(templateName, inputCSV, pathsDict):
         i += 1
 
     ######################################## Compose Mapping Worksheet ########################################
-    #### Build Mapping Worksheet
-    worksheetMapping.write('A1', 'FLAT-Path', header_cell_format)
     # Index-Spalten hinzufuegen (Zeile 1 = Flat Paths, Zeile 2+ind = Indexe, Zeile 2+ind+1 = CSV-Item Dropdown)
     ind = 0
-    while ind < max_value:
-        worksheetMapping.write(0, ind+1, str(ind + 1) + '. Index' , header_cell_format)
+    while ind < max_value:   #Hier wurde ADHOC der alte Mapping Tab rausgelöscht bei den UCC Arbeiten
         ind += 1
-    columnCharFLATpath   = chr(ord('A') + ind + 1)
-    columnCharExampleVal = chr(ord('A') + ind + 2)
-    worksheetMapping.write( columnCharFLATpath   + '1', 'CSV-Column', header_cell_format) #Buchstabe aus dem Alphabet an Position 1 Spalte +Indexanzahl an Spalten
-    worksheetMapping.write( columnCharExampleVal + '1', 'Example-Value', header_cell_format)
 
-    worksheetMapping.set_column('A:A', 100)
-    worksheetMapping.set_column('B:B', 15)
-    worksheetMapping.set_column('C:C', 50)
-    worksheetMapping.set_column('D:D', 25)
-
-    # FLAT Paths in Spalte 1 und Dropdowns in Spalte 3 bzw. Rechts von der letzten Index-Spalte hinzufuegen
-    i = 1
-    for path in pathsDict:
-        worksheetMapping.write(i, 0, path)
-        worksheetMapping.data_validation('C'+str(i+1), {'validate': 'list','source': '=CSV_Paths!$A$2:$A$' + str(numberofPaths +1)})
-        i += 1
-
-    addExampleValues(df, worksheetMapping, ind, mapping_item_cell_format)
     addExampleValues(df, worksheetAutoIndexedMapping, ind, mapping_item_cell_format) #TODO in compose-method reinziehen
 
     ################################ Compose auto-indiced Mapping Worksheet ###############################
 
+    #nicht anzahl der pfade, sondern anzahl der CSV-Items! #ADHOC CHANGE FOR UCC
+    numberofPaths = len(df.columns)
     composeAutoIndexedWS(worksheetAutoIndexedMapping, header_cell_format, pathsDict, numberofPaths)
 
     workbook.close()
@@ -178,7 +157,7 @@ def composeAutoIndexedWS(worksheetMapping, header_cell_format, pathsDict, number
             if index_value == 0:
                 continue #TODO handeln?
             for j in range(0, index_value):
-                indexed_path = path.replace('<<index>>',str(j))
+                indexed_path = path.replace('<<index>>', (':'+str(j)) )  ###ADHOC CHANGE FOR UCC KARDIO
                 worksheetMapping.write(i+j,0,indexed_path)
                 worksheetMapping.data_validation('B'+str(i+j+1), {'validate': 'list','source': '=CSV_Paths!$A$2:$A$' + str(numberOfPaths +1)})
             i += index_value
