@@ -157,7 +157,7 @@ def composeAutoIndexedWS(worksheetMapping, header_cell_format, pathsDict, number
             if index_value == 0:
                 continue #TODO handeln?
             for j in range(0, index_value):
-                indexed_path = path.replace('<<index>>', (':'+str(j)) )  ###ADHOC CHANGE FOR UCC KARDIO
+                indexed_path = path.replace('<<index>>', (str(j)) )
                 worksheetMapping.write(i+j,0,indexed_path)
                 worksheetMapping.data_validation('B'+str(i+j+1), {'validate': 'list','source': '=CSV_Paths!$A$2:$A$' + str(numberOfPaths +1)})
             i += index_value
