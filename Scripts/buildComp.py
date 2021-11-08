@@ -39,11 +39,6 @@ def main(config):
 
     # Read Excel-File as data frame
     mapTabDF = xlsxAsDataFrame(config.templateName)
-  
-    # Init some variables
-    columnNames = pd.Index( list(mapTabDF.columns.values) )
-    colnr_of_csvcolumn = columnNames.get_loc( key='CSV-Column' )
-    highestIndex = getHighestIndexNr(columnNames , colnr_of_csvcolumn)
 
     # Get rid of "NaN"-Values in mapTabDF['CSV-Column']
     # mappedCSVItemsWOnan = [x for x in mapTabDF['CSV-Column'] if pd.isnull(x) == False]
@@ -63,19 +58,17 @@ def main(config):
                 # Fuer jeden FLAT_Pfad
                 for xlsxIndex, xlsxRow in mapTabDF.iterrows():
                     path = xlsxRow['FLAT-Path']
-                    
-                    ###### Index...TODO
-                    # Ersetze <<Index>>-Chars mit Index (TODO: erstmal der Index der im Mapping eingetragen ist -> 
-                    # siehe Issue 18 <- Wir wissen nicht wieviele Indexe reinkommen TODO Wie herum soll das Mapping geschen??)
-                    pattern = re.compile("<<index>>")
-                    if pattern.search(path):
-                        path = replaceIndexStringWithIndexNumber(path,highestIndex,mapTabDF,xlsxIndex)
 
                     # Schaue ob Mapping in Mapping-File eingetragen / vorhanden ist
                     gemappteSpalteAusCSV = mapTabDF['CSV-Column'][xlsxIndex]
                     if str(gemappteSpalteAusCSV) != "nan":
                         # Erstelle einen Dict-Eintrag mit KEY=PATH und VALUE=WERT in der dem KEY zugeordneten Spalte
-                        dict[path] = dataDF[ gemappteSpalteAusCSV ][csvIndex]
+                        ###ADHOC EINGEFUEGTES NAN-HANDLING (Kontext UCC-Import)
+                        if str(dataDF[ gemappteSpalteAusCSV ][csvIndex]) != "nan":
+                            dict[path] = dataDF[ gemappteSpalteAusCSV ][csvIndex]
+                        else:
+                            pass
+                            #dict[path] = emptyString <<<- leerer string hilft nicht, da die EHRBase einen passenden Eintrag erwartet
                         
                         # Neues Dataframe erzeugen und mit Apply die Operation vornehmen? Ist das performanter auf großen Datensätzen? iterrow vermeiden
                         # newFrame = dataDF.apply()
@@ -91,7 +84,10 @@ def main(config):
         raise SystemExit
 
     # Store ALL Entrys / Resources as .json-files for later use or upload
+    # TODO Store ehrId in resource-filename for uploader later!!! TODO
     storeDictArrayAsRes(resArray, config.templateName)
+
+    return resArray
 
 ############################### Methods ###############################
 
@@ -105,7 +101,7 @@ def storeDictArrayAsRes(dictArray, templateName):
 
 def xlsxAsDataFrame(templateName):
     xlsxPath = os.path.join(workdir, 'ManualTasks', templateName + '_MAPPING.xlsx')
-    mapTabDF = pd.read_excel(xlsxPath, "Mapping CSV2openEHR", header=0, engine='openpyxl', dtype=str) 
+    mapTabDF = pd.read_excel(xlsxPath, "Auto-indexed Mapping", header=0, engine='openpyxl', dtype=str) 
     #engine openpyxl not xlrd since xlrd drop support for non-xls-files
     return mapTabDF
 
@@ -118,38 +114,6 @@ def csvAsDataFrame(inputCSV):
 def convert(o):
     if isinstance(o, np.int64): return o.item()  
     raise TypeError
-
-def replacenth(string, indexNr, n):
-    where = [m.start() for m in re.finditer('<<index>>', string)][n-1]
-    before = string[:where]
-    after = string[where:]
-    after = after.replace('<<index>>', ':'+indexNr, 1)
-    newString = before + after
-    return newString
-
-def getHighestIndexNr(colNr, colnr_of_hinweis):
-    # Get String of the Header left of CSV-Column (e.g. "1.Index")
-    biggestIndexHeader = colNr[colnr_of_hinweis-1]
-    highestIndex = biggestIndexHeader[0] # Erstes zeichen der x.Index Spalte = hoechster Index --> Nur wenn Indexe existieren!
-    return int(highestIndex)
-
-def replaceIndexStringWithIndexNumber(path, highestIndex, mapTabDF, xlsxIndex):
-    pattern = re.compile("<<index>>")
-    if pattern.search(path):
-        n = 1
-        while n <= highestIndex:
-            # Wenn Index nicht angegeben in Mapping-File dann ist er "nan"
-            try:
-                if str(mapTabDF[str(n) + '. Index'][xlsxIndex]) != "nan":
-                    path = replacenth(path, str(mapTabDF[str(n) + '. Index'][xlsxIndex]), n-1)
-                    n += 1
-                else:
-                    n += 1
-                    raise Exception( "Bei Pfad %s in Zeile %d fehlt die Index-Angabe!" % (path, xlsxIndex+2) )
-            except Exception as e:
-                print(indent + str(e))
-                #raise SystemExit
-    return path
 
 def mappingIsEmpty(mapTabDF):
     # Checken ob das Mapping leer ist, also nur "nan"-Eintraege vorhanden sind

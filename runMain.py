@@ -12,13 +12,16 @@
 #########################################################################
 # Standard library imports
 import os.path
+from pathlib import Path
 # Third party imports
+import pandas as pd
 # Local application/script imports
 from Scripts import configHandler
 from Scripts import handleOPT
 from Scripts import buildComp
 from Scripts import pathExport
 from Scripts import mappingListGen
+from Scripts import ucc_uploader
 
 #Init Config-Object
 config = configHandler.config()
@@ -57,10 +60,37 @@ def runStep(choosenStep):
         print("Generated the (empty) Mapping-Table")
 
     elif(choosenStep == str(2)):
-        buildComp.main(config)
+        resArray = buildComp.main(config)
 
-    elif(choosenStep == str(3)):
-        config.queryConfEntry()
+        # Create EHRs
+        patient_id_column_name = "sha1"
+        subject_namespace_column_name = "upload_subject_namespace"
+        csvPath = Path("C:\\Users\\richter122\\Desktop\\UCC_EHRBase\\FLAT_Loader_UCC\\Input\\CSV\\ucc_score_gesamtdaten_erweitert_utf8.csv")
+        csv_dataframe = pd.read_csv(csvPath, header=0, delimiter=";", dtype=str)
+        anzahl_eintraege = len(csv_dataframe.index)
+
+        ## TODO Server und Auth sind in UCC Uploader hardkodiert!
+
+        #Create EHRs for all patients in csv
+        if config.createehrs == "1":
+            print (f'Create {anzahl_eintraege} EHRs')
+            csv_dataframe = ucc_uploader.createEHRsForAllPatients(csv_dataframe, patient_id_column_name, subject_namespace_column_name)
+            csv_dataframe.to_csv(csvPath, sep=";", index = False, encoding = "UTF-8")
+        else:
+            print ("EHR Creation is disabled in Config.ini")
+            pass
+
+        # Send resource to server
+        if config.directupload == "1":
+            print ("Upload Compositions")
+            quick_and_dirty_index = 0
+            for res in resArray:
+                ucc_uploader.uploadResourceToEhrIdFromCSV(config.targetAdress , csv_dataframe, res, config.templateName, quick_and_dirty_index)
+
+                quick_and_dirty_index += 1
+        else:
+            print ("Direct Upload is disabled in Config.ini")
+            pass
 
 def printInfoText():
     print(os.linesep)
@@ -78,8 +108,10 @@ def printInfoText():
     )
     print(os.linesep + "Auswahl:"
         + os.linesep + indent +"'1': OPT-laden und Mapping-Liste für manuelle Ausfüllen erzeugen."
-        + os.linesep + indent +"'2': Auf Basis des ausgefüllten Mappings und der Quelldaten-CSV die Ressourcen erzeugen."
-        + os.linesep + indent +"'3': Werte für Konfig-Datei eigeben."
+        + os.linesep + indent +"'2': Auf Basis des ausgefüllten Mappings und der Quelldaten-CSV die Ressourcen (Compositions) erzeugen"
+        + os.linesep + indent +"     Config 'create_ehrs'   auf 1 setzen um EHRs auf dem Server zu erzeugen   (Schreibt ehrIds in CSV-Spalte: ehrId)"
+        + os.linesep + indent +"     Config 'direct_upload' auf 1 setzen um Compositions zum Server zu schicken (Nutzt ehrIds aus CSV-Spalte: ehrId)"
+        + os.linesep + indent +"'coming later': Upload Resources to Server."
     )
     print(os.linesep)
 
