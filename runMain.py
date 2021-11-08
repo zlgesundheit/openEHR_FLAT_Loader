@@ -51,15 +51,12 @@ def runStep(choosenStep):
     if (choosenStep == str(1)):
         # Upload OPT to openEHR-Repo if necessary
         webTemp = handleOPT.main(config)
-        print("The OPT-File is uploaded to the openEHR-Repo") # TODO this print should be done by the other scripts after they performed, not in the runMain, also see others below
         
         # Extrahiere Pfade in Dict 
-        pathsDict = pathExport.main(webTemp, config.templateName)
-        print("Extracted FLAT-Paths from the WebTemplate")
+        pathArray = pathExport.main(webTemp, config.templateName)
 
         # Baue Mapping
-        mappingListGen.main(config.templateName, config.inputCSV, pathsDict)
-        print("Generated the (empty) Mapping-Table")
+        mappingListGen.main(config.templateName, config.inputCSV, pathArray)
 
     elif(choosenStep == str(2)):
         resArray = buildComp.main(config)

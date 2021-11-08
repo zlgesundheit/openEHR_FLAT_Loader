@@ -12,13 +12,13 @@ import os.path
 # Third party imports
 # Local application imports
 
-indent = "    "
+indent = "\t"
 workdir = os.getcwd()
 
 ############################### Main ###############################
 
 def main(config):
-    print(os.linesep + "Step 1: HandleOPT is running.")
+    print("\nHandleOPT is running:")
 
     # Read OPT from Input Folder
     optFile = readOPTfromInput(config.templateName)
@@ -33,6 +33,7 @@ def main(config):
     webTemplateResp = json.dumps(json_resp['webTemplate'], ensure_ascii=False)
     webTemp = json.loads(webTemplateResp)
 
+    print (indent + "OPT exists at server and WebTemplate has been downloaded")
     return webTemp
 
 ############################### Methods ###############################

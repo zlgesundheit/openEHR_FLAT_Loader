@@ -30,7 +30,6 @@
 
 ###########################################################################
 # Standard library imports
-from collections import defaultdict
 import traceback #debug
 # Third party imports
 # Local application imports
@@ -41,6 +40,7 @@ indent = "\t"
 ############################### Main ###############################
 
 def main(webTemp, templateName):
+    print ("PathExport is running:")
 
     pathArray = []
     try:
@@ -58,6 +58,7 @@ def main(webTemp, templateName):
         traceback.print_exc()
         raise SystemExit
 
+    print(indent + "Extracted FLAT-Paths from the WebTemplate")
     return pathArray
 
 ############################### Methods ###############################
