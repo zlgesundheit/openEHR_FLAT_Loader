@@ -5,13 +5,15 @@
 ############################################################
 # Standard library imports
 import os.path
-from math import prod
-from numpy import number
+from collections import OrderedDict
 # Third party imports
 import xlsxwriter
 import pandas as pd
 # Local application imports
 from Scripts import pathObject
+
+import sys
+sys.setrecursionlimit(10000)
 
 indent = "\t"
 workdir = os.getcwd()
@@ -53,6 +55,7 @@ def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems):
     local_indexPathDict = {}
     list_of_queried_index_elements = []
     row = 1
+    alreadyAddedPath = []
     for path in pathArray:
         # Falls Path keinen Index 
         if not path.hasIndex:
@@ -61,56 +64,200 @@ def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems):
                 for suffix in path.suffixList:
                     worksheetMapping.write('A'+str(row+1),path.pathString + "|" + suffix)
                     worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
+                    # Pflichtangabe
+                    if path.isMandatory:
+                        worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
                     row += 1
             elif not path.hasSuffix:
                 worksheetMapping.write('A'+str(row+1),path.pathString)
                 worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
+                # Pflichtangabe
+                if path.isMandatory:
+                    worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
                 row += 1
         # Falls Path Index hat
         elif path.hasIndex:   # how to get the index number that shall not be quieried?
-            
             # Abfrage von Indexen   (hier werden alle Pfade durchlaufen die mind. einen Index haben und nur einmal gefragt)
             # Wir springen hier von PfadObjekt zu Pfadobjekt. Dadurch muessen wir die erfassten Indexpfadwerte zwischenspeichern 
             # um sie den PFadobjekten hinzufuegen zu koennen, die danach kommen und fuer die kein Input kommt.
             for indexPath in path.indexPathDict:
-                path.indexPathDict[indexPath] = []
                 if not indexPath in list_of_queried_index_elements:
                     print (f'Wie viele Werte sind zum Element ({indexPath}) vorhanden?')
                     userInput = int(input('Anzahl der Messwerte: '))
-                    path.indexPathDict[indexPath].append(userInput)
-                    list_of_queried_index_elements.append(indexPath)
+                    path.indexPathDict[indexPath] = userInput
                     local_indexPathDict[indexPath] = path.indexPathDict[indexPath]
+                    list_of_queried_index_elements.append(indexPath)
                 else:
                     path.indexPathDict[indexPath] = local_indexPathDict[indexPath]
-            
+
             # Jedes Pfad-Objekt hat nun in path.indexPathDict die Angabe, wie oft das Element vorkommt und zwar als Array mit Wert fuer jeden Index!
-            for userInputArray in path.indexPathDict:
-                for index in path.indexPathDict[userInputArray]:   
-                    # Werden nacheinander die Index-Inputs fuer einen Pfad durchlaufen -> Solange man immer das erste vorkommen ersetzt sollten so alle nacheinander ersetzt werden?
-                    realPathString = path.pathString
-                    for j in range(0,index):
-                        realPathString = realPathString.replace('<<index>>',(str(j)),1)
-                        # Wenn Suffix dann pro Suffix einen Pfad
+            indexArray = []
+            for key in path.indexPathDict:
+                indexArray.append(path.indexPathDict[key])
+            path.indexArray = indexArray
+        
+            if path.maxIndexNumber == 1:
+                for indexStellenMaximum in indexArray:
+                    for j in range(0,indexStellenMaximum):
+                        realPathString = path.pathString.replace('<<index>>',(str(j)))
+                        # Wenn Suffix dann pro Suffix einen Pfad -> TODO AUSLAGERN
                         if path.hasSuffix:
                             for suffix in path.suffixList:
                                 worksheetMapping.write('A'+str(row+1),realPathString + "|" + suffix)
                                 worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
+                                # Pflichtangabe
+                                if path.isMandatory:
+                                    worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
                                 row += 1
                         elif not path.hasSuffix:
                             worksheetMapping.write('A'+str(row+1),realPathString)
                             worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
+                            # Pflichtangabe
+                            if path.isMandatory:
+                                worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
                             row += 1
+            # Das Problem mit mehreren Indexen (n^m^k etc.) :
+            # Permutationen klappen nicht, weil die Maximalwerte der einzelnen Indexstellen dann nicht Beachtung finden
+            # Liste von Listen mit validen Kombinationen (n-Laufvariablen die hochzaehlen und an bestehende Listen anfügen...)
+            # Array von Laufvariablen das durchlaufen wird war auch irgendwie Mist.
+            # Idee: Stückweise Ersetzung im Pfad beginnend von links -> REKURSIV...natürlich
+            ## SLOW AND DIRTY weil Python keine Rekursion in For-Schleifen kann.
+            ## TODO In Manual schreiben, dass wir nur Pfade mit bis zu 4 Indexen unterstützen :D :D -> Nochmal mit Jan diskutieren
+            elif path.maxIndexNumber == 2:
+                realPathString = path.pathString
+                for j in range(0,indexArray[0]):
+                    String_with_1_index_left = realPathString.replace('<<index>>',(str(j)),1)
+                    for i in range(0,indexArray[1]):
+                        String_ohne_index = String_with_1_index_left.replace('<<index>>',(str(i)),1)
+                        if not String_ohne_index in alreadyAddedPath:
+                            if path.hasSuffix:
+                                for suffix in path.suffixList:
+                                    worksheetMapping.write('A'+str(row+1),String_ohne_index + "|" + suffix)
+                                    worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
+                                    # Pflichtangabe
+                                    if path.isMandatory:
+                                        worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
+                                    row += 1
+                            elif not path.hasSuffix:
+                                worksheetMapping.write('A'+str(row+1),String_ohne_index)
+                                worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
+                                # Pflichtangabe
+                                if path.isMandatory:
+                                    worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
+                                row += 1
+                            alreadyAddedPath.append(String_ohne_index)
+            elif path.maxIndexNumber == 3:
+                somePathString = path.pathString
+                for j in range(0,indexArray[0]):
+                    String_with_2_index_left = somePathString.replace('<<index>>',(str(j)),1)
+                    for i in range(0,indexArray[1]):
+                        String_with_1_index = String_with_2_index_left.replace('<<index>>',(str(i)),1)
+                        for k in range(0,indexArray[2]):
+                            String_with_0_index = String_with_1_index.replace('<<index>>',(str(k)),1)
+                            if not String_with_0_index in alreadyAddedPath:
+                                if path.hasSuffix:
+                                    for suffix in path.suffixList:
+                                        worksheetMapping.write('A'+str(row+1),String_with_0_index + "|" + suffix)
+                                        worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
+                                        # Pflichtangabe
+                                        if path.isMandatory:
+                                            worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
+                                        row += 1
+                                elif not path.hasSuffix:
+                                    worksheetMapping.write('A'+str(row+1),String_with_0_index)
+                                    worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
+                                    # Pflichtangabe
+                                    if path.isMandatory:
+                                        worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
+                                    row += 1
+                                alreadyAddedPath.append(String_with_0_index)
+            elif path.maxIndexNumber == 4:
+                somePathString = path.pathString
+                for m in range(0,indexArray[0]):
+                    String_with_3_index_left = somePathString.replace('<<index>>',(str(m)),1)
+                    for j in range(0,indexArray[1]):
+                        String_with_2_index_left = String_with_3_index_left.replace('<<index>>',(str(j)),1)
+                        for i in range(0,indexArray[2]):
+                            String_with_1_index = String_with_2_index_left.replace('<<index>>',(str(i)),1)
+                            for k in range(0,indexArray[3]):
+                                String_with_0_index = String_with_1_index.replace('<<index>>',(str(k)),1)
+                                if not String_with_0_index in alreadyAddedPath:
+                                    if path.hasSuffix:
+                                        for suffix in path.suffixList:
+                                            worksheetMapping.write('A'+str(row+1),String_with_0_index + "|" + suffix)
+                                            worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
+                                            # Pflichtangabe
+                                            if path.isMandatory:
+                                                worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
+                                            row += 1
+                                    elif not path.hasSuffix:
+                                        worksheetMapping.write('A'+str(row+1),String_with_0_index)
+                                        worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
+                                        # Pflichtangabe
+                                        if path.isMandatory:
+                                            worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
+                                        row += 1
+                                    alreadyAddedPath.append(String_with_0_index)
 
-            for key in path.indexPathDict:
-                print(key)
-                print ("=")
-                print(path.indexPathDict[key])
 
-def pathContainedInIndexedElement(pathString, indexedElement):
-    if indexedElement in pathString:
-        return True
-    else:
-        return False
+            """
+            elif path.maxIndexNumber > 1:
+                #[5,3,3] = IndexArray
+                resultArray = []
+                final_path = setNextIndex(path.pathString, resultArray, indexArray, 0)
+
+                # Baue oben rekursiv zusammen und fuege hinzu, wenn ein Pfad fertig ist fertig
+                if path.hasSuffix:
+                    for suffix in path.suffixList:
+                        worksheetMapping.write('A'+str(row+1),final_path + "|" + suffix)
+                        worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
+                        # Pflichtangabe
+                        if path.isMandatory:
+                            worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
+                        row += 1
+                elif not path.hasSuffix:
+                    worksheetMapping.write('A'+str(row+1),final_path)
+                    worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
+                    # Pflichtangabe
+                    if path.isMandatory:
+                        worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
+                    row += 1
+            """
+
+def setNextIndex(realPathString, resultArray, indexArray, i):
+    if not "<<index>>" in realPathString:
+        return realPathString
+    for j in range(0, indexArray[i]):
+        nuuuuPath = realPathString.replace('<<index>>',(str(j)),1)
+        print(nuuuuPath)
+        nuuuuPath = setNextIndex(nuuuuPath, resultArray, indexArray, i + 1)
+
+"""
+    s = iter(pathString.split("<<index>>"))
+    (next(s) + "".join(str(y)+x for x,y in zip(s,myList)))
+    """
+""" 
+Funktionierende Version die nur daran scheitert, dass Python nicht robust genug ist und die Stacks verwirft und dann None returned.
+Das Problem ist das Konstrukt: Zuviele Stacks weil er in der For-Loop die Reku
+def foo(step=0):
+    for i in range(step, 4):
+        print step
+        foo(step+1)
+
+def setNextIndex(realPathString, indexArray, i):
+    if not "<<index>>" in realPathString:
+        return realPathString
+    for j in range(0, indexArray[i]):
+        nuuuuPath = realPathString.replace('<<index>>',(str(j)),1)
+        print(nuuuuPath)
+        nuuuuPath = setNextIndex(nuuuuPath, indexArray, i + 1)
+
+tail-calling is certainly not just for lists; any tree structure wins. Try traversing a tree without recursive calls in a loop; 
+you wind up modeling the stack by hand. Finally, your argument that Python was never designed this way is certainly true, 
+but does little to convince me that it's a god design.
+
+Seeing a recursion in a loop looks quite strange. It looks to me like hammering a screw or screwing a nail.
+"""
 
 def readCSVasDF(inputCSV):
     csvPath = os.path.join(workdir, 'Input', 'CSV', inputCSV + '.csv')

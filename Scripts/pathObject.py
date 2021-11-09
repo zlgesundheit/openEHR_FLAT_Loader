@@ -8,7 +8,6 @@
 
 ###########################################################################
 # Standard library imports
-import types
 # Third party imports
 # Local application imports
 
@@ -20,6 +19,7 @@ class pathObject:
     hasIndex:bool = None
     maxIndexNumber:int = None
     indexPathDict:dict = None
+    indexArray:list = None
     isMandatory:bool = None
     rmType:str = None
     datatype:str = None ## TODO
@@ -49,7 +49,7 @@ class pathObject:
                 for i in range(0, len(splits)-1):
                     if i == 0:
                         indexPath = splits[0].join(splits[:i+1]) + "<<index>>"
-                        indexPathDict[indexPath] = None
+                        indexPathDict[indexPath] = None # Hier soll dann rein wie oft der Index vorkommt, zu dem Key indexPath
                     else: 
                         indexPath = "<<index>>".join(splits[:i+1]) + "<<index>>"
                         indexPathDict[indexPath] = None
@@ -84,9 +84,13 @@ class pathObject:
         return str(printOutput)
 
 # Test
-#path = pathObject( )
-#path.id = "Bericht"
-#path.pathString = "Index1<<index>>/Index2<<index>>/Beispiel/Beispiel2/Index3<<index>>"
-#print(path.pathString)
-#print(path.maxIndexNumber)
-#print(path.indexPathList)
+"""
+path = pathObject( )
+path.pathString = "natars_tzusatz/schmerzerfassung/beliebiges_ereignis:<<index>>/spezifisches_symptom_anzeichen:<<index>>/symptom_krankheitsanzeichen/schmerzstärke:<<index>>"
+print(path.pathString)
+print(path.maxIndexNumber)
+for key in path.indexPathDict:
+    print("\n")
+    print(key)
+    print(path.indexPathDict)
+#"""
