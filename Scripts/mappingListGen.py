@@ -50,7 +50,8 @@ def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems):
     '''Composes mapping-worksheet based on index-values from userinput.'''
 
     # add paths + dropdown list
-    list_of_paths_where_indexes_where_queried = []
+    local_indexPathDict = {}
+    list_of_queried_index_elements = []
     row = 1
     for path in pathArray:
         # Falls Path keinen Index 
@@ -66,33 +67,50 @@ def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems):
                 worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
                 row += 1
         # Falls Path Index hat
-        elif path.hasIndex and path.pathString not in list_of_paths_where_indexes_where_queried:
-            indexArray = queryInputsForPath(path) # ? 
-            # TODO, dass ein Pfadindex nur einmal gefragt wird (ez. Liste welche schon gefragt wurden). Man koennte für das Objekt das Index-Array z.B. in einem DICT speichern 
-            # und wiederverwenden -> NUTZ DIE CONTAINS METHODE DIE DU EH GESCHRIEBEN HAST -> Nutze Index Objeckt für den PFad, wenn der Pfad den Pfad contained, für den der Index ist...irgendwie so!
-            for indexInput in indexArray:
-                ## TODO Bei mehreren Indexen im Pfad und damit im IndexArray muss der erste Index in das erste Vorkommen, der zweite ins zweite --> DAS FEHLT HIER NOCH! TODO TODO TODO
-                for j in range(0,indexInput):
-                    realPathString = path.pathString.replace( '<<index>>', (str(j)) )
-                    # Wenn Suffix dann pro Suffix einen Pfad
-                    if path.hasSuffix:
-                        for suffix in path.suffixList:
-                            worksheetMapping.write('A'+str(row+1),realPathString + "|" + suffix)
+        elif path.hasIndex:   # how to get the index number that shall not be quieried?
+            
+            # Abfrage von Indexen   (hier werden alle Pfade durchlaufen die mind. einen Index haben und nur einmal gefragt)
+            # Wir springen hier von PfadObjekt zu Pfadobjekt. Dadurch muessen wir die erfassten Indexpfadwerte zwischenspeichern 
+            # um sie den PFadobjekten hinzufuegen zu koennen, die danach kommen und fuer die kein Input kommt.
+            for indexPath in path.indexPathDict:
+                path.indexPathDict[indexPath] = []
+                if not indexPath in list_of_queried_index_elements:
+                    print (f'Wie viele Werte sind zum Element ({indexPath}) vorhanden?')
+                    userInput = int(input('Anzahl der Messwerte: '))
+                    path.indexPathDict[indexPath].append(userInput)
+                    list_of_queried_index_elements.append(indexPath)
+                    local_indexPathDict[indexPath] = path.indexPathDict[indexPath]
+                else:
+                    path.indexPathDict[indexPath] = local_indexPathDict[indexPath]
+            
+            # Jedes Pfad-Objekt hat nun in path.indexPathDict die Angabe, wie oft das Element vorkommt und zwar als Array mit Wert fuer jeden Index!
+            for userInputArray in path.indexPathDict:
+                for index in path.indexPathDict[userInputArray]:   
+                    # Werden nacheinander die Index-Inputs fuer einen Pfad durchlaufen -> Solange man immer das erste vorkommen ersetzt sollten so alle nacheinander ersetzt werden?
+                    realPathString = path.pathString
+                    for j in range(0,index):
+                        realPathString = realPathString.replace('<<index>>',(str(j)),1)
+                        # Wenn Suffix dann pro Suffix einen Pfad
+                        if path.hasSuffix:
+                            for suffix in path.suffixList:
+                                worksheetMapping.write('A'+str(row+1),realPathString + "|" + suffix)
+                                worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
+                                row += 1
+                        elif not path.hasSuffix:
+                            worksheetMapping.write('A'+str(row+1),realPathString)
                             worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
                             row += 1
-                    elif not path.hasSuffix:
-                        worksheetMapping.write('A'+str(row+1),realPathString)
-                        worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
-                        row += 1
-            list_of_paths_where_indexes_where_queried.append(path.pathString)
 
-def queryInputsForPath(path):
-    indexArray = []
-    for indexPath in path.indexPathList:
-        print (f'Wie viele Werte sind zum Element ({indexPath}) vorhanden?')
-        userInput = int(input('Anzahl der Messwerte: '))
-        indexArray.append(userInput)
-    return indexArray
+            for key in path.indexPathDict:
+                print(key)
+                print ("=")
+                print(path.indexPathDict[key])
+
+def pathContainedInIndexedElement(pathString, indexedElement):
+    if indexedElement in pathString:
+        return True
+    else:
+        return False
 
 def readCSVasDF(inputCSV):
     csvPath = os.path.join(workdir, 'Input', 'CSV', inputCSV + '.csv')

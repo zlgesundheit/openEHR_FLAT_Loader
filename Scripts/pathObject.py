@@ -19,7 +19,7 @@ class pathObject:
     hasSuffix:bool = None
     hasIndex:bool = None
     maxIndexNumber:int = None
-    indexPathList:list = None
+    indexPathDict:dict = None
     isMandatory:bool = None
     rmType:str = None
     datatype:str = None ## TODO
@@ -37,7 +37,7 @@ class pathObject:
                 super(pathObject, self).__setattr__("hasSuffix", True)
             else:
                 super(pathObject, self).__setattr__("hasSuffix", False)
-        # Wird der PathString gesetzt, dann wird hasIndex, maxIndexNumber und indexPathList geupdated
+        # Wird der PathString gesetzt, dann wird hasIndex, maxIndexNumber und indexPathDict geupdated
         elif name == "pathString":
             super().__setattr__("pathString", value)
             if "<<index>>" in value:
@@ -45,15 +45,15 @@ class pathObject:
                 maxIndexNumber = value.count("<<index>>") 
                 super(pathObject, self).__setattr__("maxIndexNumber", maxIndexNumber)
                 splits = value.split("<<index>>")
-                indexPathList = []
+                indexPathDict = {}
                 for i in range(0, len(splits)-1):
                     if i == 0:
                         indexPath = splits[0].join(splits[:i+1]) + "<<index>>"
-                        indexPathList.append(indexPath)
+                        indexPathDict[indexPath] = None
                     else: 
                         indexPath = "<<index>>".join(splits[:i+1]) + "<<index>>"
-                        indexPathList.append(indexPath)
-                super(pathObject, self).__setattr__("indexPathList", indexPathList)
+                        indexPathDict[indexPath] = None
+                super(pathObject, self).__setattr__("indexPathDict", indexPathDict)
             else:
                 super(pathObject, self).__setattr__("hasIndex", False)
                 super(pathObject, self).__setattr__("maxIndexNumber", 0)
