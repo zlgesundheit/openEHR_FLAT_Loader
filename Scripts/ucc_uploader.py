@@ -17,9 +17,7 @@ def main():
     pass  
 
 def uploadResourceToEhrIdFromCSV(baseUrl, repo_auth, csv_dataframe, resource, templateName, quick_and_dirty_index):
-    'Wird dann in buildComp auffgerufen, liest hier die aktuelle CSV mit ehrIds ein' ### TODO ordentlich ins tool integrieren
-    # Jede Zeile hat eine Ressource. Das ResourceDict (das in Build-Comp durchlaufen wird) entspricht also den indexen der CSV
-    # Quick and Dirty nimm einen index entgegen und lade Ressource "x" hoch zu csv_dataframe[ehrId][x]
+    'Wird dann in buildComp auffgerufen, liest hier die aktuelle CSV mit ehrIds ein' 
     ehrId = csv_dataframe['ehrId'][quick_and_dirty_index]
 
     url = f'{baseUrl}/rest/ecis/v1/composition/?format=FLAT&ehrId={ehrId}&templateId={templateName}'
@@ -35,7 +33,6 @@ def uploadResourceToEhrIdFromCSV(baseUrl, repo_auth, csv_dataframe, resource, te
         'Prefer': 'return=minimal'
     }
 
-    #response = requests.post(url, data=payload, headers=headers)
     response = requests.post(url, headers=headers, data=payload) #, timeout = 15)
 
     print ("Status beim Upload der Composition: " + str(response.status_code))
@@ -54,8 +51,6 @@ def createEHRsForAllPatients(baseUrl, repo_auth, csv_dataframe, patient_id_colum
         # Try to retrieve existing ehr by "subject id" and "subject namespace" 
         subject_id = csv_dataframe[patient_id_column_name][index]
         subject_namespace = csv_dataframe[subject_namespace_column_name][index]
-
-        ### TODO LATER: Maybe while creating an already existing ehr / subject_id the server will state that it already exist. Would save time
 
         # Create ehr with subject id = identifizierenden ID und subject namespace = z.B. "ucc_sha1_h_dathe"
         ehrId = createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_namespace)
