@@ -36,7 +36,7 @@ def uploadResourceToEhrIdFromCSV(baseUrl, repo_auth, csv_dataframe, resource, te
     }
 
     #response = requests.post(url, data=payload, headers=headers)
-    response = requests.request("POST", url, headers=headers, data=payload, timeout = 15)
+    response = requests.post(url, headers=headers, data=payload) #, timeout = 15)
 
     print ("Status beim Upload der Composition: " + str(response.status_code))
     print (response.text)
