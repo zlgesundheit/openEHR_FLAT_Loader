@@ -19,6 +19,8 @@ class config():
     inputCSV = 'test1'
     createehrs = '1'
     directupload = '0'
+    subjectidcolumn  = None
+    subjectnamespace  = None
 
     def __init__(self):
         # TODO Exception Handling if config not exist etc.?
@@ -31,6 +33,8 @@ class config():
         self.inputCSV                = parser['DEFAULT']['inputCSV']
         self.createehrs              = parser['DEFAULT']['createehrs']
         self.directupload            = parser['DEFAULT']['directupload']
+        self.subjectidcolumn         = parser['DEFAULT']['subjectidcolumn']
+        self.subjectnamespace        = parser['DEFAULT']['subjectnamespace']
 
 # Get AuthHeaders
 def getAuthHeader(username, pw) -> str:
