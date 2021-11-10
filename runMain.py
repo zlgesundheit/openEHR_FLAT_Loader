@@ -61,13 +61,12 @@ def runStep(choosenStep):
     elif(choosenStep == str(2)):
         resArray = buildComp.main(config)
 
-        # Create EHRs
-        csvPath = Path(workdir + "\\Input\\CSV\\" + config.inputCSV + ".csv")
-        csv_dataframe = pd.read_csv(csvPath, header=0, delimiter=";", dtype=str)
-        anzahl_eintraege = len(csv_dataframe.index)
-
         #Create EHRs for all patients in csv
         if config.createehrs == "1":
+            csvPath = Path(workdir + "\\Input\\CSV\\" + config.inputCSV + ".csv")
+            csv_dataframe = pd.read_csv(csvPath, header=0, delimiter=";", dtype=str)
+            anzahl_eintraege = len(csv_dataframe.index)
+
             print (f'Create {anzahl_eintraege} EHRs')
             csv_dataframe = ucc_uploader.createEHRsForAllPatients(config.targetAdress, config.targetAuthHeader, csv_dataframe, config.subjectidcolumn , config.subjectnamespace)
             csv_dataframe.to_csv(csvPath, sep=";", index = False, encoding = "UTF-8")
@@ -77,6 +76,10 @@ def runStep(choosenStep):
 
         # Send resource to server
         if config.directupload == "1":
+            csvPath = Path(workdir + "\\Input\\CSV\\" + config.inputCSV + ".csv")
+            csv_dataframe = pd.read_csv(csvPath, header=0, delimiter=";", dtype=str)
+            anzahl_eintraege = len(csv_dataframe.index)
+
             print ("Upload Compositions")
             quick_and_dirty_index = 0
             for res in resArray:

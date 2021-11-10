@@ -59,7 +59,11 @@ def createEHRsForAllPatients(baseUrl, repo_auth, csv_dataframe, patient_id_colum
 
         # Create ehr with subject id = identifizierenden ID und subject namespace = z.B. "ucc_sha1_h_dathe"
         ehrId = createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_namespace)
-        csv_dataframe['ehrId'][index] = ehrId
+        # TODO Was tun falls die ehrId schon existiert
+        if not ehrId is None:
+            csv_dataframe['ehrId'][index] = ehrId
+        else:
+            pass
 
     return csv_dataframe
 
@@ -87,13 +91,13 @@ def createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_na
         "is_queryable": True
     })
 
-    header = {
+    headers = {
         'Authorization' : repo_auth,
         'Content-Type': 'application/json',
         'Prefer' : 'return=representation'
     }
 
-    response = requests.post(url, data=payload, headers=header)
+    response = requests.post(url, data=payload, headers=headers)
 
     if response.status_code == 200 or response.status_code == 201 or response.status_code == 204:
         response_dict = json.loads(response.text)
@@ -101,8 +105,20 @@ def createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_na
         print ("    " + "Created EHR with ehrID: " + ehrId)
     else:
         print ("    " + "Fehler beim EHR erstellen mit Status: " + str(response.status_code))
-        ehrId = None
-        pass
+        # ehrId zu dem Subject abfragen -> Warum zur Hölle gibt der Konflikt eine PartyId die sich nirgend wiederfindet und ich muss nochmal abfragen..
+        
+        url = f'{baseUrl}/rest/openehr/v1/ehr?subject_id={subject_id}&subject_namespace={subject_namespace}'
+        headers = {
+        'Authorization' : repo_auth,
+        'Content-Type': 'application/json',
+        'Prefer' : 'return=representation'
+        }
+
+        response_bei_conflict = requests.get(url, headers=headers)
+        
+        response_dict = json.loads(response_bei_conflict.text)
+        ehrId = response_dict['ehr_id']['value']
+        print ("\t EHR existierte bereits mit ehrID: " + ehrId)
 
     return ehrId
 
