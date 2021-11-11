@@ -34,9 +34,9 @@ Preparation:
 Start the Tool:  
 
     - Run Tool using the runFlatLoader.bat on Windows (otherwise run main.py)
-        - Run Step 1 of the Tool by typing 1 and hit Enter
+        - Run Step 1 of the Tool by typing `1` and hit `Enter`
 
-Some Templates require additonal information:  
+Some Templates require additonal information: 
 
     - If an Element in the Template can occur multiple times in one composition you will be asked how many times it occurs in your data.
         - Input the maximum number of occurences and hit enter
@@ -50,7 +50,19 @@ Actual manual Mapping-Task:
         - On the Sheets "FLAT_Paths" and "CSV_Items" you find some additional information about both parts of the mapping
 ---
 ### 2. To build (and upload) Resources 
+    
+Set Config-Variables: 
+
     - The config.ini-File allows you to select options 
+        - `createehrs = 1` -> Tool will create EHRs in the repository 
+            - This needs the names of the column(s) in the csv: `subjectidcolumn` and `subjectnamespacecolumn` or `ehrId`
+            - ehrIds for these entrys will be stored in column `ehrId` in the CSV
+        - `directupload = 1` -> Tool will upload the build resources for the corresponding `ehrId` in the csv
+    
+Start the Tool:  
+
+    - Run Tool using the runFlatLoader.bat on Windows (otherwise run main.py)
+        - Run Step 2 of the Tool by typing `2` and hit `Enter`
 
 4. Run the tool again and perform step 2:
 	- Step 2: Build Compositions based on the Mapping
