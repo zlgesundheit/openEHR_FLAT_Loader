@@ -48,6 +48,39 @@ Perform and enjoy the Mapping-Task:
     - You will find the Mapping-Table-File in Directory "ManualTasks" named by the corresponding Template
         - You can now map the `Items/Paths from the Template` to `Columns in your Data` by selecting CSV-Items from the Dropdown in Column B
         - On the Sheets "FLAT_Paths" and "CSV_Items" you find some additional information about both parts of the mapping
+
+You might have noticed that there is some information required that is not yet included in your data
+
+    - Mandatory data fields are marked with "Pflichtfeld" in the Mapping-Table
+
+    - openEHR-Compositions need to hold metadata that you shall ad to your Data/.csv-File so you can map it
+    - Common Metadata:
+        - "<path>/composer|name": "jendrik.richter@med.uni-goettingen.de",
+        - "<path>/language|code": "de",
+        - "<path>/language|terminology": "ISO_639-1",
+        - "<path>/territory|code": "DE",
+        - "<path>/territory|terminology": "ISO_3166-1"
+    - Other Metadata:
+        - You can find terminologies like `openehr` online or see the Docs-Folder.
+        - Example:
+            Category:
+            - "<path>/category|value": "event"
+            - "<path>/category|code": 433
+            - "<path>/category|terminology": "openehr"
+            Setting:
+            - "<path>/context/setting|value": "other care"
+            - "<path>/context/setting|code": 238
+            Any time:
+            - openEHR uses ISO8601 date strings.
+            - For additional information consider the [openEHR-Specification Datatypes](https://specifications.openehr.org/releases/RM/latest/data_types.html#_data_types_information_model)
+        - For some fields and templates it is possible to use terminology `local` and supply any values.
+        - For Questions about terminology you may contact the modellers of your specific openEHR-Template. 
+
+    - Please note, that some elements have some metadata fields that only need to be present if the element itself is present.
+        - Those are marked as "Bedingt Pflichtelement" in the Mapping-Table
+
+    - After adding the additional metadata to the Data/.csv-File re-run step 1 of the tool.
+
 ---
 ### 2. To build (and upload) Resources 
     
