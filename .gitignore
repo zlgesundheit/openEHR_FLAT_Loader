@@ -1,5 +1,4 @@
 # Config
-*.ini
 # git update-index --assume-unchanged config.ini
 
 # Logs
