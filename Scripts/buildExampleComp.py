@@ -44,7 +44,7 @@ def buildExample(workdir, pathArray, templateName, baseUrl, repo_auth, type):
                 # Dict["Pfad"] = valid Example-Value 
                 if path.hasSuffix:
                     for suffix in path.suffixList:
-                        dict[path.pathString + "|" + suffix] = path.exampleValue
+                        dict[path.pathString + "|" + suffix] = path.exampleValue # TODO haelt bald ein Example-Value-Dict
                 elif not path.hasSuffix:
                     dict[path.pathString] = path.exampleValue
 
@@ -59,7 +59,7 @@ def buildExample(workdir, pathArray, templateName, baseUrl, repo_auth, type):
         try:
             compId = ucc_uploader.uploadResourceToEhrId(baseUrl, repo_auth, ehrId, flat_res, templateName)
         except RuntimeError:
-            print("Oops! Die Example-Composition wurde nicht erfolgreich hochgeladen.")
+            print("\tOops! Die Example-Composition wurde nicht erfolgreich hochgeladen.")
             raise SystemExit
 
         # Download Canonical Composition
@@ -96,7 +96,7 @@ def buildExample(workdir, pathArray, templateName, baseUrl, repo_auth, type):
         try:
             compId = ucc_uploader.uploadResourceToEhrId(baseUrl, repo_auth, ehrId, flat_res, templateName)
         except RuntimeError:
-            print("Oops! Die Example-Composition wurde nicht erfolgreich hochgeladen.")
+            print("\tOops! Die Example-Composition wurde nicht erfolgreich hochgeladen.")
             raise SystemExit
 
         # Download CANONICAL Maximal Composition

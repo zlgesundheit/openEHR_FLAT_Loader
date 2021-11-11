@@ -24,23 +24,21 @@ def uploadResourceToEhrId(baseUrl, repo_auth, ehrId, resource, templateName):
     ##payload needs to be json! Otherwise it will just do nothin and run forever
     payload = json.dumps(resource, default=convert)
 
-    print ("\t" + payload)
-
     headers = {
         'Authorization': repo_auth,
         'Content-Type': 'application/json',
         'Prefer': 'return=minimal'
     }
 
+    print (payload)
     response = requests.post(url, headers=headers, data=payload) #, timeout = 15)
-
-    print ("\tStatus beim Upload der Composition: " + str(response.status_code))
-    print ("\t" + response.text + "\n")
     
     if response.status_code == 400:
         raise RuntimeError
 
-    resp_json = json.load(response.json)
+    resp_json = json.loads(response.text)
+    print ("\tStatus beim Upload der Composition: " + str(response.status_code))
+    print ("\t" + "CompositionUid: " + resp_json["compositionUid"] + "\n")
 
     return resp_json["compositionUid"]
 

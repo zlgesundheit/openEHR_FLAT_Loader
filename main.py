@@ -83,7 +83,7 @@ def runStep(choosenStep):
             print ("Upload Compositions:")
             quick_and_dirty_index = 0
             for res in resArray:
-                'Wird dann in buildComp auffgerufen, liest hier die aktuelle CSV mit ehrIds ein' 
+                #Wird dann in buildComp auffgerufen, liest hier die aktuelle CSV mit ehrIds ein
                 ehrId = csv_dataframe['ehrId'][quick_and_dirty_index]
                 ucc_uploader.uploadResourceToEhrId(config.targetAdress, config.targetAuthHeader, ehrId, res, config.templateName)
 
@@ -116,7 +116,8 @@ def printInfoText():
         # TODO Columns wie Namespace SubjectId etc von Hand aus CSV auswählbar machen -> ohne in die Config gehen zu müssen
         + os.linesep + indent +"Schritt 1: OPT hochladen und Mapping erzeugen" 
         + os.linesep + indent +"Schritt 2: Ressourcen erzeugen (und hochladen)"
-        + os.linesep + indent + indent + indent + "Setze 'createehrs' und 'directupload' in config.ini (1 = Ein, 0 = Aus)"
+        + os.linesep + indent + indent + "EHRs erzeugen mit 'createehrs   = 1' in config.ini"
+        + os.linesep + indent + indent + "Upload        mit 'directupload = 1' in config.ini"
         + os.linesep + indent +"Schritt 3: Erzeuge Min/Max FLAT/CANONICAL Example-Composition -- WORK IN PROGRESS --"
     )
     print(os.linesep)
