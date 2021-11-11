@@ -1,5 +1,5 @@
 # openEHR_FLAT_Loader
-ETL-Tool to transform and upload Source Data to an openEHR-Repository (as openEHR-Resources for a given Template).
+ETL-Tool to transform Source Data and upload to an openEHR-Repository (for a given Template).
 
 ---
 #### _Disclaimer_ 
