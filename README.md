@@ -3,7 +3,7 @@ ETL-Tool to transform Source Data and upload to an openEHR-Repository (for a giv
 
 ---
 #### _Disclaimer_ 
-This Tool is not a finished product. Put flat its a ragbag of python scripts for half-automated ETL.
+This Tool is not a finished product. Put flat its a ragbag of python scripts for half-automated ETL.  
 Use with caution and only upload anonymized or pseudonymized data sets. 
 
 
