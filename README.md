@@ -64,7 +64,9 @@ You might have noticed that there is some information required that is not yet i
         - "<path>/territory|code": "DE",
         - "<path>/territory|terminology": "ISO_3166-1"
     - Other Metadata:
-        - You can find terminologies like `openehr` online or see the Docs-Folder.
+        - You can find terminologies like `openehr` in the Docs-Folder or online. 
+            - The use of SNOMED CT and LOINC for fields with CODED_TEXTs should have been taken care of by the Template Modeller .
+            - The ETLer should just be able to use the information given in the template plus some additonal openEHR-Peculiarities.
         - Example:
             Category:
             - "<path>/category|value": "event"
