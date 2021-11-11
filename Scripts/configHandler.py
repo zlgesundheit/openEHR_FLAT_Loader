@@ -20,7 +20,7 @@ class config():
     createehrs = '1'
     directupload = '0'
     subjectidcolumn  = None
-    subjectnamespace  = None
+    subjectnamespacecolumn  = None
 
     def __init__(self):
         # TODO Exception Handling if config not exist etc.?
@@ -34,7 +34,7 @@ class config():
         self.createehrs              = parser['DEFAULT']['createehrs']
         self.directupload            = parser['DEFAULT']['directupload']
         self.subjectidcolumn         = parser['DEFAULT']['subjectidcolumn']
-        self.subjectnamespace        = parser['DEFAULT']['subjectnamespace']
+        self.subjectnamespacecolumn        = parser['DEFAULT']['subjectnamespacecolumn']
 
 # Get AuthHeaders
 def getAuthHeader(username, pw) -> str:

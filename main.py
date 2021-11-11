@@ -67,7 +67,7 @@ def runStep(choosenStep):
             anzahl_eintraege = len(csv_dataframe.index)
 
             print (f'Create {anzahl_eintraege} EHRs:')
-            csv_dataframe = ucc_uploader.createEHRsForAllPatients(config.targetAdress, config.targetAuthHeader, csv_dataframe, config.subjectidcolumn , config.subjectnamespace)
+            csv_dataframe = ucc_uploader.createEHRsForAllPatients(config.targetAdress, config.targetAuthHeader, csv_dataframe, config.subjectidcolumn , config.subjectnamespacecolumn)
             csv_dataframe.to_csv(csvPath, sep=";", index = False, encoding = "UTF-8")
         else:
             print ("EHR Creation is disabled in Config.ini")
