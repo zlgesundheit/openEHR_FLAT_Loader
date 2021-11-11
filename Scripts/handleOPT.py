@@ -26,12 +26,16 @@ def main(config):
     # Upload OPT to server
     uploadOPT(config.templateName, optFile, config.targetAdress, config.targetopenEHRAPIadress, config.targetAuthHeader)
 
-    # Query and save WebTemplate
+    # Query
     json_resp = queryWebtemplate(config.templateName, config.targetAdress, config.targetflatAPIadress, config.targetAuthHeader)
 
     # We load the webTemplate-Part of the Response in a nice tree structure
     webTemplateResp = json.dumps(json_resp['webTemplate'], ensure_ascii=False)
     webTemp = json.loads(webTemplateResp)
+
+    # Save WebTemplate to Manual Tasks Directory because it is so damn important for the mapping task
+    filePath = os.path.join(workdir, 'ManualTasks')
+    storeWebTemplate(filePath, config.templateName, webTemp)
 
     print (indent + "OPT exists at server and WebTemplate has been downloaded")
     return webTemp
@@ -85,11 +89,11 @@ def queryWebtemplate(templateName, targetAdress, targetflatAPIadress, targetAuth
         raise SystemExit
     return json_resp
 
-def storeWebTemplate(path, templateName, json_resp) -> None:
+def storeWebTemplate(path, templateName, webTemp) -> None:
     """Store a JSON-String as a file"""
     filePath = os.path.join(workdir, path, templateName + '_WebTemplate.json')
     with open(filePath, 'w', encoding="utf-8") as templateFile:
-        json.dump(json_resp['webTemplate'], templateFile, indent = 4, ensure_ascii=False)
+        json.dump(webTemp, templateFile, indent = 4, ensure_ascii=False)
 
 if __name__ == '__main__':
     main()

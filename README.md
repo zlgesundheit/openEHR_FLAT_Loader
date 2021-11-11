@@ -82,8 +82,12 @@ You might have noticed that there is some information required that is not yet i
             "<path>/encoding|code": "UTF-8",
             "<path>/encoding|terminology": "IANA_character-sets"
             - IANA character sets or the openEHR-Specification are pretty handy here -> find in Docs-Folder or online
-        - For some fields and templates it is possible to use terminology `local` and supply any values.
-        - For Questions about terminology you may contact the modellers of your specific openEHR-Template. 
+    
+    - ATTENTION! In the ManualTasks-Directory there is a file called <Template-Name>_WebTemplate.json
+        - This file holds human-readable information about the structure of the Composition, it´s datatypes, CODE- and Value-Sets, Terminologies and more.
+        - Search for information in the WebTemplate if you feel you are missing vital information  
+          about missing metadata or data formats in the columns you have to add in your Data/.csv-File
+    - For Questions about terminology you may contact the modellers of your specific openEHR-Template. 
 
     - Please note, that some elements have some metadata fields that only need to be present if the element itself is present.
         - Those are marked as "Bedingt Pflichtelement" in the Mapping-Table
