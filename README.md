@@ -1,48 +1,58 @@
-## Disclaimer
-
-This Tool is not a finished product. Use with caution.
-Only upload anonymized or pseudonymized data sets.
-
-If you find any problems when using the program feel free to create an Issue on Gitlab.
-
 # openEHR_FLAT_Loader
+ETL-Tool to transform and upload Source Data to an openEHR-Repository (as openEHR-Resources for a given Template).
 
-ETL-Tool to transform and upload Source Data to an openEHR-Repository (as openEHR-Resources for a given Template).  
+---
+#### _Disclaimer_ 
+This Tool is not a finished product. Use with caution.´Only upload anonymized or pseudonymized data sets.  
+If you find any problems when using this tool feel free to create an Issue on Gitlab.
 
+---
 ### _Prerequisites:_
 - Project was developed and tested on Windows using Python 3.8.10 with "openpyxl" and "requests"
 - You need an openEHR-Repo that supports the FLAT-Format and WebTemplates (e.g. [EHRBase](https://github.com/ehrbase/ehrbase))
     - Dockered version of the EHRBase can be found from different public sources.
 
+---
 ## Usage
-1. Place some files and modify config
-    - Place your .OPT-File in the Input-Folder under /OPT
-    - Place your .CSV-File in the Input-Folder under /CSV
+Features:
+1. Create a Mapping-Table in xlsx/Excel-Format
+2. Create Compositions and upload to openEHR-Repository
+3. [PLANNED] Create an Example-Composition in FLAT or CANONICAL Json-Format
+
+### 1. To create the Mapping-Table:
+    - Place your Template (.opt-File) in the Input-Folder under /OPT
+    - Place your Data (.csv-File) in the Input-Folder under /CSV
     - Edit the config.ini and at least set:
         - templatename
         - inputcsv
         - targetrepoadress  (Base adress of the openEHR-Server e.g. `http://141.5.100.199/ehrbase`)
-        - targetauthheader  (Base64 encode of "username:password")
-2. Run Tool using the runFlatLoader.bat on Windows (otherwise run main.py)
-    - It is also possible to adjust these settings directly in the config-file 
-        - -> See [Config-File](#config-file)
-    - You will be asked which step of the process you want to perform
-        - Step 1: Upload OPT and generate Mapping-(Excel-)File
-3. To build build Compositions you have to supply mapping information in the Mapping-Table and save the Excel-file
+        - targetauthheader  (Base64 encode of "username:password")  
+    - Run Tool using the runFlatLoader.bat on Windows (otherwise run main.py)
+        - Run Step 1 of the Tool by typing 1 and hit Enter
+
+    - If an Element in the Template can occur multiple times in one composition you will be asked how many times it occurs in your data.
+        - Input the maximum number of occurences and hit enter
+        - Example: Blood Pressure Value is measured multiple times per Patient
+
+    - You will find the Mapping-Table-File in Directory "ManualTasks" named by the corresponding Template
+        - You can now map the `Items/Paths from the Template` to `Columns in your Data` by selecting CSV-Items from the Dropdown in Column B
+        - On the Sheets "FLAT_Paths" and "CSV_Items" you find some additional information about both parts of the mapping
+---
+### 2. To build (and upload) Resources 
+    - The config.ini-File allows you to select options 
+
 4. Run the tool again and perform step 2:
 	- Step 2: Build Compositions based on the Mapping
-4. After performing Step 2 you will find the FLAT-Composition in the Output-Folder 
 
 ## Context / About openEHR
-To transform data from different sources (e.g. SQL-DB, CSV, etc.) into openEHR-Resources a ETL-Job - for a specific Template / Operational Template - has to be built.  
+To transform data from different sources (e.g. SQL-DB, CSV, etc.) into openEHR-Resources a ETL-Job - for a specific Template / Operational Template - has to be created (most of the time this is done by by modellers / domain experts).  
 The idea of [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/-/tree/a58c9f479ab9d5f6ebad10906963949a806ad7c4) as well as this  **openEHR_FLAT_Loader** is to build these openEHR-Resource using a Mapping (manually supplied by the user) from DataFields to TemplateFields.
 
 _Process-Overview:_
-
 ![BPMN-Process-Overview](/Docs/Figures/Process_Overview_Screenshot.jpg)
 
-## Manual (Usage and openEHR) -- Work in Progress --
-A guide on how to use the tool and explaination of the context (openEHR, data curation) is currently being developed.
+## Manual (Usage, Example and openEHR) -- Work in Progress --
+A guide on how to use the tool and explaination of the context (openEHR, data curation) is currently being developed.  
 The manual can be found [here](/Docs/MANUAL_openEHR_FLAT_Loader.md) and is located in the "Docs" folder.
 
 ## License
