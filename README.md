@@ -36,7 +36,7 @@ Start the Tool:
     - Run Tool using the runFlatLoader.bat on Windows (otherwise run main.py)
         - Run Step 1 of the Tool by typing `1` and hit `Enter`
 
-Give additional information (that is required for the mapping for some Templates that include repeatable elements): 
+Give additional information (which the mapping requires for some Templates that include repeatable elements): 
 
     - If an Element in the Template can occur multiple times in one composition you will be asked how many times it occurs in your data.
         - Input the maximum number of occurences and hit enter
