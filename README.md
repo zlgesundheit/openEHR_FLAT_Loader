@@ -93,6 +93,8 @@ You might have noticed that there is some information required that is not yet i
         - Those are marked as "Bedingt Pflichtelement" in the Mapping-Table
 
     - After adding the additional metadata to the Data/.csv-File re-run step 1 of the tool.
+        - Note that the Mapping-Table-File in ManualTasks-Directory is overwritten when re-running.
+        - You may duplicate the mapping before. (The old mapping will not include newly added .csv-Columns in the Dropdowns..)
 
 ---
 ### 2. To build (and upload) Resources 
