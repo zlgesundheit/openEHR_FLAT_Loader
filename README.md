@@ -20,6 +20,8 @@ Features:
 3. [PLANNED] Create an Example-Composition in FLAT or CANONICAL Json-Format
 
 ### 1. To create the Mapping-Table:
+
+Preparation:
     - Place your Template (.opt-File) in the Input-Folder under /OPT
     - Place your Data (.csv-File) in the Input-Folder under /CSV
     - Edit the config.ini and at least set:
@@ -28,14 +30,17 @@ Features:
         - targetrepoadress  (Base adress of the openEHR-Server e.g. `http://141.5.100.199/ehrbase`)
         - targetauthheader  (Base64 encode of "username:password")  
 
+Start the Tool:
     - Run Tool using the runFlatLoader.bat on Windows (otherwise run main.py)
         - Run Step 1 of the Tool by typing 1 and hit Enter
 
+Some Templates require additonal information:
     - If an Element in the Template can occur multiple times in one composition you will be asked how many times it occurs in your data.
         - Input the maximum number of occurences and hit enter
         - Example: Blood Pressure Value is measured multiple times per Patient
             - The Path blood_pressure:0 might hold the values about the first measurement and blood_pressure:1 the values for the second measure.
 
+Actual manual Mapping-Task:
     - You will find the Mapping-Table-File in Directory "ManualTasks" named by the corresponding Template
         - You can now map the `Items/Paths from the Template` to `Columns in your Data` by selecting CSV-Items from the Dropdown in Column B
         - On the Sheets "FLAT_Paths" and "CSV_Items" you find some additional information about both parts of the mapping
