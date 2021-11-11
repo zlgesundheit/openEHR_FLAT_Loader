@@ -78,6 +78,10 @@ You might have noticed that there is some information required that is not yet i
             Any time:
             - openEHR uses ISO8601 date strings.
             - For additional information consider the [openEHR-Specification Datatypes](https://specifications.openehr.org/releases/RM/latest/data_types.html#_data_types_information_model)
+            Encodings:
+            "<path>/encoding|code": "UTF-8",
+            "<path>/encoding|terminology": "IANA_character-sets"
+            - IANA character sets are pretty handy here -> find in Docs-Folder or online
         - For some fields and templates it is possible to use terminology `local` and supply any values.
         - For Questions about terminology you may contact the modellers of your specific openEHR-Template. 
 
