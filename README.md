@@ -27,12 +27,14 @@ Features:
         - inputcsv
         - targetrepoadress  (Base adress of the openEHR-Server e.g. `http://141.5.100.199/ehrbase`)
         - targetauthheader  (Base64 encode of "username:password")  
+
     - Run Tool using the runFlatLoader.bat on Windows (otherwise run main.py)
         - Run Step 1 of the Tool by typing 1 and hit Enter
 
     - If an Element in the Template can occur multiple times in one composition you will be asked how many times it occurs in your data.
         - Input the maximum number of occurences and hit enter
         - Example: Blood Pressure Value is measured multiple times per Patient
+            - The Path blood_pressure:0 might hold the values about the first measurement and blood_pressure:1 the values for the second measure.
 
     - You will find the Mapping-Table-File in Directory "ManualTasks" named by the corresponding Template
         - You can now map the `Items/Paths from the Template` to `Columns in your Data` by selecting CSV-Items from the Dropdown in Column B
