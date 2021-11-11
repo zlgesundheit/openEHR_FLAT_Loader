@@ -4,9 +4,7 @@
 
 # Dieses Skript extrahiert FLAT-Pfade aus einem WebTemplate. Das WebTemplate basiert auf dem simSDT-WebTemplate Format der Firma Better, 
 # welches sowohl die Better Platform als auch die EHRBase unterstützt. 
-# 
 # Die EHRBase bietet FLAT-Funktionalitäten unter dem "ecis"-Endpunkt an. - Stand Version 0.16 (beta)
-# 
 # Die openEHR-Community plant die Übernahme des simSDT-Formats in den Standard. - https://specifications.openehr.org/releases/ITS-REST/Release-1.0.2/simplified_data_template.html
 #
 # FLAT-PFADE 
@@ -16,19 +14,16 @@
 # - Suffixe werden an den Pfad am Ende angehängt. -> Element/Element2|suffix
 #
 # Output
-# - Ausgabe ist ein Dictionary mit Pfadnamen als key ala dict['Pfadname']['rmType'] und dict['Pfadname']['mandatory']
-# - mandatory ist 0 oder 1, wobei 1 = Pflichtfeld bedeutet
-###########################################################################
-
-# List of Types
+# - Ausgabe ist ein Array von Pfadobjekten (siehe pathObject.py)
+# 
+# List of openEHR-Types
 # https://specifications.openehr.org/releases/RM/latest/data_types.html
-
-# Notes are here: https://pad.gwdg.de/nGok78r6SCK58rlZttKOAw?both
-
-# TODO
-# Es wäre gut auch die Validation-Angaben mitzuschleppen. Bei Elementen, die diese haben. 
-
+#
+# TODOs:
+# TODO Es wäre gut auch die Validation-Angaben mitzuschleppen. Bei Elementen, die diese haben. 
+# TODO Zu jedem Pfad sollte im Pfadobjekt ein valides Beispiel angelegt werden -> Zu händeln in PathObject.py
 ###########################################################################
+
 # Standard library imports
 import traceback #debug
 # Third party imports
@@ -92,8 +87,12 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
 
             path.id = element['id']
             path.pathString = suffixPath
-            path.isMandatory = localMandatoryFlag
             path.rmType = element['rmType']
+            # Ganzer Pfad ist Pflicht
+            path.isMandatory = localMandatoryFlag
+            # Bedingt Pflicht (nur wenn das Element existiert)
+            if not localMandatoryFlag and element['min'] == 1:
+                path.isCondMandatory = True
 
             case4 = ["DV_TEXT", "DV_BOOLEAN", "DV_URI", "DV_EHR_URI", "DV_DATE_TIME", "DV_DATE", "DV_TIME"]
 

@@ -9,7 +9,8 @@
 from os import stat
 import requests
 #import grequests
-# TODO parallelize requests using grequest -> install grequest in correct python kernel
+# TODO parallelize requests using grequest -> install grequest in correct python kernel -> Ist das notwendig. 
+# ----> Performancetests von Luca abwarten. EHRBase geht evtl in die Knie bei gleichzeitigen Anfragen :D
 import json
 import numpy as np
 
@@ -25,7 +26,7 @@ def uploadResourceToEhrIdFromCSV(baseUrl, repo_auth, csv_dataframe, resource, te
     ##payload needs to be json! Otherwise it will just do nothin and run forever
     payload = json.dumps(resource, default=convert)
 
-    print (payload)
+    print ("\t" + payload)
 
     headers = {
         'Authorization': repo_auth,
@@ -35,8 +36,8 @@ def uploadResourceToEhrIdFromCSV(baseUrl, repo_auth, csv_dataframe, resource, te
 
     response = requests.post(url, headers=headers, data=payload) #, timeout = 15)
 
-    print ("Status beim Upload der Composition: " + str(response.status_code))
-    print (response.text)
+    print ("\tStatus beim Upload der Composition: " + str(response.status_code))
+    print ("\t" + response.text + "\n")
     
 # for numpy int in pandas df 
 def convert(o):
@@ -53,12 +54,7 @@ def createEHRsForAllPatients(baseUrl, repo_auth, csv_dataframe, patient_id_colum
         subject_namespace = csv_dataframe[subject_namespace_column_name][index]
 
         # Create ehr with subject id = identifizierenden ID und subject namespace = z.B. "ucc_sha1_h_dathe"
-        ehrId = createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_namespace)
-        # TODO Was tun falls die ehrId schon existiert
-        if not ehrId is None:
-            csv_dataframe['ehrId'][index] = ehrId
-        else:
-            pass
+        createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_namespace)
 
     return csv_dataframe
 
@@ -97,9 +93,9 @@ def createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_na
     if response.status_code == 200 or response.status_code == 201 or response.status_code == 204:
         response_dict = json.loads(response.text)
         ehrId = response_dict['ehr_id']['value']
-        print ("    " + "Created EHR with ehrID: " + ehrId)
+        print ("\t" + "Created EHR with ehrID: " + ehrId)
     else:
-        print ("    " + "Fehler beim EHR erstellen mit Status: " + str(response.status_code))
+        print ("\t" + "Fehler beim EHR erstellen mit Status: " + str(response.status_code))
         # ehrId zu dem Subject abfragen -> Warum zur Hölle gibt der Konflikt eine PartyId die sich nirgend wiederfindet und ich muss nochmal abfragen..
         
         url = f'{baseUrl}/rest/openehr/v1/ehr?subject_id={subject_id}&subject_namespace={subject_namespace}'
@@ -113,7 +109,7 @@ def createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_na
         
         response_dict = json.loads(response_bei_conflict.text)
         ehrId = response_dict['ehr_id']['value']
-        print ("\t EHR existierte bereits mit ehrID: " + ehrId)
+        print ("\t  EHR existierte bereits mit ehrID: " + ehrId + "\n")
 
     return ehrId
 

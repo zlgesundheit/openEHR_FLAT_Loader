@@ -2,9 +2,8 @@
 # including all relevant information about cardinality, suffixes, data type, example values, ...
 #
 # Jendrik Richter, Jan Janosch Schneider
-
-# TODO:
-# Example Creation basierend auf dem rmType der Composition
+#
+# TODO: Example Creation basierend auf dem rmType der Composition
 
 ###########################################################################
 # Standard library imports
@@ -21,6 +20,7 @@ class pathObject:
     indexPathDict:dict = None
     indexArray:list = None
     isMandatory:bool = None
+    isCondMandatory:bool = None
     rmType:str = None
     datatype:str = None ## TODO
     exampleValueList:list = None ## TODO

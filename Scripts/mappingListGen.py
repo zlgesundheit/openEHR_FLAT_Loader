@@ -5,7 +5,6 @@
 ############################################################
 # Standard library imports
 import os.path
-from collections import OrderedDict
 # Third party imports
 import xlsxwriter
 import pandas as pd
@@ -31,7 +30,7 @@ def main(templateName, inputCSV, pathArray):
     worksheetPaths = workbook.add_worksheet('FLAT_Paths')
     worksheetCSVPaths = workbook.add_worksheet('CSV_Items')
 
-    # Set Appearance -> Muss man die Worksheets mmit zurueckgeben? TODO
+    # Set Appearance -> TODO Farbliches Hervorheben von Pflichtpfaden o.ä.?
     setAppearanceForAllSheets(workbook, worksheetAutoIndexedMapping, worksheetPaths, worksheetCSVPaths)
 
     df, numberOfCSVitems = readCSVasDF(inputCSV)
@@ -62,18 +61,13 @@ def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems):
             # Wenn Suffix dann pro Suffix einen Pfad
             if path.hasSuffix:
                 for suffix in path.suffixList:
-                    worksheetMapping.write('A'+str(row+1),path.pathString + "|" + suffix)
-                    worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
-                    # Pflichtangabe
-                    if path.isMandatory:
-                        worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
+                    addPathWithSuffix(path.pathString, suffix, row, worksheetMapping, numberOfCSVitems)
+                    addMandatoryColumnEntry(path, row, worksheetMapping)
                     row += 1
             elif not path.hasSuffix:
-                worksheetMapping.write('A'+str(row+1),path.pathString)
-                worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
+                addPathWithoutSuffix(path.pathString, row, worksheetMapping, numberOfCSVitems)
                 # Pflichtangabe
-                if path.isMandatory:
-                    worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
+                addMandatoryColumnEntry(path, row, worksheetMapping)
                 row += 1
         # Falls Path Index hat
         elif path.hasIndex:   # how to get the index number that shall not be quieried?
@@ -99,22 +93,16 @@ def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems):
             if path.maxIndexNumber == 1:
                 for indexStellenMaximum in indexArray:
                     for j in range(0,indexStellenMaximum):
-                        realPathString = path.pathString.replace('<<index>>',(str(j)))
-                        # Wenn Suffix dann pro Suffix einen Pfad -> TODO AUSLAGERN
+                        String_with_0_index = path.pathString.replace('<<index>>',(str(j)))
                         if path.hasSuffix:
                             for suffix in path.suffixList:
-                                worksheetMapping.write('A'+str(row+1),realPathString + "|" + suffix)
-                                worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
-                                # Pflichtangabe
-                                if path.isMandatory:
-                                    worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
+                                addPathWithSuffix(String_with_0_index, suffix, row, worksheetMapping, numberOfCSVitems)
+                                addMandatoryColumnEntry(path, row, worksheetMapping)
                                 row += 1
                         elif not path.hasSuffix:
-                            worksheetMapping.write('A'+str(row+1),realPathString)
-                            worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
+                            addPathWithoutSuffix(String_with_0_index, row, worksheetMapping, numberOfCSVitems)
                             # Pflichtangabe
-                            if path.isMandatory:
-                                worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
+                            addMandatoryColumnEntry(path, row, worksheetMapping)
                             row += 1
             # Das Problem mit mehreren Indexen (n^m^k etc.) :
             # Permutationen klappen nicht, weil die Maximalwerte der einzelnen Indexstellen dann nicht Beachtung finden
@@ -122,30 +110,25 @@ def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems):
             # Array von Laufvariablen das durchlaufen wird war auch irgendwie Mist.
             # Idee: Stückweise Ersetzung im Pfad beginnend von links -> REKURSIV...natürlich
             ## SLOW AND DIRTY weil Python keine Rekursion in For-Schleifen kann.
-            ## TODO In Manual schreiben, dass wir nur Pfade mit bis zu 4 Indexen unterstützen :D :D -> Nochmal mit Jan diskutieren
+            ## In Manual schreiben, dass wir nur Pfade mit bis zu 4 Indexen unterstützen :D :D -> Nochmal mit Jan diskutieren TODO
             elif path.maxIndexNumber == 2:
                 realPathString = path.pathString
                 for j in range(0,indexArray[0]):
                     String_with_1_index_left = realPathString.replace('<<index>>',(str(j)),1)
                     for i in range(0,indexArray[1]):
-                        String_ohne_index = String_with_1_index_left.replace('<<index>>',(str(i)),1)
-                        if not String_ohne_index in alreadyAddedPath:
+                        String_with_0_index = String_with_1_index_left.replace('<<index>>',(str(i)),1)
+                        if not String_with_0_index in alreadyAddedPath:
                             if path.hasSuffix:
                                 for suffix in path.suffixList:
-                                    worksheetMapping.write('A'+str(row+1),String_ohne_index + "|" + suffix)
-                                    worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
-                                    # Pflichtangabe
-                                    if path.isMandatory:
-                                        worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
+                                    addPathWithSuffix(String_with_0_index, suffix, row, worksheetMapping, numberOfCSVitems)
+                                    addMandatoryColumnEntry(path, row, worksheetMapping)
                                     row += 1
                             elif not path.hasSuffix:
-                                worksheetMapping.write('A'+str(row+1),String_ohne_index)
-                                worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
+                                addPathWithoutSuffix(String_with_0_index, row, worksheetMapping, numberOfCSVitems)
                                 # Pflichtangabe
-                                if path.isMandatory:
-                                    worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
+                                addMandatoryColumnEntry(path, row, worksheetMapping)
                                 row += 1
-                            alreadyAddedPath.append(String_ohne_index)
+                            alreadyAddedPath.append(String_with_0_index)
             elif path.maxIndexNumber == 3:
                 somePathString = path.pathString
                 for j in range(0,indexArray[0]):
@@ -157,18 +140,13 @@ def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems):
                             if not String_with_0_index in alreadyAddedPath:
                                 if path.hasSuffix:
                                     for suffix in path.suffixList:
-                                        worksheetMapping.write('A'+str(row+1),String_with_0_index + "|" + suffix)
-                                        worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
-                                        # Pflichtangabe
-                                        if path.isMandatory:
-                                            worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
+                                        addPathWithSuffix(String_with_0_index, suffix, row, worksheetMapping, numberOfCSVitems)
+                                        addMandatoryColumnEntry(path, row, worksheetMapping)
                                         row += 1
                                 elif not path.hasSuffix:
-                                    worksheetMapping.write('A'+str(row+1),String_with_0_index)
-                                    worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
+                                    addPathWithoutSuffix(String_with_0_index, row, worksheetMapping, numberOfCSVitems)
                                     # Pflichtangabe
-                                    if path.isMandatory:
-                                        worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
+                                    addMandatoryColumnEntry(path, row, worksheetMapping)
                                     row += 1
                                 alreadyAddedPath.append(String_with_0_index)
             elif path.maxIndexNumber == 4:
@@ -184,45 +162,38 @@ def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems):
                                 if not String_with_0_index in alreadyAddedPath:
                                     if path.hasSuffix:
                                         for suffix in path.suffixList:
-                                            worksheetMapping.write('A'+str(row+1),String_with_0_index + "|" + suffix)
-                                            worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
-                                            # Pflichtangabe
-                                            if path.isMandatory:
-                                                worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
+                                            addPathWithSuffix(String_with_0_index, suffix, row, worksheetMapping, numberOfCSVitems)
+                                            addMandatoryColumnEntry(path, row, worksheetMapping)
                                             row += 1
                                     elif not path.hasSuffix:
-                                        worksheetMapping.write('A'+str(row+1),String_with_0_index)
-                                        worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
-                                        # Pflichtangabe
-                                        if path.isMandatory:
-                                            worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
+                                        addPathWithoutSuffix(String_with_0_index, row, worksheetMapping, numberOfCSVitems)
+                                        addMandatoryColumnEntry(path, row, worksheetMapping)
                                         row += 1
                                     alreadyAddedPath.append(String_with_0_index)
 
 
-            """
-            elif path.maxIndexNumber > 1:
-                #[5,3,3] = IndexArray
-                resultArray = []
-                final_path = setNextIndex(path.pathString, resultArray, indexArray, 0)
+"""
+elif path.maxIndexNumber > 1:
+    #[5,3,3] = IndexArray
+    resultArray = []
+    final_path = setNextIndex(path.pathString, resultArray, indexArray, 0)
+"""
 
-                # Baue oben rekursiv zusammen und fuege hinzu, wenn ein Pfad fertig ist fertig
-                if path.hasSuffix:
-                    for suffix in path.suffixList:
-                        worksheetMapping.write('A'+str(row+1),final_path + "|" + suffix)
-                        worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
-                        # Pflichtangabe
-                        if path.isMandatory:
-                            worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
-                        row += 1
-                elif not path.hasSuffix:
-                    worksheetMapping.write('A'+str(row+1),final_path)
-                    worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
-                    # Pflichtangabe
-                    if path.isMandatory:
-                        worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
-                    row += 1
-            """
+def addPathWithSuffix(pathString, suffix, row, worksheetMapping, numberOfCSVitems):
+    worksheetMapping.write('A'+str(row+1),pathString + "|" + suffix)
+    worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
+
+def addPathWithoutSuffix(pathString, row, worksheetMapping, numberOfCSVitems):
+    worksheetMapping.write('A'+str(row+1),pathString)
+    worksheetMapping.data_validation('B'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
+
+def addMandatoryColumnEntry(path, row, worksheetMapping):
+    # Pflichtangabe
+    if path.isMandatory:
+        worksheetMapping.write('C'+str(row+1),"Pflichtpfad")
+    # Bedingt Pflichtelement
+    if path.isCondMandatory:
+        worksheetMapping.write('C'+str(row+1),"Bedingt Pflichtelement")
 
 def setNextIndex(realPathString, resultArray, indexArray, i):
     if not "<<index>>" in realPathString:
@@ -233,9 +204,9 @@ def setNextIndex(realPathString, resultArray, indexArray, i):
         nuuuuPath = setNextIndex(nuuuuPath, resultArray, indexArray, i + 1)
 
 """
-    s = iter(pathString.split("<<index>>"))
-    (next(s) + "".join(str(y)+x for x,y in zip(s,myList)))
-    """
+s = iter(pathString.split("<<index>>"))
+(next(s) + "".join(str(y)+x for x,y in zip(s,myList)))
+"""
 """ 
 Funktionierende Version die nur daran scheitert, dass Python nicht robust genug ist und die Stacks verwirft und dann None returned.
 Das Problem ist das Konstrukt: Zuviele Stacks weil er in der For-Loop die Reku
@@ -288,11 +259,10 @@ def composeFlatPathsWorksheet(pathArray, worksheetPaths):
             worksheetPaths.write(j, 2, "Pflichtpfad")
             nrMandatoryPaths += 1
         j += 1
-        # TODO Bedingt Pflicht angeben (Item ist Pflicht, wenn Parent-Element vorher existiert)
     print( indent + "Anzahl der Pflichtpfade: " + str(nrMandatoryPaths) )
 
 def setAppearanceForAllSheets(workbook, worksheetAutoIndexedMapping, worksheetPaths, worksheetCSVPaths):
-    # Allgemein -> TODO Not used atm
+    # Allgemein
     mapping_item_cell_format = workbook.add_format()
     mapping_item_cell_format.set_align('valign')
     mapping_item_cell_format.set_text_wrap()
