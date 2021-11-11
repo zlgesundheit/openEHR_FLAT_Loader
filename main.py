@@ -39,7 +39,7 @@ def main():
     printInfoText()
 
     # Query User Input
-    choosenStep = input("Bitte Ziffer eingeben: ")
+    choosenStep = input("Bitte Schritt wählen (1,2,3,4) eingeben: ")
 
     # Run Script Part/Step that was choosen by the user
     runStep(choosenStep)
@@ -105,18 +105,16 @@ def printInfoText():
     print("Willkommen im openEHR_FLAT_Loader-Commandline-Tool")
     print(os.linesep)
     print("Mithilfe dieses Tools können beliebige tabellarische Daten in das interoperable openEHR-Format transformiert werden."
-        + os.linesep
-        + os.linesep + "Geben Sie in der Config-Datei entsprechend die Variablen für Template, CSV und Repository an. Führen Sie Schritt 1"
-        + os.linesep + "aus, um erst ein Mapping zu erzeugen, dass (nach manuellem Ausfüllen) in Schritt 2 für die automatisierte"
-        + os.linesep + "Erzeugung von openEHR-Ressourcen aus ihren tabellarischen Daten genutzt wird."
+        + os.linesep + "Geben Sie in der Config-Datei entsprechend die Variablen für Template, CSV und Repository an."
         + os.linesep
         # Auswahl von im OPT-Ordner existierenden Dateien + Abfrage welche genutzt werden soll? TODO
         # TODO Columns wie Namespace SubjectId etc von Hand aus CSV auswählbar machen -> ohne in die Config gehen zu müssen
         + os.linesep + indent +"Schritt 1: OPT hochladen und Mapping erzeugen" 
-        + os.linesep + indent +"Schritt 2: Ressourcen erzeugen"
-        + os.linesep + "Für das Anlegen von EHRs und den Upload setzen Sie in der Config entsprechend 'createehrs' und 'directupload' auf den Wert 1"
+        + os.linesep + indent +"Schritt 2: Ressourcen erzeugen (und hochladen)"
+        + os.linesep + indent + indent + indent + "Setze 'createehrs' und 'directupload' in config.ini (1 = Ein, 0 = Aus)"
+        + os.linesep + indent +"Schritt 3: Erzeuge Min/Max FLAT Example-Composition -- WORK IN PROGRESS -- Creates FLAT Minimal by now"
+        + os.linesep + indent +"Schritt 4: Erzeuge Canonical Example-Composition(s) TODO"
     )
-    print(os.linesep + "Auswahl:")
     print(os.linesep)
 
 def createDir(path):
