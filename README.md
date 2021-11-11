@@ -16,16 +16,16 @@ ETL-Tool to transform and upload Source Data to an openEHR-Repository (as openEH
 
 ## Usage
 1. Place some files and modify config
-  - Place your .OPT-File in the Input-Folder under /OPT
-  - Place your .CSV-File in the Input-Folder under /CSV
-  - Edit the config.ini and at least set:
-    - templatename
-    - inputcsv
-    - targetrepoadress  (Base adress of the openEHR-Server e.g. `http://141.5.100.199/ehrbase`)
-    - targetauthheader  (Base64 encode of "username:password")
+    - Place your .OPT-File in the Input-Folder under /OPT
+    - Place your .CSV-File in the Input-Folder under /CSV
+    - Edit the config.ini and at least set:
+        - templatename
+        - inputcsv
+        - targetrepoadress  (Base adress of the openEHR-Server e.g. `http://141.5.100.199/ehrbase`)
+        - targetauthheader  (Base64 encode of "username:password")
 2. Run Tool using the runFlatLoader.bat on Windows (otherwise run main.py)
     - It is also possible to adjust these settings directly in the config-file 
-      - -> See [Config-File](#config-file)
+        - -> See [Config-File](#config-file)
     - You will be asked which step of the process you want to perform
         - Step 1: Upload OPT and generate Mapping-(Excel-)File
 3. To build build Compositions you have to supply mapping information in the Mapping-Table and save the Excel-file
