@@ -4,18 +4,12 @@
 #
 # Create JSON-String from Dict 
 # [Key=Path-Name, Value=data from csv from column that belongs to Path-Name]
-#
-# Note: We flipped the Mapping from CSV <- FLAT-Path to FLAT-Path <- CSV 
-# (left part is fixed in Mapping Table, right side gets "mapped" to it)
-# If we need the old code: https://gitlab.gwdg.de/medinfpub/openehr_flat_loader/-/commit/db9222717de557c13c36067b20a6a561bc842e4c
-# For changes consider Issue #18: https://gitlab.gwdg.de/medinfpub/openehr_flat_loader/-/issues/18
 # 
 # Jendrik Richter (UMG)
 #########################################################################
 # Standard library imports
 import os.path
 import json
-import re
 import warnings
 import traceback #debug
 # Third party imports
@@ -98,7 +92,7 @@ def storeDictArrayAsRes(dictArray, templateName):
         with open(filePath,"w", encoding = 'UTF-8') as resFile:
             json.dump(res, resFile, default=convert, indent=4, ensure_ascii=False)
         i += 1
-    print (indent + str(i) + f' Ressourcen erstellt und im Ordner "Output" gespeichert.')
+    print (indent + str(i) + f' Ressourcen erstellt und im Ordner "Output" gespeichert. \n')
 
 def xlsxAsDataFrame(templateName):
     xlsxPath = os.path.join(workdir, 'ManualTasks', templateName + '_MAPPING.xlsx')

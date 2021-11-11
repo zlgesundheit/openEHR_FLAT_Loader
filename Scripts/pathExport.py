@@ -4,9 +4,7 @@
 
 # Dieses Skript extrahiert FLAT-Pfade aus einem WebTemplate. Das WebTemplate basiert auf dem simSDT-WebTemplate Format der Firma Better, 
 # welches sowohl die Better Platform als auch die EHRBase unterstützt. 
-# 
 # Die EHRBase bietet FLAT-Funktionalitäten unter dem "ecis"-Endpunkt an. - Stand Version 0.16 (beta)
-# 
 # Die openEHR-Community plant die Übernahme des simSDT-Formats in den Standard. - https://specifications.openehr.org/releases/ITS-REST/Release-1.0.2/simplified_data_template.html
 #
 # FLAT-PFADE 
@@ -16,159 +14,128 @@
 # - Suffixe werden an den Pfad am Ende angehängt. -> Element/Element2|suffix
 #
 # Output
-# - Ausgabe ist ein Dictionary mit Pfadnamen als key ala dict['Pfadname']['rmType'] und dict['Pfadname']['mandatory']
-# - mandatory ist 0 oder 1, wobei 1 = Pflichtfeld bedeutet
-###########################################################################
-
-# List of Types
+# - Ausgabe ist ein Array von Pfadobjekten (siehe pathObject.py)
+# 
+# List of openEHR-Types
 # https://specifications.openehr.org/releases/RM/latest/data_types.html
-
-# Notes are here: https://pad.gwdg.de/nGok78r6SCK58rlZttKOAw?both
-
-# TODO
-# Es wäre gut auch die Validation-Angaben mitzuschleppen. Bei Elementen, die diese haben. 
-
+#
+# TODOs:
+# TODO Es wäre gut auch die Validation-Angaben mitzuschleppen. Bei Elementen, die diese haben. 
+# TODO Zu jedem Pfad sollte im Pfadobjekt ein valides Beispiel angelegt werden -> Zu händeln in PathObject.py
 ###########################################################################
+
 # Standard library imports
-from collections import defaultdict
 import traceback #debug
 # Third party imports
 # Local application imports
+from Scripts import pathObject
 
-indent = "    "
-case4 = ["DV_TEXT", "DV_BOOLEAN", "DV_URI", "DV_EHR_URI", "DV_DATE_TIME", "DV_DATE", "DV_TIME"]
+indent = "\t"
 
 ############################### Main ###############################
 
 def main(webTemp, templateName):
+    print ("PathExport is running:")
 
-    pathDict = defaultdict(list)
+    pathArray = []
     try:
-        # Durchlaufe den Baum
         path = webTemp['tree']['id']
-        parentMandatoryChain = ""
-        pathDict = goLow(path, pathDict, webTemp['tree']['children'],parentMandatoryChain)
+        pathIsMandatoryFlag = True 
+
+        # Durchlaufe den Baum
+        pathArray = goLow(path, pathArray, pathIsMandatoryFlag, webTemp['tree']['children'])
 
         # Gib some Output
-        print ( indent + "Anzahl extrahierter Pfade: " + str( len(pathDict) ) )
+        print ( indent + "Anzahl extrahierter Pfade: " + str( len(pathArray) ) )
     except Exception as e:
         print(indent + templateName + "_Webtemplate ist fehlerhaft.")
         print (indent + str(e))
         traceback.print_exc()
         raise SystemExit
 
-    return pathDict
+    print(indent + "Extracted FLAT-Paths from the WebTemplate")
+    return pathArray
 
 ############################### Methods ###############################
 
-def addSuffixes(pathDict, element, suffixPath, suffixPathArr, mandatoryChain):
-    for suffix in suffixPathArr:
-        if suffix == "":
-            addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath, mandatoryChain)
-        else:
-            addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath+"|"+suffix, mandatoryChain)
-
-def addPathAndSetRmTypeAndMandatory(pathDict, element, suffixPath, mandatoryChain):
-    # Pflichtelement oder nicht
-    if element['min'] == 1 and '0' in mandatoryChain:
-        # Bedingt Mandatory = -1
-        pathDict[suffixPath] = { 'rmType' : element['rmType'], 'mandatory' : "-1" }
-    elif element['min'] == 1 and not '0' in mandatoryChain:
-        pathDict[suffixPath] = { 'rmType' : element['rmType'], 'mandatory' : "1" }
-    elif element['min'] == 0:
-        pathDict[suffixPath] = { "rmType" : element['rmType'], "mandatory" : "0"  }
-
-    return pathDict
-
 # Rekursiv den Baum durchlaufen
-def goLow(parentPath, pathDict, children, parentMandatoryChain):
+def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
     self = children
+
     for element in self:
-        # Pfad zum aktuellen Element 
-        # Falls Kardinalitaet mehrfacheintraege zulaesst (Max: -1) dann <<index>>
+        # Achtung: Bei jedem Element wieder neue die parentFlag holen, sonst bleibt die Flag nach einem Nicht-Pflichtelement False!
+        localMandatoryFlag = pathIsMandatoryFlag
+
+        # Pfad zum aktuellen Element -> Bei (Max: -1) Mehrfacheintraege zulaessig dann :<<index>> im Pfad
         if element['max'] == -1:
-            suffixPath = parentPath + '/' + element['id'] + '<<index>>'
+            suffixPath = parentPath + '/' + element['id'] + ':<<index>>'
         else:
             suffixPath = parentPath + '/' + element['id']
 
-        # Mandatory
-        if element['min'] == 1:
-            mandatoryChain = parentMandatoryChain + "/1"
-        else:
-            mandatoryChain = parentMandatoryChain + "/0"
+        # Checken ob wir weiterhin auf einem Pflichtpfad sind
+        if element['min'] != 1:
+            localMandatoryFlag = False
 
         # Bei weiteren 'children' tiefer gehen    
         if 'children' in element:
-            pathDict = goLow(suffixPath, pathDict, element['children'], mandatoryChain)
-        # Falls Element "Inputs" hat -> Gehe jedes Inputs-Element durch und speichere Pfade
-        elif 'inputs' in element:
-            #print( element['rmType'] )
+            pathArray = goLow(suffixPath, pathArray, localMandatoryFlag, element['children'])
+        
+        # Falls Element Inputs hat oder weder Inputs noch Children, dann ist es ein Blatt
+        elif 'inputs' in element or element['rmType'] == "CODE_PHRASE":
+            # Pfad-Objekt anlegen
+            path = pathObject.pathObject()
+
+            path.id = element['id']
+            path.pathString = suffixPath
+            path.rmType = element['rmType']
+            # Ganzer Pfad ist Pflicht
+            path.isMandatory = localMandatoryFlag
+            # Bedingt Pflicht (nur wenn das Element existiert)
+            if not localMandatoryFlag and element['min'] == 1:
+                path.isCondMandatory = True
+
+            case4 = ["DV_TEXT", "DV_BOOLEAN", "DV_URI", "DV_EHR_URI", "DV_DATE_TIME", "DV_DATE", "DV_TIME"]
 
             # Case 1: PARTY_PROXY -> id, id_scheme, id_namespace, name
             if (element['rmType'] == "PARTY_PROXY"):
-                suffixes = ['id','id_scheme','id_namespace','name']
-                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
-
+                path.suffixList = ['id','id_scheme','id_namespace','name']
             # Case 2: DV_IDENTIFIER -> id, type, issuer, assigner
             elif (element['rmType'] == "DV_IDENTIFIER"):
-                suffixes = ['id','type','issuer','assigner']
-                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
-
+                path.suffixList = ['id','type','issuer','assigner']
             # Case 3: DV_QUANTITY
             elif (element['rmType'] == "DV_QUANTITY"):
-                suffixes = ['magnitude','unit']
-                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
-
+                path.suffixList = ['magnitude','unit']
             # Case 4: DV_TEXT, DV_BOOLEAN, DV_URI, DV_EHR_URI,DV_DATE_TIME, DV_DATE, DV_TIME -> No Suffix
             elif element['rmType'] in case4:
-                # No Suffix
-                suffixes = ['']
-                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
-
+                path.suffixList = []
             # Case 5: DV_MULTIMEDIA -> none + mediatype + alternatetext + size
             elif element['rmType'] == "DV_MULTIMEDIA":
-                # Suffixes
-                suffixes = ['','mediatype','alternatetext','size']
-                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
-
+                path.suffixList = ['','mediatype','alternatetext','size']
             # Case 6: DV_PROPORTION -> numerator, denominator, type
             elif element['rmType'] == "DV_PROPORTION":
-                suffixes = ['numerator','denominator','type']
-                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
-
-            # Case 7 is below in the else-Part because there are no "inputs" present
-
+                path.suffixList = ['numerator','denominator','type']
+            # Case 7: CODE_PHRASE
+            elif (element['rmType'] == "CODE_PHRASE"):
+                path.suffixList = ['code','terminology']
             # Case 8: DV_COUNT
             elif (element['rmType'] == "DV_COUNT"):
-                suffixes = ['value']
-                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
-
+                path.suffixList = ['value']
             # Case 9: DV_ORDINAL
             elif (element['rmType'] == "DV_ORDINAL"):
-                suffixes = ['value','code','ordinal']
-                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
-
+                path.suffixList = ['value','code','ordinal']
             # Case 10: DV_CODED_TEXT 
             elif (element['rmType'] == "DV_CODED_TEXT"):
-                suffixes = ['value','code','terminology']
-                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
-
+                path.suffixList = ['value','code','terminology']
             # Case 11: DV_PARSABLE -> value, formalism
             elif (element['rmType'] == "DV_PARSABLE"):
-                suffixes = ['value','formalism']
-                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
-
+                path.suffixList = ['value','formalism']
             # Case 12: DV_DURATION -> year,month,day,week,hour,minute,second	
             elif (element['rmType'] == "DV_DURATION"):
-                suffixes = ['year','month','day','week','hour','minute','second']
-                addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
+                path.suffixList = ['year','month','day','week','hour','minute','second']         
 
-        # Case 7: CODE_PHRASE
-        elif (element['rmType'] == "CODE_PHRASE"):
-            suffixes = ['code','terminology']
-            addSuffixes(pathDict, element, suffixPath, suffixes, mandatoryChain)
+            pathArray.append(path)
 
-    return pathDict
+    return pathArray
 
 if __name__ == '__main__':
     main()
