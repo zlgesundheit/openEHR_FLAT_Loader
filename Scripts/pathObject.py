@@ -23,7 +23,7 @@ class pathObject:
     isCondMandatory:bool = None
     rmType:str = None
     datatype:str = None ## TODO
-    exampleValueList:list = None ## TODO
+    exampleValue = "Beispiel" # None ## TODO
     mentionedTerminologiesList:list = None ## TODO
     
     def __init__(self):

@@ -22,6 +22,7 @@ from Scripts import buildComp
 from Scripts import pathExport
 from Scripts import mappingListGen
 from Scripts import ucc_uploader
+from Scripts import buildExampleComp
 
 #Init Config-Object
 config = configHandler.config()
@@ -51,7 +52,7 @@ def runStep(choosenStep):
         # Upload OPT to openEHR-Repo if necessary
         webTemp = handleOPT.main(config)
         
-        # Extrahiere Pfade in Dict 
+        # Extrahiere Pfade in Array von Pfadobjekten 
         pathArray = pathExport.main(webTemp, config.templateName)
 
         # Baue Mapping
@@ -88,6 +89,16 @@ def runStep(choosenStep):
         else:
             print ("Direct Upload is disabled in Config.ini")
             pass
+    
+    elif(choosenStep == str(3)):
+        # Upload OPT to openEHR-Repo if necessary
+        webTemp = handleOPT.main(config)
+        
+        # Extrahiere Pfade in Array von Pfadobjekten 
+        pathArray = pathExport.main(webTemp, config.templateName)
+
+        # Build Example
+        buildExampleComp.main(workdir, pathArray, config.templateName, "min")
 
 def printInfoText():
     print(os.linesep)
