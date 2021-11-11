@@ -34,9 +34,6 @@ def main(config):
     # Read Excel-File as data frame
     mapTabDF = xlsxAsDataFrame(config.templateName)
 
-    # Get rid of "NaN"-Values in mapTabDF['CSV-Column']
-    # mappedCSVItemsWOnan = [x for x in mapTabDF['CSV-Column'] if pd.isnull(x) == False]
-
     resArray = []
     try:
         if mappingIsEmpty(mapTabDF):
@@ -57,15 +54,10 @@ def main(config):
                     gemappteSpalteAusCSV = mapTabDF['CSV-Column'][xlsxIndex]
                     if str(gemappteSpalteAusCSV) != "nan":
                         # Erstelle einen Dict-Eintrag mit KEY=PATH und VALUE=WERT in der dem KEY zugeordneten Spalte
-                        ###ADHOC EINGEFUEGTES NAN-HANDLING (Kontext UCC-Import)
                         if str(dataDF[ gemappteSpalteAusCSV ][csvIndex]) != "nan":
                             dict[path] = dataDF[ gemappteSpalteAusCSV ][csvIndex]
                         else:
                             pass
-                            #dict[path] = emptyString <<<- leerer string hilft nicht, da die EHRBase einen passenden Eintrag erwartet
-                        
-                        # Neues Dataframe erzeugen und mit Apply die Operation vornehmen? Ist das performanter auf großen Datensätzen? iterrow vermeiden
-                        # newFrame = dataDF.apply()
 
                 # Add Dict to Array of these Dicts
                 resArray.append(dict)
@@ -77,8 +69,7 @@ def main(config):
         traceback.print_exc()
         raise SystemExit
 
-    # Store ALL Entrys / Resources as .json-files for later use or upload
-    # TODO Store ehrId in resource-filename for uploader later!!! TODO
+    # Erstellte Compositions im Output-Ordner speichern
     storeDictArrayAsRes(resArray, config.templateName)
 
     return resArray
@@ -86,6 +77,7 @@ def main(config):
 ############################### Methods ###############################
 
 def storeDictArrayAsRes(dictArray, templateName):
+    '''Dump Dicts as JSON-String in Files'''
     i = 0
     for res in dictArray:
         filePath = os.path.join(workdir, 'Output', templateName + '_resource' + str(i) + ".json" )
@@ -95,23 +87,25 @@ def storeDictArrayAsRes(dictArray, templateName):
     print (indent + str(i) + f' Ressourcen erstellt und im Ordner "Output" gespeichert. \n')
 
 def xlsxAsDataFrame(templateName):
+    '''Read Mapping as Dataframe'''
     xlsxPath = os.path.join(workdir, 'ManualTasks', templateName + '_MAPPING.xlsx')
     mapTabDF = pd.read_excel(xlsxPath, "Auto-indexed Mapping", header=0, engine='openpyxl', dtype=str) 
     #engine openpyxl not xlrd since xlrd drop support for non-xls-files
     return mapTabDF
 
 def csvAsDataFrame(inputCSV):
+    '''Read CSV as Dataframe'''
     csvPath = os.path.join(workdir, 'Input', 'CSV', inputCSV + '.csv')
     dataDF = pd.read_csv(csvPath, header=0, delimiter=";")
     return dataDF
 
-# Workaround because Pandas uses some panda data types that are NOT serializable. Use like json.dumps(dictArray[0]), default=convert)
 def convert(o):
+    '''Workaround because Pandas uses some panda data types that are NOT serializable. Use like json.dumps(dictArray[0]), default=convert)'''
     if isinstance(o, np.int64): return o.item()  
     raise TypeError
 
 def mappingIsEmpty(mapTabDF):
-    # Checken ob das Mapping leer ist, also nur "nan"-Eintraege vorhanden sind
+    '''Checken ob das Mapping leer ist, also nur "nan"-Eintraege vorhanden sind'''
     empty = True
     for i in mapTabDF['CSV-Column']:
         if str(i) != "nan":

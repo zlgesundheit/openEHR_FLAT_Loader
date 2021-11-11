@@ -39,7 +39,7 @@ def main():
     printInfoText()
 
     # Query User Input
-    choosenStep = input("Bitte Schritt wählen (1,2,3,4) eingeben: ")
+    choosenStep = input("Bitte Schritt wählen (1,2,3) eingeben: ")
 
     # Run Script Part/Step that was choosen by the user
     runStep(choosenStep)
@@ -83,7 +83,9 @@ def runStep(choosenStep):
             print ("Upload Compositions:")
             quick_and_dirty_index = 0
             for res in resArray:
-                ucc_uploader.uploadResourceToEhrIdFromCSV(config.targetAdress, config.targetAuthHeader, csv_dataframe, res, config.templateName, quick_and_dirty_index)
+                'Wird dann in buildComp auffgerufen, liest hier die aktuelle CSV mit ehrIds ein' 
+                ehrId = csv_dataframe['ehrId'][quick_and_dirty_index]
+                ucc_uploader.uploadResourceToEhrId(config.targetAdress, config.targetAuthHeader, ehrId, res, config.templateName)
 
                 quick_and_dirty_index += 1
         else:
@@ -97,8 +99,11 @@ def runStep(choosenStep):
         # Extrahiere Pfade in Array von Pfadobjekten 
         pathArray = pathExport.main(webTemp, config.templateName)
 
-        # Build Example
-        buildExampleComp.main(workdir, pathArray, config.templateName, "min")
+        # Build Maximal Example
+        buildExampleComp.main(workdir, pathArray, config.templateName, config.targetAdress, config.targetAuthHeader, "max")
+        # Build Minimal Example
+        buildExampleComp.main(workdir, pathArray, config.templateName, config.targetAdress, config.targetAuthHeader, "min")
+        
 
 def printInfoText():
     print(os.linesep)
@@ -112,8 +117,7 @@ def printInfoText():
         + os.linesep + indent +"Schritt 1: OPT hochladen und Mapping erzeugen" 
         + os.linesep + indent +"Schritt 2: Ressourcen erzeugen (und hochladen)"
         + os.linesep + indent + indent + indent + "Setze 'createehrs' und 'directupload' in config.ini (1 = Ein, 0 = Aus)"
-        + os.linesep + indent +"Schritt 3: Erzeuge Min/Max FLAT Example-Composition -- WORK IN PROGRESS -- Creates FLAT Minimal by now"
-        + os.linesep + indent +"Schritt 4: Erzeuge Canonical Example-Composition(s) TODO"
+        + os.linesep + indent +"Schritt 3: Erzeuge Min/Max FLAT/CANONICAL Example-Composition -- WORK IN PROGRESS --"
     )
     print(os.linesep)
 

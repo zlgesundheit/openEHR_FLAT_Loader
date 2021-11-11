@@ -17,10 +17,8 @@ import numpy as np
 def main():
     pass  
 
-def uploadResourceToEhrIdFromCSV(baseUrl, repo_auth, csv_dataframe, resource, templateName, quick_and_dirty_index):
-    'Wird dann in buildComp auffgerufen, liest hier die aktuelle CSV mit ehrIds ein' 
-    ehrId = csv_dataframe['ehrId'][quick_and_dirty_index]
-
+def uploadResourceToEhrId(baseUrl, repo_auth, ehrId, resource, templateName):
+    
     url = f'{baseUrl}/rest/ecis/v1/composition/?format=FLAT&ehrId={ehrId}&templateId={templateName}'
 
     ##payload needs to be json! Otherwise it will just do nothin and run forever
@@ -39,6 +37,13 @@ def uploadResourceToEhrIdFromCSV(baseUrl, repo_auth, csv_dataframe, resource, te
     print ("\tStatus beim Upload der Composition: " + str(response.status_code))
     print ("\t" + response.text + "\n")
     
+    if response.status_code == 400:
+        raise RuntimeError
+
+    resp_json = json.load(response.json)
+
+    return resp_json["compositionUid"]
+
 # for numpy int in pandas df 
 def convert(o):
     if isinstance(o, np.int64): return o.item()  
