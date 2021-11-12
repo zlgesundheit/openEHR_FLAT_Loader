@@ -159,6 +159,7 @@ The following third party libraries or contents are part of the openEHR_FLAT_Loa
 * Pandas
 * Numpy
 * xlsxwriter
+* chardet
 
 Part of Python Standard Libs:
 * requests

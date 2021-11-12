@@ -14,7 +14,6 @@
 import os.path
 from os import getcwd
 # Third party imports
-import pandas as pd
 # Local application/script imports
 from Scripts import configHandler
 from Scripts import handleOPT
@@ -31,7 +30,8 @@ workdir = getcwd()
 
 ############################### Main ###############################
 def main():
-    
+    global guessed_encoding
+
     # Check if all directories exist otherwise create them
     checkIfDirsExists()
 
@@ -39,7 +39,11 @@ def main():
     printInfoText()
 
     # Query User Input
-    choosenStep = input("Bitte Schritt wählen (1,2,3) eingeben: ")
+    print ("    Please enter number 1,2 or 3 to run the desired step: ")
+    print ("\n")
+    choosenStep = input("\t") 
+    # WE could add a nice selector menue with 'whaaaaat' or 'inquirer' but that would mean the user needs to install an additional package: no
+    # Input zeigt nichts mehr an, weil durch @echo off im .bat die Ausgabe cleaner wird...
 
     # Run Script Part/Step that was choosen by the user
     runStep(choosenStep)
@@ -55,20 +59,22 @@ def runStep(choosenStep):
         # Extrahiere Pfade in Array von Pfadobjekten 
         pathArray = pathExport.main(webTemp, config.templateName)
 
+        csv_dataframe = configHandler.readCSVasDataFrame(config.inputCSV)
+
         # Baue Mapping
-        mappingListGen.main(config.templateName, config.inputCSV, pathArray)
+        mappingListGen.main(config.templateName, csv_dataframe, pathArray, allindexesareone = config.allindexesareone)
 
     elif(choosenStep == str(2)):
         resArray = buildComp.main(config)
 
         #Create EHRs for all patients in csv
         if config.createehrs == "1":
-            csvPath = os.path.join(workdir, "Input", "CSV", config.inputCSV + ".csv")
-            csv_dataframe = pd.read_csv(csvPath, header=0, delimiter=";", dtype=str)
+            csv_dataframe = csv_dataframe = configHandler.readCSVasDataFrame(config.inputCSV)
             anzahl_eintraege = len(csv_dataframe.index)
 
             print (f'Create {anzahl_eintraege} EHRs:')
             csv_dataframe = ucc_uploader.createEHRsForAllPatients(config.targetAdress, config.targetAuthHeader, csv_dataframe, config.subjectidcolumn , config.subjectnamespacecolumn)
+            csvPath = os.path.join(workdir, 'Input', 'CSV', config.inputCSV + '.csv')
             csv_dataframe.to_csv(csvPath, sep=";", index = False, encoding = "UTF-8")
         else:
             print ("EHR Creation is disabled in Config.ini")
@@ -76,8 +82,7 @@ def runStep(choosenStep):
 
         # Send resource to server
         if config.directupload == "1":
-            csvPath = os.path.join(workdir, "Input", "CSV", config.inputCSV + ".csv")
-            csv_dataframe = pd.read_csv(csvPath, header=0, delimiter=";", dtype=str)
+            csv_dataframe = configHandler.readCSVasDataFrame(config.inputCSV)
             anzahl_eintraege = len(csv_dataframe.index)
 
             print ("Upload Compositions:")
@@ -99,26 +104,31 @@ def runStep(choosenStep):
         # Extrahiere Pfade in Array von Pfadobjekten 
         pathArray = pathExport.main(webTemp, config.templateName)
 
-        # Build Maximal Example
-        buildExampleComp.main(workdir, pathArray, config.templateName, config.targetAdress, config.targetAuthHeader, "max")
         # Build Minimal Example
         buildExampleComp.main(workdir, pathArray, config.templateName, config.targetAdress, config.targetAuthHeader, "min")
-        
+        # Build Maximal Example
+        buildExampleComp.main(workdir, pathArray, config.templateName, config.targetAdress, config.targetAuthHeader, "max")
 
 def printInfoText():
     print(os.linesep)
-    print("Willkommen im openEHR_FLAT_Loader-Commandline-Tool")
+    print("    Welcome to the openEHR_FLAT_Loader-Commandline-Tool!")
     print(os.linesep)
-    print("Mithilfe dieses Tools können beliebige tabellarische Daten in das interoperable openEHR-Format transformiert werden."
-        + os.linesep + "Geben Sie in der Config-Datei entsprechend die Variablen für Template, CSV und Repository an."
+    print("    This tool allows you to transform tabular data into the interoperable openEHR format."
+        + os.linesep + "                                                             (given an existing template)"
+        + os.linesep 
+        + os.linesep + "    Please set variables for template, data/csv-file and repository in config.ini."
         + os.linesep
         # Auswahl von im OPT-Ordner existierenden Dateien + Abfrage welche genutzt werden soll? TODO
         # TODO Columns wie Namespace SubjectId etc von Hand aus CSV auswählbar machen -> ohne in die Config gehen zu müssen
-        + os.linesep + indent +"Schritt 1: OPT hochladen und Mapping erzeugen" 
-        + os.linesep + indent +"Schritt 2: Ressourcen erzeugen (und hochladen)"
-        + os.linesep + indent + indent + "EHRs erzeugen mit 'createehrs   = 1' in config.ini"
-        + os.linesep + indent + indent + "Upload        mit 'directupload = 1' in config.ini"
-        + os.linesep + indent +"Schritt 3: Erzeuge Min/Max FLAT/CANONICAL Example-Composition -- WORK IN PROGRESS --"
+        + os.linesep + indent + "Schritt 1: OPT hochladen und Mapping erzeugen" 
+        + os.linesep + indent + indent +  "   Indexe  mit 'allindexesareone  = 1' in config.ini automatisch auf 1 setzen"
+        + os.linesep
+        + os.linesep + indent + "Schritt 2: Ressourcen erzeugen (und hochladen)"
+        + os.linesep + indent + indent +  "   EHRs    mit 'createehrs   = 1' in config.ini erzeugen"
+        + os.linesep + indent + indent +  "   Upload  mit 'directupload = 1' in config.ini ausführen"
+        + os.linesep
+        + os.linesep + indent + "Schritt 3: Erzeuge Min/Max FLAT/CANONICAL Example-Composition"
+        + os.linesep + indent + indent +  "   -- WORK IN PROGRESS --"
     )
     print(os.linesep)
 
