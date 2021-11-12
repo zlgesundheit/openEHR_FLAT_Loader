@@ -4,103 +4,59 @@
 # Jendrik Richter, Jan Janosch Schneider
 #
 # TODO: Example Creation basierend auf dem rmType des Pfadobjekts
-
 # Beispiele einfach ersichtlich in WebTemplate_Datatypes in Notes and Testing
-
 # Je nach rmType hat der Pfad inputs mit suffixen oder nicht
-
-# Pfad mit "rmType" =  DV_CODED_TEXT -> Hat "inputs" -> Inputs halten Liste mit "suffix", "type", "terminology" -> Bei "Type" = "CODED_TEXT" gibt es in "inputs" eine "list" -> "list enthaelt "value", "label"
-#                                                                                          -> Bei "Type" = "TEXT" ist der Inhalt von "inputs" selbst ein Array mit Elementen mit "suffix", "type","terminology"
-# Inputs haelt je nach "type" andere Inhalte
-
-# Pfad mit "rmType" = DV_QUANTITIY hat "inputs" mit Array mit je "suffix" "type" -> mit z.B. |magnitude => "type" = "DECIMAL" und |unit => "type" = CODED_TEXT mit Liste mit "value","label"
-
-# Pfad mit "rmType" = DV_COUNT hat "inputs" mit Array mit "type" z.B. = INTEGER und "validation" = Liste mit "range" die "min", "minOp", "max", "maxOp" angibt. (Z.B. "min":0,"minOp":">=")
-# Ähnlich DV_DURATION aber einige Inputs für Jahr,Monat,tag, etc. bis Sekunde
-
-# DV_PROPORTION hat evtl. noch im element "proportionTypes" muesste man in dem Fall mit rausholen in PathExport.py #TODO?
-
-# DV_URI hat "type" = "TEXT"
-
-#DV_BOOLEAN
-"""
-"inputs": [
-    {
-        "type": "BOOLEAN"
-    }
-]
-"""
-
-# DV_ORDINAL
-"""
-"inputs": [
-    {
-        "type": "CODED_TEXT",
-        "list": [
-            {
-                "value": "at0021",
-                "label": "Orindalwert1",
-                "localizedLabels": {
-                    "de": "Orindalwert1"
-                },
-                "localizedDescriptions": {
-                    "de": "Beschreibung1"
-                },
-                "ordinal": 1
-            },
-            {
-                "value": "at0022",
-                "label": "Ordinalwert2",
-                "localizedLabels": {
-                    "de": "Ordinalwert2"
-                },
-                "localizedDescriptions": {
-                    "de": "Beschreibung2"
-                },
-                "ordinal": 2
-            },
-            {
-                "value": "at0023",
-                "label": "Ordinalwert3",
-                "localizedLabels": {
-                    "de": "Ordinalwert3"
-                },
-                "localizedDescriptions": {
-                    "de": "Beschreibung3"
-                },
-                "ordinal": 3
-            }
-        ]
-    }
-]
-"""
-
-# ACHTUNG: TODO
-# "rmType" = "CODE_PHRASE"
-# Keine Inputs aber dafuer 2 Suffixe -> |code und |terminology
-
-# PARTY_PROXY hat "suffix", "type"
-
-# DV_MULTIMEDIA hat 
-"""
-"inputs": [
-    {
-        "type": "TEXT"
-    }
-]
-"""
-
-# DV_IDENTIFIER hat "suffix", "type"
-
-# Bei Dates gibts drei Möglichkeiten: DATETIME, DATE und TIME
-# Pfad mit "rmType" = DV_DATE_TIME hat "inputs" mit Array mit "type" z.B. = DATETIME und "validation" z.B. gleich "pattern": "yyyy-mm-ddTHH:MM:SS"
-#                     DV_DATE hat "type" = "DATE" und "validation" mit "pattern": "yyyy-mm-dd"
-#                                          "TIME" dann "pattern": "HH:MM:SS"
 
 ###########################################################################
 # Standard library imports
+from random import randrange
+from sys import maxsize
+from decimal import *
+import os.path
 # Third party imports
+from numpy import float32
 # Local application imports
+
+def setBoundaryByOperator(boundary, operator, changer):
+    final_boundary = None
+    if      operator == "=" or operator == "<=" or operator == ">=": final_boundary = boundary
+    elif    operator == ">": final_boundary = min + changer
+    elif    operator == "<": final_boundary = min - changer
+    return final_boundary
+
+def getNumberOfType(number_type):
+    if   number_type == "INTEGER":  changer = int(1)
+    elif number_type == "DECIMAL":  changer = Decimal(0.1)
+    elif number_type == "REAL":     changer = float32(0.01)  # Single Precision Floating-Point needed (32-bit)
+    elif number_type == "DOUBLE":   changer = float(0.01)  # Double Precision Floating-Point needed (64-bit)
+    else: 
+        print ("Folgender Zahlentyp konnte nicht erkannt werden: " + number_type)
+        # https://specifications.openehr.org/releases/BASE/latest/foundation_types.html#_integer_class
+        raise TypeError
+    return changer
+
+def getExampleICObase64encoded():
+    workdir = os.getcwd()
+    filepath = os.path.join(workdir, "Docs", "DV_Multimedia_Example", "icon_base64_encoded.txt")
+    f = open( filepath, "r")
+    base64_encoded_example_ico = f.read()
+    return base64_encoded_example_ico
+
+def getRandNumberWithOrWithoutValidation(entry, changer):
+    if 'validation' in entry:
+        if 'min' in entry['validation']['range'] and 'max' in entry['validation']['range']:
+            final_lower = setBoundaryByOperator( entry['validation']['range']['min'], entry['validation']['range']['minOp'], changer)
+            final_upper = setBoundaryByOperator( entry['validation']['range']['max'], entry['validation']['range']['maxOp'], changer)
+            number = randrange(final_lower, final_upper)
+        elif 'min' in entry['validation']['range'] and not 'max' in entry['validation']['range']:
+            final_lower = setBoundaryByOperator( entry['validation']['range']['min'], entry['validation']['range']['minOp'], changer)
+            number = randrange(final_lower, maxsize - changer)
+        elif not 'min' in entry['validation']['range'] and 'max' in entry['validation']['range']:
+            final_upper = setBoundaryByOperator( entry['validation']['range']['max'], entry['validation']['range']['maxOp'], changer)
+            number = randrange(0 + changer, final_upper)
+    else:
+        number = randrange(changer, changer * 10000)
+    return number
 
 class pathObject:
     id:str = None
@@ -113,8 +69,7 @@ class pathObject:
     isMandatory:bool = None
     isCondMandatory:bool = None
     rmType:str = None
-    exampleValueDict:dict = "Beispiel" # None ## TODO ---> Evtl. als dict mit "Key" = pathString MIT Suffix!!!TODO und "Value" = ExampleValue # TODO buildExampleComp.py kurz umschreiben
-    exampleValue = "Beispiel" # -> Holds Quatsch-Value until...
+    exampleValueDict:dict = None # None ## TODO ---> Evtl. als dict mit "Key" = pathString MIT Suffix!!!TODO und "Value" = ExampleValue # TODO buildExampleComp.py kurz umschreiben
 
     def __init__(self):
         pass
@@ -147,17 +102,89 @@ class pathObject:
             else:
                 super(pathObject, self).__setattr__("hasIndex", False)
                 super(pathObject, self).__setattr__("maxIndexNumber", 0)
+        # Wenn der rmType gesetzt wird:
+        #   - Setze exampleValueDict mit key: volle pfadnamen ( mit Suffix(en) ) und value: example-wert abhaengig von "rmType" und "type" des Inputs/Suffix
+        #   - Notizen dazu stehen oben oder im WebTemplate_Datatypes_WebTemplate...
         elif name == "rmType":
             super(pathObject, self).__setattr__("rmType", value)
             
-            # TODO
             exampleValueDict = {}
-            # Wenn der rmType gesetzt wird:
-            #   - Setze exampleValueDict mit key: volle pfadnamen ( mit Suffix(en) ) und value: example-wert abhaengig von "rmType" und "type" des Inputs/Suffix
-            #   - Notizen dazu stehen oben oder im WebTemplate_Datatypes_WebTemplate...
+            if value == "DV_TEXT":
+                exampleValueDict[self.pathString] = "Beispieltext"
+            elif value == "DV_MULTIMEDIA":
+                exampleValueDict[self.pathString] = getExampleICObase64encoded()
+            elif value == "DV_URI":
+                # https://datatracker.ietf.org/doc/html/rfc3986#section-1.1.2
+                # Format: \s*
+                exampleValueDict[self.pathString] = "urn:oasis:names:specification:docbook:dtd:xml:4.1.2"
+            elif value == "DV_EHR_URI":
+                # https://specifications.openehr.org/releases/RM/latest/data_types.html#_dv_ehr_uri_class
+                exampleValueDict[self.pathString] = "ehr://system_id/ehr_id/top_level_structure_locator/path_inside_top_level_structure"
+            elif value == "DV_BOOLEAN":
+                exampleValueDict[self.pathString] = True
+            elif value == "CODE_PHRASE":
+                # https://specifications.openehr.org/releases/RM/latest/data_types.html#_code_phrase_class
+                if self.id == "language":
+                    exampleValueDict[ self.pathString + "|" + 'code' ] = "de"
+                    exampleValueDict[ self.pathString + "|" + 'terminology' ] = "ISO_639-1"
+                elif self.id == "territory":
+                    exampleValueDict[ self.pathString + "|" + 'code' ] = "DE"
+                    exampleValueDict[ self.pathString + "|" + 'terminology' ] = "ISO_3166-1"
+                elif self.id == "encoding":
+                    exampleValueDict[ self.pathString + "|" + 'code' ] = "UTF-8"
+                    exampleValueDict[ self.pathString + "|" + 'terminology' ] = "IANA_character-sets"
+                else:
+                    exampleValueDict[ self.pathString + "|" + 'code' ] = "1234"
+                    exampleValueDict[ self.pathString + "|" + 'terminology' ] = "local"
+            elif value == "DV_CODED_TEXT":
+                pass # TODO
+            elif value == "DV_DATE_TIME":
+                # DATETIME String nach ISO 8601
+                exampleValueDict[self.pathString] = "1989-11-09T21:20:00+02:00"
+            elif value == "DV_DATE":
+                exampleValueDict[self.pathString] = "1989-11-09"
+            elif value == "DV_TIME":
+                exampleValueDict[self.pathString] = "21:20:00"
+            elif value == "DV_IDENTIFIER":
+                exampleValueDict[ self.pathString + "|" + 'id' ] = "ID 1234"
+                exampleValueDict[ self.pathString + "|" + 'type' ] = "GENERIC_ID"
+                exampleValueDict[ self.pathString + "|" + 'issuer' ] = "Issuer Person"
+                exampleValueDict[ self.pathString + "|" + 'assigner' ] = "Assigning Organisation X"
+            elif value == "DV_COUNT":
+                for entry in self.inputs:
+                    # Select number type
+                    changer = getNumberOfType(entry['type'])
+                    number = getRandNumberWithOrWithoutValidation(entry, changer)
+                    exampleValueDict[ self.pathString ] = number
+            elif value == "DV_DURATION":
+                for entry in self.inputs:
+                    # Select number type
+                    changer = getNumberOfType(entry['type'])
+                    number = getRandNumberWithOrWithoutValidation(entry, changer)
+                    exampleValueDict[ self.pathString + "|" + entry['suffix'] ] = number
+            # Weitere Cases...TODO
+            # Checken, ob die evtl schon vorhanden sind und sich mit anderen If-Bedingungen zusammenfassen lassen. 
+            # Manchmal enthalten sie auch andere rmTypes Bsp. DV_ORDERED enthaelt DV_ORDINAL oder DV_SCALE!
+            # Siehe Spezifikation und WebTemplate_Datentypen
             
-            super(pathObject, self).__setattr__("exampleValueDict", exampleValueDict)
-            pass
+            # DV_TIMEZONE ?
+            # DV_PROPORTION
+            # DV_STATE ?
+            # DV_IDENTIFIER
+            # CODE_PHRASE
+            # DV_ORDERED?
+            # DV_INTERVAL
+            # DV_ORDINAL
+            # DV_SCALE
+            # DV_QUANTIFIED
+            # DV_AMOUNT
+            # DV_QUANTITY
+            # DV_ENCAPSULATED ?
+            else:
+                # Wenn der rmType hier nicht vorkam, gab es evtl. neue rmTypes o.ä. ?
+                print ("Noch nicht behandelter Fall bei Example-Generation in pathObject.py: " + value)
+                #raise TypeError
+            #super(pathObject, self).__setattr__("exampleValueDict", exampleValueDict)
         # Wird keiner der Fälle oben genutzt, dann wird die Variable einfach wie immer gesetzt
         else:
             super().__setattr__(name, value)

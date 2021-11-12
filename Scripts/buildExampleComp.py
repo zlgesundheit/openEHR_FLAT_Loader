@@ -42,11 +42,10 @@ def buildExample(workdir, pathArray, templateName, baseUrl, repo_auth, type):
             
             if path.isMandatory:
                 # Dict["Pfad"] = valid Example-Value 
-                if path.hasSuffix:
-                    for suffix in path.suffixList:
-                        dict[path.pathString + "|" + suffix] = path.exampleValue # TODO haelt bald ein Example-Value-Dict
-                elif not path.hasSuffix:
-                    dict[path.pathString] = path.exampleValue
+                # TODO, hier testen, wenn ExampleDict in pathObject.py fertig ist.
+                exampleValueDict = path.exampleValueDict
+                for pfad in exampleValueDict:
+                    dict[pfad] = exampleValueDict[pfad]
 
         # Store FLAT Example-Composition
         filename = "MIN_EXAMPLE_FLAT_"+ templateName + ".json"
@@ -79,11 +78,10 @@ def buildExample(workdir, pathArray, templateName, baseUrl, repo_auth, type):
             path.pathString = path.pathString.replace("<<index>>", "0")
 
             # Pfade mit Suffixen und ohne dem CompositionDict hinzufügen
-            if path.hasSuffix:
-                for suffix in path.suffixList:
-                    dict[path.pathString + "|" + suffix] = path.exampleValue
-            elif not path.hasSuffix:
-                dict[path.pathString] = path.exampleValue
+            # TODO, hier testen, wenn ExampleDict in pathObject.py fertig ist.
+            exampleValueDict = path.exampleValueDict
+            for pfad in exampleValueDict:
+                dict[pfad] = exampleValueDict[pfad]
 
         # Store Maximal FLAT Resource-Dict
         filename = "MAX_EXAMPLE_FLAT_"+ templateName + ".json"

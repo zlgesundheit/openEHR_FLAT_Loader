@@ -87,10 +87,10 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
 
             path.id = element['id']
             path.pathString = suffixPath
-            path.rmType = element['rmType']
             # Bei CODE_PHRASE keine inputs -> 2 Suffixe mit Text
             if 'inputs' in element:
                 path.inputs = element['inputs']
+            path.rmType = element['rmType']
             # Ganzer Pfad ist Pflicht
             path.isMandatory = localMandatoryFlag
             # Bedingt Pflicht (nur wenn das Element existiert)
