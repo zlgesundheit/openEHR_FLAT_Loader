@@ -60,7 +60,7 @@ def readCSVasDataFrame(inputCSV):
         guessed_encoding = "ANSI"
 
     # Read CSV-File   
-    dataDF = pd.read_csv(csvPath, header=0, delimiter=";", encoding = guessed_encoding)
+    dataDF = pd.read_csv(csvPath, header=0, delimiter=";", dtype = str, encoding = guessed_encoding)
     return dataDF
 
 def guessCSVencoding(filepath):
