@@ -57,7 +57,7 @@ def createEHRsForAllPatients(baseUrl, repo_auth, csv_dataframe, patient_id_colum
         subject_namespace = csv_dataframe[subject_namespace_column_name][index]
 
         # Create ehr with subject id = identifizierenden ID und subject namespace = z.B. "ucc_sha1_h_dathe"
-        createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_namespace)
+        csv_dataframe[index]['ehrId'] = createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_namespace)
 
     return csv_dataframe
 

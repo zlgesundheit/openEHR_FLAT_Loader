@@ -1,2 +1,2 @@
-python "%~dp0%\main.py"
+python "%~dp0%main.py"
 pause
