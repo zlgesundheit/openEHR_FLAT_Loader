@@ -17,6 +17,7 @@ import pandas as pd
 import numpy as np
 # import openpyxl
 # Local application imports
+from Scripts import configHandler
 
 # openpyxl does not support Validation in Excel-Files and sends a warning
 warnings.filterwarnings('ignore', category=UserWarning, module='openpyxl')
@@ -29,7 +30,7 @@ def main(config):
     print(os.linesep + "Step 3: BuildComp is running.")
     
     # Read CSV as data frame
-    dataDF = csvAsDataFrame(config.inputCSV)
+    csv_dataframe = configHandler.readCSVasDataFrame(config.inputCSV)
 
     # Read Excel-File as data frame
     mapTabDF = xlsxAsDataFrame(config.templateName)
@@ -42,7 +43,7 @@ def main(config):
 
         elif not mappingIsEmpty(mapTabDF):
             # Fuer jede Row/Zeile in CSV = eine Ressource
-            for csvIndex, csvRow in dataDF.iterrows():
+            for csvIndex, csvRow in csv_dataframe.iterrows():
                 # Erstelle ein Dict (pro Zeile) und befuelle es mit allen KEYS + Values
                 dict = {}
 
@@ -54,8 +55,8 @@ def main(config):
                     gemappteSpalteAusCSV = mapTabDF['CSV-Column'][xlsxIndex]
                     if str(gemappteSpalteAusCSV) != "nan":
                         # Erstelle einen Dict-Eintrag mit KEY=PATH und VALUE=WERT in der dem KEY zugeordneten Spalte
-                        if str(dataDF[ gemappteSpalteAusCSV ][csvIndex]) != "nan":
-                            dict[path] = dataDF[ gemappteSpalteAusCSV ][csvIndex]
+                        if str(csv_dataframe[ gemappteSpalteAusCSV ][csvIndex]) != "nan":
+                            dict[path] = csv_dataframe[ gemappteSpalteAusCSV ][csvIndex]
                         else:
                             pass
 
@@ -92,12 +93,6 @@ def xlsxAsDataFrame(templateName):
     mapTabDF = pd.read_excel(xlsxPath, "Auto-indexed Mapping", header=0, engine='openpyxl', dtype=str) 
     #engine openpyxl not xlrd since xlrd drop support for non-xls-files
     return mapTabDF
-
-def csvAsDataFrame(inputCSV):
-    '''Read CSV as Dataframe'''
-    csvPath = os.path.join(workdir, 'Input', 'CSV', inputCSV + '.csv')
-    dataDF = pd.read_csv(csvPath, header=0, delimiter=";")
-    return dataDF
 
 def convert(o):
     '''Workaround because Pandas uses some panda data types that are NOT serializable. Use like json.dumps(dictArray[0]), default=convert)'''

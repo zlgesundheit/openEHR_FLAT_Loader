@@ -10,16 +10,17 @@ import xlsxwriter
 import pandas as pd
 # Local application imports
 from Scripts import pathObject
+from Scripts import configHandler
 
 import sys
-sys.setrecursionlimit(10000)
+#sys.setrecursionlimit(10000)
 
 indent = "\t"
 workdir = os.getcwd()
 
 ############################### Main ###############################
 
-def main(templateName, inputCSV, pathArray):
+def main(templateName, csv_dataframe, pathArray, allindexesareone):
     print("MappingListGen is running:")
     
     # Create Excel-File
@@ -33,21 +34,21 @@ def main(templateName, inputCSV, pathArray):
     # Set Appearance -> TODO Farbliches Hervorheben von Pflichtpfaden o.ä.?
     setAppearanceForAllSheets(workbook, worksheetAutoIndexedMapping, worksheetPaths, worksheetCSVPaths)
 
-    df, numberOfCSVitems = readCSVasDF(inputCSV)
+    numberOfCSVitems = len(csv_dataframe.columns)
 
     # Compose CSV_Items Worksheet
-    composeCSVitemWorksheet(df, worksheetCSVPaths)
+    composeCSVitemWorksheet(csv_dataframe, worksheetCSVPaths)
     # Compose FLAT_Path Worksheet
     composeFlatPathsWorksheet(pathArray, worksheetPaths)
     # Compose Auto-indexed Mapping Worksheet
-    composeAutoIndexedWS(worksheetAutoIndexedMapping, pathArray, numberOfCSVitems)
+    composeAutoIndexedWS(worksheetAutoIndexedMapping, pathArray, numberOfCSVitems, allindexesareone)
 
     workbook.close()
     print("Generated the (empty) Mapping-Table")
 
 ############################### Methods ###############################
 
-def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems):
+def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems, allindexesareone):
     '''Composes mapping-worksheet based on index-values from userinput.'''
 
     # add paths + dropdown list
@@ -76,8 +77,11 @@ def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems):
             # um sie den PFadobjekten hinzufuegen zu koennen, die danach kommen und fuer die kein Input kommt.
             for indexPath in path.indexPathDict:
                 if not indexPath in list_of_queried_index_elements:
-                    print (f'Wie viele Werte sind zum Element ({indexPath}) vorhanden?')
-                    userInput = int(input('Anzahl der Messwerte: '))
+                    if allindexesareone == "0":
+                        print (f'Wie viele Werte sind zum Element ({indexPath}) vorhanden?')
+                        userInput = int(input('Anzahl der Messwerte: '))
+                    else:
+                        userInput = 1
                     path.indexPathDict[indexPath] = userInput
                     local_indexPathDict[indexPath] = path.indexPathDict[indexPath]
                     list_of_queried_index_elements.append(indexPath)
@@ -229,13 +233,6 @@ but does little to convince me that it's a god design.
 
 Seeing a recursion in a loop looks quite strange. It looks to me like hammering a screw or screwing a nail.
 """
-
-def readCSVasDF(inputCSV):
-    csvPath = os.path.join(workdir, 'Input', 'CSV', inputCSV + '.csv')
-    df = pd.read_csv(csvPath, header=0, delimiter=";")
-    numberOfCSVitems = len(df.columns)
-
-    return df, numberOfCSVitems
 
 def composeCSVitemWorksheet(df, worksheetCSVPaths):
     i = 1

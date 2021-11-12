@@ -14,7 +14,6 @@
 import os.path
 from os import getcwd
 # Third party imports
-import pandas as pd
 # Local application/script imports
 from Scripts import configHandler
 from Scripts import handleOPT
@@ -31,7 +30,8 @@ workdir = getcwd()
 
 ############################### Main ###############################
 def main():
-    
+    global guessed_encoding
+
     # Check if all directories exist otherwise create them
     checkIfDirsExists()
 
@@ -55,20 +55,22 @@ def runStep(choosenStep):
         # Extrahiere Pfade in Array von Pfadobjekten 
         pathArray = pathExport.main(webTemp, config.templateName)
 
+        csv_dataframe = configHandler.readCSVasDataFrame(config.inputCSV)
+
         # Baue Mapping
-        mappingListGen.main(config.templateName, config.inputCSV, pathArray)
+        mappingListGen.main(config.templateName, csv_dataframe, pathArray, allindexesareone = config.allindexesareone)
 
     elif(choosenStep == str(2)):
         resArray = buildComp.main(config)
 
         #Create EHRs for all patients in csv
         if config.createehrs == "1":
-            csvPath = os.path.join(workdir, "Input", "CSV", config.inputCSV + ".csv")
-            csv_dataframe = pd.read_csv(csvPath, header=0, delimiter=";", dtype=str)
+            csv_dataframe = csv_dataframe = configHandler.readCSVasDataFrame(config.inputCSV)
             anzahl_eintraege = len(csv_dataframe.index)
 
             print (f'Create {anzahl_eintraege} EHRs:')
             csv_dataframe = ucc_uploader.createEHRsForAllPatients(config.targetAdress, config.targetAuthHeader, csv_dataframe, config.subjectidcolumn , config.subjectnamespacecolumn)
+            csvPath = os.path.join(workdir, 'Input', 'CSV', config.inputCSV + '.csv')
             csv_dataframe.to_csv(csvPath, sep=";", index = False, encoding = "UTF-8")
         else:
             print ("EHR Creation is disabled in Config.ini")
@@ -76,8 +78,7 @@ def runStep(choosenStep):
 
         # Send resource to server
         if config.directupload == "1":
-            csvPath = os.path.join(workdir, "Input", "CSV", config.inputCSV + ".csv")
-            csv_dataframe = pd.read_csv(csvPath, header=0, delimiter=";", dtype=str)
+            csv_dataframe = configHandler.readCSVasDataFrame(config.inputCSV)
             anzahl_eintraege = len(csv_dataframe.index)
 
             print ("Upload Compositions:")
