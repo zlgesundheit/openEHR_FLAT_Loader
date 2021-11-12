@@ -38,9 +38,13 @@ def uploadResourceToEhrId(baseUrl, repo_auth, ehrId, resource, templateName):
 
     resp_json = json.loads(response.text)
     print ("\tStatus beim Upload der Composition: " + str(response.status_code))
-    print ("\t" + "CompositionUid: " + resp_json["compositionUid"] + "\n")
-
-    return resp_json["compositionUid"]
+    print (resp_json)
+    if 'compositionUid' in resp_json:
+        print ("\t" + "CompositionUid: " + resp_json["compositionUid"] + "\n")
+        return resp_json["compositionUid"]
+    else:
+        print ("Oops! Da lief etwas beim Upload der Composition schief.")
+        raise RuntimeError
 
 # for numpy int in pandas df 
 def convert(o):

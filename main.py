@@ -99,11 +99,10 @@ def runStep(choosenStep):
         # Extrahiere Pfade in Array von Pfadobjekten 
         pathArray = pathExport.main(webTemp, config.templateName)
 
-        # Build Maximal Example
-        buildExampleComp.main(workdir, pathArray, config.templateName, config.targetAdress, config.targetAuthHeader, "max")
         # Build Minimal Example
         buildExampleComp.main(workdir, pathArray, config.templateName, config.targetAdress, config.targetAuthHeader, "min")
-        
+        # Build Maximal Example
+        buildExampleComp.main(workdir, pathArray, config.templateName, config.targetAdress, config.targetAuthHeader, "max")
 
 def printInfoText():
     print(os.linesep)

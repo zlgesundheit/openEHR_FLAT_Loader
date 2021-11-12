@@ -136,8 +136,6 @@ class pathObject:
                 else:
                     exampleValueDict[ self.pathString + "|" + 'code' ] = "1234"
                     exampleValueDict[ self.pathString + "|" + 'terminology' ] = "local"
-            elif value == "DV_CODED_TEXT":
-                pass # TODO
             elif value == "DV_DATE_TIME":
                 # DATETIME String nach ISO 8601
                 exampleValueDict[self.pathString] = "1989-11-09T21:20:00+02:00"
@@ -145,6 +143,11 @@ class pathObject:
                 exampleValueDict[self.pathString] = "1989-11-09"
             elif value == "DV_TIME":
                 exampleValueDict[self.pathString] = "21:20:00"
+            elif value == "PARTY_PROXY":
+                exampleValueDict[ self.pathString + "|" + 'id' ] = "ID 4321"
+                exampleValueDict[ self.pathString + "|" + 'id_scheme' ] = "GENERIC_ID"
+                exampleValueDict[ self.pathString + "|" + 'id_namespace' ] = "Namesapce"
+                exampleValueDict[ self.pathString + "|" + 'name' ] = "Herbert Composer"
             elif value == "DV_IDENTIFIER":
                 exampleValueDict[ self.pathString + "|" + 'id' ] = "ID 1234"
                 exampleValueDict[ self.pathString + "|" + 'type' ] = "GENERIC_ID"
@@ -162,29 +165,18 @@ class pathObject:
                     changer = getNumberOfType(entry['type'])
                     number = getRandNumberWithOrWithoutValidation(entry, changer)
                     exampleValueDict[ self.pathString + "|" + entry['suffix'] ] = number
-            # Weitere Cases...TODO
-            # Checken, ob die evtl schon vorhanden sind und sich mit anderen If-Bedingungen zusammenfassen lassen. 
-            # Manchmal enthalten sie auch andere rmTypes Bsp. DV_ORDERED enthaelt DV_ORDINAL oder DV_SCALE!
-            # Siehe Spezifikation und WebTemplate_Datentypen
-            
-            # DV_TIMEZONE ?
-            # DV_PROPORTION
-            # DV_STATE ?
-            # DV_IDENTIFIER
-            # CODE_PHRASE
-            # DV_ORDERED?
-            # DV_INTERVAL
-            # DV_ORDINAL
-            # DV_SCALE
-            # DV_QUANTIFIED
-            # DV_AMOUNT
-            # DV_QUANTITY
-            # DV_ENCAPSULATED ?
+            elif value == "DV_CODED_TEXT":
+                pass # TODO
+            # DV_QUANTITY TODO
+            # DV_PROPORTION TODO
+            # DV_ORDINAL TODO
+            # DV_PARSABLE TODO
             else:
                 # Wenn der rmType hier nicht vorkam, gab es evtl. neue rmTypes o.ä. ?
                 print ("Noch nicht behandelter Fall bei Example-Generation in pathObject.py: " + value)
-                #raise TypeError
-            #super(pathObject, self).__setattr__("exampleValueDict", exampleValueDict)
+                #raise some Error TODO
+            # ExampleValueDict wird hier im Objekt gesetzt!
+            super(pathObject, self).__setattr__("exampleValueDict", exampleValueDict)
         # Wird keiner der Fälle oben genutzt, dann wird die Variable einfach wie immer gesetzt
         else:
             super().__setattr__(name, value)

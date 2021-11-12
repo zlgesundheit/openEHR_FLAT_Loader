@@ -43,9 +43,21 @@ def buildExample(workdir, pathArray, templateName, baseUrl, repo_auth, type):
             if path.isMandatory:
                 # Dict["Pfad"] = valid Example-Value 
                 # TODO, hier testen, wenn ExampleDict in pathObject.py fertig ist.
-                exampleValueDict = path.exampleValueDict
+                if not path.exampleValueDict == None:
+                    exampleValueDict = path.exampleValueDict
+                else:
+                    print (f'Für Pfad {path.pathString} wurde kein Beispielwert generiert. -> ' + str(path.exampleValueDict))
+                    raise RuntimeError
+                
+                
                 for pfad in exampleValueDict:
-                    dict[pfad] = exampleValueDict[pfad]
+                    if ('composer' in pfad and not '|name' in pfad) or ('subject' in pfad and not '|name' in pfad):
+                        # Die EHRBASE hat (zumindest beim Composer) -> PARTY_PROXY nur |name als Pflicht. 
+                        # Der Rest muss nicht vorhanden sein und sorgt für Fehler. Erstmal die anderen rausgenommen TODO
+                        # Sprich |id, |id_scheme und |id_namespace werden ignoriert fuer das Beispiel
+                        pass
+                    else:
+                        dict[pfad] = exampleValueDict[pfad]
 
         # Store FLAT Example-Composition
         filename = "MIN_EXAMPLE_FLAT_"+ templateName + ".json"
@@ -74,14 +86,24 @@ def buildExample(workdir, pathArray, templateName, baseUrl, repo_auth, type):
         #Build FLAT Maximal Resource-Dict mit allen Pfaden
         dict = {}
         for path in pathArray:
-            # Im Maximal Example setze alle Indexe = 0
-            path.pathString = path.pathString.replace("<<index>>", "0")
 
             # Pfade mit Suffixen und ohne dem CompositionDict hinzufügen
             # TODO, hier testen, wenn ExampleDict in pathObject.py fertig ist.
-            exampleValueDict = path.exampleValueDict
+            if not path.exampleValueDict == None:
+                exampleValueDict = path.exampleValueDict
+            else:
+                # Bei Maximal-Komposition muessen alle Pfade vorkommen. Warum gibt es zu dem kein Example? Muesste schon vorher Fehler werfen.
+                print (f'Für Pfad {path.pathString} wurde kein Beispielwert generiert. ->' + path.exampleValueDict)
+                raise RuntimeError
             for pfad in exampleValueDict:
-                dict[pfad] = exampleValueDict[pfad]
+                if ('composer' in pfad and not '|name' in pfad) or ('subject' in pfad and not '|name' in pfad):
+                    # Die EHRBASE hat (zumindest beim Composer) -> PARTY_PROXY nur |name als Pflicht. 
+                    # Der Rest muss nicht vorhanden sein und sorgt für Fehler. Erstmal die anderen rausgenommen
+                    # Sprich |id, |id_scheme und |id_namespace werden ignoriert fuer das Beispiel
+                    pass
+                else:
+                    pfad_mit_index_0 = pfad.replace("<<index>>", "0") # Im Maximal Example setze alle Indexe = 0
+                    dict[pfad_mit_index_0] = exampleValueDict[pfad]
 
         # Store Maximal FLAT Resource-Dict
         filename = "MAX_EXAMPLE_FLAT_"+ templateName + ".json"
