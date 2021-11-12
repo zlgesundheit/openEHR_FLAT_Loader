@@ -39,7 +39,11 @@ def main():
     printInfoText()
 
     # Query User Input
-    choosenStep = input("Bitte Schritt wählen (1,2,3) eingeben: ")
+    print ("    Please enter number 1,2 or 3 to run the desired step: ")
+    print ("\n")
+    choosenStep = input("\t") 
+    # WE could add a nice selector menue with 'whaaaaat' or 'inquirer' but that would mean the user needs to install an additional package: no
+    # Input zeigt nichts mehr an, weil durch @echo off im .bat die Ausgabe cleaner wird...
 
     # Run Script Part/Step that was choosen by the user
     runStep(choosenStep)
@@ -107,18 +111,24 @@ def runStep(choosenStep):
 
 def printInfoText():
     print(os.linesep)
-    print("Willkommen im openEHR_FLAT_Loader-Commandline-Tool")
+    print("    Welcome to the openEHR_FLAT_Loader-Commandline-Tool!")
     print(os.linesep)
-    print("Mithilfe dieses Tools können beliebige tabellarische Daten in das interoperable openEHR-Format transformiert werden."
-        + os.linesep + "Geben Sie in der Config-Datei entsprechend die Variablen für Template, CSV und Repository an."
+    print("    This tool allows you to transform tabular data into the interoperable openEHR format."
+        + os.linesep + "                                                             (given an existing template)"
+        + os.linesep 
+        + os.linesep + "    Please set variables for template, data/csv-file and repository in config.ini."
         + os.linesep
         # Auswahl von im OPT-Ordner existierenden Dateien + Abfrage welche genutzt werden soll? TODO
         # TODO Columns wie Namespace SubjectId etc von Hand aus CSV auswählbar machen -> ohne in die Config gehen zu müssen
-        + os.linesep + indent +"Schritt 1: OPT hochladen und Mapping erzeugen" 
-        + os.linesep + indent +"Schritt 2: Ressourcen erzeugen (und hochladen)"
-        + os.linesep + indent + indent + "EHRs erzeugen mit 'createehrs   = 1' in config.ini"
-        + os.linesep + indent + indent + "Upload        mit 'directupload = 1' in config.ini"
-        + os.linesep + indent +"Schritt 3: Erzeuge Min/Max FLAT/CANONICAL Example-Composition -- WORK IN PROGRESS --"
+        + os.linesep + indent + "Schritt 1: OPT hochladen und Mapping erzeugen" 
+        + os.linesep + indent + indent +  "   Indexe  mit 'allindexesareone  = 1' in config.ini automatisch auf 1 setzen"
+        + os.linesep
+        + os.linesep + indent + "Schritt 2: Ressourcen erzeugen (und hochladen)"
+        + os.linesep + indent + indent +  "   EHRs    mit 'createehrs   = 1' in config.ini erzeugen"
+        + os.linesep + indent + indent +  "   Upload  mit 'directupload = 1' in config.ini ausführen"
+        + os.linesep
+        + os.linesep + indent + "Schritt 3: Erzeuge Min/Max FLAT/CANONICAL Example-Composition"
+        + os.linesep + indent + indent +  "   -- WORK IN PROGRESS --"
     )
     print(os.linesep)
 

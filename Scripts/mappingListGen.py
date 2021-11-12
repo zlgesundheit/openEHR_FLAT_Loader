@@ -44,7 +44,8 @@ def main(templateName, csv_dataframe, pathArray, allindexesareone):
     composeAutoIndexedWS(worksheetAutoIndexedMapping, pathArray, numberOfCSVitems, allindexesareone)
 
     workbook.close()
-    print("Generated the (empty) Mapping-Table")
+    print ("Generated the (empty) Mapping-Table")
+    print ("\n")
 
 ############################### Methods ###############################
 
@@ -78,7 +79,10 @@ def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems, allindex
             for indexPath in path.indexPathDict:
                 if not indexPath in list_of_queried_index_elements:
                     if allindexesareone == "0":
-                        print (f'Wie viele Werte sind zum Element ({indexPath}) vorhanden?')
+                        print ("\n")
+                        print (f'Das nachfolgende Element kann in der Composition beliebig oft wiederholt werden:')
+                        print (f'{indexPath}')
+                        print (f'Wie oft wird das Element maximal pro Composition vorkommen?')
                         userInput = int(input('Anzahl der Messwerte: '))
                     else:
                         userInput = 1
