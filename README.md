@@ -28,6 +28,7 @@ Preparation:
 
     - Place your Template (.opt-File) in the Input-Folder under /OPT
     - Place your Data (.csv-File) in the Input-Folder under /CSV
+        - Please encode your .csv-File as UTF-8
     - Edit the config.ini and at least set:
         - templatename
         - inputcsv
