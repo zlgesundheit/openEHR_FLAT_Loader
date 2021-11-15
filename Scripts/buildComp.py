@@ -49,11 +49,15 @@ def main(config):
 
                 # Fuer jeden FLAT_Pfad
                 for xlsxIndex, xlsxRow in mapTabDF.iterrows():
-                    path = xlsxRow['FLAT-Path']
+                    path = xlsxRow['FLAT-Path (Data field in later composition - if mapped)']
 
                     # Schaue ob Mapping in Mapping-File eingetragen / vorhanden ist
-                    gemappteSpalteAusCSV = mapTabDF['CSV-Column'][xlsxIndex]
-                    if str(gemappteSpalteAusCSV) != "nan":
+                    gemappteSpalteAusCSV = mapTabDF['Map CSV-Column to Path (Dropdown-Selector)'][xlsxIndex]
+                    metadatumAusSpalteD = mapTabDF['Set Metadata directly (optional)'][xlsxIndex]
+                    # !Vorrangig! Wenn Metadatum in Spalte D (D haelt ab jetzt Metadaten die direkt im Mapping mitgegeben werden können )
+                    if str(metadatumAusSpalteD) != "nan":
+                        dict[path] = metadatumAusSpalteD
+                    elif str(gemappteSpalteAusCSV) != "nan":
                         # Erstelle einen Dict-Eintrag mit KEY=PATH und VALUE=WERT in der dem KEY zugeordneten Spalte
                         if str(csv_dataframe[ gemappteSpalteAusCSV ][csvIndex]) != "nan":
                             dict[path] = csv_dataframe[ gemappteSpalteAusCSV ][csvIndex]
@@ -102,9 +106,15 @@ def convert(o):
 def mappingIsEmpty(mapTabDF):
     '''Checken ob das Mapping leer ist, also nur "nan"-Eintraege vorhanden sind'''
     empty = True
-    for i in mapTabDF['CSV-Column']:
+    # Checken ob CSV-Column (C) leer ist
+    for i in mapTabDF['Map CSV-Column to Path (Dropdown-Selector)']:
         if str(i) != "nan":
             empty = False
+    # Wenn C leer war, dann noch Metadaten (D) prüfen
+    if empty:
+        for i in mapTabDF['Set Metadata directly (optional)']:
+            if str(i) != "nan":
+                empty = False
     return empty
 
 if __name__ == '__main__':
