@@ -251,7 +251,7 @@ def composeFlatPathsWorksheet(pathArray, worksheetPaths):
         if path.isCondMandatory:
             worksheetPaths.write('C'+str(j),"bedingt Pflicht")
         j += 1
-    print( indent + "Anzahl der Pflichtpfade: " + str(nrMandatoryPaths) )
+    print( indent + "Anzahl der Pflichtpfade (ohne Suffixe): " + str(nrMandatoryPaths) )
 
 def setAppearances(workbook, worksheetAutoIndexedMapping, worksheetPaths, worksheetCSVPaths):
     # Allgemein
