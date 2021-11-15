@@ -7,4 +7,3 @@ IF %ERRORLEVEL%==9009 ECHO python.exe was not found on PATH.
 IF %ERRORLEVEL%==9009 ECHO Add python to PATH or substitute the correct path to python.exe in this .bat-file.
 
 pause > NUL
-
