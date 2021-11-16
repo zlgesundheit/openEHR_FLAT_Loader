@@ -26,6 +26,8 @@
 
 # Standard library imports
 import traceback #debug
+import sys
+import os
 # Third party imports
 # Local application imports
 from Scripts import pathObject
@@ -49,8 +51,11 @@ def main(webTemp, templateName):
         print ( indent + "Anzahl extrahierter Pfade: " + str( len(pathArray) ) )
     except Exception as e:
         print(indent + templateName + "_Webtemplate ist fehlerhaft.")
-        print (indent + str(e))
-        traceback.print_exc()
+        #print (indent + str(e))
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+        print(traceback.format_exc())
         raise SystemExit
 
     print(indent + "Extracted FLAT-Paths from the WebTemplate")

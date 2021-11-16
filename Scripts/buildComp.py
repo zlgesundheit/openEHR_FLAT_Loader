@@ -50,6 +50,18 @@ def main(config):
                 # Fuer jeden FLAT_Pfad
                 for xlsxIndex, xlsxRow in mapTabDF.iterrows():
                     path = xlsxRow['FLAT-Path (Data field in later composition - if mapped)']
+                    
+                    # AD-hoc haessliche Index-Ersetzung aus buildMapping hier ruebergebaut in BuildComp
+                    # Vor dem Pfad in Zeile C sollte in Zeile B ein Array stehen, dass die Indexangabe für jeden Index im Pfad enthält.
+                    # Hier wäre dann so oft zu ersetzen wie Indexe im Array sind. Erste Index-Angabe in erstes Vorkommen von <<index>> usw.
+                    # Dafür muss das aber im Mapping schon richtig stehen.
+                    indexArrayString = str(xlsxRow['Index(e)'])
+                    maxIndexNumber = None
+                    if indexArrayString != "nan":
+                        indexArray = indexArrayString.split(",")
+                        maxIndexNumber = len(indexArray)
+                        for j in range(0, maxIndexNumber):
+                            path = path.replace("<<index>>", indexArray[j],1)
 
                     # Schaue ob Mapping in Mapping-File eingetragen / vorhanden ist
                     gemappteSpalteAusCSV = mapTabDF['Map CSV-Column to Path (Dropdown-Selector)'][xlsxIndex]

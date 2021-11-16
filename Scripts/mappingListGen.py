@@ -31,7 +31,7 @@ def main(templateName, csv_dataframe, pathArray, allindexesareone):
     worksheetPaths = workbook.add_worksheet('FLAT_Paths')
     worksheetCSVPaths = workbook.add_worksheet('CSV_Items')
 
-    # Set Appearance -> TODO Farbliches Hervorheben von Pflichtpfaden o.ä.?
+    # Set Appearance
     mandatory_cell_format, cond_mandatory_cell_format = setAppearances(workbook, worksheetAutoIndexedMapping, worksheetPaths, worksheetCSVPaths)
 
     numberOfCSVitems = len(csv_dataframe.columns)
@@ -104,22 +104,25 @@ def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems, allindex
             for key in path.indexPathDict:
                 indexArray.append(path.indexPathDict[key])
             path.indexArray = indexArray
-        
+
             if path.maxIndexNumber == 1:
                 for indexStellenMaximum in indexArray:
                     for j in range(0,indexStellenMaximum):
-                        String_with_0_index = path.pathString.replace('<<index>>',(str(j)))
+                        #String_with_0_index = path.pathString.replace('<<index>>',(str(j)))
                         if path.hasSuffix:
                             for suffix in path.suffixList:
-                                addPathWithSuffix(String_with_0_index, suffix, row, worksheetMapping, numberOfCSVitems, formatting)
+                                #addPathWithSuffix(String_with_0_index, suffix, row, worksheetMapping, numberOfCSVitems, formatting)
+                                addPathWithSuffix(path.pathString, suffix, row, worksheetMapping, numberOfCSVitems, formatting)
                                 addMandatoryColumnEntry(path, row, worksheetMapping, formatting)
+                                worksheetMapping.write('B'+str(row+1),str(j), formatting)
                                 row += 1
                         elif not path.hasSuffix:
-                            addPathWithoutSuffix(String_with_0_index, row, worksheetMapping, numberOfCSVitems, formatting)
+                            #addPathWithoutSuffix(String_with_0_index, row, worksheetMapping, numberOfCSVitems, formatting)
+                            addPathWithoutSuffix(path.pathString, row, worksheetMapping, numberOfCSVitems, formatting)
                             # Pflichtangabe
                             addMandatoryColumnEntry(path, row, worksheetMapping, formatting)
+                            worksheetMapping.write('B'+str(row+1),str(j), formatting)
                             row += 1
-            
             
 ################################################################################################################################################
 ###################################          Part needs to be discussed since its smelly                ########################################
@@ -131,82 +134,93 @@ def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems, allindex
             # Idee: Stückweise Ersetzung im Pfad beginnend von links -> REKURSIV...natürlich
             ## SLOW AND DIRTY weil Python keine Rekursion in For-Schleifen kann.
             ## In Manual schreiben, dass wir nur Pfade mit bis zu 4 Indexen unterstützen :D :D -> Nochmal mit Jan diskutieren TODO
+            
+            # Naechstes Problem: Richtige Indexe zum Pfad in IndexAngabenArray in Zeile B schreiben, nicht direkt in den Pfad
+            
             elif path.maxIndexNumber == 2:
-                realPathString = path.pathString
+                #realPathString = path.pathString
                 for j in range(0,indexArray[0]):
-                    String_with_1_index_left = realPathString.replace('<<index>>',(str(j)),1)
+                    #String_with_1_index_left = realPathString.replace('<<index>>',(str(j)),1)
                     for i in range(0,indexArray[1]):
-                        String_with_0_index = String_with_1_index_left.replace('<<index>>',(str(i)),1)
-                        if not String_with_0_index in alreadyAddedPath:
+                        #String_with_0_index = String_with_1_index_left.replace('<<index>>',(str(i)),1)
+                        String_with_0_index = path.pathString # actually it has indexes but i dont want to change the variable names below
+                        #if not String_with_0_index in alreadyAddedPath:
+                        if path.hasSuffix:
+                            for suffix in path.suffixList:
+                                addPathWithSuffix(String_with_0_index, suffix, row, worksheetMapping, numberOfCSVitems, formatting)
+                                addMandatoryColumnEntry(path, row, worksheetMapping, formatting)
+                                worksheetMapping.write('B'+str(row+1),str(j)+","+str(i), formatting)
+                                row += 1
+                        elif not path.hasSuffix:
+                            addPathWithoutSuffix(String_with_0_index, row, worksheetMapping, numberOfCSVitems, formatting)
+                            addMandatoryColumnEntry(path, row, worksheetMapping, formatting)
+                            worksheetMapping.write('B'+str(row+1),str(j)+","+str(i), formatting)
+                            row += 1
+                            #alreadyAddedPath.append(String_with_0_index)
+            elif path.maxIndexNumber == 3:
+                #somePathString = path.pathString
+                for j in range(0,indexArray[0]):
+                    #String_with_2_index_left = somePathString.replace('<<index>>',(str(j)),1)
+                    for i in range(0,indexArray[1]):
+                        #String_with_1_index = String_with_2_index_left.replace('<<index>>',(str(i)),1)
+                        for k in range(0,indexArray[2]):
+                            #String_with_0_index = String_with_1_index.replace('<<index>>',(str(k)),1)
+                            String_with_0_index = path.pathString # actually it has indexes but i dont want to change the variable names below
+                            #if not String_with_0_index in alreadyAddedPath:
                             if path.hasSuffix:
                                 for suffix in path.suffixList:
                                     addPathWithSuffix(String_with_0_index, suffix, row, worksheetMapping, numberOfCSVitems, formatting)
                                     addMandatoryColumnEntry(path, row, worksheetMapping, formatting)
+                                    worksheetMapping.write('B'+str(row+1),str(j)+","+str(i)+","+str(k), formatting)
                                     row += 1
                             elif not path.hasSuffix:
                                 addPathWithoutSuffix(String_with_0_index, row, worksheetMapping, numberOfCSVitems, formatting)
-                                # Pflichtangabe
                                 addMandatoryColumnEntry(path, row, worksheetMapping, formatting)
+                                worksheetMapping.write('B'+str(row+1),str(j)+","+str(i)+","+str(k), formatting)
                                 row += 1
-                            alreadyAddedPath.append(String_with_0_index)
-            elif path.maxIndexNumber == 3:
-                somePathString = path.pathString
-                for j in range(0,indexArray[0]):
-                    String_with_2_index_left = somePathString.replace('<<index>>',(str(j)),1)
-                    for i in range(0,indexArray[1]):
-                        String_with_1_index = String_with_2_index_left.replace('<<index>>',(str(i)),1)
-                        for k in range(0,indexArray[2]):
-                            String_with_0_index = String_with_1_index.replace('<<index>>',(str(k)),1)
-                            if not String_with_0_index in alreadyAddedPath:
+                                #alreadyAddedPath.append(String_with_0_index)
+            elif path.maxIndexNumber == 4:
+                #somePathString = path.pathString
+                
+                for m in range(0,indexArray[0]):
+                    #String_with_3_index_left = somePathString.replace('<<index>>',(str(m)),1)
+                    for j in range(0,indexArray[1]):
+                        #String_with_2_index_left = String_with_3_index_left.replace('<<index>>',(str(j)),1)
+                        for i in range(0,indexArray[2]):
+                            #String_with_1_index = String_with_2_index_left.replace('<<index>>',(str(i)),1)
+                            for k in range(0,indexArray[3]):
+                                #String_with_0_index = String_with_1_index.replace('<<index>>',(str(k)),1)
+                                String_with_0_index = path.pathString # actually it has indexes but i dont want to change the variable names below
+                                #if not String_with_0_index in alreadyAddedPath:
                                 if path.hasSuffix:
                                     for suffix in path.suffixList:
                                         addPathWithSuffix(String_with_0_index, suffix, row, worksheetMapping, numberOfCSVitems, formatting)
                                         addMandatoryColumnEntry(path, row, worksheetMapping, formatting)
+                                        worksheetMapping.write('B'+str(row+1),str(m)+","+str(j)+","+str(i)+","+str(k), formatting)
                                         row += 1
                                 elif not path.hasSuffix:
                                     addPathWithoutSuffix(String_with_0_index, row, worksheetMapping, numberOfCSVitems, formatting)
-                                    # Pflichtangabe
                                     addMandatoryColumnEntry(path, row, worksheetMapping, formatting)
+                                    worksheetMapping.write('B'+str(row+1),str(m)+","+str(j)+","+str(i)+","+str(k), formatting)
                                     row += 1
-                                alreadyAddedPath.append(String_with_0_index)
-            elif path.maxIndexNumber == 4:
-                somePathString = path.pathString
-                for m in range(0,indexArray[0]):
-                    String_with_3_index_left = somePathString.replace('<<index>>',(str(m)),1)
-                    for j in range(0,indexArray[1]):
-                        String_with_2_index_left = String_with_3_index_left.replace('<<index>>',(str(j)),1)
-                        for i in range(0,indexArray[2]):
-                            String_with_1_index = String_with_2_index_left.replace('<<index>>',(str(i)),1)
-                            for k in range(0,indexArray[3]):
-                                String_with_0_index = String_with_1_index.replace('<<index>>',(str(k)),1)
-                                if not String_with_0_index in alreadyAddedPath:
-                                    if path.hasSuffix:
-                                        for suffix in path.suffixList:
-                                            addPathWithSuffix(String_with_0_index, suffix, row, worksheetMapping, numberOfCSVitems, formatting)
-                                            addMandatoryColumnEntry(path, row, worksheetMapping, formatting)
-                                            row += 1
-                                    elif not path.hasSuffix:
-                                        addPathWithoutSuffix(String_with_0_index, row, worksheetMapping, numberOfCSVitems, formatting)
-                                        addMandatoryColumnEntry(path, row, worksheetMapping, formatting)
-                                        row += 1
-                                    alreadyAddedPath.append(String_with_0_index)
+                                    #alreadyAddedPath.append(String_with_0_index)
 ################################################################################################################################################
     # Write Legende
     row += 1
-    worksheetMapping.write('B'+str(row+1), "Legend:")
-    worksheetMapping.write('B'+str(row+2), "Mandatory Path that needs to be present to get a valid Composition" , mandatory_cell_format)
-    worksheetMapping.write('B'+str(row+3), "Conditionally mandatory Path that needs to be present if the 'parent'-Element is exists" , cond_mandatory_cell_format)
-    worksheetMapping.write('B'+str(row+4), "Non-mandatory Path that does not need to be present to store the Composition" )
+    worksheetMapping.write('C'+str(row+1), "Legend:")
+    worksheetMapping.write('C'+str(row+2), "Mandatory Path that needs to be present to get a valid Composition" , mandatory_cell_format)
+    worksheetMapping.write('C'+str(row+3), "Conditionally mandatory Path that needs to be present if the 'parent'-Element is exists" , cond_mandatory_cell_format)
+    worksheetMapping.write('C'+str(row+4), "Non-mandatory Path that does not need to be present to store the Composition" )
     
     # End of Auto-indexed-Mapping Sheet
 
 def addPathWithSuffix(pathString, suffix, row, worksheetMapping, numberOfCSVitems, formatting):
-    worksheetMapping.write('B'+str(row+1),pathString + "|" + suffix, formatting)
-    worksheetMapping.data_validation('C'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
+    worksheetMapping.write('C'+str(row+1),pathString + "|" + suffix, formatting)
+    worksheetMapping.data_validation('D'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
 
 def addPathWithoutSuffix(pathString, row, worksheetMapping, numberOfCSVitems, formatting):
-    worksheetMapping.write('B'+str(row+1),pathString, formatting)
-    worksheetMapping.data_validation('C'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
+    worksheetMapping.write('C'+str(row+1),pathString, formatting)
+    worksheetMapping.data_validation('D'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
 
 def addMandatoryColumnEntry(path, row, worksheetMapping, formatting):
     # Pflichtangabe
@@ -288,13 +302,15 @@ def setAppearances(workbook, worksheetAutoIndexedMapping, worksheetPaths, worksh
 
     # Mapping
     worksheetAutoIndexedMapping.write('A1', '', header_cell_format) 
-    worksheetAutoIndexedMapping.write('B1', 'FLAT-Path (Data field in later composition - if mapped)', header_cell_format)
-    worksheetAutoIndexedMapping.write('C1', 'Map CSV-Column to Path (Dropdown-Selector)', header_cell_format) 
-    worksheetAutoIndexedMapping.write('D1', 'Set Metadata directly (optional)', header_cell_format) 
+    worksheetAutoIndexedMapping.write('B1', 'Index(e)', header_cell_format)
+    worksheetAutoIndexedMapping.write('C1', 'FLAT-Path (Data field in later composition - if mapped)', header_cell_format)
+    worksheetAutoIndexedMapping.write('D1', 'Map CSV-Column to Path (Dropdown-Selector)', header_cell_format) 
+    worksheetAutoIndexedMapping.write('E1', 'Set Metadata directly (optional)', header_cell_format) 
     worksheetAutoIndexedMapping.set_column('A:A', 5)
-    worksheetAutoIndexedMapping.set_column('B:B', 100)
-    worksheetAutoIndexedMapping.set_column('C:C', 50)
-    worksheetAutoIndexedMapping.set_column('D:D', 35)
+    worksheetAutoIndexedMapping.set_column('B:B', 15)
+    worksheetAutoIndexedMapping.set_column('C:C', 100)
+    worksheetAutoIndexedMapping.set_column('D:D', 50)
+    worksheetAutoIndexedMapping.set_column('E:E', 35)
 
     return mandatory_cell_format, cond_mandatory_cell_format
 

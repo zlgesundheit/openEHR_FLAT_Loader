@@ -154,17 +154,22 @@ class pathObject:
                 exampleValueDict[ self.pathString + "|" + 'issuer' ] = "Issuer Person"
                 exampleValueDict[ self.pathString + "|" + 'assigner' ] = "Assigning Organisation X"
             elif value == "DV_COUNT":
+                pass
+                """
                 for entry in self.inputs:
                     # Select number type
                     changer = getNumberOfType(entry['type'])
                     number = getRandNumberWithOrWithoutValidation(entry, changer)
                     exampleValueDict[ self.pathString ] = number
+                """
             elif value == "DV_DURATION":
+                """
                 for entry in self.inputs:
                     # Select number type
                     changer = getNumberOfType(entry['type'])
                     number = getRandNumberWithOrWithoutValidation(entry, changer)
                     exampleValueDict[ self.pathString + "|" + entry['suffix'] ] = number
+                """
             elif value == "DV_CODED_TEXT":
                 pass # TODO
             # DV_QUANTITY TODO
