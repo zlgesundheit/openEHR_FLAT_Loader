@@ -68,6 +68,8 @@ class pathObject:
     indexPathDict:dict = None
     isMandatory:bool = None
     isCondMandatory:bool = None
+    mappedCSVColumn:str = None
+    isMapped:bool = None
     rmType:str = None
     exampleValueDict:dict = None # None ## TODO ---> Evtl. als dict mit "Key" = pathString MIT Suffix!!!TODO und "Value" = ExampleValue # TODO buildExampleComp.py kurz umschreiben
 
@@ -82,6 +84,13 @@ class pathObject:
                 super(pathObject, self).__setattr__("hasSuffix", True)
             else:
                 super(pathObject, self).__setattr__("hasSuffix", False)
+        # Mapped value wird in buildComp gesetzt
+        elif name == "mappedCSVColumn":
+            super().__setattr__("mappedCSVColumn", value)
+            if isinstance(value, str) and len(value) > 0:
+                super(pathObject, self).__setattr__("isMapped", True)
+            else:
+                super(pathObject, self).__setattr__("isMapped", False)
         # Wird der PathString gesetzt, dann wird hasIndex, maxIndexNumber und indexPathDict geupdated
         elif name == "pathString":
             super().__setattr__("pathString", value)
