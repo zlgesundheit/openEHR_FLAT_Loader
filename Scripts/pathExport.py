@@ -21,7 +21,7 @@
 #
 # TODOs:
 # TODO Es wäre gut auch die Validation-Angaben mitzuschleppen. Bei Elementen, die diese haben. 
-# TODO Zu jedem Pfad sollte im Pfadobjekt ein valides Beispiel angelegt werden -> Zu händeln in PathObject.py
+# TODO Zu jedem Pfad sollte im Pfadobjekt ein valides Beispiel angelegt werden -> Zu händeln hier
 ###########################################################################
 
 # Standard library imports

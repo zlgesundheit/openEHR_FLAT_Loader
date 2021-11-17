@@ -53,8 +53,8 @@ def main(config):
     resArray = []
     try:
         if mappingIsEmpty(mapTabDF):
-            errorMsg = "The Mapping is empty."
-            raise Exception(errorMsg)
+            error_msg = "The Mapping is empty (in buildComp.py)"
+            raise Exception(error_msg)
 
         elif not mappingIsEmpty(mapTabDF):
             # Fuer jede Row/Zeile in CSV = eine Ressource
@@ -101,7 +101,7 @@ def main(config):
         # Dict Building is done
 
         print(indent + "buildComp finished.")
-    except Exception as error:
+    except Exception:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         print(exc_type, fname, exc_tb.tb_lineno)
@@ -132,7 +132,7 @@ def makePathStringWithIndexes(path, indexArrayString, dict_of_known_indexKombis)
     # Probleme:
     # pfad1<<index>> und pfad2/pfad<<index>> haben die selbe Index_ID (Beide z.B. 0) -> die 0 bezieht sich aber auf verschiedene Indexeintraege
     # Evtl. das ganze nicht in dict mit KEY = IndexId speichern sondern in dict mit KEY = indexPath <- das wird erstellt, wenn man in Pfadobjekt einen Pfad setzt. 
-    # TODO Pfadobjekte nutzen und das ganze pro? indexPath machen...
+    # TODO Pfadobjekte nutzen und das ganze pro? indexPath machen... Noch ein Dict mit KEY = IndexPfadString und VALUE = indexPath
 
     maxIndexNumber = None
     if indexArrayString != "nan":
@@ -152,13 +152,6 @@ def makePathStringWithIndexes(path, indexArrayString, dict_of_known_indexKombis)
                 realIndex = getRealIndexForMappedIndex(dict_of_known_indexKombis, einstellige_index_id)
 
                 path = setRealIndexesInPath(path, realIndex)
-                
-                print ("MappedIndex (Obj): ", dict_of_known_indexKombis[indexArrayString].mappedIndex)
-                print ("Real Index (Obj): ", dict_of_known_indexKombis[indexArrayString].realIndex)
-                print ("Counter (Obj): ", dict_of_known_indexKombis[indexArrayString].counter)
-
-                print ("Pfad nach Ersetzen: ", path)
-                print("\n")
 
             elif maxIndexNumber == 2:
                 # Wenn Teil 1 des indexArraqyStrings in schon bekannt, dann nehme den Wert, sonst erhöhe ihn und nehme den
@@ -218,18 +211,7 @@ def makePathStringWithIndexes(path, indexArrayString, dict_of_known_indexKombis)
         # Falls Index schon bekannt, dann einfach den bestehenden Wert als Index nehmen
         else:
             realIndex = str(dict_of_known_indexKombis[indexArrayString].realIndex)
-
-            print ("Bereits gemappt:")
-            print ("Pfad: ", path)
-
             path = setRealIndexesInPath(path, realIndex)
-
-            print ("MappedIndex (Obj): ", dict_of_known_indexKombis[indexArrayString].mappedIndex)
-            print ("Real Index (Obj): ", dict_of_known_indexKombis[indexArrayString].realIndex)
-            print ("Counter (Obj): ", dict_of_known_indexKombis[indexArrayString].counter)
-
-            print ("Pfad nach Ersetzen: ", path)
-
 
     return path, dict_of_known_indexKombis
 
@@ -259,15 +241,29 @@ def storeDictArrayAsRes(dictArray, templateName):
     i = 0
     for res in dictArray:
         filePath = os.path.join(workdir, 'Output', templateName + '_resource' + str(i) + ".json" )
-        with open(filePath,"w", encoding = 'UTF-8') as resFile:
-            json.dump(res, resFile, default=convert, indent=4, ensure_ascii=False)
-        i += 1
+        try:
+            with open(filePath,"w", encoding = 'UTF-8') as resFile:
+                json.dump(res, resFile, default=convert, indent=4, ensure_ascii=False)
+            i += 1
+        except:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
+            print(traceback.format_exc())
+            raise SystemExit
     print (indent + str(i) + f' Ressourcen erstellt und im Ordner "Output" gespeichert. \n')
 
 def xlsxAsDataFrame(templateName):
     '''Read Mapping as Dataframe'''
     xlsxPath = os.path.join(workdir, 'ManualTasks', templateName + '_MAPPING.xlsx')
-    mapTabDF = pd.read_excel(xlsxPath, "Auto-indexed Mapping", header=0, engine='openpyxl', dtype=str) 
+    try:
+        mapTabDF = pd.read_excel(xlsxPath, "Auto-indexed Mapping", header=0, engine='openpyxl', dtype=str) 
+    except:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+        print(traceback.format_exc())
+        raise SystemExit
     #engine openpyxl not xlrd since xlrd drop support for non-xls-files
     return mapTabDF
 

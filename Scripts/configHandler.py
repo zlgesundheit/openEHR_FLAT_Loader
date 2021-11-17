@@ -7,6 +7,8 @@ import base64
 import configparser
 import os.path
 from os import getcwd
+import sys
+import traceback
 # Third party imports
 import pandas as pd
 from chardet import detect
@@ -29,8 +31,14 @@ class config():
     allindexesareone = 1
 
     def __init__(self):
-        # TODO Exception Handling if config not exist etc.?
-        parser.read('config.ini')
+        try:
+            parser.read('config.ini')
+        except:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
+            print(traceback.format_exc())
+            raise SystemExit
         self.targetAdress            = parser['targetRepo']['targetRepoAdress']
         self.targetAuthHeader        = parser['targetRepo']['targetAuthHeader']
         self.targetopenEHRAPIadress  = parser['targetRepo']['targetopenEHRAPIadress']
@@ -59,13 +67,28 @@ def readCSVasDataFrame(inputCSV):
     if guessed_encoding == 'windows-1255':
         guessed_encoding = "ANSI"
 
-    # Read CSV-File   
-    dataDF = pd.read_csv(csvPath, header=0, delimiter=";", dtype = str, encoding = guessed_encoding)
+    # Read CSV-File  
+    try: 
+        dataDF = pd.read_csv(csvPath, header=0, delimiter=";", dtype = str, encoding = guessed_encoding)
+    except:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+        print(traceback.format_exc())
+        raise SystemExit
+
     return dataDF
 
 def guessCSVencoding(filepath):
     # look at the first ten thousand bytes to guess the character encoding
-    with open(filepath, 'rb') as rawdata:
-        result = detect(rawdata.read(10000))
+    try:
+        with open(filepath, 'rb') as rawdata:
+            result = detect(rawdata.read(10000))
+    except:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+        print(traceback.format_exc())
+        raise SystemExit
 
     return result['encoding']

@@ -6,7 +6,9 @@
 #     -> Zweite Idee direkt bei der Erstellung der Ressourcen angeben lassen in welcher Spalte die patientenkennung/fallkennung steht 
 #        und anschließend die ressource statt sie abzuspeichern direkt zu der ehrID hochladen)
 
-from os import stat
+import os
+import sys
+import traceback
 import requests
 #import grequests
 # TODO parallelize requests using grequest -> install grequest in correct python kernel -> Ist das notwendig. 
@@ -30,21 +32,28 @@ def uploadResourceToEhrId(baseUrl, repo_auth, ehrId, resource, templateName):
         'Prefer': 'return=minimal'
     }
 
-    print (payload)
-    response = requests.post(url, headers=headers, data=payload) #, timeout = 15)
-    
-    if response.status_code == 400:
-        raise RuntimeError
+    # print (payload)
+    try:
+        response = requests.post(url, headers=headers, data=payload) #, timeout = 15)
+        
+        if response.status_code == 400:
+            raise RuntimeError
 
-    resp_json = json.loads(response.text)
-    print ("\tStatus beim Upload der Composition: " + str(response.status_code))
-    print (resp_json)
-    if 'compositionUid' in resp_json:
+        resp_json = json.loads(response.text)
+        print ("\tStatus beim Upload der Composition: " + str(response.status_code))
+        print (resp_json)
+        #if 'compositionUid' in resp_json:
         print ("\t" + "CompositionUid: " + resp_json["compositionUid"] + "\n")
         return resp_json["compositionUid"]
-    else:
-        print ("Oops! Da lief etwas beim Upload der Composition schief.")
-        raise RuntimeError
+        #else:
+            #print ("Oops! Da lief etwas beim Upload der Composition schief.")
+            #raise RuntimeError
+    except:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+        print(traceback.format_exc())
+        raise SystemExit
 
 # for numpy int in pandas df 
 def convert(o):
@@ -95,14 +104,21 @@ def createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_na
         'Prefer' : 'return=representation'
     }
 
-    response = requests.post(url, data=payload, headers=headers)
+    try:
+        response = requests.post(url, data=payload, headers=headers)
+    except:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+        print(traceback.format_exc())
+        raise SystemExit
 
     if response.status_code == 200 or response.status_code == 201 or response.status_code == 204:
         response_dict = json.loads(response.text)
         ehrId = response_dict['ehr_id']['value']
         print ("\t" + "Created EHR with ehrID: " + ehrId)
     else:
-        print ("\t" + "Fehler beim EHR erstellen mit Status: " + str(response.status_code))
+        print ("\t" + "Hindernis beim EHR erstellen mit Status: " + str(response.status_code))
         # ehrId zu dem Subject abfragen -> Warum zur Hölle gibt der Konflikt eine PartyId die sich nirgend wiederfindet und ich muss nochmal abfragen..
         
         url = f'{baseUrl}/rest/openehr/v1/ehr?subject_id={subject_id}&subject_namespace={subject_namespace}'
@@ -111,12 +127,19 @@ def createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_na
         'Content-Type': 'application/json',
         'Prefer' : 'return=representation'
         }
-
-        response_bei_conflict = requests.get(url, headers=headers)
         
-        response_dict = json.loads(response_bei_conflict.text)
-        ehrId = response_dict['ehr_id']['value']
-        print ("\t  EHR existierte bereits mit ehrID: " + ehrId + "\n")
+        try:
+            response_bei_conflict = requests.get(url, headers=headers)
+        
+            response_dict = json.loads(response_bei_conflict.text)
+            ehrId = response_dict['ehr_id']['value']
+            print ("\t  EHR existierte bereits mit ehrID: " + ehrId + "\n")
+        except:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
+            print(traceback.format_exc())
+            raise SystemExit
 
     return ehrId
 
