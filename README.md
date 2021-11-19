@@ -9,6 +9,8 @@ Use with caution and you may only upload anonymized or pseudonymized data sets.
 
 If you find any problems when using this tool feel free to create an Issue on Gitlab.
 
+`At the moment the tool works fine with normal templates. More complex Templates with lots of repeatable clusters are not handled completely well - yet`
+
 ---
 ### _Prerequisites:_
 - Project was developed and tested on Windows using Python 3.8.10 with "openpyxl" and "requests"
