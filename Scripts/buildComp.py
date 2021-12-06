@@ -39,6 +39,14 @@ class indexKombi():
     counter[4] = 0
 
     def __init__(self):
+        self.realIndex = None
+        self.mappedIndex = None
+        self.counter = {}
+        self.counter[0] = 0
+        self.counter[1] = 0
+        self.counter[2] = 0
+        self.counter[3] = 0
+        self.counter[4] = 0
         pass
 
 def main(config):
@@ -77,22 +85,22 @@ def main(config):
                     # Test mit pathObject
                     if str(metadatumAusSpalteD) != "nan":
                         pathObj.pathString = path
-                        pathObj.mappedCSVColumn = metadatumAusSpalteD
+                        pathObj.mappedCSVColumn = metadatumAusSpalteD #Achtung, das setzen der Column-Variable setzt auch den isMapped Bool...
 
                         # Dict mit KEY = PFAD und VALUE = Value aus der CSV aus der gemappten Spalte    
                         if pathObj and pathObj.isMapped:
                             pathString, dict_of_known_indexKombis = makePathStringWithIndexes(path, indexArrayString, dict_of_known_indexKombis)
-                            
-                            dict[pathString] = pathObj.mappedCSVColumn
+                            dict[pathString] = metadatumAusSpalteD
 
                     elif str(gemappteSpalteAusCSV) != "nan":
                         pathObj.pathString = path
                         pathObj.mappedCSVColumn = gemappteSpalteAusCSV
 
                         # Dict mit KEY = PFAD und VALUE = Value aus der CSV aus der gemappten Spalte    
-                        if pathObj and pathObj.isMapped:
+                        if pathObj and pathObj.isMapped and str(csv_dataframe[ pathObj.mappedCSVColumn ][csvIndex]) != "nan":
                             pathString, dict_of_known_indexKombis = makePathStringWithIndexes(path, indexArrayString, dict_of_known_indexKombis)
-                            dict[pathObj.pathString] = csv_dataframe[ pathObj.mappedCSVColumn ][csvIndex]
+                            dict[pathString] = csv_dataframe[ pathObj.mappedCSVColumn ][csvIndex]
+
                     else:
                         pass
 
@@ -152,6 +160,16 @@ def makePathStringWithIndexes(path, indexArrayString, dict_of_known_indexKombis)
                 realIndex = getRealIndexForMappedIndex(dict_of_known_indexKombis, einstellige_index_id)
 
                 path = setRealIndexesInPath(path, realIndex)
+
+                print (path)
+                print (indexArrayString)
+                print ("MappedIndex (Obj): ", dict_of_known_indexKombis[indexArrayString].mappedIndex)
+                print ("Real Index (Obj): ", dict_of_known_indexKombis[indexArrayString].realIndex)
+                print ("Counter (Obj): ", dict_of_known_indexKombis[indexArrayString].counter)
+
+                print ("Pfad nach Ersetzen: ", path)
+                print("\n")
+
 
             elif maxIndexNumber == 2:
                 # Wenn Teil 1 des indexArraqyStrings in schon bekannt, dann nehme den Wert, sonst erhöhe ihn und nehme den

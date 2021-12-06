@@ -32,12 +32,13 @@ def uploadResourceToEhrId(baseUrl, repo_auth, ehrId, resource, templateName):
         'Prefer': 'return=minimal'
     }
 
-    # print (payload)
+    print (payload)
     try:
         response = requests.post(url, headers=headers, data=payload) #, timeout = 15)
         
         if response.status_code == 400:
-            raise RuntimeError
+            error_msg = "Response Code beim Upload der Composition 400: Bad Request"
+            raise RuntimeError(error_msg)
 
         resp_json = json.loads(response.text)
         print ("\tStatus beim Upload der Composition: " + str(response.status_code))
