@@ -9,6 +9,7 @@
 import requests
 import json
 import os.path
+import traceback
 # Third party imports
 # Local application imports
 
@@ -83,7 +84,10 @@ def queryWebtemplate(templateName, targetAdress, targetflatAPIadress, targetAuth
     queryPath = targetAdress + targetflatAPIadress + "template/" + templateName
     try:
         response = requests.get(queryPath, headers = {'Authorization':targetAuthHeader})
+        if (response.status_code != 200):
+            raise Exception(("Status Code: " + str(response.status_code)) + "\n " + indent + "Server-Message: " + response.text )
         json_resp = response.json()
+
     except Exception as e:
         print(indent + "Error while querying and saving WebTemplate from TargetRepo" + "\n" + indent + str(e))
         raise SystemExit

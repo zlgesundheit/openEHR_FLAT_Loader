@@ -13,6 +13,7 @@
 # Standard library imports
 import os.path
 from os import getcwd
+import traceback
 # Third party imports
 # Local application/script imports
 from Scripts import configHandler
@@ -54,12 +55,24 @@ def main():
 def runStep(choosenStep):
     if (choosenStep == str(1)):
         # Upload OPT to openEHR-Repo if necessary
-        webTemp = handleOPT.main(config)
-        
+        try:
+            webTemp = handleOPT.main(config)
+        except Exception as e:
+            print(indent + "Template konnte nicht gelesen oder WebTemplate konnte nicht korrekt abgerufen werden.")
+            print (indent + str(e))
+            traceback.print_exc()
+            raise SystemExit
+
         # Extrahiere Pfade in Array von Pfadobjekten 
         pathArray = pathExport.main(webTemp, config.templateName)
 
-        csv_dataframe = configHandler.readCSVasDataFrame(config.inputCSV)
+        try:
+            csv_dataframe = configHandler.readCSVasDataFrame(config.inputCSV)
+        except Exception as e:
+            print(indent + "Daten-CSV konnte nicht korrekt gelesen eingelesen werden.")
+            print (indent + str(e))
+            traceback.print_exc()
+            raise SystemExit
 
         # Baue Mapping
         mappingListGen.main(config.templateName, csv_dataframe, pathArray, allindexesareone = config.allindexesareone)

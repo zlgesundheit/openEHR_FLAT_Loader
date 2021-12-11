@@ -14,6 +14,7 @@ from chardet import detect
 
 parser = configparser.ConfigParser()
 workdir = os.getcwd()
+config_path = os.path.join(workdir, 'config.ini')
 
 class config():
     targetAdress = 'http://141.5.100.115/ehrbase'
@@ -30,7 +31,7 @@ class config():
 
     def __init__(self):
         # TODO Exception Handling if config not exist etc.?
-        parser.read('config.ini')
+        parser.read(config_path)
         self.targetAdress            = parser['targetRepo']['targetRepoAdress']
         self.targetAuthHeader        = parser['targetRepo']['targetAuthHeader']
         self.targetopenEHRAPIadress  = parser['targetRepo']['targetopenEHRAPIadress']
