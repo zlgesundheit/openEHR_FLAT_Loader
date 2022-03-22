@@ -12,6 +12,22 @@ If you find any problems when using this tool feel free to create an Issue on Gi
 `At the moment the tool works fine with normal templates. More complex Templates with lots of repeatable clusters are not handled completely well - yet`
 
 ---
+### About the Zukunftslabor Gesundheit
+The [_Zukunftslabor Gesundheit_ (ZLG)](https://www.zdin.de/zukunftslabore/gesundheit) is one of the "future labs" under the umbrella organization _Zentrum für digitale Innovation Niedersachsen_ (ZDIN). 
+
+The ZLG is a joint project of scientific institutions and local partners from the economy. In different work packages and use cases the participants push towards digitization and technological progression in health as well as translation of knowledge from researchers towards the general public.
+The efforts are organized in three work groups, namely:
+- TP1 - Data Infrastructure and Privacy Preserving Analysis
+- TP2 - Sensors
+- TP3 - Education and training
+
+TP1 includes data management aspects, openEHR-utilization and the openEHR_FLAT_Loader.
+
+##### Documentation:
+The Manual about the ETL-Loader is in the Docs-Folder of this Repo.
+There is general documentation covering the project/infrastructure -> [zlg-docs](https://gitlab.gwdg.de/medinf/ivf/zukunftslabor-gesundheit/docs-zlg) `Documentation is work in progress`
+
+---
 ### _Prerequisites:_
 - Project was developed and tested on Windows using Python 3.8.10 with "openpyxl" and "requests"
 - You need an openEHR-Repo that supports the FLAT-Format and WebTemplates (e.g. [EHRBase](https://github.com/ehrbase/ehrbase))
