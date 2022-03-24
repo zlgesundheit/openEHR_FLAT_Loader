@@ -9,7 +9,7 @@ Use with caution and you may only upload anonymized or pseudonymized data sets.
 
 If you find any problems when using this tool feel free to create an Issue on Gitlab.
 
-`At the moment the tool works fine with normal templates. More complex Templates with lots of repeatable clusters are not handled completely well - yet`
+`At the moment the tool works fine with normal templates. More complex Templates with lots of repeatable clusters are supported in the dev-branch but not yet in the master-branch`
 
 ---
 ### About the Zukunftslabor Gesundheit
