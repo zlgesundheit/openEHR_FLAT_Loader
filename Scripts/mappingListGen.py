@@ -20,11 +20,11 @@ workdir = os.getcwd()
 
 ############################### Main ###############################
 
-def main(templateName, csv_dataframe, pathArray, allindexesareone):
+def main(manualTaskDir,templateName, csv_dataframe, pathArray, allindexesareone):
     print("MappingListGen is running:")
     
     # Create Excel-File
-    excelPath = os.path.join(workdir, 'ManualTasks', templateName + '_MAPPING.xlsx')
+    excelPath = os.path.join(manualTaskDir, templateName + '_MAPPING.xlsx')
     workbook = xlsxwriter.Workbook(excelPath)
 
     worksheetAutoIndexedMapping = workbook.add_worksheet('Auto-indexed Mapping')

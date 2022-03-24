@@ -19,11 +19,11 @@ workdir = os.getcwd()
 
 ############################### Main ###############################
 
-def main(config):
+def main(config, manualTaskDir, OPTDirPath):
     print("\nHandleOPT is running:")
 
     # Read OPT from Input Folder
-    optFile = readOPTfromInput(config.templateName)
+    optFile = readOPTfromInput(OPTDirPath, config.templateName)
 
     # Upload OPT to server
     uploadOPT(config.templateName, optFile, config.targetAdress, config.targetopenEHRAPIadress, config.targetAuthHeader)
@@ -36,17 +36,16 @@ def main(config):
     webTemp = json.loads(webTemplateResp)
 
     # Save WebTemplate to Manual Tasks Directory because it is so damn important for the mapping task
-    filePath = os.path.join(workdir, 'ManualTasks')
-    storeWebTemplate(filePath, config.templateName, webTemp)
+    storeWebTemplate(manualTaskDir, config.templateName, webTemp)
 
     print (indent + "OPT exists at server and WebTemplate has been downloaded")
     return webTemp
 
 ############################### Methods ###############################
 
-def readOPTfromInput(templateName):
+def readOPTfromInput(OPTDirPath, templateName):
     """Read File with specific name from OPT-Folder"""
-    filePath = os.path.join(workdir, 'Input', 'OPT', templateName +'.opt')
+    filePath = os.path.join(OPTDirPath, templateName +'.opt')
     try:
         f = open(filePath, "r", encoding='utf-8')
         optFile = f.read()
@@ -106,9 +105,9 @@ def queryWebtemplate(templateName, targetAdress, targetflatAPIadress, targetAuth
         raise SystemExit
     return json_resp
 
-def storeWebTemplate(path, templateName, webTemp) -> None:
+def storeWebTemplate(manualTaskDir, templateName, webTemp) -> None:
     """Store a JSON-String as a file"""
-    filePath = os.path.join(workdir, path, templateName + '_WebTemplate.json')
+    filePath = os.path.join(manualTaskDir, templateName + '_WebTemplate.json')
     try:
         with open(filePath, 'w', encoding="utf-8") as templateFile:
             json.dump(webTemp, templateFile, indent = 4, ensure_ascii=False)

@@ -49,14 +49,14 @@ class indexKombi():
         self.counter[4] = 0
         pass
 
-def main(config):
+def main(config,manualTaskDir,outputDir):
     print(os.linesep + "Step 3: BuildComp is running.")
     
     # Read CSV as data frame
     csv_dataframe = configHandler.readCSVasDataFrame(config.inputCSV)
 
     # Read Excel-File as data frame
-    mapTabDF = xlsxAsDataFrame(config.templateName)
+    mapTabDF = xlsxAsDataFrame(manualTaskDir,config.templateName)
 
     resArray = []
     try:
@@ -117,7 +117,7 @@ def main(config):
         raise SystemExit
 
     # Erstellte Compositions im Output-Ordner speichern
-    storeDictArrayAsRes(resArray, config.templateName)
+    storeDictArrayAsRes(outputDir, resArray, config.templateName)
 
     return resArray
 
@@ -254,11 +254,11 @@ def getRealIndexForMappedIndex(dict_of_known_indexKombis, index_id):
 
 ####################################################################################################################################
 
-def storeDictArrayAsRes(dictArray, templateName):
+def storeDictArrayAsRes(outputDir,dictArray, templateName):
     '''Dump Dicts as JSON-String in Files'''
     i = 0
     for res in dictArray:
-        filePath = os.path.join(workdir, 'Output', templateName + '_resource' + str(i) + ".json" )
+        filePath = os.path.join(outputDir, templateName + '_resource' + str(i) + ".json" )
         try:
             with open(filePath,"w", encoding = 'UTF-8') as resFile:
                 json.dump(res, resFile, default=convert, indent=4, ensure_ascii=False)
@@ -271,9 +271,9 @@ def storeDictArrayAsRes(dictArray, templateName):
             raise SystemExit
     print (indent + str(i) + f' Ressourcen erstellt und im Ordner "Output" gespeichert. \n')
 
-def xlsxAsDataFrame(templateName):
+def xlsxAsDataFrame(manualTaskDir,templateName):
     '''Read Mapping as Dataframe'''
-    xlsxPath = os.path.join(workdir, 'ManualTasks', templateName + '_MAPPING.xlsx')
+    xlsxPath = os.path.join(manualTaskDir, templateName + '_MAPPING.xlsx')
     try:
         mapTabDF = pd.read_excel(xlsxPath, "Auto-indexed Mapping", header=0, engine='openpyxl', dtype=str) 
     except:
