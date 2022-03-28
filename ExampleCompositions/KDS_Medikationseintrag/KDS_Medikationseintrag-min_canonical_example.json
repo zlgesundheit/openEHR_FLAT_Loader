@@ -67,6 +67,6 @@
     "archetype_node_id": "openEHR-EHR-COMPOSITION.medication_list.v1",
     "uid": {
         "_type": "OBJECT_VERSION_ID",
-        "value": "f2e01725-d2fb-4317-b8fa-8ca7976e5f71::local.ehrbase.org::1"
+        "value": "a4825594-f9fa-4189-9d86-5e449ff9b476::local.ehrbase.org::1"
     }
 }

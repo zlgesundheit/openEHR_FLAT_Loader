@@ -15,6 +15,7 @@
     "medikamentenliste/medikationseintrag:0/arzneimittel/arzneimittelgruppe:0/katalog/version": "Beispieltext",
     "medikamentenliste/medikationseintrag:0/startzeitpunkt_einnahme": "1989-11-09T21:20:00+02:00",
     "medikamentenliste/medikationseintrag:0/endzeitpunkt_einnahme": "1989-11-09T21:20:00+02:00",
+    "medikamentenliste/medikationseintrag:0/dosierung:0/dosierungsreihenfolge": 7185718063529676685,
     "medikamentenliste/medikationseintrag:0/dosierung:0/dosierung_freitext": "Beispieltext",
     "medikamentenliste/medikationseintrag:0/dosierung:0/tägliche_dosierung:0/zeitpunkt/time_value": "21:20:00",
     "medikamentenliste/medikationseintrag:0/dosierung:0/tägliche_dosierung:0/zeitpunkt/interval<time>_value/upper": "21:20:00",
