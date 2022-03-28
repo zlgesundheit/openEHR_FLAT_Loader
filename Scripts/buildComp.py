@@ -18,8 +18,8 @@ import pandas as pd
 import numpy as np
 # import openpyxl
 # Local application imports
-from Scripts import configHandler
-from Scripts import pathObject
+from Scripts import handleConfig
+from Scripts import pathObjectClass
 
 # openpyxl does not support Validation in Excel-Files and sends a warning
 warnings.filterwarnings('ignore', category=UserWarning, module='openpyxl')
@@ -53,7 +53,7 @@ def main(config,manualTaskDir,outputDir):
     print(os.linesep + "Step 3: BuildComp is running.")
     
     # Read CSV as data frame
-    csv_dataframe = configHandler.readCSVasDataFrame(config.inputCSV)
+    csv_dataframe = handleConfig.readCSVasDataFrame(config.inputCSV)
 
     # Read Excel-File as data frame
     mapTabDF = xlsxAsDataFrame(manualTaskDir,config.templateName)
@@ -76,7 +76,7 @@ def main(config,manualTaskDir,outputDir):
                 for xlsxIndex, xlsxRow in mapTabDF.iterrows():
                     path = xlsxRow['FLAT-Path (Data field in later composition - if mapped)']
                     indexArrayString = str(xlsxRow['Index(e)'])
-                    pathObj = pathObject.pathObject()
+                    pathObj = pathObjectClass.pathObject()
                     
                     # Gemappte Spalten auslesen
                     gemappteSpalteAusCSV = mapTabDF['Map CSV-Column to Path (Dropdown-Selector)'][xlsxIndex]

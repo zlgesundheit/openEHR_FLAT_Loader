@@ -9,8 +9,8 @@ import os.path
 import xlsxwriter
 import pandas as pd
 # Local application imports
-from Scripts import pathObject
-from Scripts import configHandler
+from Scripts import pathObjectClass
+from Scripts import handleConfig
 
 import sys
 #sys.setrecursionlimit(10000)

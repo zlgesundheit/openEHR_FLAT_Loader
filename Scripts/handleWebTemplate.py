@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ###########################################################################
-# PATHS from WebTemplate
+# Export PATHS from WebTemplate
 
 # Dieses Skript extrahiert FLAT-Pfade aus einem WebTemplate. Das WebTemplate basiert auf dem simSDT-WebTemplate Format der Firma Better, 
 # welches sowohl die Better Platform als auch die EHRBase unterstützt. 
@@ -30,7 +30,7 @@ import sys
 import os
 # Third party imports
 # Local application imports
-from Scripts import pathObject
+from Scripts import pathObjectClass
 
 indent = "\t"
 
@@ -88,7 +88,7 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
         # Falls Element Inputs hat oder weder Inputs noch Children, dann ist es ein Blatt
         elif 'inputs' in element or element['rmType'] == "CODE_PHRASE":
             # Pfad-Objekt anlegen
-            path = pathObject.pathObject()
+            path = pathObjectClass.pathObject()
 
             path.id = element['id']
             path.pathString = suffixPath

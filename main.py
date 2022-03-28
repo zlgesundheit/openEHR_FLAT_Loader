@@ -17,16 +17,16 @@ import sys
 import traceback
 # Third party imports
 # Local application/script imports
-from Scripts import configHandler
+from Scripts import handleConfig
 from Scripts import handleOPT
 from Scripts import buildComp
-from Scripts import pathExport
-from Scripts import mappingListGen
-from Scripts import ucc_uploader
+from Scripts import handleWebTemplate
+from Scripts import buildMapping
+from Scripts import handleUpload
 from Scripts import buildExampleComp
 
 #Init Config-Object
-config = configHandler.config()
+config = handleConfig.config()
 indent = "\t"
 workdir = getcwd()
 sourceDataCsvFP = os.path.join(workdir, 'ETLProcess', 'Input', 'CSV', config.inputCSV + '.csv')
@@ -66,23 +66,23 @@ def generateMapping():
     webTemp = handleOPT.main(config,manualTaskDir,OPTDirPath)
 
     # Extrahiere Pfade in Array von Pfadobjekten 
-    pathArray = pathExport.main(webTemp, config.templateName)
+    pathArray = handleWebTemplate.main(webTemp, config.templateName)
 
-    csv_dataframe = configHandler.readCSVasDataFrame(config.inputCSV)
+    csv_dataframe = handleConfig.readCSVasDataFrame(config.inputCSV)
 
     # Baue Mapping
-    mappingListGen.main(manualTaskDir,config.templateName, csv_dataframe, pathArray, allindexesareone = config.allindexesareone)
+    buildMapping.main(manualTaskDir,config.templateName, csv_dataframe, pathArray, allindexesareone = config.allindexesareone)
 
 def buildAndUploadCompositions():
     resArray = buildComp.main(config,manualTaskDir,outputDir)
 
     #Create EHRs for all patients in csv
     if config.createehrs == "1":
-        csv_dataframe = csv_dataframe = configHandler.readCSVasDataFrame(config.inputCSV)
+        csv_dataframe = csv_dataframe = handleConfig.readCSVasDataFrame(config.inputCSV)
         anzahl_eintraege = len(csv_dataframe.index)
 
         print (f'Create {anzahl_eintraege} EHRs:')
-        csv_dataframe = ucc_uploader.createEHRsForAllPatients(config.targetAdress, config.targetAuthHeader, csv_dataframe, config.subjectidcolumn , config.subjectnamespacecolumn)
+        csv_dataframe = handleUpload.createEHRsForAllPatients(config.targetAdress, config.targetAuthHeader, csv_dataframe, config.subjectidcolumn , config.subjectnamespacecolumn)
         csvPath = sourceDataCsvFP
         csv_dataframe.to_csv(csvPath, sep=";", index = False, encoding = "UTF-8")
     else:
@@ -91,7 +91,7 @@ def buildAndUploadCompositions():
 
     # Send resource to server
     if config.directupload == "1":
-        csv_dataframe = configHandler.readCSVasDataFrame(config.inputCSV)
+        csv_dataframe = handleConfig.readCSVasDataFrame(config.inputCSV)
         anzahl_eintraege = len(csv_dataframe.index)
 
         print ("Upload Compositions:")
@@ -99,7 +99,7 @@ def buildAndUploadCompositions():
         for res in resArray:
             #Wird dann in buildComp auffgerufen, liest hier die aktuelle CSV mit ehrIds ein
             ehrId = csv_dataframe['ehrId'][quick_and_dirty_index]
-            ucc_uploader.uploadResourceToEhrId(config.targetAdress, config.targetAuthHeader, ehrId, res, config.templateName)
+            handleUpload.uploadResourceToEhrId(config.targetAdress, config.targetAuthHeader, ehrId, res, config.templateName)
 
             quick_and_dirty_index += 1
     else:
@@ -111,7 +111,7 @@ def generateExamples():
     webTemp = handleOPT.main(config,manualTaskDir,OPTDirPath)
 
     # Extrahiere Pfade in Array von Pfadobjekten 
-    pathArray = pathExport.main(webTemp, config.templateName)
+    pathArray = handleWebTemplate.main(webTemp, config.templateName)
 
     # Build Minimal Example
     buildExampleComp.main(workdir, pathArray, config.templateName, config.targetAdress, config.targetAuthHeader, "min")

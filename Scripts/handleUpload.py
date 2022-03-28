@@ -62,9 +62,8 @@ def convert(o):
     raise TypeError
 
 def createEHRsForAllPatients(baseUrl, repo_auth, csv_dataframe, patient_id_column_name, subject_namespace_column_name):
-    '''Nimmt CSV und Spaltenname der identifizierenden ID / Primaerschluessel des Datensatzes entgegen, um fuer jeden Patienten ein EHR zu erstellen.
-       Ein Check, ob die EHR zu der ID bereits existiert ist notwendig.
-    '''
+    """Nimmt CSV und Spaltenname der identifizierenden ID / Primaerschluessel des Datensatzes entgegen, um fuer jeden Patienten ein EHR zu erstellen.
+       Ein Check, ob die EHR zu der ID bereits existiert ist notwendig."""
     for index in csv_dataframe.index:   ## TODO LATER make a cool apply+lambda to read subject id and subject_namespace per row and make things. For now use 
         # Try to retrieve existing ehr by "subject id" and "subject namespace" 
         subject_id = csv_dataframe[patient_id_column_name][index]

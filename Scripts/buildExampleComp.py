@@ -18,7 +18,7 @@ import traceback
 # Third party imports
 import numpy as np
 # Local application imports
-from Scripts import ucc_uploader
+from Scripts import handleUpload
 
 ############################### Main ###############################
 
@@ -38,7 +38,7 @@ def main(workdir, pathArray, templateName, baseUrl, repo_auth, type):
 # TODO Man koennte die If-Bedinung in die for-Schleife packen und damit Code-Zeilen einsparen, da Up/Download und Speichern für Min/Max gleich sind. Ist jetzt gerade aber anders gelaufen.
 def buildExample(outdir, pathArray, templateName, baseUrl, repo_auth, type):
     # Create Example EHR
-    ehrId = ucc_uploader.createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, "examplePatient", "openEHR_FLAT_Loader")
+    ehrId = handleUpload.createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, "examplePatient", "openEHR_FLAT_Loader")
     
     #Build Minimal Resource-Dict mit nur allen Pflichtpfaden
     if type == "min":
@@ -71,7 +71,7 @@ def buildExample(outdir, pathArray, templateName, baseUrl, repo_auth, type):
         # Upload FLAT Example-Comp
         flat_res = dict #json.dumps(dict)
         try:
-            compId = ucc_uploader.uploadResourceToEhrId(baseUrl, repo_auth, ehrId, flat_res, templateName)
+            compId = handleUpload.uploadResourceToEhrId(baseUrl, repo_auth, ehrId, flat_res, templateName)
         except RuntimeError:
             print("\tOops! Die Example-Composition wurde nicht erfolgreich hochgeladen.")
             raise SystemExit
@@ -117,7 +117,7 @@ def buildExample(outdir, pathArray, templateName, baseUrl, repo_auth, type):
         # Upload FLAT Maximal Composition
         flat_res = dict #json.dumps(dict)
         try:
-            compId = ucc_uploader.uploadResourceToEhrId(baseUrl, repo_auth, ehrId, flat_res, templateName)
+            compId = handleUpload.uploadResourceToEhrId(baseUrl, repo_auth, ehrId, flat_res, templateName)
         except RuntimeError:
             print("\tOops! Die Example-Composition wurde nicht erfolgreich hochgeladen.")
             raise SystemExit
