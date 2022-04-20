@@ -72,7 +72,7 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
         localMandatoryFlag = pathIsMandatoryFlag
 
         # Pfad zum aktuellen Element -> Bei (Max: -1) Mehrfacheintraege zulaessig dann :<<index>> im Pfad
-        if element['max'] == -1:
+        if element['max'] == -1 or (element['max'] > 1 and element['max'] > element['min']):
             suffixPath = parentPath + '/' + element['id'] + ':<<index>>'
         else:
             suffixPath = parentPath + '/' + element['id']
@@ -138,7 +138,7 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
                 path.suffixList = ['value','formalism']
             # Case 12: DV_DURATION -> year,month,day,week,hour,minute,second	
             elif (element['rmType'] == "DV_DURATION"):
-                path.suffixList = ['year','month','day','week','hour','minute','second']         
+                path.suffixList = []         
 
             pathArray.append(path)
 
