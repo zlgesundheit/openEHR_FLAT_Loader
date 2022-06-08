@@ -1,64 +1,58 @@
 # openEHR_FLAT_Loader
-ETL-Tool to transform Source Data and upload to an openEHR-Repository (for a given Template).
+ETL-Tool to transform Source Data into openEHR-Compositions (for a given Template) and upload those Compositions to an openEHR-Repository .
 
 ---
 #### _Disclaimer_ 
-This Tool is not a finished product. Put flat its a ragbag of python scripts for half-automated ETL.  
-Use with caution and you may only upload anonymized or pseudonymized data sets. 
+This Tool is not a finished product. Use with caution and also take care of privacy needs regarding your data sets. 
 
-
-If you find any problems when using this tool feel free to create an Issue on Gitlab.
+If you find any problems when using this tool feel free to contact us or create an issue.
 
 ---
 ### _Prerequisites:_
 - Project was developed and tested on Windows using Python 3.8.10 
-- For dependencies see [License and Dependencies](#License and Dependencies)
-- You need an openEHR-Repo that supports the FLAT-Format and WebTemplates (e.g. [EHRBase](https://github.com/ehrbase/ehrbase))
-    - Dockered version of the EHRBase can be found from different public sources.
+- For dependencies see [License and Dependencies](#license-and-dependencies)
+- You need an openEHR-Repo that supports the FLAT-Format and WebTemplates 
+    - e.g. [EHRBase](https://github.com/ehrbase/ehrbase): A dockered version of the EHRBase can be found from different public sources.
+
+---
+## Manual (Usage, Example and openEHR) **-- Work in Progress --**
+A guide on how to use the tool and explanation of the context (openEHR, data curation) is currently being developed.  
+The manual can be found [in the Docs-Folder](/Docs/MANUAL_openEHR_FLAT_Loader.md).
 
 ---
 ## Usage
-Features:
+### Features:
 1. Create a Mapping-Table in xlsx/Excel-Format
-2. Create Compositions and upload to openEHR-Repository
+2. Create Compositions and upload to an openEHR-Repository
 3. [PLANNED] Create an Example-Composition in FLAT or CANONICAL Json-Format
 
-### 1. To create the Mapping-Table:
-
-Preparation:  
-
+### Create a Mapping-Table:
+0. Preparation:
     - Place your Template (.opt-File) in the Input-Folder under /OPT
-    - Place your Data (.csv-File) in the Input-Folder under /CSV
-        - Please encode your .csv-File as UTF-8
+    - Place your Data (.csv-File,, UTF-8 encoded) in the Input-Folder under /CSV
     - Edit the config.ini and at least set:
-        - templatename
-        - inputcsv
+        - templatename (Name of your Template)
+        - inputcsv (Name of your .csv-File)
         - targetrepoadress  (Base adress of the openEHR-Server e.g. `http://141.5.100.199/ehrbase`)
         - targetauthheader  (Base64 encode of "username:password")  
 
-Start the Tool:  
+1. Start the Tool:  
+    - Use 'run_Step1_MappingGenerator.bat' or run 'python main.py -generateMapping'
 
-    - Run Tool using the runFlatLoader.bat on Windows (otherwise run main.py)
-        - Run Step 1 of the Tool by typing `1` and hit `Enter`
-
-Give additional information (which the mapping requires for some Templates that include repeatable elements): 
-
+2. Follow the instructions:
     - If an Element in the Template can occur multiple times in one composition you will be asked how many times it occurs in your data.
         - Input the maximum number of occurences and hit enter
         - Example: Blood Pressure Value is measured multiple times per Patient
             - The Path blood_pressure:0 might hold the values about the first measurement and blood_pressure:1 the values for the second measure.
 
-Perform and enjoy the Mapping-Task:  
-
+3. Fill out the Mapping-Table:  
     - You will find the Mapping-Table-File in Directory "ManualTasks" named by the corresponding Template
         - You can now map the `Items/Paths from the Template` to `Columns in your Data` by selecting CSV-Items from the Dropdown in Column B
         - On the Sheets "FLAT_Paths" and "CSV_Items" you find some additional information about both parts of the mapping
 
-You might have noticed that there is some information required that is not yet included in your data
-
+What to do if you need to map data fields that are not present in your source data?
     - Mandatory data fields are marked with "Pflichtfeld" in the Mapping-Table
-
-    - openEHR-Compositions need to hold metadata that you shall ad to your Data/.csv-File so you can map it
+    - openEHR-Compositions need to hold metadata that you shall add to your Data/.csv-File so you can map it
     - Common Metadata:
         - "<path>/composer|name": "jendrik.richter@med.uni-goettingen.de",
         - "<path>/language|code": "de",
@@ -144,11 +138,6 @@ _Process-Overview:_
 ![BPMN-Process-Overview](/Docs/Figures/Process_Overview_Screenshot.jpg)
 
 ---
-## Manual (Usage, Example and openEHR) -- Work in Progress --
-A guide on how to use the tool and explaination of the context (openEHR, data curation) is currently being developed.  
-The manual can be found [here](/Docs/MANUAL_openEHR_FLAT_Loader.md) and is located in the "Docs" folder.
-
----
 ## License and Dependencies
 Copyright (C) 2020-2021 openehr_flat_loader contributors, see [AUTHORS.md](/AUTHORS.md)  
 
@@ -156,13 +145,15 @@ The openehr_flat_loader project source code is licensed under [GNU General Publi
 
 The following third party libraries or contents are part of the openEHR_FLAT_Loader projekt:  
 * Python, Copyright © 2001-2021 Python Software Foundation, PSF License Agreement and Zero-Clause BSD license., https://docs.python.org/3/license.html
+
+**Dependencies:**
 * openpyxl, Copyright (c) 2010 openpyxl, MIT Licence, https://github.com/fluidware/openpyxl/blob/master/LICENCE
 * Pandas / Numpy
 * xlsxwriter
+* requests
 * chardet
 
-Part of Python Standard Libs:
-* requests
+**Part of Python Standard Libs:**
 * json
 * configparser
 * base64
