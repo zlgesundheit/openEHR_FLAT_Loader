@@ -156,8 +156,7 @@ The openehr_flat_loader project source code is licensed under [GNU General Publi
 The following third party libraries or contents are part of the openEHR_FLAT_Loader projekt:  
 * Python, Copyright © 2001-2021 Python Software Foundation, PSF License Agreement and Zero-Clause BSD license., https://docs.python.org/3/license.html
 * openpyxl, Copyright (c) 2010 openpyxl, MIT Licence, https://github.com/fluidware/openpyxl/blob/master/LICENCE
-* Pandas
-* Numpy
+* Pandas / Numpy
 * xlsxwriter
 * chardet
 
