@@ -11,7 +11,8 @@ If you find any problems when using this tool feel free to create an Issue on Gi
 
 ---
 ### _Prerequisites:_
-- Project was developed and tested on Windows using Python 3.8.10 with "openpyxl" and "requests"
+- Project was developed and tested on Windows using Python 3.8.10 
+- For dependencies see [License and Dependencies](#License and Dependencies)
 - You need an openEHR-Repo that supports the FLAT-Format and WebTemplates (e.g. [EHRBase](https://github.com/ehrbase/ehrbase))
     - Dockered version of the EHRBase can be found from different public sources.
 
@@ -148,7 +149,7 @@ A guide on how to use the tool and explaination of the context (openEHR, data cu
 The manual can be found [here](/Docs/MANUAL_openEHR_FLAT_Loader.md) and is located in the "Docs" folder.
 
 ---
-## License
+## License and Dependencies
 Copyright (C) 2020-2021 openehr_flat_loader contributors, see [AUTHORS.md](/AUTHORS.md)  
 
 The openehr_flat_loader project source code is licensed under [GNU General Public License 3.0](https://spdx.org/licenses/GPL-3.0-or-later.html), see [license file](/LICENSE)  
