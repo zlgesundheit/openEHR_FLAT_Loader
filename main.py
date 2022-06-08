@@ -29,7 +29,7 @@ from Scripts import buildExampleComp
 config = handleConfig.config()
 indent = "\t"
 workdir = getcwd()
-sourceDataCsvFP = os.path.join(workdir, 'ETLProcess', 'Input', 'CSV', config.inputCSV + '.csv')
+sourceDataCsvFP = os.path.join(workdir, 'ETLProcess', 'Input', config.inputCSV + '.csv')
 OPTDirPath      = os.path.join(workdir, 'OPTs')
 manualTaskDir   = os.path.join(workdir, 'ETLProcess', 'ManualTasks')
 outputDir       = os.path.join(workdir, 'ETLProcess', 'Output')
@@ -92,6 +92,8 @@ def buildAndUploadCompositions():
     else:
         print ("EHR Creation is disabled in Config.ini")
         pass
+
+    print (config.directupload)
 
     # Send resource to server
     if config.directupload == "1":

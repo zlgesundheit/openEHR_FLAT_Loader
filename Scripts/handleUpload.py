@@ -37,6 +37,7 @@ def uploadResourceToEhrId(baseUrl, repo_auth, ehrId, resource, templateName):
         response = requests.post(url, headers=headers, data=payload) #, timeout = 15)
         
         if response.status_code == 400:
+            print(response.text)
             error_msg = "Response Code beim Upload der Composition 400: Bad Request"
             raise RuntimeError(error_msg)
 
@@ -100,14 +101,12 @@ def createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_na
         'Authorization' : repo_auth,
         'Content-type': 'application/json',
         'Prefer' : 'return=representation',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Accept': '*/*'
     }
 
+    #response = requests.post(url, data=payload, headers=headers)
+    response = requests.request("POST", url, headers=headers, data=payload)
+    '''
     try:
-        print (url)
-        print (payload)
-        #response = requests.post(url, data=payload, headers=headers)
         response = requests.post(url, data=payload, headers=headers)
         print (response.statusCode)
     except:
@@ -117,7 +116,7 @@ def createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_na
         print(exc_type, fname, exc_tb.tb_lineno)
         print(traceback.format_exc())
         raise SystemExit
-
+    '''
     if response.status_code == 200 or response.status_code == 201 or response.status_code == 204:
         response_dict = json.loads(response.text)
         ehrId = response_dict['ehr_id']['value']
@@ -133,18 +132,18 @@ def createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_na
         'Prefer' : 'return=representation'
         }
         
-        try:
-            response_bei_conflict = requests.get(url, headers=headers)
-        
-            response_dict = json.loads(response_bei_conflict.text)
-            ehrId = response_dict['ehr_id']['value']
-            print ("\t  EHR existierte bereits mit ehrID: " + ehrId + "\n")
-        except:
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(exc_type, fname, exc_tb.tb_lineno)
-            print(traceback.format_exc())
-            raise SystemExit
+        #try:
+        response_bei_conflict = requests.get(url, headers=headers)
+    
+        response_dict = json.loads(response_bei_conflict.text)
+        ehrId = response_dict['ehr_id']['value']
+        print ("\t  EHR existierte bereits mit ehrID: " + ehrId + "\n")
+        #except:
+        #    exc_type, exc_obj, exc_tb = sys.exc_info()
+        #    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        #    print(exc_type, fname, exc_tb.tb_lineno)
+        #    print(traceback.format_exc())
+        #    raise SystemExit
 
     return ehrId
 
