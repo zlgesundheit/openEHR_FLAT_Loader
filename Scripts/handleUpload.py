@@ -80,9 +80,7 @@ def createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_na
     payload = json.dumps({
         "_type": "EHR_STATUS",
         "archetype_node_id": "openEHR-EHR-EHR_STATUS.generic.v1",
-        "name": {
-            "value": "EHR"
-        },
+        "name": {"value": "EHR"},
         "subject": {
             "external_ref": {
             "id": {
@@ -100,15 +98,22 @@ def createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_na
 
     headers = {
         'Authorization' : repo_auth,
-        'Content-Type': 'application/json',
-        'Prefer' : 'return=representation'
+        'Content-type': 'application/json',
+        'Prefer' : 'return=representation',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Accept': '*/*'
     }
 
     try:
+        print (url)
+        print (payload)
+        #response = requests.post(url, data=payload, headers=headers)
         response = requests.post(url, data=payload, headers=headers)
+        print (response.statusCode)
     except:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(response.statusCode)
         print(exc_type, fname, exc_tb.tb_lineno)
         print(traceback.format_exc())
         raise SystemExit

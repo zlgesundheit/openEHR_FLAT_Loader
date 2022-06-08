@@ -43,7 +43,11 @@ def main():
     checkIfDirsExists()
 
     # Run Scripts for the argument that was passed
-    print("Used Argument: " + sys.argv[1])
+    if (len(sys.argv) <= 1):
+        print("Use arguments '-generateMapping', '-buildAndUploadCompositions' or '-generateExamples'.")
+        raise SystemExit
+    else:
+        print("Used Argument: " + sys.argv[1])
 
     # Argument: -generateMapping
     if (sys.argv[1] == '-generateMapping'):
@@ -119,16 +123,10 @@ def generateExamples():
     buildExampleComp.main(workdir, pathArray, config.templateName, config.targetAdress, config.targetAuthHeader, "max")
 
 def printInfoText():
-    print(os.linesep)
     print("    Welcome to the openEHR_FLAT_Loader-Commandline-Tool!")
-    print(os.linesep)
-    print("    This tool allows you to transform tabular data into the interoperable openEHR format."
-        + os.linesep + "                                                             (given an existing template)"
-        + os.linesep 
-        + os.linesep + "    Variables for template, data/csv-file and repository can be specified in config.ini."
-        + os.linesep
+    print("    Given an existing template, this tool allows you to transform tabular data into the interoperable openEHR format."
+        + "    Variables for template, data/csv-file and repository can be specified in config.ini."
     )
-    print(os.linesep)
 
 def checkIfDirsExists():
     if not os.path.isdir(manualTaskDir):

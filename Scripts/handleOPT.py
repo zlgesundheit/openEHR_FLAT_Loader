@@ -11,6 +11,7 @@ import json
 import os.path
 import sys
 import traceback
+from requests.compat import urljoin
 # Third party imports
 # Local application imports
 
@@ -59,13 +60,21 @@ def readOPTfromInput(OPTDirPath, templateName):
         f.close()
     return optFile
 
-def checkOPTExistence(templateName, queryPath, targetAuthHeader) -> int:
+def checkOPTExistence(templateName, base, targetAuthHeader) -> int:
     """Query an Operational Template from specific openEHR-Repo and return Status Code"""
+    
     try:
         # Check if OPT is already present at the server
-        respGet = requests.get(queryPath + "/" + templateName, headers = {'Authorization':targetAuthHeader})
+        path = "definition/template/adl1.4/"
+        url_plus = "".join([base,path,templateName])
+        payload = {}
+        headers = {'Authorization':targetAuthHeader}
+        respGet = requests.request("GET", url_plus, headers=headers, data=payload)
+        print("OP Exists? " + str(respGet.status_code))
         return respGet.status_code
     except:
+        #print (respGet.status_code)
+        #print (respGet.text)
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         print(exc_type, fname, exc_tb.tb_lineno)
@@ -74,13 +83,14 @@ def checkOPTExistence(templateName, queryPath, targetAuthHeader) -> int:
 
 def uploadOPT(templateName, optFile, targetAdress, targetopenEHRAPIadress, targetAuthHeader) -> None:
     """Upload an Operational Template to a specific openEHR-Repo if it does not exist yet."""
-    queryPath = targetAdress + targetopenEHRAPIadress + "definition/template/adl1.4"
+    base = targetAdress + targetopenEHRAPIadress
     
-    checkOPTExist_RespCode= checkOPTExistence(templateName, queryPath, targetAuthHeader)
+    checkOPTExist_RespCode= checkOPTExistence(templateName, base, targetAuthHeader)
     if  checkOPTExist_RespCode != 200:
         try:
             # Send OPT to Server
-            response = requests.post(queryPath, headers = {'Authorization':targetAuthHeader, 'Content-Type':'application/xml', 'Accept':'*/*', 'Accept-Encoding':'gzip, deflate, br'} ,data = optFile.encode('UTF-8')) 
+            # print(base + "definition/template/adl1.4")
+            response = requests.post(base + "definition/template/adl1.4", headers = {'Authorization':targetAuthHeader, 'Content-Type':'application/xml', 'Accept':'*/*', 'Accept-Encoding':'gzip, deflate, br'} ,data = optFile.encode('UTF-8')) 
             print (indent + "Template Upload to Target-Repo: " + os.linesep + indent + "Target-Repo: " + targetAdress + os.linesep + indent + "Status: " + str(response.status_code) )
         except:
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -89,7 +99,7 @@ def uploadOPT(templateName, optFile, targetAdress, targetopenEHRAPIadress, targe
             print(traceback.format_exc())
             raise SystemExit
     elif checkOPTExist_RespCode == 200:
-        print( indent + "OPT already exists at this server" )
+        print( indent + "OPT already exists at this server")
 
 def queryWebtemplate(templateName, targetAdress, targetflatAPIadress, targetAuthHeader) -> str:
     """Query a webtemplate from a specific openEHR-Repo."""
