@@ -1,0 +1,9 @@
+{
+    "webtemplate_datatypes/time": "1989-11-09T21:20:00+02:00",
+    "webtemplate_datatypes/time2": "1989-11-09T21:20:00+02:00",
+    "webtemplate_datatypes/subject|name": "Herbert Composer",
+    "webtemplate_datatypes/language|code": "de",
+    "webtemplate_datatypes/language|terminology": "ISO_639-1",
+    "webtemplate_datatypes/encoding|code": "UTF-8",
+    "webtemplate_datatypes/encoding|terminology": "IANA_character-sets"
+}

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ###########################################################################
-# PATHS from WebTemplate
+# Export PATHS from WebTemplate
 
 # Dieses Skript extrahiert FLAT-Pfade aus einem WebTemplate. Das WebTemplate basiert auf dem simSDT-WebTemplate Format der Firma Better, 
 # welches sowohl die Better Platform als auch die EHRBase unterstützt. 
@@ -21,14 +21,16 @@
 #
 # TODOs:
 # TODO Es wäre gut auch die Validation-Angaben mitzuschleppen. Bei Elementen, die diese haben. 
-# TODO Zu jedem Pfad sollte im Pfadobjekt ein valides Beispiel angelegt werden -> Zu händeln in PathObject.py
+# TODO Zu jedem Pfad sollte im Pfadobjekt ein valides Beispiel angelegt werden -> Zu händeln hier
 ###########################################################################
 
 # Standard library imports
 import traceback #debug
+import sys
+import os
 # Third party imports
 # Local application imports
-from Scripts import pathObject
+from Scripts import pathObjectClass
 
 indent = "\t"
 
@@ -49,8 +51,11 @@ def main(webTemp, templateName):
         print ( indent + "Anzahl extrahierter Pfade: " + str( len(pathArray) ) )
     except Exception as e:
         print(indent + templateName + "_Webtemplate ist fehlerhaft.")
-        print (indent + str(e))
-        traceback.print_exc()
+        #print (indent + str(e))
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+        print(traceback.format_exc())
         raise SystemExit
 
     print(indent + "Extracted FLAT-Paths from the WebTemplate")
@@ -67,7 +72,7 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
         localMandatoryFlag = pathIsMandatoryFlag
 
         # Pfad zum aktuellen Element -> Bei (Max: -1) Mehrfacheintraege zulaessig dann :<<index>> im Pfad
-        if element['max'] == -1:
+        if element['max'] == -1 or (element['max'] > 1 and element['max'] > element['min']):
             suffixPath = parentPath + '/' + element['id'] + ':<<index>>'
         else:
             suffixPath = parentPath + '/' + element['id']
@@ -83,7 +88,7 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
         # Falls Element Inputs hat oder weder Inputs noch Children, dann ist es ein Blatt
         elif 'inputs' in element or element['rmType'] == "CODE_PHRASE":
             # Pfad-Objekt anlegen
-            path = pathObject.pathObject()
+            path = pathObjectClass.pathObject()
 
             path.id = element['id']
             path.pathString = suffixPath
@@ -133,7 +138,7 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
                 path.suffixList = ['value','formalism']
             # Case 12: DV_DURATION -> year,month,day,week,hour,minute,second	
             elif (element['rmType'] == "DV_DURATION"):
-                path.suffixList = ['year','month','day','week','hour','minute','second']         
+                path.suffixList = []         
 
             pathArray.append(path)
 

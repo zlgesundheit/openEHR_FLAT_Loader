@@ -9,7 +9,9 @@
 import requests
 import json
 import os.path
+import sys
 import traceback
+from requests.compat import urljoin
 # Third party imports
 # Local application imports
 
@@ -18,11 +20,11 @@ workdir = os.getcwd()
 
 ############################### Main ###############################
 
-def main(config):
+def main(config, manualTaskDir, OPTDirPath):
     print("\nHandleOPT is running:")
 
     # Read OPT from Input Folder
-    optFile = readOPTfromInput(config.templateName)
+    optFile = readOPTfromInput(OPTDirPath, config.templateName)
 
     # Upload OPT to server
     uploadOPT(config.templateName, optFile, config.targetAdress, config.targetopenEHRAPIadress, config.targetAuthHeader)
@@ -35,49 +37,69 @@ def main(config):
     webTemp = json.loads(webTemplateResp)
 
     # Save WebTemplate to Manual Tasks Directory because it is so damn important for the mapping task
-    filePath = os.path.join(workdir, 'ManualTasks')
-    storeWebTemplate(filePath, config.templateName, webTemp)
+    storeWebTemplate(manualTaskDir, config.templateName, webTemp)
 
     print (indent + "OPT exists at server and WebTemplate has been downloaded")
     return webTemp
 
 ############################### Methods ###############################
 
-def readOPTfromInput(templateName):
+def readOPTfromInput(OPTDirPath, templateName):
     """Read File with specific name from OPT-Folder"""
-    filePath = os.path.join(workdir, 'Input', 'OPT', templateName +'.opt')
+    filePath = os.path.join(OPTDirPath, templateName +'.opt')
     try:
         f = open(filePath, "r", encoding='utf-8')
         optFile = f.read()
+    except:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+        print(traceback.format_exc())
+        raise SystemExit
     finally:
         f.close()
     return optFile
 
-def checkOPTExistence(templateName, queryPath, targetAuthHeader) -> int:
+def checkOPTExistence(templateName, base, targetAuthHeader) -> int:
     """Query an Operational Template from specific openEHR-Repo and return Status Code"""
+    
     try:
         # Check if OPT is already present at the server
-        respGet = requests.get(queryPath + "/" + templateName, headers = {'Authorization':targetAuthHeader})
+        path = "definition/template/adl1.4/"
+        url_plus = "".join([base,path,templateName])
+        payload = {}
+        headers = {'Authorization':targetAuthHeader}
+        respGet = requests.request("GET", url_plus, headers=headers, data=payload)
+        print("OP Exists? " + str(respGet.status_code))
         return respGet.status_code
-    except Exception as e:
-        print(indent + "Error while storing OPT at Target-Repo" + "\n" + indent + str(e) )
+    except:
+        #print (respGet.status_code)
+        #print (respGet.text)
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+        print(traceback.format_exc())
         raise SystemExit
 
 def uploadOPT(templateName, optFile, targetAdress, targetopenEHRAPIadress, targetAuthHeader) -> None:
     """Upload an Operational Template to a specific openEHR-Repo if it does not exist yet."""
-    queryPath = targetAdress + targetopenEHRAPIadress + "definition/template/adl1.4"
+    base = targetAdress + targetopenEHRAPIadress
     
-    checkOPTExist_RespCode= checkOPTExistence(templateName, queryPath, targetAuthHeader)
+    checkOPTExist_RespCode= checkOPTExistence(templateName, base, targetAuthHeader)
     if  checkOPTExist_RespCode != 200:
         try:
             # Send OPT to Server
-            response = requests.post(queryPath, headers = {'Authorization':targetAuthHeader, 'Content-Type':'application/xml', 'Accept':'*/*', 'Accept-Encoding':'gzip, deflate, br'} ,data = optFile.encode('UTF-8')) 
+            # print(base + "definition/template/adl1.4")
+            response = requests.post(base + "definition/template/adl1.4", headers = {'Authorization':targetAuthHeader, 'Content-Type':'application/xml', 'Accept':'*/*', 'Accept-Encoding':'gzip, deflate, br'} ,data = optFile.encode('UTF-8')) 
             print (indent + "Template Upload to Target-Repo: " + os.linesep + indent + "Target-Repo: " + targetAdress + os.linesep + indent + "Status: " + str(response.status_code) )
-        except Exception as e:
-            print(indent + "Error while storing OPT at Target-Repo" + "\n" + indent + str(e) )
+        except:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
+            print(traceback.format_exc())
             raise SystemExit
     elif checkOPTExist_RespCode == 200:
-        print( indent + "OPT already exists at this server" )
+        print( indent + "OPT already exists at this server")
 
 def queryWebtemplate(templateName, targetAdress, targetflatAPIadress, targetAuthHeader) -> str:
     """Query a webtemplate from a specific openEHR-Repo."""
@@ -87,17 +109,26 @@ def queryWebtemplate(templateName, targetAdress, targetflatAPIadress, targetAuth
         if (response.status_code != 200):
             raise Exception(("Status Code: " + str(response.status_code)) + "\n " + indent + "Server-Message: " + response.text )
         json_resp = response.json()
-
-    except Exception as e:
-        print(indent + "Error while querying and saving WebTemplate from TargetRepo" + "\n" + indent + str(e))
+    except:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+        print(traceback.format_exc())
         raise SystemExit
     return json_resp
 
-def storeWebTemplate(path, templateName, webTemp) -> None:
+def storeWebTemplate(manualTaskDir, templateName, webTemp) -> None:
     """Store a JSON-String as a file"""
-    filePath = os.path.join(workdir, path, templateName + '_WebTemplate.json')
-    with open(filePath, 'w', encoding="utf-8") as templateFile:
-        json.dump(webTemp, templateFile, indent = 4, ensure_ascii=False)
+    filePath = os.path.join(manualTaskDir, templateName + '_WebTemplate.json')
+    try:
+        with open(filePath, 'w', encoding="utf-8") as templateFile:
+            json.dump(webTemp, templateFile, indent = 4, ensure_ascii=False)
+    except:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+        print(traceback.format_exc())
+        raise SystemExit
 
 if __name__ == '__main__':
     main()

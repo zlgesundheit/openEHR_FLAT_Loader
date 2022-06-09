@@ -11,6 +11,8 @@
 
 `08/2021`
 
+---
+
 ## Contents
 [[_TOC_]]
 
@@ -18,6 +20,7 @@
 #### xx/2021
 - Release of Version 1.0
 
+---
 ## Introduction
 This manual describes how the **openEHR_FLAT_Loader** can be used to transform tabular data into openEHR-Resources / openEHR-Compositions.  
   
@@ -37,6 +40,7 @@ We hope to stay (or become) compatible with the standard in the future.
 - openEHR-Server supporting the FLAT-API (e.g. EHRBase)
 - Python 3.8 with modules "openpyxl" and "requests"
 
+---
 ## Features
 - Extraction of FLAT-Paths 
   - from Webtemplates
@@ -49,12 +53,13 @@ We hope to stay (or become) compatible with the standard in the future.
 - Upload Ressources 
   - using identifier-column .csv-data-file 
 
-## Data Modeling / Template Creation
+---
+## **Data Modeling / Template Creation**
 Templates (and Archetypes) are created by domain experts either by selecting existing archetypes (which represented specific clinical concepts) or creating new archetypes in collaboration with the (openEHR-) Community. 
 
 TODO: Hinweise zur Modellierung --> Darstellen wie Templates zustande kommen --> Siehe unten Template
 
-#### Data Modelling (openEHR)
+### **Data Modelling using openEHR in general**
 - **openEHR-Specification**  
 The [specification of openEHR](https://specifications.openehr.org) holds nearly ALL important information about openEHR.
 This information is best used accompanied by information from [community discussions](https://discourse.openehr.org), examples and available open-source openEHR-Servers (e.g. [EHRBase](https://github.com/ehrbase/ehrbase)).
@@ -62,12 +67,12 @@ This information is best used accompanied by information from [community discuss
 - **Information Model / Reference Model**  
 The openEHR [information model](https://specifications.openehr.org/releases/RM/latest/ehr.html) describes how data is structured in the openEHR-World. Data is organized in EHRs (so it is patient-centered) holding information about the EHR(Access, Status) and the EHR that may contain folders / directorys which contain the compositions that hold the data, in form of defined data types and attributes taken from the Reference Model. The structure of compositions that hold the data is defined by Templates (that use Archetypes, which are the Core of openEHR)
 
-  <img src="/Docs/Figures/openEHR_Information_Model_High_Level_Structure.jpg">
+  <img src="/0_Docs/Figures/openEHR_Information_Model_High_Level_Structure.jpg">
 
 - **Archetypes**  
 [OpenEHR-Archetypes](https://specifications.openehr.org/releases/AM/latest/Overview.html) are defined in Archetype Definition Language (ADL). In the multi-level-modelling approach of openEHR they allow to distinct between domain semantics and the information model / reference model. An Archetype is a reusable definition of a semantic concept from a domain, which correspond to logical data points and groups. Archetypes / Semantic concepts should be designed and maintained by domain experts. Often the archetype and template development takes place in [Clinical Knowledge Managers (CKM)](https://ckm.openehr.org/ckm/).
 
-  <img src="/Docs/Figures/openehr_archetype_figure.jpg">
+  <img src="/0_Docs/Figures/openehr_archetype_figure.jpg">
 
 - **Templates**  
 An openEHR-Template defines an arrangement of items from one or more archetypes, possibly with further constraints on them (regarding cardinality, inputs, etc.). A Template defines how a composition of data looks like and is used at runtime to create data structures and validate inputs.
@@ -75,21 +80,23 @@ An openEHR-Template defines an arrangement of items from one or more archetypes,
 - **Webtemplates and FLAT-Paths**  
 A Webtemplate is an other format of a Template (Operational Template / .opt). Webtemplates are Part of the [FLAT-API](https://ehrbase.readthedocs.io/en/latest/02_getting_started/05_load_data/index.html) at first used by EtherCIS and Better and later EHRBase. The FLAT-API allows to communicate with the server using Compositions in FLAT-Format, which means they are structured a non-hierarchical JSON-Strings using FLAT-Paths to define which data item is assigned which value. This format is easy to read, understand and easy to work with.
 
-  <img src="/Docs/Figures/FLAT_Composition_Example.jpg">
+  <img src="/0_Docs/Figures/FLAT_Composition_Example.jpg">
 
-## Data Preparation
+### **Data Preparation**
 There are some noteworthy aspects in preparing the data to be consumed by the FLAT_Loader. Aligning **data types** and **item/column names** and **some metadata** with the **data model / openEHR-Template** makes the transformation process easy.
 
-#### Data Curation
+#### **Data Curation**
 Curate your data and make sure to only generate (and upload) data with high data quality that matches your needs and the needs of others working with the data in the future.
 
-#### Formatting
+#### **Formatting**
 The data formatting has to comply on one hand with constraints in the data model (e.g. Date and Time formatting according to standards defined in openEHR) and on the other hand with constraints of the FLAT_Loader (e.g. Id-Column name, metadata like language, status codes and encoding info to build valid resources). 
 
 How to format the data will be explained in the following:
 TODO
 
 #### Identificators/Pseudonymisation
+TODO 
+There are tools like Mainzelliste and similar to manage pseudonyms and sensible/identifing data. If you need to protect your data because of ethical reasons or data usage constraints you should handle this before uploading the data with this tool.
 
 ## Tool Usage Steps
 ``Work in progress`
@@ -118,7 +125,7 @@ After Data Preparation, Curation and Formatting
 #### 0.2 Provide a template as .opt
 - Get the Operational Template for your Data Set 
   - E.g. download the OPT-File (.opt) from a Clinical Knowledge Manager (CKM) using the Export-Functionality  
-    <img src="/Docs/Figures/ckm_template_mark.jpg">
+    <img src="/0_Docs/Figures/ckm_template_mark.jpg">
 - Move the OPT-File to "<pathToTool>\openehr_flat_loader\Input\OPT\"
 - Set the Template that will be dealed with by the tool
   - Change the "templatename"-Variable in the config to the current Templatename
@@ -148,19 +155,19 @@ After Data Preparation, Curation and Formatting
 - Start the tool using "runFlatLoader_win.bat"
 - Select Step 1 by typing "1" + press "Enter"
 
-  <img src="/Docs/Figures/cmd_step1.jpg">
+  <img src="/0_Docs/Figures/cmd_step1.jpg">
 
 #### 2. Fill in mapping information
 - Find the (empty) mapping file in "openehr_flat_loader\Manual Tasks\" by looking for <<templatename>>_MAPPING.xlsx
 - Select CSV-Items from the Dropdown and map them to FLAT-Paths from the Template
 
-  <img src="/Docs/Figures/mapping_file.jpg">
+  <img src="/0_Docs/Figures/mapping_file.jpg">
 
 #### 3. Build Ressources
 - Start the tool using "runFlatLoader_win.bat"
 - Select Step 2 by typing "2" + press "Enter"
 
-  <img src="/Docs/Figures/cmd_step1.jpg">
+  <img src="/0_Docs/Figures/cmd_step1.jpg">
 
 `Resources can be found in "openehr_flat_loader\Output\"`
 
@@ -173,3 +180,28 @@ After Data Preparation, Curation and Formatting
 ## Funding
 - Funded by the Lower Saxony Ministry of Science and within the Lower Saxony “Vorab“ of the Volkswagen Foundation and supported by the Center for Digital Innovations (ZDIN).
 - Funds of the participating institutes
+
+#### 5. Sonstiges und Anhänge
+
+##### 5.1 Generation of Examples
+Attention: 
+buildExampleComp.py is building min/max-Examples but the values for the examples are set for each Path-Object. This means, pathObject.py which is used in pathExport.py is the location of code regarding the exmplae value generation and therefore the place to apply changes if the standard may change or similar.
+Min-Examples are a minimal set of needed attributes for a compositions to be valid, Max-Example is a maximal set with every possible attribute in the example composition.
+
+rmType   | Anmerkung | Code
+-------- | --------  | --------
+DV_TEXT         | Klassischer String   | `exampleValueDict[self.pathString] = "Beispieltext"`
+DV_MULTIMEDIA   | An instance of an encapsulated package. See https://specifications.openehr.org/releases/RM/latest/data_types.html#_examples <br> **TODO** Add "media_type" and "size" attributes -> See self.id of CODE_PHRASE for this..  | `exampleValueDict[self.pathString] = getExampleICObase64encoded()`
+DV_URI   | Can be an URI,URL, URN -> see RFC 3986. <br> https://datatracker.ietf.org/doc/html/rfc3986#section-1.1.2   | `exampleValueDict[self.pathString] = "urn:oasis:names:specification:docbook:dtd:xml:4.1.2"`
+DV_EHR_URI      | The syntax of a DV_EHR_URI is an openEHR path, inside the 'ehr' URI scheme-space, and is one of the forms:<br>https://specifications.openehr.org/releases/RM/latest/data_types.html#_dv_ehr_uri_class   | `exampleValueDict[self.pathString] = "ehr://system_id/ehr_id/top_level_structure_locator/path_inside_top_level_structure"`
+DV_BOOLEAN      | Klassischer Boolean   | `exampleValueDict[self.pathString] = True`
+CODE_PHRASE     | TODO -> Was ist, wenn das Template ein ValueSet vorgibt? -> https://specifications.openehr.org/releases/RM/latest/data_types.html#_code_phrase_class   | Language:<br>`exampleValueDict[ self.pathString + "\|" + 'code' ] = "de"`<br>`exampleValueDict[ self.pathString + "\|" + 'terminology' ] = "ISO_639-1"`<br>Territory:<br>`exampleValueDict[ self.pathString + "\|" + 'code' ] = "DE"`<br>`exampleValueDict[ self.pathString + "\|" + 'terminology' ] = "ISO_3166-1"`<br>Encoding:<br>`exampleValueDict[ self.pathString + "\|" + 'code' ] = "UTF-8"`<br>`exampleValueDict[ self.pathString + "\|" + 'terminology' ] = "IANA_character-sets"`<br>Sonstige:<br>`exampleValueDict[ self.pathString + "\|" + 'code' ] = "1234"`<br>`exampleValueDict[ self.pathString + "\|" + 'terminology' ] = "local"`
+DV_DATE_TIME   | DATETIME String nach ISO 8601   | Inhalt
+DV_DATE   | Inhalt   | Inhalt
+DV_TIME   | Inhalt   | Inhalt
+PARTY_PROXY   | Inhalt   | Inhalt
+DV_IDENTIFIER   | Inhalt   | Inhalt
+DV_COUNT   | Inhalt   | Inhalt
+DV_DURATION   | Inhalt   | Inhalt
+DV_CODED_TEXT   | Inhalt   | Inhalt
+Inhalt   | Inhalt   | Inhalt

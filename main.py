@@ -6,28 +6,34 @@
 # 3. (Manual Task) Mapping-List ausfüllen
 # 4. Build Compositions
 #
-# Developed and tested with Python 3.8.10
+# Developed and tested with Python 3.8.10 (+ 3.10.4)
 #
 # Jendrik Richter (UMG)
 #########################################################################
 # Standard library imports
 import os.path
 from os import getcwd
+import sys
 import traceback
 # Third party imports
 # Local application/script imports
-from Scripts import configHandler
+from Scripts import handleConfig
 from Scripts import handleOPT
 from Scripts import buildComp
-from Scripts import pathExport
-from Scripts import mappingListGen
-from Scripts import ucc_uploader
+from Scripts import handleWebTemplate
+from Scripts import buildMapping
+from Scripts import handleUpload
 from Scripts import buildExampleComp
 
 #Init Config-Object
-config = configHandler.config()
+config = handleConfig.config()
 indent = "\t"
 workdir = getcwd()
+sourceDataCsvFP = os.path.join(workdir, 'ETLProcess', 'Input', config.inputCSV + '.csv')
+OPTDirPath      = os.path.join(workdir, 'OPTs')
+manualTaskDir   = os.path.join(workdir, 'ETLProcess', 'ManualTasks')
+outputDir       = os.path.join(workdir, 'ETLProcess', 'Output')
+# TODO Set all Paths here or in configHandler? centralized and pass them to the other scripts. SinglePointOfChange
 
 ############################### Main ###############################
 def main():
@@ -36,134 +42,121 @@ def main():
     # Check if all directories exist otherwise create them
     checkIfDirsExists()
 
-    # Show Explanatory Text on how to use the tool and what steps to perform to the User
-    printInfoText()
+    # Run Scripts for the argument that was passed
+    if (len(sys.argv) <= 1):
+        print("Use arguments '-generateMapping', '-buildAndUploadCompositions' or '-generateExamples'.")
+        raise SystemExit
+    else:
+        print("Used Argument: " + sys.argv[1])
 
-    # Query User Input
-    print ("    Please enter number 1,2 or 3 to run the desired step: ")
-    print ("\n")
-    choosenStep = input("\t") 
-    # WE could add a nice selector menue with 'whaaaaat' or 'inquirer' but that would mean the user needs to install an additional package: no
-    # Input zeigt nichts mehr an, weil durch @echo off im .bat die Ausgabe cleaner wird...
-
-    # Run Script Part/Step that was choosen by the user
-    runStep(choosenStep)
-
+    # Argument: -generateMapping
+    if (sys.argv[1] == '-generateMapping'):
+        # Show Explanatory Text on how to use the tool and what steps to perform to the User
+        printInfoText()
+        generateMapping()
+    # Argument: -buildAndUploadCompositions
+    elif (sys.argv[1] == '-buildAndUploadCompositions'):
+        # Show Explanatory Text on how to use the tool and what steps to perform to the User
+        printInfoText()
+        buildAndUploadCompositions()
+    # Argument: -generateExamples
+    elif (sys.argv[1] == '-generateExamples'):
+        generateExamples()
     # Terminate
 
 ############################### Methods ###############################
-def runStep(choosenStep):
-    if (choosenStep == str(1)):
-        # Upload OPT to openEHR-Repo if necessary
-        try:
-            webTemp = handleOPT.main(config)
-        except Exception as e:
-            print(indent + "Template konnte nicht gelesen oder WebTemplate konnte nicht korrekt abgerufen werden.")
-            print (indent + str(e))
-            traceback.print_exc()
+def generateMapping():
+    # Upload OPT to openEHR-Repo if necessary
+    webTemp = handleOPT.main(config,manualTaskDir,OPTDirPath)
+
+    # Extrahiere Pfade in Array von Pfadobjekten 
+    pathArray = handleWebTemplate.main(webTemp, config.templateName)
+
+    csv_dataframe = handleConfig.readCSVasDataFrame(config.inputCSV)
+
+    # Baue Mapping
+    buildMapping.main(manualTaskDir,config.templateName, csv_dataframe, pathArray, allindexesareone = config.allindexesareone)
+
+def buildAndUploadCompositions():
+    resArray = buildComp.main(config,manualTaskDir,outputDir)
+
+    # Create EHRs for all patients in csv
+    if config.createehrs == "1":  # EHRCreation could be an extra-parameter
+        csv_dataframe = csv_dataframe = handleConfig.readCSVasDataFrame(config.inputCSV)
+        anzahl_eintraege = len(csv_dataframe.index)
+
+        # Check for existence of columns: ehrId, namespace-column from config, subjectID-column from config -> else error-message and systemexit
+        if not ('ehrId' in csv_dataframe.columns and config.subjectidcolumn in csv_dataframe.columns and config.subjectnamespacecolumn in csv_dataframe.columns):
+            print ("The Input-Data needs to contain columns for 'ehrId' as well as the ID-Column ["+ config.subjectidcolumn +"] and Namespace-Column ["+ config.subjectnamespacecolumn +"] defined in config.ini")
             raise SystemExit
 
-        # Extrahiere Pfade in Array von Pfadobjekten 
-        pathArray = pathExport.main(webTemp, config.templateName)
+        print (f'Create {anzahl_eintraege} EHRs:')
+        csv_dataframe = handleUpload.createEHRsForAllPatients(config.targetAdress, config.targetAuthHeader, csv_dataframe, config.subjectidcolumn , config.subjectnamespacecolumn)
+        csvPath = sourceDataCsvFP
+        csv_dataframe.to_csv(csvPath, sep=";", index = False, encoding = "UTF-8")
+    else:
+        print ("EHR Creation is disabled in Config.ini")
+        pass
 
-        try:
-            csv_dataframe = configHandler.readCSVasDataFrame(config.inputCSV)
-        except Exception as e:
-            print(indent + "Daten-CSV konnte nicht korrekt gelesen eingelesen werden.")
-            print (indent + str(e))
-            traceback.print_exc()
-            raise SystemExit
+    print (config.directupload)
 
-        # Baue Mapping
-        mappingListGen.main(config.templateName, csv_dataframe, pathArray, allindexesareone = config.allindexesareone)
+    # Send resource to server
+    if config.directupload == "1":
+        csv_dataframe = handleConfig.readCSVasDataFrame(config.inputCSV)
+        anzahl_eintraege = len(csv_dataframe.index)
 
-    elif(choosenStep == str(2)):
-        resArray = buildComp.main(config)
+        print ("Upload Compositions:")
+        quick_and_dirty_index = 0
+        for res in resArray:
+            # Wird dann in buildComp auffgerufen, liest hier die aktuelle CSV mit ehrIds ein
+            ehrId = csv_dataframe['ehrId'][quick_and_dirty_index]
+            handleUpload.uploadResourceToEhrId(config.targetAdress, config.targetAuthHeader, ehrId, res, config.templateName)
 
-        #Create EHRs for all patients in csv
-        if config.createehrs == "1":
-            csv_dataframe = csv_dataframe = configHandler.readCSVasDataFrame(config.inputCSV)
-            anzahl_eintraege = len(csv_dataframe.index)
+            quick_and_dirty_index += 1
 
-            print (f'Create {anzahl_eintraege} EHRs:')
-            csv_dataframe = ucc_uploader.createEHRsForAllPatients(config.targetAdress, config.targetAuthHeader, csv_dataframe, config.subjectidcolumn , config.subjectnamespacecolumn)
-            csvPath = os.path.join(workdir, 'Input', 'CSV', config.inputCSV + '.csv')
-            csv_dataframe.to_csv(csvPath, sep=";", index = False, encoding = "UTF-8")
-        else:
-            print ("EHR Creation is disabled in Config.ini")
-            pass
-
-        # Send resource to server
-        if config.directupload == "1":
-            csv_dataframe = configHandler.readCSVasDataFrame(config.inputCSV)
-            anzahl_eintraege = len(csv_dataframe.index)
-
-            print ("Upload Compositions:")
-            quick_and_dirty_index = 0
-            for res in resArray:
-                #Wird dann in buildComp auffgerufen, liest hier die aktuelle CSV mit ehrIds ein
-                ehrId = csv_dataframe['ehrId'][quick_and_dirty_index]
-                ucc_uploader.uploadResourceToEhrId(config.targetAdress, config.targetAuthHeader, ehrId, res, config.templateName)
-
-                quick_and_dirty_index += 1
-        else:
-            print ("Direct Upload is disabled in Config.ini")
-            pass
+        print ("Upload finished. Great Success.")
+    else:
+        print ("Direct Upload is disabled in Config.ini")
+        pass
     
-    elif(choosenStep == str(3)):
-        # Upload OPT to openEHR-Repo if necessary
-        webTemp = handleOPT.main(config)
-        
-        # Extrahiere Pfade in Array von Pfadobjekten 
-        pathArray = pathExport.main(webTemp, config.templateName)
+def generateExamples():
+    # Upload OPT to openEHR-Repo if necessary
+    webTemp = handleOPT.main(config,manualTaskDir,OPTDirPath)
 
-        # Build Minimal Example
-        buildExampleComp.main(workdir, pathArray, config.templateName, config.targetAdress, config.targetAuthHeader, "min")
-        # Build Maximal Example
-        buildExampleComp.main(workdir, pathArray, config.templateName, config.targetAdress, config.targetAuthHeader, "max")
+    # Extrahiere Pfade in Array von Pfadobjekten 
+    pathArray = handleWebTemplate.main(webTemp, config.templateName)
+
+    # Build Minimal Example
+    buildExampleComp.main(workdir, pathArray, config.templateName, config.targetAdress, config.targetAuthHeader, "min")
+    # Build Maximal Example
+    buildExampleComp.main(workdir, pathArray, config.templateName, config.targetAdress, config.targetAuthHeader, "max")
 
 def printInfoText():
-    print(os.linesep)
     print("    Welcome to the openEHR_FLAT_Loader-Commandline-Tool!")
-    print(os.linesep)
-    print("    This tool allows you to transform tabular data into the interoperable openEHR format."
-        + os.linesep + "                                                             (given an existing template)"
-        + os.linesep 
-        + os.linesep + "    Please set variables for template, data/csv-file and repository in config.ini."
-        + os.linesep
-        # Auswahl von im OPT-Ordner existierenden Dateien + Abfrage welche genutzt werden soll? TODO
-        # TODO Columns wie Namespace SubjectId etc von Hand aus CSV auswählbar machen -> ohne in die Config gehen zu müssen
-        + os.linesep + indent + "Schritt 1: OPT hochladen und Mapping erzeugen" 
-        + os.linesep + indent + indent +  "   Indexe  mit 'allindexesareone  = 1' in config.ini automatisch auf 1 setzen"
-        + os.linesep
-        + os.linesep + indent + "Schritt 2: Ressourcen erzeugen (und hochladen)"
-        + os.linesep + indent + indent +  "   EHRs    mit 'createehrs   = 1' in config.ini erzeugen"
-        + os.linesep + indent + indent +  "   Upload  mit 'directupload = 1' in config.ini ausführen"
-        + os.linesep
-        + os.linesep + indent + "Schritt 3: Erzeuge Min/Max FLAT/CANONICAL Example-Composition"
-        + os.linesep + indent + indent +  "   -- WORK IN PROGRESS --"
+    print("    Given an existing template, this tool allows you to transform tabular data into the interoperable openEHR format."
+        + "    Variables for template, data/csv-file and repository can be specified in config.ini."
     )
-    print(os.linesep)
+
+def checkIfDirsExists():
+    if not os.path.isdir(manualTaskDir):
+        createDir(manualTaskDir)
+
+    if not os.path.isdir(outputDir):
+        createDir(outputDir)
 
 def createDir(path):
     access_rights = 0o755
     try:
         os.mkdir(path, access_rights)
     except OSError:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+        print(traceback.format_exc())
         print ("Creation of the directory %s failed" % path)
+        raise SystemExit
     else:
         print ("Successfully created the directory %s" % path)
-
-def checkIfDirsExists():
-    workdir  = os.getcwd()
-    manualTasksDir = os.path.join(workdir, "ManualTasks")
-    outputDir = os.path.join(workdir, "Output")
-
-    if not os.path.isdir(manualTasksDir):
-        createDir(manualTasksDir)
-
-    if not os.path.isdir(outputDir):
-        createDir(outputDir)
 
 if __name__ == '__main__':
     main()
