@@ -7,7 +7,7 @@ This Tool is not a finished product. Use with caution and also take care of priv
 
 If you find any problems when using this tool feel free to contact us or create an issue.
 
-`At the moment the tool works fine with normal templates. More complex Templates with lots of repeatable clusters are not handled completely well - yet`
+`At the moment the tool works fine with normal templates. More complex Templates with lots of repeatable clusters are supported in the dev-branch but not yet in the master-branch`
 
 ---
 ### About the Zukunftslabor Gesundheit
