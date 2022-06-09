@@ -102,7 +102,7 @@ class pathObject:
         return str(printOutput)
 
 # Test
-
+"""
 ##%
 path = pathObject( )
 path.pathString = "natars_tzusatz/schmerzerfassung/beliebiges_ereignis:<<index>>/spezifisches_symptom_anzeichen:<<index>>/symptom_krankheitsanzeichen/schmerzstärke:<<index>>"
@@ -113,3 +113,4 @@ print(path.maxIndexNumber)
 print(path.exampleValueDict)
 
 print(path)
+"""
