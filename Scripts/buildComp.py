@@ -50,7 +50,7 @@ class indexKombi():
         pass
 
 def main(config,manualTaskDir,outputDir):
-    print(os.linesep + "Step 3: BuildComp is running.")
+    print(os.linesep + "BuildComp is running.")
     
     # Read CSV as data frame
     csv_dataframe = handleConfig.readCSVasDataFrame(config.inputCSV)
@@ -107,8 +107,6 @@ def main(config,manualTaskDir,outputDir):
                 # Add Dict to Array of these Dicts
                 resArray.append(dict)
         # Dict Building is done
-
-        print(indent + "buildComp finished.")
     except Exception:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -118,6 +116,8 @@ def main(config,manualTaskDir,outputDir):
 
     # Erstellte Compositions im Output-Ordner speichern
     storeDictArrayAsRes(outputDir, resArray, config.templateName)
+
+    print(indent + "buildComp finished.\n")
 
     return resArray
 
@@ -161,6 +161,7 @@ def makePathStringWithIndexes(path, indexArrayString, dict_of_known_indexKombis)
 
                 path = setRealIndexesInPath(path, realIndex)
 
+                """
                 print (path)
                 print (indexArrayString)
                 print ("MappedIndex (Obj): ", dict_of_known_indexKombis[indexArrayString].mappedIndex)
@@ -169,6 +170,7 @@ def makePathStringWithIndexes(path, indexArrayString, dict_of_known_indexKombis)
 
                 print ("Pfad nach Ersetzen: ", path)
                 print("\n")
+                """
 
 
             elif maxIndexNumber == 2:
@@ -256,6 +258,8 @@ def getRealIndexForMappedIndex(dict_of_known_indexKombis, index_id):
 
 def storeDictArrayAsRes(outputDir,dictArray, templateName):
     '''Dump Dicts as JSON-String in Files'''
+    anzahl_eintraege = len(dictArray)
+    print ("    Erstelle "+ str(anzahl_eintraege) + " Composition-Ressourcen.")
     i = 0
     for res in dictArray:
         filePath = os.path.join(outputDir, templateName + '_resource' + str(i) + ".json" )
@@ -269,7 +273,7 @@ def storeDictArrayAsRes(outputDir,dictArray, templateName):
             print(exc_type, fname, exc_tb.tb_lineno)
             print(traceback.format_exc())
             raise SystemExit
-    print (indent + str(i) + f' Ressourcen erstellt und im Ordner "Output" gespeichert. \n')
+    print (indent + str(i) + " / " + str(anzahl_eintraege) + f' Ressourcen erstellt und im Ordner "Output" gespeichert.')
 
 def xlsxAsDataFrame(manualTaskDir,templateName):
     '''Read Mapping as Dataframe'''
