@@ -6,7 +6,7 @@
 # 3. (Manual Task) Mapping-List ausfüllen
 # 4. Build Compositions
 #
-# Developed and tested with Python 3.8.10
+# Developed and tested with Python 3.8.10 (+ 3.10.4)
 #
 # Jendrik Richter (UMG)
 #########################################################################
@@ -80,10 +80,15 @@ def generateMapping():
 def buildAndUploadCompositions():
     resArray = buildComp.main(config,manualTaskDir,outputDir)
 
-    #Create EHRs for all patients in csv
-    if config.createehrs == "1":
+    # Create EHRs for all patients in csv
+    if config.createehrs == "1":  # EHRCreation could be an extra-parameter
         csv_dataframe = csv_dataframe = handleConfig.readCSVasDataFrame(config.inputCSV)
         anzahl_eintraege = len(csv_dataframe.index)
+
+        # Check for existence of columns: ehrId, namespace-column from config, subjectID-column from config -> else error-message and systemexit
+        if not ('ehrId' in csv_dataframe.columns and config.subjectidcolumn in csv_dataframe.columns and config.subjectnamespacecolumn in csv_dataframe.columns):
+            print ("The Input-Data needs to contain columns for 'ehrId' as well as the ID-Column ["+ config.subjectidcolumn +"] and Namespace-Column ["+ config.subjectnamespacecolumn +"] defined in config.ini")
+            raise SystemExit
 
         print (f'Create {anzahl_eintraege} EHRs:')
         csv_dataframe = handleUpload.createEHRsForAllPatients(config.targetAdress, config.targetAuthHeader, csv_dataframe, config.subjectidcolumn , config.subjectnamespacecolumn)
@@ -103,11 +108,13 @@ def buildAndUploadCompositions():
         print ("Upload Compositions:")
         quick_and_dirty_index = 0
         for res in resArray:
-            #Wird dann in buildComp auffgerufen, liest hier die aktuelle CSV mit ehrIds ein
+            # Wird dann in buildComp auffgerufen, liest hier die aktuelle CSV mit ehrIds ein
             ehrId = csv_dataframe['ehrId'][quick_and_dirty_index]
             handleUpload.uploadResourceToEhrId(config.targetAdress, config.targetAuthHeader, ehrId, res, config.templateName)
 
             quick_and_dirty_index += 1
+
+        print ("Upload finished. Great Success.")
     else:
         print ("Direct Upload is disabled in Config.ini")
         pass

@@ -90,8 +90,8 @@ class pathObject:
         else:
             return False
 
-    def print(self) -> str:
-        """ Print Methode, welche einige Attribute des 'pathObject' auf der Kommandozeile ausgibt. """
+    def __str__(self) -> str:
+        """ String Repräsentation der Klasse, welche einige Attribute des 'pathObject' auf der Kommandozeile ausgibt. """
         printOutput = (
             f'\tID: \t\t{self.id}\n'
             f'\tPfad: \t\t{self.pathString}\n'
@@ -102,7 +102,7 @@ class pathObject:
         return str(printOutput)
 
 # Test
-"""
+
 ##%
 path = pathObject( )
 path.pathString = "natars_tzusatz/schmerzerfassung/beliebiges_ereignis:<<index>>/spezifisches_symptom_anzeichen:<<index>>/symptom_krankheitsanzeichen/schmerzstärke:<<index>>"
@@ -111,4 +111,5 @@ print(path.pathString)
 print(path.maxIndexNumber)
 
 print(path.exampleValueDict)
-"""
+
+print(path)
