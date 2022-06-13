@@ -2,17 +2,18 @@
 ETL-Tool to transform Source Data into openEHR-Compositions (for a given Template) and upload those Compositions to an openEHR-Repository .
 
 ---
-#### _Disclaimer_ 
-This Tool is not a finished product. Use with caution and also take care of privacy needs regarding your data sets. 
-
-If you find any problems when using this tool feel free to contact us or create an issue.
+### Features:
+1. Create a Mapping-Table in xlsx/Excel-Format
+2. Create Compositions and upload those to an openEHR-Repository
+3. [PLANNED] Create an Example-Composition in FLAT or CANONICAL Json-Format
 
 ---
-### _Prerequisites:_
-- Project was developed and tested on Windows using Python 3.8.10 
-- For dependencies see [License and Dependencies](#license-and-dependencies)
-- You need an openEHR-Repo that supports the FLAT-Format and WebTemplates 
-    - e.g. [EHRBase](https://github.com/ehrbase/ehrbase): A dockered version of the EHRBase can be found from different public sources.
+## Context / About openEHR
+To transform data from different sources (e.g. SQL-DB, CSV, etc.) into openEHR-Resources a ETL-Job - for a specific Template / Operational Template - has to be created (most of the time this is done by by modellers / domain experts).  
+The idea of [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/-/tree/a58c9f479ab9d5f6ebad10906963949a806ad7c4) as well as this  **openEHR_FLAT_Loader** is to build these openEHR-Resource using a Mapping (manually supplied by the user) from DataFields to TemplateFields.
+
+_Process-Overview:_
+![BPMN-Process-Overview](/0_Docs/Figures/Process_Overview_Screenshot.jpg)
 
 ---
 ## Manual (Usage, Example and openEHR) **-- Work in Progress --**
@@ -20,11 +21,13 @@ A guide on how to use the tool and explanation of the context (openEHR, data cur
 The manual can be found [in the Docs-Folder](/Docs/MANUAL_openEHR_FLAT_Loader.md).
 
 ---
-## Usage
-### Features:
-1. Create a Mapping-Table in xlsx/Excel-Format
-2. Create Compositions and upload to an openEHR-Repository
-3. [PLANNED] Create an Example-Composition in FLAT or CANONICAL Json-Format
+### _Prerequisites:_
+- You need an openEHR-Repo that supports the FLAT-Format and WebTemplates 
+    - e.g. [EHRBase](https://github.com/ehrbase/ehrbase): A dockered version of the EHRBase can be found from different public sources.
+
+
+- Project was developed and tested on Windows using Python 3.8.10 
+- For dependencies see [License and Dependencies](#license-and-dependencies)
 
 ### Create a Mapping-Table:
 0. Preparation:
@@ -130,12 +133,9 @@ Find and enjoy your Example-Composition:
     - You will find the Compositions (FLAT and Canonical) in Directory "Output" named "Example_Comp_<Template-Name>"
 
 ---
-## Context / About openEHR
-To transform data from different sources (e.g. SQL-DB, CSV, etc.) into openEHR-Resources a ETL-Job - for a specific Template / Operational Template - has to be created (most of the time this is done by by modellers / domain experts).  
-The idea of [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/-/tree/a58c9f479ab9d5f6ebad10906963949a806ad7c4) as well as this  **openEHR_FLAT_Loader** is to build these openEHR-Resource using a Mapping (manually supplied by the user) from DataFields to TemplateFields.
-
-_Process-Overview:_
-![BPMN-Process-Overview](/Docs/Figures/Process_Overview_Screenshot.jpg)
+#### _Disclaimer_ 
+This Tool is not a finished product. Use with caution and also take care of privacy needs regarding your data sets. 
+If you find any problems when using this tool feel free to contact us or create an issue.
 
 ---
 ## License and Dependencies
