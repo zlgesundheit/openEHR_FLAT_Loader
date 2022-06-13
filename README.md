@@ -8,9 +8,12 @@ ETL-Tool to transform Source Data into openEHR-Compositions (for a given Templat
 3. [PLANNED] Create an Example-Composition in FLAT or CANONICAL Json-Format
 
 ---
-## Context / About openEHR
-To transform data from different sources (e.g. SQL-DB, CSV, etc.) into openEHR-Resources a ETL-Job - for a specific Template / Operational Template - has to be created (most of the time this is done by by modellers / domain experts).  
-The idea of [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/-/tree/a58c9f479ab9d5f6ebad10906963949a806ad7c4) as well as this  **openEHR_FLAT_Loader** is to build these openEHR-Resource using a Mapping (manually supplied by the user) from DataFields to TemplateFields.
+## About openEHR and the ETL-Process
+OpenEHR is a technology framework for the handling of medical data in the form of Electronic Health Records. The main point of the openEHR-Approach is the differentiation between logical modeling (in forms of archetypes/templates) and the physical storage (based on item-identifiers that are used in the technical background of these templates).
+
+To transform data from different sources (e.g. SQL-DB, CSV, etc.) into openEHR-Resources an ETL-Job a specific openEHR-Template has to be created. The Template defines which data points (from which archetypes) are part of this data entry - template are later instantiated in form of resources which are send and stored by the openEHR-Server/openEHR-Repository.
+
+The idea of the tools [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/-/tree/a58c9f479ab9d5f6ebad10906963949a806ad7c4)-Builder as well as this  **openEHR_FLAT_Loader** is to build these openEHR-Resources using a Mapping (manually supplied by the user) from DataFields to TemplateFields. With this mapping the ressources can than be generated and uploaded.
 
 _Process-Overview:_
 ![BPMN-Process-Overview](/0_Docs/Figures/Process_Overview_Screenshot.jpg)
@@ -18,13 +21,30 @@ _Process-Overview:_
 ---
 ## Manual (Usage, Example and openEHR) **-- Work in Progress --**
 A guide on how to use the tool and explanation of the context (openEHR, data curation) is currently being developed.  
-The manual can be found [in the Docs-Folder](/Docs/MANUAL_openEHR_FLAT_Loader.md).
+For now this README describes the Import-Process in sufficient detail, the full manual can later be found [in the Docs-Folder](/Docs/MANUAL_openEHR_FLAT_Loader.md)
 
 ---
 ### _Prerequisites:_
+Setup:
 - You need an openEHR-Repo that supports the FLAT-Format and WebTemplates 
     - e.g. [EHRBase](https://github.com/ehrbase/ehrbase): A dockered version of the EHRBase can be found from different public sources.
+- You may also setup a NUM Portal to manage your data and projects more easily as well as making it accessible to researcher.
+    - NUM Portal offers FAIR-Search, Role-based User Management, etc.
+- You need a Template (Operational Template = .opt-File) for the data you want to store.
+    - e.g. download a template from a Clinical Knowledge Manager (CKM)
+- You need a UTF-8 encoded CSV-File with your data.
 
+General Procedure:
+    0. Clone the FLAT-Loader
+    0.1 Copy OPT and CSV to the Flat-Loader (ETLProcess/Input)
+    0.2 Set correct Auth-Data and File-Names in config.ini
+    1. Generate Mapping (ETProcess/ManualTasks) 
+    2. Fill the Mapping (see the WebTemplate of your  for Details)
+    2.1 Add missing Metadata to the CSV or in the Mapping-File
+    2.2 Add Columns ehrId, id, namespace to CSV
+    3. Build and Upload Compositions    
+    3.1 Automated Generation of EHRs 
+    3.2 Instant Upload or handle Server Feedback accordingly
 
 - Project was developed and tested on Windows using Python 3.8.10 
 - For dependencies see [License and Dependencies](#license-and-dependencies)
