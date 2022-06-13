@@ -45,10 +45,13 @@ General Procedure:
 4. Build and Upload Compositions      
     4.1 Automated Generation of EHRs   
     4.2 Instant Upload or handle Server Feedback accordingly  
-  
+
+Dependencies:
 - Project was developed and tested on Windows using Python 3.8.10 
 - For dependencies see [License and Dependencies](#license-and-dependencies)
 
+---
+## Steps in more Detail
 ### Create a Mapping-Table:
 0. Preparation:
     - Place your Template (.opt-File) in the Input-Folder under /OPT
