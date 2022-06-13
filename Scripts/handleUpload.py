@@ -19,7 +19,7 @@ import numpy as np
 def main():
     pass  
 
-def uploadResourceToEhrId(baseUrl, repo_auth, ehrId, resource, templateName):
+def uploadResourceToEhrId(baseUrl, repo_auth, ehrId, resource, templateName, comp_created_count):
     
     url = f'{baseUrl}/rest/ecis/v1/composition/?format=FLAT&ehrId={ehrId}&templateId={templateName}'
 
@@ -32,7 +32,7 @@ def uploadResourceToEhrId(baseUrl, repo_auth, ehrId, resource, templateName):
         'Prefer': 'return=minimal'
     }
 
-    print (payload)
+    print ("    " + str(payload))
     try:
         response = requests.post(url, headers=headers, data=payload) #, timeout = 15)
         
@@ -42,11 +42,14 @@ def uploadResourceToEhrId(baseUrl, repo_auth, ehrId, resource, templateName):
             raise RuntimeError(error_msg)
 
         resp_json = json.loads(response.text)
-        print ("\tStatus beim Upload der Composition: " + str(response.status_code))
-        print (resp_json)
-        #if 'compositionUid' in resp_json:
+        print ("\n    Status beim Upload der Composition: " + str(response.status_code))
+        print ("\t"+str(resp_json))
         print ("\t" + "CompositionUid: " + resp_json["compositionUid"] + "\n")
-        return resp_json["compositionUid"]
+
+        if response.status_code == 201:
+            comp_created_count +=1
+
+        return resp_json["compositionUid"], comp_created_count
         #else:
             #print ("Oops! Da lief etwas beim Upload der Composition schief.")
             #raise RuntimeError
@@ -62,7 +65,7 @@ def convert(o):
     if isinstance(o, np.int64): return o.item()  
     raise TypeError
 
-def createEHRsForAllPatients(baseUrl, repo_auth, csv_dataframe, patient_id_column_name, subject_namespace_column_name):
+def createEHRsForAllPatients(baseUrl, repo_auth, csv_dataframe, patient_id_column_name, subject_namespace_column_name, ehr_counter):
     """Nimmt CSV und Spaltenname der identifizierenden ID / Primaerschluessel des Datensatzes entgegen, um fuer jeden Patienten ein EHR zu erstellen.
        Ein Check, ob die EHR zu der ID bereits existiert ist notwendig."""
     for index in csv_dataframe.index:   ## TODO LATER make a cool apply+lambda to read subject id and subject_namespace per row and make things. For now use 
@@ -71,9 +74,12 @@ def createEHRsForAllPatients(baseUrl, repo_auth, csv_dataframe, patient_id_colum
         subject_namespace = csv_dataframe[subject_namespace_column_name][index]
 
         # Create ehr with subject id = identifizierenden ID und subject namespace = z.B. "ucc_sha1_h_dathe"
-        csv_dataframe['ehrId'][index] = createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_namespace)
+        ehr_id = createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_namespace)
+        csv_dataframe['ehrId'][index] = ehr_id
+        if (ehr_id != None):
+            ehr_counter += 1
 
-    return csv_dataframe
+    return csv_dataframe, ehr_counter
 
 def createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_namespace):
     url = f'{baseUrl}/rest/openehr/v1/ehr'
@@ -122,7 +128,7 @@ def createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_na
         ehrId = response_dict['ehr_id']['value']
         print ("\t" + "Created EHR with ehrID: " + ehrId)
     else:
-        print ("\t" + "Hindernis beim EHR erstellen mit Status: " + str(response.status_code))
+        print ("    " + "Hindernis beim EHR erstellen mit Status: " + str(response.status_code))
         # ehrId zu dem Subject abfragen -> Warum zur Hölle gibt der Konflikt eine PartyId die sich nirgend wiederfindet und ich muss nochmal abfragen..
         
         url = f'{baseUrl}/rest/openehr/v1/ehr?subject_id={subject_id}&subject_namespace={subject_namespace}'
@@ -137,7 +143,7 @@ def createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_na
     
         response_dict = json.loads(response_bei_conflict.text)
         ehrId = response_dict['ehr_id']['value']
-        print ("\t  EHR existierte bereits mit ehrID: " + ehrId + "\n")
+        print ("      EHR existierte bereits mit ehrID: " + ehrId + "\n")
         #except:
         #    exc_type, exc_obj, exc_tb = sys.exc_info()
         #    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]

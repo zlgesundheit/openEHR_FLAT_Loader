@@ -91,29 +91,30 @@ def buildAndUploadCompositions():
             raise SystemExit
 
         print (f'Create {anzahl_eintraege} EHRs:')
-        csv_dataframe = handleUpload.createEHRsForAllPatients(config.targetAdress, config.targetAuthHeader, csv_dataframe, config.subjectidcolumn , config.subjectnamespacecolumn)
+        ehr_counter = 0
+        csv_dataframe, ehr_counter = handleUpload.createEHRsForAllPatients(config.targetAdress, config.targetAuthHeader, csv_dataframe, config.subjectidcolumn , config.subjectnamespacecolumn, ehr_counter)
+        print ("EHRs for " + str(ehr_counter) + " / " + str(anzahl_eintraege) + " Subjects have been created successfully.\n")
         csvPath = sourceDataCsvFP
         csv_dataframe.to_csv(csvPath, sep=";", index = False, encoding = "UTF-8")
     else:
         print ("EHR Creation is disabled in Config.ini")
         pass
 
-    print (config.directupload)
-
     # Send resource to server
     if config.directupload == "1":
         csv_dataframe = handleConfig.readCSVasDataFrame(config.inputCSV)
         anzahl_eintraege = len(csv_dataframe.index)
 
-        print ("Upload Compositions:")
+        print ("Upload "+ str(anzahl_eintraege) +" Compositions:")
         quick_and_dirty_index = 0
+        comp_created_count = 0
         for res in resArray:
             # Wird dann in buildComp auffgerufen, liest hier die aktuelle CSV mit ehrIds ein
             ehrId = csv_dataframe['ehrId'][quick_and_dirty_index]
-            handleUpload.uploadResourceToEhrId(config.targetAdress, config.targetAuthHeader, ehrId, res, config.templateName)
-
+            compositionUid, comp_created_count = handleUpload.uploadResourceToEhrId(config.targetAdress, config.targetAuthHeader, ehrId, res, config.templateName, comp_created_count)
             quick_and_dirty_index += 1
 
+        print (str(comp_created_count) + " / " + str(anzahl_eintraege) + " Compositions have been created successfully.\n" )    
         print ("Upload finished. Great Success.")
     else:
         print ("Direct Upload is disabled in Config.ini")
@@ -134,7 +135,7 @@ def generateExamples():
 def printInfoText():
     print("    Welcome to the openEHR_FLAT_Loader-Commandline-Tool!")
     print("    Given an existing template, this tool allows you to transform tabular data into the interoperable openEHR format."
-        + "    Variables for template, data/csv-file and repository can be specified in config.ini."
+        + "       Variables for template, data/csv-file and repository can be specified in config.ini."
     )
 
 def checkIfDirsExists():
