@@ -34,18 +34,18 @@ Setup:
     - e.g. download a template from a Clinical Knowledge Manager (CKM)
 - You need a UTF-8 encoded CSV-File with your data.
 
-General Procedure:
-    0. Clone the FLAT-Loader
-    0.1 Copy OPT and CSV to the Flat-Loader (ETLProcess/Input)
-    0.2 Set correct Auth-Data and File-Names in config.ini
-    1. Generate Mapping (ETProcess/ManualTasks) 
-    2. Fill the Mapping (see the WebTemplate of your  for Details)
-    2.1 Add missing Metadata to the CSV or in the Mapping-File
-    2.2 Add Columns ehrId, id, namespace to CSV
-    3. Build and Upload Compositions    
-    3.1 Automated Generation of EHRs 
-    3.2 Instant Upload or handle Server Feedback accordingly
-
+General Procedure:  
+1. Clone the FLAT-Loader  
+    1.1 Copy OPT and CSV to the Flat-Loader (ETLProcess/Input)  
+    1.2 Set correct Auth-Data and File-Names in config.ini  
+2. Generate Mapping (ETProcess/ManualTasks)   
+3. Fill the Mapping (see the WebTemplate of your  for Details)  
+    3.1 Add missing Metadata to the CSV or in the Mapping-File  
+    3.2 Add Columns ehrId, id, namespace to CSV  
+4. Build and Upload Compositions      
+    4.1 Automated Generation of EHRs   
+    4.2 Instant Upload or handle Server Feedback accordingly  
+  
 - Project was developed and tested on Windows using Python 3.8.10 
 - For dependencies see [License and Dependencies](#license-and-dependencies)
 
