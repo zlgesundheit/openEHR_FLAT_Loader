@@ -77,33 +77,33 @@ Dependencies:
         - On the Sheets "FLAT_Paths" and "CSV_Items" you find some additional information about both parts of the mapping
 
 What to do if you need to map data fields that are not present in your source data?
-    - Mandatory data fields are marked with "Pflichtfeld" in the Mapping-Table
-    - openEHR-Compositions need to hold metadata that you shall add to your Data/.csv-File so you can map it
-    - Common Metadata:
-        - "<path>/composer|name": "jendrik.richter@med.uni-goettingen.de",
-        - "<path>/language|code": "de",
-        - "<path>/language|terminology": "ISO_639-1",
-        - "<path>/territory|code": "DE",
-        - "<path>/territory|terminology": "ISO_3166-1"
-    - Other Metadata:
-        - You can find terminologies like `openehr` in the Docs-Folder or online. 
-            - The use of SNOMED CT and LOINC for fields with CODED_TEXTs should have been taken care of by the Template Modeller .
-            - The ETLer should just be able to use the information given in the template plus some additonal openEHR-Peculiarities.
-        - Example:
-            Category:
-            - "<path>/category|value": "event"
-            - "<path>/category|code": 433
-            - "<path>/category|terminology": "openehr"
-            Setting:
-            - "<path>/context/setting|value": "other care"
-            - "<path>/context/setting|code": 238
-            Any time:
-            - openEHR uses ISO8601 date strings.
-            - For additional information consider the [openEHR-Specification Datatypes](https://specifications.openehr.org/releases/RM/latest/data_types.html#_data_types_information_model)
-            Encodings:
-            "<path>/encoding|code": "UTF-8",
-            "<path>/encoding|terminology": "IANA_character-sets"
-            - IANA character sets or the openEHR-Specification are pretty handy here -> find in Docs-Folder or online
+- Mandatory data fields are marked with "Pflichtfeld" in the Mapping-Table
+- openEHR-Compositions need to hold metadata that you shall add to your Data/.csv-File so you can map it
+- Common Metadata:
+    - "<path>/composer|name": "jendrik.richter@med.uni-goettingen.de",
+    - "<path>/language|code": "de",
+    - "<path>/language|terminology": "ISO_639-1",
+    - "<path>/territory|code": "DE",
+    - "<path>/territory|terminology": "ISO_3166-1"
+- Other Metadata:
+    - You can find terminologies like `openehr` in the Docs-Folder or online. 
+        - The use of SNOMED CT and LOINC for fields with CODED_TEXTs should have been taken care of by the Template Modeller .
+        - The ETLer should just be able to use the information given in the template plus some additonal openEHR-Peculiarities.
+    - Example:
+        Category:
+        - "<path>/category|value": "event"
+        - "<path>/category|code": 433
+        - "<path>/category|terminology": "openehr"
+        Setting:
+        - "<path>/context/setting|value": "other care"
+        - "<path>/context/setting|code": 238
+        Any time:
+        - openEHR uses ISO8601 date strings.
+        - For additional information consider the [openEHR-Specification Datatypes](https://specifications.openehr.org/releases/RM/latest/data_types.html#_data_types_information_model)
+        Encodings:
+        "<path>/encoding|code": "UTF-8",
+        "<path>/encoding|terminology": "IANA_character-sets"
+        - IANA character sets or the openEHR-Specification are pretty handy here -> find in Docs-Folder or online
     
     - ATTENTION! In the ManualTasks-Directory there is a file called <Template-Name>_WebTemplate.json
         - This file holds human-readable information about the structure of the Composition, it´s datatypes, CODE- and Value-Sets, Terminologies and more.
@@ -139,7 +139,6 @@ Enjoy the uploaded Compositions at your openEHR-Repository.
 ---
 ### 3. [PLANNED] Create an Example-Composition for a given Template
 Preparation:  
-
     - Place your Template (.opt-File) in the Input-Folder under /OPT
     - Edit the config.ini and at least set:
         - templatename
@@ -147,12 +146,10 @@ Preparation:
         - targetauthheader  (Base64 encode of "username:password")  
 
 Start the Tool:  
-
     - Run Tool using the runFlatLoader.bat on Windows (otherwise run main.py)
         - Run Example-Creation Task of the Tool by typing `3` and hit `Enter`
 
 Find and enjoy your Example-Composition:
-
     - You will find the Compositions (FLAT and Canonical) in Directory "Output" named "Example_Comp_<Template-Name>"
 
 ---
