@@ -3,9 +3,9 @@ ETL-Tool to transform Source Data into openEHR-Compositions (for a given Templat
 
 ---
 ### Features:
-1. Create a Mapping-Table in xlsx/Excel-Format
-2. Create Compositions and upload those to an openEHR-Repository
-3. [PLANNED] Create an Example-Composition in FLAT or CANONICAL Json-Format
+1. Create an Example-Composition in FLAT JSON-Format
+2. Create a Mapping-Table in xlsx/Excel-Format
+3. Create Compositions and upload those to an openEHR-Repository
 
 ---
 ## About openEHR and the ETL-Process
