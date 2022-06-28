@@ -35,13 +35,13 @@ The idea of the tools [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/
 
 _Process-Overview:_
 
-![BPMN-Process-Overview](/HowTo/Figures/Process_Overview_Screenshot.jpg)
+![BPMN-Process-Overview](/ETLPRocess/HowTo/Figures/Process_Overview_Screenshot.jpg)
 
 ---
 ## Manual (Usage, Example and openEHR) **-- Work in Progress --**
 A guide on how to use the tool and explanation of the context (openEHR, data curation) is currently being developed.  
 
-For now this README describes the Import-Process in sufficient detail, the full manual can later be found [in the HowTo-Folder](/HowTo/MANUAL_openEHR_FLAT_Loader.md)
+For now this README describes the Import-Process in sufficient detail, the full manual can later be found [in the HowTo-Folder](/ETLProcess/HowTo/MANUAL_openEHR_FLAT_Loader.md)
 
 ---
 ### _Prerequisites:_
