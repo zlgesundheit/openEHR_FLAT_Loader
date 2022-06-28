@@ -72,7 +72,7 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
         localMandatoryFlag = pathIsMandatoryFlag
 
         # Pfad zum aktuellen Element -> Bei (Max: -1) Mehrfacheintraege zulaessig dann :<<index>> im Pfad
-        if element['max'] == -1 or (element['max'] > 1 and element['max'] > element['min']):
+        if element['max'] == -1:# or (element['max'] > 1 and element['max'] > element['min']):
             suffixPath = parentPath + '/' + element['id'] + ':<<index>>'
         else:
             suffixPath = parentPath + '/' + element['id']

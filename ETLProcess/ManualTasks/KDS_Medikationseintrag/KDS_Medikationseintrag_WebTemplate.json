@@ -19,7 +19,6 @@
         "localizedDescriptions": {
             "de": "Eine beständige und versionierte Liste von Medikamenten für eine Person."
         },
-        "aqlPath": "",
         "children": [
             {
                 "id": "category",
@@ -77,6 +76,7 @@
                                 "name": "Fall-Kennung",
                                 "localizedName": "Fall-Kennung",
                                 "rmType": "DV_TEXT",
+                                "nodeId": "at0001",
                                 "min": 0,
                                 "max": 1,
                                 "localizedNames": {
@@ -166,6 +166,7 @@
                                 "name": "Arzneimittel-Name",
                                 "localizedName": "Arzneimittel-Name",
                                 "rmType": "DV_TEXT",
+                                "nodeId": "at0132",
                                 "min": 0,
                                 "max": 1,
                                 "localizedNames": {
@@ -174,7 +175,7 @@
                                 "localizedDescriptions": {
                                     "de": "Der Name des Arzneimittels oder der Arzneimittelkomponente."
                                 },
-                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[at0132,'Arzneimittel-Name']/value",
+                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[at0132 and name/value='Arzneimittel-Name']/value",
                                 "inputs": [
                                     {
                                         "type": "TEXT"
@@ -189,6 +190,7 @@
                                 "name": "Darreichungsform",
                                 "localizedName": "Darreichungsform",
                                 "rmType": "DV_CODED_TEXT",
+                                "nodeId": "at0071",
                                 "min": 0,
                                 "max": 1,
                                 "localizedNames": {
@@ -2696,6 +2698,7 @@
                                 "name": "Wirkstärke (Konzentration)",
                                 "localizedName": "Wirkstärke (Konzentration)",
                                 "rmType": "DV_QUANTITY",
+                                "nodeId": "at0115",
                                 "min": 0,
                                 "max": 1,
                                 "localizedNames": {
@@ -2704,7 +2707,7 @@
                                 "localizedDescriptions": {
                                     "de": "Die Wirkstärke eines Arzneimittels oder einer Arzneimittelkomponente als Konzentration."
                                 },
-                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[at0115,'Wirkstärke (Konzentration)']/value",
+                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[at0115 and name/value='Wirkstärke (Konzentration)']/value",
                                 "inputs": [
                                     {
                                         "suffix": "magnitude",
@@ -2733,13 +2736,14 @@
                                 "localizedDescriptions": {
                                     "de": "Angaben über ein Arzneimittel oder eine Arzneimittelkomponente, einschließlich der Wirkstärke, der Darreichungsform und Informationen über spezifische Bestandteile."
                                 },
-                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1,'Wirkstoff']",
+                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1 and name/value='Wirkstoff']",
                                 "children": [
                                     {
                                         "id": "wirkstoff-name",
                                         "name": "Wirkstoff-Name",
                                         "localizedName": "Wirkstoff-Name",
                                         "rmType": "DV_TEXT",
+                                        "nodeId": "at0132",
                                         "min": 0,
                                         "max": 1,
                                         "localizedNames": {
@@ -2748,7 +2752,7 @@
                                         "localizedDescriptions": {
                                             "de": "Der Name des Arzneimittels oder der Arzneimittelkomponente."
                                         },
-                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1,'Wirkstoff']/items[at0132,'Wirkstoff-Name']/value",
+                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1 and name/value='Wirkstoff']/items[at0132 and name/value='Wirkstoff-Name']/value",
                                         "inputs": [
                                             {
                                                 "type": "TEXT"
@@ -2763,6 +2767,7 @@
                                         "name": "Wirkstofftyp",
                                         "localizedName": "Wirkstofftyp",
                                         "rmType": "DV_TEXT",
+                                        "nodeId": "at0142",
                                         "min": 0,
                                         "max": 1,
                                         "localizedNames": {
@@ -2771,7 +2776,7 @@
                                         "localizedDescriptions": {
                                             "de": "Die Kategorie des Arzneimittels oder der Arzneimittelkomponente, hinsichtlich der Herstellung oder Zubereitung und der Anzahl der Inhaltsstoffe."
                                         },
-                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1,'Wirkstoff']/items[at0142,'Wirkstofftyp']/value",
+                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1 and name/value='Wirkstoff']/items[at0142 and name/value='Wirkstofftyp']/value",
                                         "inputs": [
                                             {
                                                 "type": "TEXT",
@@ -2806,13 +2811,14 @@
                                         "localizedDescriptions": {
                                             "de": "Die Wirkstärke des Arzneimittels oder der Arzneimittelkomponente, ausgedrückt als Verhältniszahl."
                                         },
-                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1,'Wirkstoff']/items[at0152,'Wirkstoffmenge']",
+                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1 and name/value='Wirkstoff']/items[at0152 and name/value='Wirkstoffmenge']",
                                         "children": [
                                             {
                                                 "id": "zähler",
                                                 "name": "Zähler",
                                                 "localizedName": "Zähler",
                                                 "rmType": "DV_QUANTITY",
+                                                "nodeId": "at0153",
                                                 "min": 1,
                                                 "max": 1,
                                                 "localizedNames": {
@@ -2821,7 +2827,7 @@
                                                 "localizedDescriptions": {
                                                     "de": "Der Wert des Zählers des Wirkstärkeanteils."
                                                 },
-                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1,'Wirkstoff']/items[at0152,'Wirkstoffmenge']/items[at0153,'Zähler']/value",
+                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1 and name/value='Wirkstoff']/items[at0152 and name/value='Wirkstoffmenge']/items[at0153 and name/value='Zähler']/value",
                                                 "inputs": [
                                                     {
                                                         "suffix": "magnitude",
@@ -2859,6 +2865,7 @@
                                                 "name": "Einheit Zähler",
                                                 "localizedName": "Einheit Zähler",
                                                 "rmType": "DV_TEXT",
+                                                "nodeId": "at0004",
                                                 "min": 1,
                                                 "max": 1,
                                                 "localizedNames": {
@@ -2867,7 +2874,7 @@
                                                 "localizedDescriptions": {
                                                     "de": "Die Einheit des Zählers des Wirkstärkeanteils."
                                                 },
-                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1,'Wirkstoff']/items[at0152,'Wirkstoffmenge']/items[at0004,'Einheit Zähler']/value",
+                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1 and name/value='Wirkstoff']/items[at0152 and name/value='Wirkstoffmenge']/items[at0004 and name/value='Einheit Zähler']/value",
                                                 "inputs": [
                                                     {
                                                         "type": "TEXT"
@@ -2882,6 +2889,7 @@
                                                 "name": "Nenner",
                                                 "localizedName": "Nenner",
                                                 "rmType": "DV_QUANTITY",
+                                                "nodeId": "at0157",
                                                 "min": 1,
                                                 "max": 1,
                                                 "localizedNames": {
@@ -2890,7 +2898,7 @@
                                                 "localizedDescriptions": {
                                                     "de": "Der Wert des Nenners des Wirkstärkeanteils."
                                                 },
-                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1,'Wirkstoff']/items[at0152,'Wirkstoffmenge']/items[at0157,'Nenner']/value",
+                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1 and name/value='Wirkstoff']/items[at0152 and name/value='Wirkstoffmenge']/items[at0157 and name/value='Nenner']/value",
                                                 "inputs": [
                                                     {
                                                         "suffix": "magnitude",
@@ -2928,6 +2936,7 @@
                                                 "name": "Einheit Nenner",
                                                 "localizedName": "Einheit Nenner",
                                                 "rmType": "DV_TEXT",
+                                                "nodeId": "at0005",
                                                 "min": 1,
                                                 "max": 1,
                                                 "localizedNames": {
@@ -2936,7 +2945,7 @@
                                                 "localizedDescriptions": {
                                                     "de": "Die Einheit des Nenners des Wirkstärkeanteils."
                                                 },
-                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1,'Wirkstoff']/items[at0152,'Wirkstoffmenge']/items[at0005,'Einheit Nenner']/value",
+                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1 and name/value='Wirkstoff']/items[at0152 and name/value='Wirkstoffmenge']/items[at0005 and name/value='Einheit Nenner']/value",
                                                 "inputs": [
                                                     {
                                                         "type": "TEXT"
@@ -2977,13 +2986,14 @@
                                         "localizedDescriptions": {
                                             "de": "Zur Einordnung eines Arzneimittels in eine Gruppe, Klasse oder Kategorie."
                                         },
-                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1,'Wirkstoff']/items[openEHR-EHR-CLUSTER.drug_class.v0,'Wirkstoff-Code (ASK, SNOMED CT, UNII, CAS)']",
+                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1 and name/value='Wirkstoff']/items[openEHR-EHR-CLUSTER.drug_class.v0 and name/value='Wirkstoff-Code (ASK, SNOMED CT, UNII, CAS)']",
                                         "children": [
                                             {
                                                 "id": "wirkstoff-code",
                                                 "name": "Wirkstoff-Code",
                                                 "localizedName": "Wirkstoff-Code",
                                                 "rmType": "DV_TEXT",
+                                                "nodeId": "at0001",
                                                 "min": 1,
                                                 "max": 1,
                                                 "localizedNames": {
@@ -2992,7 +3002,7 @@
                                                 "localizedDescriptions": {
                                                     "de": "Name der Arzneimittelgruppe."
                                                 },
-                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1,'Wirkstoff']/items[openEHR-EHR-CLUSTER.drug_class.v0,'Wirkstoff-Code (ASK, SNOMED CT, UNII, CAS)']/items[at0001,'Wirkstoff-Code']/value",
+                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1 and name/value='Wirkstoff']/items[openEHR-EHR-CLUSTER.drug_class.v0 and name/value='Wirkstoff-Code (ASK, SNOMED CT, UNII, CAS)']/items[at0001 and name/value='Wirkstoff-Code']/value",
                                                 "inputs": [
                                                     {
                                                         "type": "TEXT"
@@ -3013,13 +3023,14 @@
                                                 "localizedDescriptions": {
                                                     "de": "Hier können Arzneimittelverzeichnisse, sowie intern verwendete Kataloge angegeben werden."
                                                 },
-                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1,'Wirkstoff']/items[openEHR-EHR-CLUSTER.drug_class.v0,'Wirkstoff-Code (ASK, SNOMED CT, UNII, CAS)']/items[at0004]",
+                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1 and name/value='Wirkstoff']/items[openEHR-EHR-CLUSTER.drug_class.v0 and name/value='Wirkstoff-Code (ASK, SNOMED CT, UNII, CAS)']/items[at0004]",
                                                 "children": [
                                                     {
                                                         "id": "katalogname",
                                                         "name": "Katalogname",
                                                         "localizedName": "Katalogname",
                                                         "rmType": "DV_TEXT",
+                                                        "nodeId": "at0002",
                                                         "min": 0,
                                                         "max": 1,
                                                         "localizedNames": {
@@ -3028,7 +3039,7 @@
                                                         "localizedDescriptions": {
                                                             "de": "Name des verwendeten Katalogs oder Verzeichnisses."
                                                         },
-                                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1,'Wirkstoff']/items[openEHR-EHR-CLUSTER.drug_class.v0,'Wirkstoff-Code (ASK, SNOMED CT, UNII, CAS)']/items[at0004]/items[at0002]/value",
+                                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1 and name/value='Wirkstoff']/items[openEHR-EHR-CLUSTER.drug_class.v0 and name/value='Wirkstoff-Code (ASK, SNOMED CT, UNII, CAS)']/items[at0004]/items[at0002]/value",
                                                         "inputs": [
                                                             {
                                                                 "type": "TEXT",
@@ -3062,6 +3073,7 @@
                                                         "name": "Version",
                                                         "localizedName": "Version",
                                                         "rmType": "DV_TEXT",
+                                                        "nodeId": "at0005",
                                                         "min": 0,
                                                         "max": 1,
                                                         "localizedNames": {
@@ -3070,7 +3082,7 @@
                                                         "localizedDescriptions": {
                                                             "de": "Versionsnummer des verwendeten Katalogs oder Verzeichnisses."
                                                         },
-                                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1,'Wirkstoff']/items[openEHR-EHR-CLUSTER.drug_class.v0,'Wirkstoff-Code (ASK, SNOMED CT, UNII, CAS)']/items[at0004]/items[at0005]/value",
+                                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.medication.v1 and name/value='Wirkstoff']/items[openEHR-EHR-CLUSTER.drug_class.v0 and name/value='Wirkstoff-Code (ASK, SNOMED CT, UNII, CAS)']/items[at0004]/items[at0005]/value",
                                                         "inputs": [
                                                             {
                                                                 "type": "TEXT"
@@ -3088,6 +3100,7 @@
                                 "name": "Rezeptur Freitextzeile",
                                 "localizedName": "Rezeptur Freitextzeile",
                                 "rmType": "DV_TEXT",
+                                "nodeId": "at0133",
                                 "min": 0,
                                 "max": 1,
                                 "localizedNames": {
@@ -3096,7 +3109,7 @@
                                 "localizedDescriptions": {
                                     "de": "Eine Möglichkeit zur Beschreibung des Arzneimittels oder der Arzneimittelkomponente, wenn dies nicht mit vollständig strukturierten Elementen möglich war."
                                 },
-                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[at0133,'Rezeptur Freitextzeile']/value",
+                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[at0133 and name/value='Rezeptur Freitextzeile']/value",
                                 "inputs": [
                                     {
                                         "type": "TEXT"
@@ -3124,6 +3137,7 @@
                                         "name": "Arzneimittel-Code",
                                         "localizedName": "Arzneimittel-Code",
                                         "rmType": "DV_TEXT",
+                                        "nodeId": "at0001",
                                         "min": 0,
                                         "max": 1,
                                         "localizedNames": {
@@ -3132,7 +3146,7 @@
                                         "localizedDescriptions": {
                                             "de": "Name der Arzneimittelgruppe."
                                         },
-                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.drug_class.v0]/items[at0001,'Arzneimittel-Code']/value",
+                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.medication.v1]/items[openEHR-EHR-CLUSTER.drug_class.v0]/items[at0001 and name/value='Arzneimittel-Code']/value",
                                         "inputs": [
                                             {
                                                 "type": "TEXT"
@@ -3160,6 +3174,7 @@
                                                 "name": "Katalogname",
                                                 "localizedName": "Katalogname",
                                                 "rmType": "DV_TEXT",
+                                                "nodeId": "at0002",
                                                 "min": 0,
                                                 "max": 1,
                                                 "localizedNames": {
@@ -3206,6 +3221,7 @@
                                                 "name": "Version",
                                                 "localizedName": "Version",
                                                 "rmType": "DV_TEXT",
+                                                "nodeId": "at0005",
                                                 "min": 0,
                                                 "max": 1,
                                                 "localizedNames": {
@@ -3232,6 +3248,7 @@
                         "name": "Verabreichungsweg",
                         "localizedName": "Verabreichungsweg",
                         "rmType": "DV_CODED_TEXT",
+                        "nodeId": "at0030",
                         "min": 0,
                         "max": -1,
                         "localizedNames": {
@@ -4049,6 +4066,7 @@
                         "name": "Startzeitpunkt Einnahme",
                         "localizedName": "Startzeitpunkt Einnahme",
                         "rmType": "DV_DATE_TIME",
+                        "nodeId": "at0019",
                         "min": 1,
                         "max": 1,
                         "localizedNames": {
@@ -4057,7 +4075,7 @@
                         "localizedDescriptions": {
                             "de": "Der gültige Zeitpunkt für den Statusbeginn."
                         },
-                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[at0019,'Startzeitpunkt Einnahme']/value",
+                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[at0019 and name/value='Startzeitpunkt Einnahme']/value",
                         "inputs": [
                             {
                                 "type": "DATETIME"
@@ -4069,6 +4087,7 @@
                         "name": "Dauer der Einnahme",
                         "localizedName": "Dauer der Einnahme",
                         "rmType": "DV_DURATION",
+                        "nodeId": "at0020",
                         "min": 1,
                         "max": 1,
                         "localizedNames": {
@@ -4077,7 +4096,7 @@
                         "localizedDescriptions": {
                             "de": "Die gültige Dauer für den Status."
                         },
-                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[at0020,'Dauer der Einnahme']/value",
+                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[at0020 and name/value='Dauer der Einnahme']/value",
                         "inputs": [
                             {
                                 "suffix": "year",
@@ -4159,6 +4178,7 @@
                         "name": "Endzeitpunkt Einnahme",
                         "localizedName": "Endzeitpunkt Einnahme",
                         "rmType": "DV_DATE_TIME",
+                        "nodeId": "at0021",
                         "min": 0,
                         "max": 1,
                         "localizedNames": {
@@ -4167,7 +4187,7 @@
                         "localizedDescriptions": {
                             "de": "Der gültige Zeitpunkt für das Statusende."
                         },
-                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[at0021,'Endzeitpunkt Einnahme']/value",
+                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[at0021 and name/value='Endzeitpunkt Einnahme']/value",
                         "inputs": [
                             {
                                 "type": "DATETIME"
@@ -4195,6 +4215,7 @@
                                 "name": "Dosierungsreihenfolge",
                                 "localizedName": "Dosierungsreihenfolge",
                                 "rmType": "DV_COUNT",
+                                "nodeId": "at0164",
                                 "min": 0,
                                 "max": 1,
                                 "localizedNames": {
@@ -4224,6 +4245,7 @@
                                 "name": "Dosis",
                                 "localizedName": "Dosis",
                                 "rmType": "DV_QUANTITY",
+                                "nodeId": "at0144",
                                 "min": 0,
                                 "max": 1,
                                 "localizedNames": {
@@ -4232,7 +4254,7 @@
                                 "localizedDescriptions": {
                                     "de": "Der Wert der Arzneimittelmenge, die an einem Zeitpunkt verabreicht wird, als reelle Zahl oder als Bereich von reellen Zahlen. Dem Wert ist die Dosiseinheit zugeordnet."
                                 },
-                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[at0144,'Dosis']/value",
+                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[at0144 and name/value='Dosis']/value",
                                 "inputs": [
                                     {
                                         "suffix": "magnitude",
@@ -4270,6 +4292,7 @@
                                 "name": "Dosierung Freitext",
                                 "localizedName": "Dosierung Freitext",
                                 "rmType": "DV_TEXT",
+                                "nodeId": "at0178",
                                 "min": 0,
                                 "max": 1,
                                 "localizedNames": {
@@ -4278,7 +4301,7 @@
                                 "localizedDescriptions": {
                                     "de": "Textbeschreibung der Dosis."
                                 },
-                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[at0178,'Dosierung Freitext']/value",
+                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[at0178 and name/value='Dosierung Freitext']/value",
                                 "inputs": [
                                     {
                                         "type": "TEXT"
@@ -4302,13 +4325,14 @@
                                 "localizedDescriptions": {
                                     "de": "Strukturierte Informationen über den geplanten Zeitablauf einer therapeutischen oder diagnostischen Aktivität innerhalb eines Zeitraums von 24 Stunden."
                                 },
-                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1,'Tägliche Dosierung']",
+                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1 and name/value='Tägliche Dosierung']",
                                 "children": [
                                     {
                                         "id": "periode",
                                         "name": "Periode",
                                         "localizedName": "Periode",
                                         "rmType": "DV_DURATION",
+                                        "nodeId": "at0014",
                                         "min": 0,
                                         "max": 1,
                                         "localizedNames": {
@@ -4317,7 +4341,7 @@
                                         "localizedDescriptions": {
                                             "de": "Das Zeitintervall oder der minimale und maximale Zeitspanne zwischen jeder geplanten Aktivität."
                                         },
-                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1,'Tägliche Dosierung']/items[at0014,'Periode']/value",
+                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1 and name/value='Tägliche Dosierung']/items[at0014 and name/value='Periode']/value",
                                         "inputs": [
                                             {
                                                 "suffix": "hour",
@@ -4360,13 +4384,14 @@
                                         "localizedDescriptions": {
                                             "de": "Eine bestimmte Uhrzeit oder ein bestimmtes Zeitintervall für das Stattfinden der Aktivität."
                                         },
-                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1,'Tägliche Dosierung']/items[at0004,'Zeitpunkt']",
+                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1 and name/value='Tägliche Dosierung']/items[at0004 and name/value='Zeitpunkt']",
                                         "children": [
                                             {
                                                 "id": "time_value",
                                                 "name": "Zeitpunkt",
                                                 "localizedName": "Zeitpunkt",
                                                 "rmType": "DV_TIME",
+                                                "nodeId": "at0004",
                                                 "min": 1,
                                                 "max": 1,
                                                 "localizedNames": {
@@ -4375,18 +4400,22 @@
                                                 "localizedDescriptions": {
                                                     "de": "Eine bestimmte Uhrzeit oder ein bestimmtes Zeitintervall für das Stattfinden der Aktivität."
                                                 },
-                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1,'Tägliche Dosierung']/items[at0004,'Zeitpunkt']/value",
+                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1 and name/value='Tägliche Dosierung']/items[at0004 and name/value='Zeitpunkt']/value",
                                                 "inputs": [
                                                     {
                                                         "type": "TIME"
                                                     }
-                                                ]
+                                                ],
+                                                "annotations": {
+                                                    "comment": "Zum Beispiel: \"08:00\" oder \"15:00 - 16:00\"."
+                                                }
                                             },
                                             {
-                                                "id": "interval<time>_value",
+                                                "id": "interval<dv_time>_value",
                                                 "name": "Zeitpunkt",
                                                 "localizedName": "Zeitpunkt",
                                                 "rmType": "DV_INTERVAL<DV_TIME>",
+                                                "nodeId": "at0004",
                                                 "min": 1,
                                                 "max": 1,
                                                 "localizedNames": {
@@ -4395,7 +4424,7 @@
                                                 "localizedDescriptions": {
                                                     "de": "Eine bestimmte Uhrzeit oder ein bestimmtes Zeitintervall für das Stattfinden der Aktivität."
                                                 },
-                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1,'Tägliche Dosierung']/items[at0004,'Zeitpunkt']/value",
+                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1 and name/value='Tägliche Dosierung']/items[at0004 and name/value='Zeitpunkt']/value",
                                                 "children": [
                                                     {
                                                         "id": "upper",
@@ -4404,7 +4433,7 @@
                                                         "rmType": "DV_TIME",
                                                         "min": 1,
                                                         "max": 1,
-                                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1,'Tägliche Dosierung']/items[at0004,'Zeitpunkt']/value/upper",
+                                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1 and name/value='Tägliche Dosierung']/items[at0004 and name/value='Zeitpunkt']/value/upper",
                                                         "inputs": [
                                                             {
                                                                 "type": "TIME"
@@ -4418,14 +4447,17 @@
                                                         "rmType": "DV_TIME",
                                                         "min": 1,
                                                         "max": 1,
-                                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1,'Tägliche Dosierung']/items[at0004,'Zeitpunkt']/value/lower",
+                                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1 and name/value='Tägliche Dosierung']/items[at0004 and name/value='Zeitpunkt']/value/lower",
                                                         "inputs": [
                                                             {
                                                                 "type": "TIME"
                                                             }
                                                         ]
                                                     }
-                                                ]
+                                                ],
+                                                "annotations": {
+                                                    "comment": "Zum Beispiel: \"08:00\" oder \"15:00 - 16:00\"."
+                                                }
                                             }
                                         ],
                                         "annotations": {
@@ -4437,6 +4469,7 @@
                                         "name": "Beschreibung des Zeitablaufs",
                                         "localizedName": "Beschreibung des Zeitablaufs",
                                         "rmType": "DV_TEXT",
+                                        "nodeId": "at0027",
                                         "min": 0,
                                         "max": 1,
                                         "localizedNames": {
@@ -4445,7 +4478,7 @@
                                         "localizedDescriptions": {
                                             "de": "Beschreibung des täglichen Zeitablaufs. Dieses Element soll es ermöglichen, die Strukturen für verschiedene Zeitabläufe zu verwenden, ohne notwendigerweise die Struktur der Zeitabläufe zu spezifizieren."
                                         },
-                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1,'Tägliche Dosierung']/items[at0027]/value",
+                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1 and name/value='Tägliche Dosierung']/items[at0027]/value",
                                         "inputs": [
                                             {
                                                 "type": "TEXT"
@@ -4460,6 +4493,7 @@
                                         "name": "Bei Bedarf",
                                         "localizedName": "Bei Bedarf",
                                         "rmType": "DV_BOOLEAN",
+                                        "nodeId": "at0024",
                                         "min": 0,
                                         "max": 1,
                                         "localizedNames": {
@@ -4468,7 +4502,7 @@
                                         "localizedDescriptions": {
                                             "de": "Als \"Wahr\" darstellen, wenn die Aktivität nur ausgeführt werden soll, wenn das \"Kriterium \"Bei Bedarf\"\" erfüllt ist."
                                         },
-                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1,'Tägliche Dosierung']/items[at0024]/value",
+                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1 and name/value='Tägliche Dosierung']/items[at0024]/value",
                                         "inputs": [
                                             {
                                                 "type": "BOOLEAN",
@@ -4498,13 +4532,14 @@
                                         "localizedDescriptions": {
                                             "de": "Ein bestimmtes, benanntes Zeitereignis, auf das sich die Aktivität bezieht und stattfinden soll."
                                         },
-                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1,'Tägliche Dosierung']/items[at0039]",
+                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1 and name/value='Tägliche Dosierung']/items[at0039]",
                                         "children": [
                                             {
                                                 "id": "ereignis",
                                                 "name": "Ereignis",
                                                 "localizedName": "Ereignis",
                                                 "rmType": "DV_TEXT",
+                                                "nodeId": "at0026",
                                                 "min": 0,
                                                 "max": 1,
                                                 "localizedNames": {
@@ -4513,7 +4548,7 @@
                                                 "localizedDescriptions": {
                                                     "de": "Der Name des Ereignisses, das die Aktivität auslöst."
                                                 },
-                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1,'Tägliche Dosierung']/items[at0039]/items[at0026,'Ereignis']/value",
+                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1 and name/value='Tägliche Dosierung']/items[at0039]/items[at0026 and name/value='Ereignis']/value",
                                                 "inputs": [
                                                     {
                                                         "type": "TEXT"
@@ -4528,6 +4563,7 @@
                                                 "name": "Offset",
                                                 "localizedName": "Offset",
                                                 "rmType": "DV_DURATION",
+                                                "nodeId": "at0040",
                                                 "min": 0,
                                                 "max": 1,
                                                 "localizedNames": {
@@ -4536,7 +4572,7 @@
                                                 "localizedDescriptions": {
                                                     "de": "Das Zeitintervall vor oder nach dem Ereignis, in dem die Aktivität ausgeführt werden soll. Negative Intervalle können verwendet werden, um anzugeben, dass die Aktivität vor dem genannten Ereignis ausgeführt werden soll."
                                                 },
-                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1,'Tägliche Dosierung']/items[at0039]/items[at0040,'Offset']/value",
+                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_daily.v1 and name/value='Tägliche Dosierung']/items[at0039]/items[at0040 and name/value='Offset']/value",
                                                 "inputs": [
                                                     {
                                                         "suffix": "hour",
@@ -4583,13 +4619,14 @@
                                 "localizedDescriptions": {
                                     "de": "Strukturierte Informationen über das geplante Zeitablaufmuster für eine therapeutische oder diagnostische Aktivität, die sich über Tage, Wochen, Monate oder Jahre erstreckt."
                                 },
-                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1,'Nicht tägliche Dosierung']",
+                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1 and name/value='Nicht tägliche Dosierung']",
                                 "children": [
                                     {
                                         "id": "periode",
                                         "name": "Periode",
                                         "localizedName": "Periode",
                                         "rmType": "DV_DURATION",
+                                        "nodeId": "at0002",
                                         "min": 0,
                                         "max": 1,
                                         "localizedNames": {
@@ -4598,7 +4635,7 @@
                                         "localizedDescriptions": {
                                             "de": "Das Intervall zwischen den Wiederholungen der Aktivität."
                                         },
-                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1,'Nicht tägliche Dosierung']/items[at0002,'Periode']/value",
+                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1 and name/value='Nicht tägliche Dosierung']/items[at0002 and name/value='Periode']/value",
                                         "inputs": [
                                             {
                                                 "suffix": "year",
@@ -4659,13 +4696,14 @@
                                         "localizedDescriptions": {
                                             "de": "Die Aktivität sollte an einem bestimmten Datum oder in einem bestimmten Datumsbereich stattfinden."
                                         },
-                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1,'Nicht tägliche Dosierung']/items[at0001,'Zeitpunkt']",
+                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1 and name/value='Nicht tägliche Dosierung']/items[at0001 and name/value='Zeitpunkt']",
                                         "children": [
                                             {
                                                 "id": "date_value",
                                                 "name": "Zeitpunkt",
                                                 "localizedName": "Zeitpunkt",
                                                 "rmType": "DV_DATE",
+                                                "nodeId": "at0001",
                                                 "min": 1,
                                                 "max": 1,
                                                 "localizedNames": {
@@ -4674,18 +4712,22 @@
                                                 "localizedDescriptions": {
                                                     "de": "Die Aktivität sollte an einem bestimmten Datum oder in einem bestimmten Datumsbereich stattfinden."
                                                 },
-                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1,'Nicht tägliche Dosierung']/items[at0001,'Zeitpunkt']/value",
+                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1 and name/value='Nicht tägliche Dosierung']/items[at0001 and name/value='Zeitpunkt']/value",
                                                 "inputs": [
                                                     {
                                                         "type": "DATE"
                                                     }
-                                                ]
+                                                ],
+                                                "annotations": {
+                                                    "comment": "Zum Beispiel: \"am 12. Januar 2017\" oder \"vom 30. Oktober 2017 bis 6. November 2017\""
+                                                }
                                             },
                                             {
-                                                "id": "interval<date>_value",
+                                                "id": "interval<dv_date>_value",
                                                 "name": "Zeitpunkt",
                                                 "localizedName": "Zeitpunkt",
                                                 "rmType": "DV_INTERVAL<DV_DATE>",
+                                                "nodeId": "at0001",
                                                 "min": 1,
                                                 "max": 1,
                                                 "localizedNames": {
@@ -4694,7 +4736,7 @@
                                                 "localizedDescriptions": {
                                                     "de": "Die Aktivität sollte an einem bestimmten Datum oder in einem bestimmten Datumsbereich stattfinden."
                                                 },
-                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1,'Nicht tägliche Dosierung']/items[at0001,'Zeitpunkt']/value",
+                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1 and name/value='Nicht tägliche Dosierung']/items[at0001 and name/value='Zeitpunkt']/value",
                                                 "children": [
                                                     {
                                                         "id": "upper",
@@ -4703,7 +4745,7 @@
                                                         "rmType": "DV_DATE",
                                                         "min": 1,
                                                         "max": 1,
-                                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1,'Nicht tägliche Dosierung']/items[at0001,'Zeitpunkt']/value/upper",
+                                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1 and name/value='Nicht tägliche Dosierung']/items[at0001 and name/value='Zeitpunkt']/value/upper",
                                                         "inputs": [
                                                             {
                                                                 "type": "DATE"
@@ -4717,14 +4759,17 @@
                                                         "rmType": "DV_DATE",
                                                         "min": 1,
                                                         "max": 1,
-                                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1,'Nicht tägliche Dosierung']/items[at0001,'Zeitpunkt']/value/lower",
+                                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1 and name/value='Nicht tägliche Dosierung']/items[at0001 and name/value='Zeitpunkt']/value/lower",
                                                         "inputs": [
                                                             {
                                                                 "type": "DATE"
                                                             }
                                                         ]
                                                     }
-                                                ]
+                                                ],
+                                                "annotations": {
+                                                    "comment": "Zum Beispiel: \"am 12. Januar 2017\" oder \"vom 30. Oktober 2017 bis 6. November 2017\""
+                                                }
                                             }
                                         ],
                                         "annotations": {
@@ -4736,6 +4781,7 @@
                                         "name": "Beschreibung des Zeitablaufs",
                                         "localizedName": "Beschreibung des Zeitablaufs",
                                         "rmType": "DV_TEXT",
+                                        "nodeId": "at0021",
                                         "min": 0,
                                         "max": 1,
                                         "localizedNames": {
@@ -4744,7 +4790,7 @@
                                         "localizedDescriptions": {
                                             "de": "Freitextbeschreibung des Zeitablaufs."
                                         },
-                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1,'Nicht tägliche Dosierung']/items[at0021]/value",
+                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1 and name/value='Nicht tägliche Dosierung']/items[at0021]/value",
                                         "inputs": [
                                             {
                                                 "type": "TEXT"
@@ -4768,13 +4814,14 @@
                                         "localizedDescriptions": {
                                             "de": "Ein bestimmtes, benanntes Zeitereignis, auf das sich die Aktivität bezieht und stattfinden soll."
                                         },
-                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1,'Nicht tägliche Dosierung']/items[at0006]",
+                                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1 and name/value='Nicht tägliche Dosierung']/items[at0006]",
                                         "children": [
                                             {
                                                 "id": "ereignis",
                                                 "name": "Ereignis",
                                                 "localizedName": "Ereignis",
                                                 "rmType": "DV_TEXT",
+                                                "nodeId": "at0005",
                                                 "min": 0,
                                                 "max": 1,
                                                 "localizedNames": {
@@ -4783,7 +4830,7 @@
                                                 "localizedDescriptions": {
                                                     "de": "Der Name des Ereignisses, das die Aktivität auslöst."
                                                 },
-                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1,'Nicht tägliche Dosierung']/items[at0006]/items[at0005,'Ereignis']/value",
+                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1 and name/value='Nicht tägliche Dosierung']/items[at0006]/items[at0005 and name/value='Ereignis']/value",
                                                 "inputs": [
                                                     {
                                                         "type": "TEXT"
@@ -4798,6 +4845,7 @@
                                                 "name": "Offset",
                                                 "localizedName": "Offset",
                                                 "rmType": "DV_DURATION",
+                                                "nodeId": "at0009",
                                                 "min": 0,
                                                 "max": 1,
                                                 "localizedNames": {
@@ -4806,7 +4854,7 @@
                                                 "localizedDescriptions": {
                                                     "de": "Das Zeitintervall vor oder nach dem Ereignis, in dem die Aktivität stattfinden sollte. Negative Intervalle können verwendet werden, damit signalisiert werden kann, dass die Aktivität vor dem genannten Ereignis stattfinden soll."
                                                 },
-                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1,'Nicht tägliche Dosierung']/items[at0006]/items[at0009,'Offset']/value",
+                                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[openEHR-EHR-CLUSTER.dosage.v1]/items[openEHR-EHR-CLUSTER.timing_nondaily.v1 and name/value='Nicht tägliche Dosierung']/items[at0006]/items[at0009 and name/value='Offset']/value",
                                                 "inputs": [
                                                     {
                                                         "suffix": "year",
@@ -4867,6 +4915,7 @@
                         "name": "Behandlungsgrund",
                         "localizedName": "Behandlungsgrund",
                         "rmType": "DV_TEXT",
+                        "nodeId": "at0023",
                         "min": 0,
                         "max": 1,
                         "localizedNames": {
@@ -4875,7 +4924,7 @@
                         "localizedDescriptions": {
                             "de": "Der klinische Grund für die Anwendung des Medikaments."
                         },
-                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[at0023,'Behandlungsgrund']/value",
+                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[at0023 and name/value='Behandlungsgrund']/value",
                         "inputs": [
                             {
                                 "type": "TEXT"
@@ -4890,6 +4939,7 @@
                         "name": "Hinweis",
                         "localizedName": "Hinweis",
                         "rmType": "DV_TEXT",
+                        "nodeId": "at0029",
                         "min": 0,
                         "max": 1,
                         "localizedNames": {
@@ -4898,7 +4948,7 @@
                         "localizedDescriptions": {
                             "de": "Zusätzliche Kommentare über den Medikationseintrag, die nicht in anderen Feldern erfasst wurden."
                         },
-                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[at0029,'Hinweis']/value",
+                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/data[at0001]/events[at0002]/data[at0003]/items[at0029 and name/value='Hinweis']/value",
                         "inputs": [
                             {
                                 "type": "TEXT"
@@ -4933,13 +4983,14 @@
                         "localizedDescriptions": {
                             "de": "Ein Code, der die Beurteilung des Patienten oder einer anderen Beurteilungsquelle über den Status des angewendeten Medikaments darstellt, mit dem sich diese Angabe befasst. Im Allgemeinen wird dies aktiv oder abgeschlossen sein."
                         },
-                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/protocol[at0004]/items[openEHR-EHR-CLUSTER.medication_status_fhir.v0,'Status']",
+                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/protocol[at0004]/items[openEHR-EHR-CLUSTER.medication_status_fhir.v0 and name/value='Status']",
                         "children": [
                             {
                                 "id": "status",
                                 "name": "Status",
                                 "localizedName": "Status",
                                 "rmType": "DV_CODED_TEXT",
+                                "nodeId": "at0001",
                                 "min": 1,
                                 "max": 1,
                                 "localizedNames": {
@@ -4948,7 +4999,7 @@
                                 "localizedDescriptions": {
                                     "de": "Status der Einnahme des Medikamentes im Verlauf oder nach dem Ende der Therapie bzw. der Nachsorge."
                                 },
-                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/protocol[at0004]/items[openEHR-EHR-CLUSTER.medication_status_fhir.v0,'Status']/items[at0001]/value",
+                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/protocol[at0004]/items[openEHR-EHR-CLUSTER.medication_status_fhir.v0 and name/value='Status']/items[at0001]/value",
                                 "inputs": [
                                     {
                                         "suffix": "code",
@@ -5044,6 +5095,7 @@
                                 "name": "Status Grund",
                                 "localizedName": "Status Grund",
                                 "rmType": "DV_TEXT",
+                                "nodeId": "at0014",
                                 "min": 0,
                                 "max": -1,
                                 "localizedNames": {
@@ -5052,7 +5104,7 @@
                                 "localizedDescriptions": {
                                     "de": "Zusätzliche Informationen über die Medikation, die nicht in anderen Bereichen dargestellt wurden."
                                 },
-                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/protocol[at0004]/items[openEHR-EHR-CLUSTER.medication_status_fhir.v0,'Status']/items[at0014,'Status Grund']/value",
+                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/protocol[at0004]/items[openEHR-EHR-CLUSTER.medication_status_fhir.v0 and name/value='Status']/items[at0014 and name/value='Status Grund']/value",
                                 "inputs": [
                                     {
                                         "type": "TEXT"
@@ -5075,13 +5127,14 @@
                         "localizedDescriptions": {
                             "de": "Mit FHIR-Ressource abgestimmt Details zur Organisation."
                         },
-                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/protocol[at0004]/items[openEHR-EHR-CLUSTER.organisation_cc.v0,'Autor/Informant des Eintrags']",
+                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/protocol[at0004]/items[openEHR-EHR-CLUSTER.organisation_cc.v0 and name/value='Autor/Informant des Eintrags']",
                         "children": [
                             {
                                 "id": "name",
                                 "name": "Name",
                                 "localizedName": "Name",
                                 "rmType": "DV_TEXT",
+                                "nodeId": "at0012",
                                 "min": 1,
                                 "max": 1,
                                 "localizedNames": {
@@ -5090,7 +5143,7 @@
                                 "localizedDescriptions": {
                                     "de": "Der Name, der der Organisation zugeordnet ist."
                                 },
-                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/protocol[at0004]/items[openEHR-EHR-CLUSTER.organisation_cc.v0,'Autor/Informant des Eintrags']/items[at0012]/value",
+                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/protocol[at0004]/items[openEHR-EHR-CLUSTER.organisation_cc.v0 and name/value='Autor/Informant des Eintrags']/items[at0012]/value",
                                 "inputs": [
                                     {
                                         "type": "TEXT"
@@ -5120,6 +5173,7 @@
                                 "name": "Kategorie der Medikation",
                                 "localizedName": "Kategorie der Medikation",
                                 "rmType": "DV_TEXT",
+                                "nodeId": "at0002",
                                 "min": 0,
                                 "max": 1,
                                 "localizedNames": {
@@ -5128,7 +5182,7 @@
                                 "localizedDescriptions": {
                                     "de": "Kategorie des Eintrags"
                                 },
-                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/protocol[at0004]/items[openEHR-EHR-CLUSTER.entry_category.v0]/items[at0002,'Kategorie der Medikation']/value",
+                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/protocol[at0004]/items[openEHR-EHR-CLUSTER.entry_category.v0]/items[at0002 and name/value='Kategorie der Medikation']/value",
                                 "inputs": [
                                     {
                                         "type": "TEXT",
@@ -5176,6 +5230,7 @@
                                 "name": "Externer identifier",
                                 "localizedName": "Externer identifier",
                                 "rmType": "DV_IDENTIFIER",
+                                "nodeId": "at0001",
                                 "min": 0,
                                 "max": 1,
                                 "localizedNames": {
@@ -5184,7 +5239,7 @@
                                 "localizedDescriptions": {
                                     "de": "Identifikator"
                                 },
-                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/protocol[at0004]/items[openEHR-EHR-CLUSTER.identifier_fhir.v0]/items[at0001,'Externer identifier']/value",
+                                "aqlPath": "/content[openEHR-EHR-OBSERVATION.medication_statement.v0]/protocol[at0004]/items[openEHR-EHR-CLUSTER.identifier_fhir.v0]/items[at0001 and name/value='Externer identifier']/value",
                                 "inputs": [
                                     {
                                         "suffix": "id",

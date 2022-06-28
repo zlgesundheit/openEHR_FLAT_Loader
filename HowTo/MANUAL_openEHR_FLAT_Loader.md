@@ -67,12 +67,12 @@ This information is best used accompanied by information from [community discuss
 - **Information Model / Reference Model**  
 The openEHR [information model](https://specifications.openehr.org/releases/RM/latest/ehr.html) describes how data is structured in the openEHR-World. Data is organized in EHRs (so it is patient-centered) holding information about the EHR(Access, Status) and the EHR that may contain folders / directorys which contain the compositions that hold the data, in form of defined data types and attributes taken from the Reference Model. The structure of compositions that hold the data is defined by Templates (that use Archetypes, which are the Core of openEHR)
 
-  <img src="/0_Docs/Figures/openEHR_Information_Model_High_Level_Structure.jpg">
+  <img src="/HowTo/Figures/openEHR_Information_Model_High_Level_Structure.jpg">
 
 - **Archetypes**  
 [OpenEHR-Archetypes](https://specifications.openehr.org/releases/AM/latest/Overview.html) are defined in Archetype Definition Language (ADL). In the multi-level-modelling approach of openEHR they allow to distinct between domain semantics and the information model / reference model. An Archetype is a reusable definition of a semantic concept from a domain, which correspond to logical data points and groups. Archetypes / Semantic concepts should be designed and maintained by domain experts. Often the archetype and template development takes place in [Clinical Knowledge Managers (CKM)](https://ckm.openehr.org/ckm/).
 
-  <img src="/0_Docs/Figures/openehr_archetype_figure.jpg">
+  <img src="/HowTo/Figures/openehr_archetype_figure.jpg">
 
 - **Templates**  
 An openEHR-Template defines an arrangement of items from one or more archetypes, possibly with further constraints on them (regarding cardinality, inputs, etc.). A Template defines how a composition of data looks like and is used at runtime to create data structures and validate inputs.
@@ -80,7 +80,7 @@ An openEHR-Template defines an arrangement of items from one or more archetypes,
 - **Webtemplates and FLAT-Paths**  
 A Webtemplate is an other format of a Template (Operational Template / .opt). Webtemplates are Part of the [FLAT-API](https://ehrbase.readthedocs.io/en/latest/02_getting_started/05_load_data/index.html) at first used by EtherCIS and Better and later EHRBase. The FLAT-API allows to communicate with the server using Compositions in FLAT-Format, which means they are structured a non-hierarchical JSON-Strings using FLAT-Paths to define which data item is assigned which value. This format is easy to read, understand and easy to work with.
 
-  <img src="/0_Docs/Figures/FLAT_Composition_Example.jpg">
+  <img src="/HowTo/Figures/FLAT_Composition_Example.jpg">
 
 ### **Data Preparation**
 There are some noteworthy aspects in preparing the data to be consumed by the FLAT_Loader. Aligning **data types** and **item/column names** and **some metadata** with the **data model / openEHR-Template** makes the transformation process easy.
@@ -125,7 +125,7 @@ After Data Preparation, Curation and Formatting
 #### 0.2 Provide a template as .opt
 - Get the Operational Template for your Data Set 
   - E.g. download the OPT-File (.opt) from a Clinical Knowledge Manager (CKM) using the Export-Functionality  
-    <img src="/0_Docs/Figures/ckm_template_mark.jpg">
+    <img src="/HowTo/Figures/ckm_template_mark.jpg">
 - Move the OPT-File to "<pathToTool>\openehr_flat_loader\Input\OPT\"
 - Set the Template that will be dealed with by the tool
   - Change the "templatename"-Variable in the config to the current Templatename
@@ -155,19 +155,19 @@ After Data Preparation, Curation and Formatting
 - Start the tool using "runFlatLoader_win.bat"
 - Select Step 1 by typing "1" + press "Enter"
 
-  <img src="/0_Docs/Figures/cmd_step1.jpg">
+  <img src="/HowTo/Figures/cmd_step1.jpg">
 
 #### 2. Fill in mapping information
 - Find the (empty) mapping file in "openehr_flat_loader\Manual Tasks\" by looking for <<templatename>>_MAPPING.xlsx
 - Select CSV-Items from the Dropdown and map them to FLAT-Paths from the Template
 
-  <img src="/0_Docs/Figures/mapping_file.jpg">
+  <img src="/HowTo/Figures/mapping_file.jpg">
 
 #### 3. Build Ressources
 - Start the tool using "runFlatLoader_win.bat"
 - Select Step 2 by typing "2" + press "Enter"
 
-  <img src="/0_Docs/Figures/cmd_step1.jpg">
+  <img src="/HowTo/Figures/cmd_step1.jpg">
 
 `Resources can be found in "openehr_flat_loader\Output\"`
 
