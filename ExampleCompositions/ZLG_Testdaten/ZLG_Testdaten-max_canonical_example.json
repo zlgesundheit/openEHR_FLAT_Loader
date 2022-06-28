@@ -49,7 +49,7 @@
         "_type": "EVENT_CONTEXT",
         "start_time": {
             "_type": "DV_DATE_TIME",
-            "value": "1989-11-09T21:20:00+02:00"
+            "value": "1989-11-09T21:20:00.000+02:00"
         },
         "setting": {
             "_type": "DV_CODED_TEXT",
@@ -93,6 +93,36 @@
                         "value": "Beispieltext"
                     },
                     "archetype_node_id": "at0005"
+                },
+                {
+                    "_type": "CLUSTER",
+                    "name": {
+                        "_type": "DV_TEXT",
+                        "value": "UMG_Geschlecht"
+                    },
+                    "items": [
+                        {
+                            "_type": "ELEMENT",
+                            "name": {
+                                "_type": "DV_TEXT",
+                                "value": "Administratives Geschlecht"
+                            },
+                            "value": {
+                                "_type": "DV_CODED_TEXT",
+                                "value": "Weiblich",
+                                "defining_code": {
+                                    "_type": "CODE_PHRASE",
+                                    "terminology_id": {
+                                        "_type": "TERMINOLOGY_ID",
+                                        "value": "local"
+                                    },
+                                    "code_string": "at0028"
+                                }
+                            },
+                            "archetype_node_id": "at0022"
+                        }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.umg_geschlecht.v0"
                 }
             ],
             "archetype_node_id": "at0001"
@@ -141,7 +171,7 @@
                 },
                 "origin": {
                     "_type": "DV_DATE_TIME",
-                    "value": "1989-11-09T21:20:00+02:00"
+                    "value": "1989-11-09T21:20:00.000+02:00"
                 },
                 "events": [
                     {
@@ -152,7 +182,7 @@
                         },
                         "time": {
                             "_type": "DV_DATE_TIME",
-                            "value": "1989-11-09T21:20:00+02:00"
+                            "value": "1989-11-09T21:20:00.000+02:00"
                         },
                         "data": {
                             "_type": "ITEM_TREE",
@@ -165,11 +195,35 @@
                                     "_type": "ELEMENT",
                                     "name": {
                                         "_type": "DV_TEXT",
+                                        "value": "Alter Jahresanteil"
+                                    },
+                                    "value": {
+                                        "_type": "DV_COUNT",
+                                        "magnitude": 1509
+                                    },
+                                    "archetype_node_id": "at0004"
+                                },
+                                {
+                                    "_type": "ELEMENT",
+                                    "name": {
+                                        "_type": "DV_TEXT",
+                                        "value": "Alter Tagesanteil"
+                                    },
+                                    "value": {
+                                        "_type": "DV_COUNT",
+                                        "magnitude": 6671
+                                    },
+                                    "archetype_node_id": "at0005"
+                                },
+                                {
+                                    "_type": "ELEMENT",
+                                    "name": {
+                                        "_type": "DV_TEXT",
                                         "value": "Berechnungsdatum"
                                     },
                                     "value": {
                                         "_type": "DV_DATE_TIME",
-                                        "value": "1989-11-09T21:20:00+02:00"
+                                        "value": "1989-11-09T21:20:00.000+02:00"
                                     },
                                     "archetype_node_id": "at0006"
                                 }
@@ -187,6 +241,6 @@
     "archetype_node_id": "openEHR-EHR-COMPOSITION.report.v1",
     "uid": {
         "_type": "OBJECT_VERSION_ID",
-        "value": "e9af3aff-604b-427b-acfc-ddb853fdd9e0::local.ehrbase.org::1"
+        "value": "3506ff94-dfcf-4a8d-8b6e-b945cd3d2259::local.ehrbase.org::1"
     }
 }

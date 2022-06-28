@@ -49,7 +49,7 @@
         "_type": "EVENT_CONTEXT",
         "start_time": {
             "_type": "DV_DATE_TIME",
-            "value": "1989-11-09T21:20:00+02:00"
+            "value": "1989-11-09T21:20:00.000+02:00"
         },
         "setting": {
             "_type": "DV_CODED_TEXT",
@@ -67,6 +67,6 @@
     "archetype_node_id": "openEHR-EHR-COMPOSITION.report.v1",
     "uid": {
         "_type": "OBJECT_VERSION_ID",
-        "value": "4b70aa6e-279f-4eee-993d-9e6b1e95415f::local.ehrbase.org::1"
+        "value": "169c083b-7c9e-40f3-bd16-b198a866f3cf::local.ehrbase.org::1"
     }
 }

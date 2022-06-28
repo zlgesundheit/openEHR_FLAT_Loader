@@ -96,11 +96,9 @@ def createExampleValueDict(self, value):
         exampleValueDict[ self.pathString + "|" + 'issuer' ] = "Issuer Person"
         exampleValueDict[ self.pathString + "|" + 'assigner' ] = "Assigning Organisation X"
     elif value == "DV_COUNT": # TODO
-        for entry in self.inputs:
-            # Select number type
-            changer = getNumberOfType(entry['type'])
-            number = getRandNumberWithOrWithoutValidation(entry, changer)
-            exampleValueDict[ self.pathString ] = number
+        changer = getNumberOfType(self.inputs[0]['type'])
+        number = getRandNumberWithOrWithoutValidation(self.inputs, changer)
+        exampleValueDict[ self.pathString ] = number
     #elif value == "DV_DURATION":
         """
         for entry in self.inputs:
@@ -109,8 +107,16 @@ def createExampleValueDict(self, value):
             number = getRandNumberWithOrWithoutValidation(entry, changer)
             exampleValueDict[ self.pathString + "|" + entry['suffix'] ] = number
         """
-    #elif value == "DV_CODED_TEXT":
-        #TODO
+    elif value == "DV_CODED_TEXT":
+        if hasattr(self, "inputs"):
+            # self.inputs[0] 
+            if self.inputs[0]['type'] == "CODED_TEXT":
+                #print (self.inputs[0]['terminology'])
+
+                exampleValueDict[ self.pathString + "|" + 'value' ] = self.inputs[0]['list'][0]['label']
+                exampleValueDict[ self.pathString + "|" + 'code' ] = self.inputs[0]['list'][0]['value']
+                exampleValueDict[ self.pathString + "|" + 'terminology' ] = self.inputs[0]['terminology']
+
     # DV_QUANTITY TODO
     # DV_PROPORTION TODO # Can be in percent or fraction
     elif value == "DV_PROPORTION":
@@ -160,6 +166,8 @@ def getExampleICObase64encoded():
     return base64_encoded_example_ico
 
 def getRandNumberWithOrWithoutValidation(entry, changer):
+    entry = entry[0]
+
     if 'validation' in entry:
         if 'min' in entry['validation']['range'] and 'max' in entry['validation']['range']:
             final_lower = setBoundaryByOperator( entry['validation']['range']['min'], entry['validation']['range']['minOp'], changer)

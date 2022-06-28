@@ -1,4 +1,7 @@
 {
+    "bericht/category|value": "event",
+    "bericht/category|code": "433",
+    "bericht/category|terminology": "openehr",
     "bericht/context/start_time": "1989-11-09T21:20:00+02:00",
     "bericht/composer|name": "Herbert Composer",
     "bericht/language|code": "de",

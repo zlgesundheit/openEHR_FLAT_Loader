@@ -121,8 +121,16 @@ def buildAndUploadCompositions():
         pass
     
 def generateExamples():
+    """ Beispiele werden generiert, wenn die Pfade aus dem WebTemplate ausgelesen werden. Zu jedem Pfad wird abhängig vom Datentyp/rmType ein Beispielwert erzeugt.
+    Danach kann also zu jedem Pfad im Pfad-Dict nicht nur der Pfad (pathString) sondern auch Beispiele abgerufen werden (exampleValueDict). """
+
     # Upload OPT to openEHR-Repo if necessary
     webTemp = handleOPT.main(config,manualTaskDir,OPTDirPath)
+
+    # Store Webtemplate in Example-Folder
+    templateName = config.templateName
+    outdir = os.path.join(workdir,'ExampleCompositions', templateName)
+    buildExampleComp.storeStringAsFile(webTemp, outdir, templateName + "_WebTemplate" + ".json")
 
     # Extrahiere Pfade in Array von Pfadobjekten 
     pathArray = handleWebTemplate.main(webTemp, config.templateName)
