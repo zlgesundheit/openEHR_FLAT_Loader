@@ -31,8 +31,8 @@ indent = "\t"
 workdir = getcwd()
 sourceDataCsvFP = os.path.join(workdir, 'ETLProcess', 'Input', config.inputCSV + '.csv')
 OPTDirPath      = os.path.join(workdir, 'OPTs')
-manualTaskDir   = os.path.join(workdir, 'ETLProcess', 'ManualTasks')
-outputDir       = os.path.join(workdir, 'ETLProcess', 'Output')
+manualTaskDir   = os.path.join(workdir, 'ETLProcess', 'ManualTasks', config.templateName)
+outputDir       = os.path.join(workdir, 'ETLProcess', 'Output', config.templateName)
 # TODO Set all Paths here or in configHandler? centralized and pass them to the other scripts. SinglePointOfChange
 
 ############################### Main ###############################
@@ -121,9 +121,29 @@ def buildAndUploadCompositions():
         pass
     
 def generateExamples():
+    """ Beispiele werden generiert, wenn die Pfade aus dem WebTemplate ausgelesen werden. Zu jedem Pfad wird abhängig vom Datentyp/rmType ein Beispielwert erzeugt.
+    Danach kann also zu jedem Pfad im Pfad-Dict nicht nur der Pfad (pathString) sondern auch Beispiele abgerufen werden (exampleValueDict). 
+    
+    Implementierung fast aller rmTypes mit Beispielen hat beim Verständnis des der Strukturen des Webtemplates sehr geholfen.
+    Inzwischen bietet die FLAT-API der EHRBase allerdings einen Example-Endpunkt:
+    {{host}}/rest/ecis/v1/template/:template_id/example?format=FLAT
+
+    """
+
     # Upload OPT to openEHR-Repo if necessary
     webTemp = handleOPT.main(config,manualTaskDir,OPTDirPath)
 
+    # Query Example and store in 
+    exampleComp = buildExampleComp.queryExampleComp(workdir, config.templateName, config.targetAdress, config.targetAuthHeader)
+    buildExampleComp.storeStringAsFile(exampleComp, manualTaskDir, config.templateName + "CompositionExample" + ".json")
+
+    # Store Webtemplate in Example-Folder
+    buildExampleComp.storeStringAsFile(webTemp, manualTaskDir, config.templateName + "_WebTemplate" + ".json")
+
+    print("\n")
+    print("OPT is uploaded to the Repository and an Example-Composition is stored in the ManualTasks-Folder.")
+
+    """
     # Extrahiere Pfade in Array von Pfadobjekten 
     pathArray = handleWebTemplate.main(webTemp, config.templateName)
 
@@ -131,7 +151,7 @@ def generateExamples():
     buildExampleComp.main(workdir, pathArray, config.templateName, config.targetAdress, config.targetAuthHeader, "min")
     # Build Maximal Example
     buildExampleComp.main(workdir, pathArray, config.templateName, config.targetAdress, config.targetAuthHeader, "max")
-
+    """
 def printInfoText():
     print("    Welcome to the openEHR_FLAT_Loader-Commandline-Tool!")
     print("    Given an existing template, this tool allows you to transform tabular data into the interoperable openEHR format."

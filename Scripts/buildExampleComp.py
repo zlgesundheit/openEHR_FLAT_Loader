@@ -35,11 +35,29 @@ def main(workdir, pathArray, templateName, baseUrl, repo_auth, type):
 
 ############################### Methods ###############################
 
+def queryExampleComp(outdir, templateName, baseUrl, repo_auth):
+    url = f'{baseUrl}/rest/ecis/v1/template/{templateName}/example?format=FLAT'
+
+    ##payload needs to be json! Otherwise it will just do nothin and run forever
+    payload = {}
+
+    headers = {
+        'Authorization': repo_auth,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+
+    exampleComp = json.loads(response.text)
+
+    return exampleComp
+
 # TODO Man koennte die If-Bedinung in die for-Schleife packen und damit Code-Zeilen einsparen, da Up/Download und Speichern für Min/Max gleich sind. Ist jetzt gerade aber anders gelaufen.
 def buildExample(outdir, pathArray, templateName, baseUrl, repo_auth, type):
     # Create Example EHR
     ehrId = handleUpload.createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, "examplePatient", "openEHR_FLAT_Loader")
-    
+
     #Build Minimal Resource-Dict mit nur allen Pflichtpfaden
     if type == "min":
         dict = {}
@@ -70,11 +88,10 @@ def buildExample(outdir, pathArray, templateName, baseUrl, repo_auth, type):
 
         # Upload FLAT Example-Comp
         flat_res = dict #json.dumps(dict)
-        try:
-            compId = handleUpload.uploadResourceToEhrId(baseUrl, repo_auth, ehrId, flat_res, templateName)
-        except RuntimeError:
-            print("\tOops! Die Example-Composition wurde nicht erfolgreich hochgeladen.")
-            raise SystemExit
+        
+        compId, cnt = handleUpload.uploadResourceToEhrId(baseUrl, repo_auth, ehrId, flat_res, templateName, comp_created_count = 0)
+
+        print(compId)
 
         # Download Canonical Composition
         canonical_json = getCanonicalJSONComp(baseUrl, repo_auth, compId)
@@ -112,15 +129,12 @@ def buildExample(outdir, pathArray, templateName, baseUrl, repo_auth, type):
         filename = templateName + "-max_flat_example" + ".json"
         storeStringAsFile(dict, outdir, filename)
 
-        print ("\t" + f'CANONICAL Minimal-Example-Composition erstellt und im Ordner "Output" gespeichert. \n')
+        print ("\t" + f'FLAT Maximal-Example-Composition erstellt und im Ordner "Output" gespeichert. \n')
 
         # Upload FLAT Maximal Composition
         flat_res = dict #json.dumps(dict)
-        try:
-            compId = handleUpload.uploadResourceToEhrId(baseUrl, repo_auth, ehrId, flat_res, templateName)
-        except RuntimeError:
-            print("\tOops! Die Example-Composition wurde nicht erfolgreich hochgeladen.")
-            raise SystemExit
+
+        compId, cnt = handleUpload.uploadResourceToEhrId(baseUrl, repo_auth, ehrId, flat_res, templateName, comp_created_count = 0)
 
         # Download CANONICAL Maximal Composition
         canonical_json = getCanonicalJSONComp(baseUrl, repo_auth, compId)

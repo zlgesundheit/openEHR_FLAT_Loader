@@ -32,15 +32,10 @@ def uploadResourceToEhrId(baseUrl, repo_auth, ehrId, resource, templateName, com
         'Prefer': 'return=minimal'
     }
 
-    print ("    " + str(payload))
     try:
-        response = requests.post(url, headers=headers, data=payload) #, timeout = 15)
+        #response = requests.post(url, headers=headers, data=payload) #, timeout = 15)
+        response = requests.request("POST", url, headers=headers, data=payload)
         
-        if response.status_code == 400:
-            print(response.text)
-            error_msg = "Response Code beim Upload der Composition 400: Bad Request"
-            raise RuntimeError(error_msg)
-
         resp_json = json.loads(response.text)
         print ("\n    Status beim Upload der Composition: " + str(response.status_code))
         print ("\t"+str(resp_json))
@@ -50,9 +45,7 @@ def uploadResourceToEhrId(baseUrl, repo_auth, ehrId, resource, templateName, com
             comp_created_count +=1
 
         return resp_json["compositionUid"], comp_created_count
-        #else:
-            #print ("Oops! Da lief etwas beim Upload der Composition schief.")
-            #raise RuntimeError
+        
     except:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
