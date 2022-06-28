@@ -70,8 +70,9 @@ class pathObject:
         # Wenn der rmType gesetzt wird: Setze exampleValueDict mit key: volle pfadnamen ( mit Suffix(en) ) und value: example-wert abhaengig von "rmType" und "type" des Inputs/Suffix
         elif name == "rmType":
             super(pathObject, self).__setattr__("rmType", value)
-            exampleValueDict = exampleGeneratorClass.createExampleValueDict(self, value)
-            super(pathObject, self).__setattr__("exampleValueDict", exampleValueDict)
+            ### EXAMPLE GENERATION --> outcomment the two following lines to generate own examples
+            #exampleValueDict = exampleGeneratorClass.createExampleValueDict(self, value)
+            #super(pathObject, self).__setattr__("exampleValueDict", exampleValueDict)
         # Wird keiner der Fälle oben genutzt, dann wird die Variable einfach wie immer gesetzt
         else:
             super().__setattr__(name, value)
