@@ -35,6 +35,24 @@ def main(workdir, pathArray, templateName, baseUrl, repo_auth, type):
 
 ############################### Methods ###############################
 
+def queryExampleComp(outdir, templateName, baseUrl, repo_auth):
+    url = f'{baseUrl}/rest/ecis/v1/template/{templateName}/example?format=FLAT'
+
+    ##payload needs to be json! Otherwise it will just do nothin and run forever
+    payload = {}
+
+    headers = {
+        'Authorization': repo_auth,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+
+    exampleComp = json.loads(response.text)
+
+    return exampleComp
+
 # TODO Man koennte die If-Bedinung in die for-Schleife packen und damit Code-Zeilen einsparen, da Up/Download und Speichern für Min/Max gleich sind. Ist jetzt gerade aber anders gelaufen.
 def buildExample(outdir, pathArray, templateName, baseUrl, repo_auth, type):
     # Create Example EHR

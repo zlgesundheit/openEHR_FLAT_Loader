@@ -32,7 +32,6 @@
 # Standard library imports
 import os
 from random import randrange
-from sys import maxsize
 from decimal import *
 
 # Third party imports
@@ -48,7 +47,13 @@ class exampleGenerator:
 def createExampleValueDict(self, value):
     exampleValueDict = {}
     if value == "DV_TEXT":
-        exampleValueDict[self.pathString] = "Beispieltext"
+        if hasattr(self,'inputs'):
+            if 'list' in self.inputs[0]:
+                exampleValueDict[self.pathString] = self.inputs[0]['list'][0]['value']
+            else:
+                exampleValueDict[self.pathString] = "Beispieltext"
+        else:
+            exampleValueDict[self.pathString] = "Beispieltext"
     elif value == "DV_MULTIMEDIA":
         # Example is a file that is in "DV_Multimedia_Example"-Folder in 0_Docs
         exampleValueDict[self.pathString] = getExampleICObase64encoded()
@@ -96,17 +101,16 @@ def createExampleValueDict(self, value):
         exampleValueDict[ self.pathString + "|" + 'issuer' ] = "Issuer Person"
         exampleValueDict[ self.pathString + "|" + 'assigner' ] = "Assigning Organisation X"
     elif value == "DV_COUNT": # TODO
+        element = self.inputs[0]
         changer = getNumberOfType(self.inputs[0]['type'])
-        number = getRandNumberWithOrWithoutValidation(self.inputs, changer)
+        number = getRandNumberWithOrWithoutValidation(element, changer)
         exampleValueDict[ self.pathString ] = number
-    #elif value == "DV_DURATION":
-        """
-        for entry in self.inputs:
-            # Select number type
-            changer = getNumberOfType(entry['type'])
-            number = getRandNumberWithOrWithoutValidation(entry, changer)
-            exampleValueDict[ self.pathString + "|" + entry['suffix'] ] = number
-        """
+    elif value == "DV_DURATION": #TODO Doing
+        # Select number type
+        for element in self.inputs:
+            changer = getNumberOfType(element['type'])
+            number = getRandNumberWithOrWithoutValidation(element, changer)
+            exampleValueDict[ self.pathString + "|" + element['suffix'] ] = number
     elif value == "DV_CODED_TEXT":
         if hasattr(self, "inputs"):
             # self.inputs[0] 
@@ -116,6 +120,8 @@ def createExampleValueDict(self, value):
                 exampleValueDict[ self.pathString + "|" + 'value' ] = self.inputs[0]['list'][0]['label']
                 exampleValueDict[ self.pathString + "|" + 'code' ] = self.inputs[0]['list'][0]['value']
                 exampleValueDict[ self.pathString + "|" + 'terminology' ] = self.inputs[0]['terminology']
+
+        # Eventuell gibt es auch Fälle, bei denen lokal im WebTemplate keine Terminology vorhanden ist aber hier trotzdem Werte eingetragen werden müssen...
 
     # DV_QUANTITY TODO
     # DV_PROPORTION TODO # Can be in percent or fraction
@@ -143,15 +149,15 @@ def createExampleValueDict(self, value):
 def setBoundaryByOperator(boundary, operator, changer):
     final_boundary = None
     if      operator == "=" or operator == "<=" or operator == ">=": final_boundary = boundary
-    elif    operator == ">": final_boundary = min + changer
-    elif    operator == "<": final_boundary = min - changer
+    elif    operator == ">": final_boundary = boundary + changer
+    elif    operator == "<": final_boundary = boundary - changer
     return final_boundary
 
 def getNumberOfType(number_type):
     if   number_type == "INTEGER":  changer = int(1) # Integer
-    elif number_type == "DECIMAL":  changer = Decimal(0.1) # Double
-    elif number_type == "REAL":     changer = float32(0.01)  # Single Precision Floating-Point needed (32-bit)
-    elif number_type == "DOUBLE":   changer = float(0.01)  # Double Precision Floating-Point needed (64-bit)
+    elif number_type == "DECIMAL":  changer = Decimal(1.1) # Double
+    elif number_type == "REAL":     changer = float32(1.01)  # Single Precision Floating-Point needed (32-bit)
+    elif number_type == "DOUBLE":   changer = float(1.01)  # Double Precision Floating-Point needed (64-bit)
     else: 
         print ("Folgender Zahlentyp konnte nicht erkannt werden: " + number_type)
         # https://specifications.openehr.org/releases/BASE/latest/foundation_types.html#_integer_class
@@ -166,8 +172,6 @@ def getExampleICObase64encoded():
     return base64_encoded_example_ico
 
 def getRandNumberWithOrWithoutValidation(entry, changer):
-    entry = entry[0]
-
     if 'validation' in entry:
         if 'min' in entry['validation']['range'] and 'max' in entry['validation']['range']:
             final_lower = setBoundaryByOperator( entry['validation']['range']['min'], entry['validation']['range']['minOp'], changer)
@@ -175,7 +179,7 @@ def getRandNumberWithOrWithoutValidation(entry, changer):
             number = randrange(final_lower, final_upper)
         elif 'min' in entry['validation']['range'] and not 'max' in entry['validation']['range']:
             final_lower = setBoundaryByOperator( entry['validation']['range']['min'], entry['validation']['range']['minOp'], changer)
-            number = randrange(final_lower, maxsize - changer)
+            number = randrange(final_lower, 12 - changer)
         elif not 'min' in entry['validation']['range'] and 'max' in entry['validation']['range']:
             final_upper = setBoundaryByOperator( entry['validation']['range']['max'], entry['validation']['range']['maxOp'], changer)
             number = randrange(0 + changer, final_upper)
