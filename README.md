@@ -16,12 +16,12 @@ To transform data from different sources (e.g. SQL-DB, CSV, etc.) into openEHR-R
 The idea of the tools [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/-/tree/a58c9f479ab9d5f6ebad10906963949a806ad7c4)-Builder as well as this  **openEHR_FLAT_Loader** is to build these openEHR-Resources using a Mapping (manually supplied by the user) from DataFields to TemplateFields. With this mapping the ressources can than be generated and uploaded.
 
 _Process-Overview:_
-![BPMN-Process-Overview](/0_Docs/Figures/Process_Overview_Screenshot.jpg)
+![BPMN-Process-Overview](/HowTo/Figures/Process_Overview_Screenshot.jpg)
 
 ---
 ## Manual (Usage, Example and openEHR) **-- Work in Progress --**
 A guide on how to use the tool and explanation of the context (openEHR, data curation) is currently being developed.  
-For now this README describes the Import-Process in sufficient detail, the full manual can later be found [in the Docs-Folder](/Docs/MANUAL_openEHR_FLAT_Loader.md)
+For now this README describes the Import-Process in sufficient detail, the full manual can later be found [in the HowTo-Folder](/HowTo/MANUAL_openEHR_FLAT_Loader.md)
 
 ---
 ### _Prerequisites:_
@@ -86,7 +86,7 @@ What to do if you need to map data fields that are not present in your source da
     - "<path>/territory|code": "DE",
     - "<path>/territory|terminology": "ISO_3166-1"
 - Other Metadata:
-    - You can find terminologies like `openehr` in the Docs-Folder or online. 
+    - You can find terminologies like `openehr` in the HowTo-Folder or online. 
         - The use of SNOMED CT and LOINC for fields with CODED_TEXTs should have been taken care of by the Template Modeller .
         - The ETLer should just be able to use the information given in the template plus some additonal openEHR-Peculiarities.
     - Example:
@@ -103,7 +103,7 @@ What to do if you need to map data fields that are not present in your source da
         Encodings:
         "<path>/encoding|code": "UTF-8",
         "<path>/encoding|terminology": "IANA_character-sets"
-        - IANA character sets or the openEHR-Specification are pretty handy here -> find in Docs-Folder or online
+        - IANA character sets or the openEHR-Specification are pretty handy here -> find in HowTo-Folder or online
     
     - ATTENTION! In the ManualTasks-Directory there is a file called <Template-Name>_WebTemplate.json
         - This file holds human-readable information about the structure of the Composition, it´s datatypes, CODE- and Value-Sets, Terminologies and more.
@@ -161,7 +161,7 @@ If you find any problems when using this tool feel free to contact us or create 
 ## License and Dependencies
 Copyright (C) 2020-2021 openehr_flat_loader contributors, see [AUTHORS.md](/AUTHORS.md)  
 
-The openehr_flat_loader project source code is licensed under [GNU General Public License 3.0](https://spdx.org/licenses/GPL-3.0-or-later.html), see [license file](0_Docs/LICENSE)  
+The openehr_flat_loader project source code is licensed under [GNU General Public License 3.0](https://spdx.org/licenses/GPL-3.0-or-later.html), see [license file](HowTo/LICENSE)  
 
 The following third party libraries or contents are part of the openEHR_FLAT_Loader projekt:  
 * Python, Copyright © 2001-2021 Python Software Foundation, PSF License Agreement and Zero-Clause BSD license., https://docs.python.org/3/license.html
