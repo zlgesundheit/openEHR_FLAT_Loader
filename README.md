@@ -35,7 +35,7 @@ The idea of the tools [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/
 
 _Process-Overview:_
 
-![BPMN-Process-Overview](/ETLPRocess/HowTo/Figures/Process_Overview_Screenshot.jpg)
+![BPMN-Process-Overview](/ETLProcess/HowTo/Figures/Process_Overview_Screenshot.jpg)
 
 ---
 ## Manual (Usage, Example and openEHR) **-- Work in Progress --**
@@ -56,7 +56,7 @@ Setup:
 
 General Procedure:  
 1. Clone the FLAT-Loader  
-    1.1 Copy OPT and CSV to the Flat-Loader (ETLProcess/Input)  
+    1.1 Copy OPT and CSV to the Flat-Loader (/Input)  
     1.2 Set correct Auth-Data and File-Names in config.ini  
 2. Generate Mapping (ETProcess/ManualTasks)   
 3. Fill the Mapping (see the WebTemplate of your  for Details)  
