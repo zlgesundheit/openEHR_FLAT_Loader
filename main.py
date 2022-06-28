@@ -29,7 +29,7 @@ from Scripts import buildExampleComp
 config = handleConfig.config()
 indent = "\t"
 workdir = getcwd()
-sourceDataCsvFP = os.path.join(workdir, 'ETLProcess', 'Input', config.inputCSV + '.csv')
+sourceDataCsvFP = os.path.join(workdir, 'Input', config.inputCSV + '.csv')
 OPTDirPath      = os.path.join(workdir, 'OPTs')
 manualTaskDir   = os.path.join(workdir, 'ETLProcess', 'ManualTasks', config.templateName)
 outputDir       = os.path.join(workdir, 'ETLProcess', 'Output', config.templateName)

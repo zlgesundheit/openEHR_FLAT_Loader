@@ -16,12 +16,12 @@ To transform data from different sources (e.g. SQL-DB, CSV, etc.) into openEHR-R
 The idea of the tools [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/-/tree/a58c9f479ab9d5f6ebad10906963949a806ad7c4)-Builder as well as this  **openEHR_FLAT_Loader** is to build these openEHR-Resources using a Mapping (manually supplied by the user) from DataFields to TemplateFields. With this mapping the ressources can than be generated and uploaded.
 
 _Process-Overview:_
-![BPMN-Process-Overview](/HowTo/Figures/Process_Overview_Screenshot.jpg)
+![BPMN-Process-Overview](ETLProcess/HowTo/Figures/Process_Overview_Screenshot.jpg)
 
 ---
 ## Manual (Usage, Example and openEHR) **-- Work in Progress --**
 A guide on how to use the tool and explanation of the context (openEHR, data curation) is currently being developed.  
-For now this README describes the Import-Process in sufficient detail, the full manual can later be found [in the HowTo-Folder](/HowTo/MANUAL_openEHR_FLAT_Loader.md)
+For now this README describes the Import-Process in sufficient detail, the full manual can later be found [in the HowTo-Folder](ETLProcess/HowTo/MANUAL_openEHR_FLAT_Loader.md)
 
 ---
 ### _Prerequisites:_

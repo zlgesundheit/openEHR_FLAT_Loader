@@ -60,7 +60,7 @@ def getAuthHeader(username, pw) -> str:
 def readCSVasDataFrame(inputCSV):
     '''Read CSV as Dataframe'''
     # Compose Path
-    csvPath = os.path.join(workdir,'ETLProcess' ,'Input', inputCSV + '.csv')
+    csvPath = os.path.join(workdir, 'Input', inputCSV + '.csv')
 
     # Guess Encoding
     guessed_encoding = guessCSVencoding(csvPath)
