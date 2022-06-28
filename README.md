@@ -3,9 +3,9 @@ ETL-Tool to transform Source Data into openEHR-Compositions (for a given Templat
 
 ---
 ### Features:
-1. Create a Mapping-Table in xlsx/Excel-Format
-2. Create Compositions and upload those to an openEHR-Repository
-3. [PLANNED] Create an Example-Composition in FLAT or CANONICAL Json-Format
+1. Create an Example-Composition in FLAT JSON-Format
+2. Create a Mapping-Table in xlsx/Excel-Format
+3. Create Compositions and upload those to an openEHR-Repository
 
 `At the moment the tool works fine with normal templates. More complex Templates with lots of repeatable clusters are supported in the dev-branch but not yet in the master-branch`
 
@@ -34,11 +34,13 @@ To transform data from different sources (e.g. SQL-DB, CSV, etc.) into openEHR-R
 The idea of the tools [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/-/tree/a58c9f479ab9d5f6ebad10906963949a806ad7c4)-Builder as well as this  **openEHR_FLAT_Loader** is to build these openEHR-Resources using a Mapping (manually supplied by the user) from DataFields to TemplateFields. With this mapping the ressources can than be generated and uploaded.
 
 _Process-Overview:_
+
 ![BPMN-Process-Overview](/HowTo/Figures/Process_Overview_Screenshot.jpg)
 
 ---
 ## Manual (Usage, Example and openEHR) **-- Work in Progress --**
 A guide on how to use the tool and explanation of the context (openEHR, data curation) is currently being developed.  
+
 For now this README describes the Import-Process in sufficient detail, the full manual can later be found [in the HowTo-Folder](/HowTo/MANUAL_openEHR_FLAT_Loader.md)
 
 ---
@@ -155,7 +157,7 @@ Start the Tool:
 Enjoy the uploaded Compositions at your openEHR-Repository.
 
 ---
-### 3. [PLANNED] Create an Example-Composition for a given Template
+### 3. Create an Example-Composition for a given Template
 Preparation:  
     - Place your Template (.opt-File) in the Input-Folder under /OPT
     - Edit the config.ini and at least set:
@@ -168,7 +170,7 @@ Start the Tool:
         - Run Example-Creation Task of the Tool by typing `3` and hit `Enter`
 
 Find and enjoy your Example-Composition:
-    - You will find the Compositions (FLAT and Canonical) in Directory "Output" named "Example_Comp_<Template-Name>"
+    - You will find the Compositions (FLAT and Canonical) in Directory "ManualTasks" named according to the Template Name.
 
 ---
 #### _Disclaimer_ 

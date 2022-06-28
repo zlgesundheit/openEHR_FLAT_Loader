@@ -11,7 +11,6 @@ import json
 import os.path
 import sys
 import traceback
-from requests.compat import urljoin
 # Third party imports
 # Local application imports
 
