@@ -76,6 +76,7 @@ Dependencies:
 0. Preparation:
     - Place your Template (.opt-File) in the Input-Folder under /OPT
     - Place your Data (.csv-File,, UTF-8 encoded) in the Input-Folder under /CSV
+        - a typical source-data table looks [like this](#typical-data-csv)
     - Edit the config.ini and at least set:
         - templatename (Name of your Template)
         - inputcsv (Name of your .csv-File)
@@ -171,6 +172,21 @@ Start the Tool:
 
 Find and enjoy your Example-Composition:
     - You will find the Compositions (FLAT and Canonical) in Directory "ManualTasks" named according to the Template Name.
+
+---
+#### Typical Data CSV
+The source data needs to be provided in the form of a .csv-File.
+
+At least the file needs to contain the following columns:
+- Subject Id Column (concrete column-name specified in config.ini)
+- Subject Namespace Column (concrete column-name specified in config.ini)
+- ehrId Column (which might be empty when no EHRs exist yet)
+
+| subject-id-column | ehrId | subject_namespace | data-column1 | data-column2 | 
+| ------ | ------ | ------ | ------ | ------ |
+| Subject 1 |  | ExampleImport | data | data |
+| Subject 2 |  | ExampleImport | data | data |
+| Subject 3 |  | ExampleImport | data | data |
 
 ---
 #### _Disclaimer_ 
