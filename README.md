@@ -7,8 +7,6 @@ ETL-Tool to transform Source Data into openEHR-Compositions (for a given Templat
 2. Create a Mapping-Table in xlsx/Excel-Format
 3. Create Compositions and upload those to an openEHR-Repository
 
-`At the moment the tool works fine with normal templates. More complex Templates with lots of repeatable clusters are supported in the dev-branch but not yet in the master-branch`
-
 ---
 ### About the Zukunftslabor Gesundheit
 The [_Zukunftslabor Gesundheit_ (ZLG)](https://www.zdin.de/zukunftslabore/gesundheit) is one of the "future labs" under the umbrella organization _Zentrum für digitale Innovation Niedersachsen_ (ZDIN). 
