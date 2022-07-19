@@ -13,6 +13,10 @@
 /ETLProcess/Output/
 /ETLProcess/ManualTasks/
 /OPTs/
+__pycache__
+/__pycache__/
+/Scripts/__pycache__
+/Scripts/__pycache__/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
