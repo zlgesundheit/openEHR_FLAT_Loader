@@ -29,11 +29,12 @@ from Scripts import buildExampleComp
 config = handleConfig.config()
 indent = "\t"
 workdir = getcwd()
-sourceDataCsvFP = os.path.join(workdir, 'Input', config.inputCSV + '.csv')
+
+# TODO Set all Paths here or in configHandler? centralized and pass them to the other scripts. SinglePointOfChange
 OPTDirPath      = os.path.join(workdir, 'OPTs')
+sourceDataCsvFP = os.path.join(workdir, 'ETLProcess','Input', config.inputCSV + '.csv')
 manualTaskDir   = os.path.join(workdir, 'ETLProcess', 'ManualTasks', config.templateName)
 outputDir       = os.path.join(workdir, 'ETLProcess', 'Output', config.templateName)
-# TODO Set all Paths here or in configHandler? centralized and pass them to the other scripts. SinglePointOfChange
 
 ############################### Main ###############################
 def main():
@@ -100,8 +101,11 @@ def buildAndUploadCompositions():
         print ("EHR Creation is disabled in Config.ini")
         pass
 
+    print ("Test2")
+
     # Send resource to server
     if config.directupload == "1":
+        print ("Test")
         csv_dataframe = handleConfig.readCSVasDataFrame(config.inputCSV)
         anzahl_eintraege = len(csv_dataframe.index)
 

@@ -8,6 +8,22 @@ ETL-Tool to transform Source Data into openEHR-Compositions (for a given Templat
 3. Create Compositions and upload those to an openEHR-Repository
 
 ---
+### About the Zukunftslabor Gesundheit
+The [_Zukunftslabor Gesundheit_ (ZLG)](https://www.zdin.de/zukunftslabore/gesundheit) is one of the "future labs" under the umbrella organization _Zentrum für digitale Innovation Niedersachsen_ (ZDIN). 
+
+The ZLG is a joint project of scientific institutions and local partners from the economy. In different work packages and use cases the participants push towards digitization and technological progression in health as well as translation of knowledge from researchers towards the general public.
+The efforts are organized in three work groups, namely:
+- TP1 - Data Infrastructure and Privacy Preserving Analysis
+- TP2 - Sensors
+- TP3 - Education and training
+
+TP1 includes data management aspects, openEHR-utilization and the openEHR_FLAT_Loader.
+
+##### Documentation:
+The Manual about the ETL-Loader is in the Docs-Folder of this Repo.
+There is general documentation covering the project/infrastructure -> [zlg-docs](https://gitlab.gwdg.de/medinf/ivf/zukunftslabor-gesundheit/docs-zlg) `Documentation is work in progress`
+
+---
 ## About openEHR and the ETL-Process
 OpenEHR is a technology framework for the handling of medical data in the form of Electronic Health Records. The main point of the openEHR-Approach is the differentiation between logical modeling (in forms of archetypes/templates) and the physical storage (based on item-identifiers that are used in the technical background of these templates).
 
@@ -16,12 +32,14 @@ To transform data from different sources (e.g. SQL-DB, CSV, etc.) into openEHR-R
 The idea of the tools [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/-/tree/a58c9f479ab9d5f6ebad10906963949a806ad7c4)-Builder as well as this  **openEHR_FLAT_Loader** is to build these openEHR-Resources using a Mapping (manually supplied by the user) from DataFields to TemplateFields. With this mapping the ressources can than be generated and uploaded.
 
 _Process-Overview:_
-![BPMN-Process-Overview](ETLProcess/HowTo/Figures/Process_Overview_Screenshot.jpg)
+
+![BPMN-Process-Overview](/ETLProcess/HowTo/Figures/Process_Overview_Screenshot.jpg)
 
 ---
 ## Manual (Usage, Example and openEHR) **-- Work in Progress --**
 A guide on how to use the tool and explanation of the context (openEHR, data curation) is currently being developed.  
-For now this README describes the Import-Process in sufficient detail, the full manual can later be found [in the HowTo-Folder](ETLProcess/HowTo/MANUAL_openEHR_FLAT_Loader.md)
+
+For now this README describes the Import-Process in sufficient detail, the full manual can later be found [in the HowTo-Folder](/ETLProcess/HowTo/MANUAL_openEHR_FLAT_Loader.md)
 
 ---
 ### _Prerequisites:_
@@ -36,7 +54,7 @@ Setup:
 
 General Procedure:  
 1. Clone the FLAT-Loader  
-    1.1 Copy OPT and CSV to the Flat-Loader (ETLProcess/Input)  
+    1.1 Copy OPT and CSV to the Flat-Loader (/Input)  
     1.2 Set correct Auth-Data and File-Names in config.ini  
 2. Generate Mapping (ETProcess/ManualTasks)   
 3. Fill the Mapping (see the WebTemplate of your  for Details)  
@@ -56,6 +74,7 @@ Dependencies:
 0. Preparation:
     - Place your Template (.opt-File) in the Input-Folder under /OPT
     - Place your Data (.csv-File,, UTF-8 encoded) in the Input-Folder under /CSV
+        - a typical source-data table looks [like this](#typical-data-csv)
     - Edit the config.ini and at least set:
         - templatename (Name of your Template)
         - inputcsv (Name of your .csv-File)
@@ -137,7 +156,7 @@ Start the Tool:
 Enjoy the uploaded Compositions at your openEHR-Repository.
 
 ---
-### 3. [PLANNED] Create an Example-Composition for a given Template
+### 3. Create an Example-Composition for a given Template
 Preparation:  
     - Place your Template (.opt-File) in the Input-Folder under /OPT
     - Edit the config.ini and at least set:
@@ -150,7 +169,22 @@ Start the Tool:
         - Run Example-Creation Task of the Tool by typing `3` and hit `Enter`
 
 Find and enjoy your Example-Composition:
-    - You will find the Compositions (FLAT and Canonical) in Directory "Output" named "Example_Comp_<Template-Name>"
+    - You will find the Compositions (FLAT and Canonical) in Directory "ManualTasks" named according to the Template Name.
+
+---
+#### Typical Data CSV
+The source data needs to be provided in the form of a .csv-File.
+
+At least the file needs to contain the following columns:
+- Subject Id Column (concrete column-name specified in config.ini)
+- Subject Namespace Column (concrete column-name specified in config.ini)
+- ehrId Column (which might be empty when no EHRs exist yet)
+
+| subject-id-column | ehrId | subject_namespace | data-column1 | data-column2 | 
+| ------ | ------ | ------ | ------ | ------ |
+| Subject 1 |  | ExampleImport | data | data |
+| Subject 2 |  | ExampleImport | data | data |
+| Subject 3 |  | ExampleImport | data | data |
 
 ---
 #### _Disclaimer_ 
