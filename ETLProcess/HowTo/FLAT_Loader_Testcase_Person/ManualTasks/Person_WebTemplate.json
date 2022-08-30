@@ -1,0 +1,2671 @@
+{
+    "templateId": "Person",
+    "version": "2.3",
+    "defaultLanguage": "de",
+    "languages": [
+        "de"
+    ],
+    "tree": {
+        "id": "person",
+        "name": "Person",
+        "localizedName": "Person",
+        "rmType": "COMPOSITION",
+        "nodeId": "openEHR-EHR-COMPOSITION.personendaten.v0",
+        "min": 1,
+        "max": 1,
+        "localizedNames": {
+            "de": "Person"
+        },
+        "localizedDescriptions": {
+            "de": "Dokument zur Übermittlung von Informationen über Personen"
+        },
+        "aqlPath": "",
+        "children": [
+            {
+                "id": "category",
+                "name": "category",
+                "localizedName": "category",
+                "rmType": "DV_CODED_TEXT",
+                "min": 1,
+                "max": 1,
+                "aqlPath": "/category",
+                "inputs": [
+                    {
+                        "suffix": "code",
+                        "type": "CODED_TEXT",
+                        "list": [
+                            {
+                                "value": "433",
+                                "label": "event",
+                                "localizedLabels": {
+                                    "de": "event"
+                                }
+                            }
+                        ],
+                        "terminology": "openehr"
+                    }
+                ],
+                "inContext": true
+            },
+            {
+                "id": "context",
+                "name": "context",
+                "localizedName": "context",
+                "rmType": "EVENT_CONTEXT",
+                "min": 1,
+                "max": 1,
+                "aqlPath": "/context",
+                "children": [
+                    {
+                        "id": "personen_id",
+                        "name": "Personen ID",
+                        "localizedName": "Personen ID",
+                        "rmType": "DV_TEXT",
+                        "min": 0,
+                        "max": 1,
+                        "localizedNames": {
+                            "de": "Personen ID"
+                        },
+                        "localizedDescriptions": {
+                            "de": "ID der Person"
+                        },
+                        "aqlPath": "/context/other_context[at0003]/items[at0004]/value",
+                        "inputs": [
+                            {
+                                "type": "TEXT"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "start_time",
+                        "name": "start_time",
+                        "rmType": "DV_DATE_TIME",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/context/start_time",
+                        "inputs": [
+                            {
+                                "type": "DATETIME"
+                            }
+                        ],
+                        "inContext": true
+                    },
+                    {
+                        "id": "setting",
+                        "name": "setting",
+                        "rmType": "DV_CODED_TEXT",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/context/setting",
+                        "inputs": [
+                            {
+                                "suffix": "code",
+                                "type": "TEXT"
+                            },
+                            {
+                                "suffix": "value",
+                                "type": "TEXT"
+                            }
+                        ],
+                        "inContext": true
+                    }
+                ]
+            },
+            {
+                "id": "geschlecht",
+                "name": "Geschlecht",
+                "localizedName": "Geschlecht",
+                "rmType": "EVALUATION",
+                "nodeId": "openEHR-EHR-EVALUATION.gender.v1",
+                "min": 1,
+                "max": 1,
+                "localizedNames": {
+                    "de": "Geschlecht"
+                },
+                "localizedDescriptions": {
+                    "de": "Detaillierte Beschreibung des Geschlechts einer Person."
+                },
+                "aqlPath": "/content[openEHR-EHR-EVALUATION.gender.v1]",
+                "children": [
+                    {
+                        "id": "administratives_geschlecht",
+                        "name": "Administratives Geschlecht",
+                        "localizedName": "Administratives Geschlecht",
+                        "rmType": "DV_CODED_TEXT",
+                        "min": 1,
+                        "max": 1,
+                        "localizedNames": {
+                            "de": "Administratives Geschlecht"
+                        },
+                        "localizedDescriptions": {
+                            "de": "Das Geschlecht einer Person, das für administrative Zwecke verwendet wird."
+                        },
+                        "aqlPath": "/content[openEHR-EHR-EVALUATION.gender.v1]/data[at0002]/items[at0022]/value",
+                        "inputs": [
+                            {
+                                "suffix": "code",
+                                "type": "CODED_TEXT",
+                                "list": [
+                                    {
+                                        "value": "male",
+                                        "label": "male",
+                                        "localizedLabels": {
+                                            "de": "male"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": ""
+                                        }
+                                    },
+                                    {
+                                        "value": "female",
+                                        "label": "female",
+                                        "localizedLabels": {
+                                            "de": "female"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": ""
+                                        }
+                                    },
+                                    {
+                                        "value": "other",
+                                        "label": "other",
+                                        "localizedLabels": {
+                                            "de": "other"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": ""
+                                        }
+                                    },
+                                    {
+                                        "value": "unknown",
+                                        "label": "Unknown",
+                                        "localizedLabels": {
+                                            "de": "Unknown"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": ""
+                                        }
+                                    }
+                                ],
+                                "terminology": "https://simplifier.net/packages/hl7.fhir.r4.core/4.0.1/files/81193"
+                            }
+                        ],
+                        "annotations": {
+                            "comment": "Dieses Element beschreibt das, was die meisten Systeme heutzutage als \"Geschlecht\" (vgl. engl.: \"Sex\" oder \"Gender\") bezeichnen. Zum Beispiel \"Männlich\", \"Weiblich\", \"Divers\". Dieser Archetyp entspricht dem HL7 FHIR Element \"Person.gender\"'. Die Kodierung mit einer Terminologie wird empfohlen, wenn möglich."
+                        }
+                    },
+                    {
+                        "id": "subject",
+                        "name": "subject",
+                        "rmType": "PARTY_PROXY",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/content[openEHR-EHR-EVALUATION.gender.v1]/subject",
+                        "inputs": [
+                            {
+                                "suffix": "id",
+                                "type": "TEXT"
+                            },
+                            {
+                                "suffix": "id_scheme",
+                                "type": "TEXT"
+                            },
+                            {
+                                "suffix": "id_namespace",
+                                "type": "TEXT"
+                            },
+                            {
+                                "suffix": "name",
+                                "type": "TEXT"
+                            }
+                        ],
+                        "inContext": true
+                    },
+                    {
+                        "id": "language",
+                        "name": "language",
+                        "rmType": "CODE_PHRASE",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/content[openEHR-EHR-EVALUATION.gender.v1]/language",
+                        "inContext": true
+                    },
+                    {
+                        "id": "encoding",
+                        "name": "encoding",
+                        "rmType": "CODE_PHRASE",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/content[openEHR-EHR-EVALUATION.gender.v1]/encoding",
+                        "inContext": true
+                    }
+                ]
+            },
+            {
+                "id": "personendaten",
+                "name": "Personendaten",
+                "localizedName": "Personendaten",
+                "rmType": "ADMIN_ENTRY",
+                "nodeId": "openEHR-EHR-ADMIN_ENTRY.person_data.v0",
+                "min": 0,
+                "max": -1,
+                "localizedNames": {
+                    "de": "Personendaten"
+                },
+                "localizedDescriptions": {
+                    "de": "Demografische Daten zu einer Person wie Geburtsdatum und Telefonnummer."
+                },
+                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]",
+                "children": [
+                    {
+                        "id": "name",
+                        "name": "Name",
+                        "localizedName": "Name",
+                        "rmType": "CLUSTER",
+                        "nodeId": "openEHR-EHR-CLUSTER.person_name.v0",
+                        "min": 1,
+                        "max": -1,
+                        "localizedNames": {
+                            "de": "Name"
+                        },
+                        "localizedDescriptions": {
+                            "de": "Details des Personennamens einer Privatperson, eines Versorgers oder einer Dritten Person."
+                        },
+                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Name']",
+                        "children": [
+                            {
+                                "id": "namensart",
+                                "name": "Namensart",
+                                "localizedName": "Namensart",
+                                "rmType": "DV_CODED_TEXT",
+                                "min": 1,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Namensart"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Art des beschriebenen Namens."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Name']/items[at0006]/value",
+                                "inputs": [
+                                    {
+                                        "suffix": "code",
+                                        "type": "CODED_TEXT",
+                                        "list": [
+                                            {
+                                                "value": "at0020",
+                                                "label": "Registrierter Name",
+                                                "localizedLabels": {
+                                                    "de": "Registrierter Name"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Der Name, unter dem die Person offiziell registriert ist."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0008",
+                                                "label": "Früherer Name",
+                                                "localizedLabels": {
+                                                    "de": "Früherer Name"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Von der Person früher benutzter Name."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0009",
+                                                "label": "Geburtsname",
+                                                "localizedLabels": {
+                                                    "de": "Geburtsname"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Der Person bei Geburt gegebener Name."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0010",
+                                                "label": "AKA",
+                                                "localizedLabels": {
+                                                    "de": "AKA"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Die Person ist auch bekannt als."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0011",
+                                                "label": "Alias",
+                                                "localizedLabels": {
+                                                    "de": "Alias"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Ein Anderer von der Person benutzter Name."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0012",
+                                                "label": "Mädchenname",
+                                                "localizedLabels": {
+                                                    "de": "Mädchenname"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Der Name der bis zur Heirat benutzt wurde."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0019",
+                                                "label": "Berufsname",
+                                                "localizedLabels": {
+                                                    "de": "Berufsname"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Der Name, den die Person für geschäftliche oder berufliche Zwecke verwendet."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0021",
+                                                "label": "Berichtsname",
+                                                "localizedLabels": {
+                                                    "de": "Berichtsname"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Der Name der Person, wie er für die Berichterstellung verwendet werden soll, wenn er mit einer bestimmten Kennung verwendet wird."
+                                                }
+                                            },
+                                            {
+                                                "value": "usual",
+                                                "label": "Usual",
+                                                "localizedLabels": {
+                                                    "de": "Usual"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            },
+                                            {
+                                                "value": "official",
+                                                "label": "Official",
+                                                "localizedLabels": {
+                                                    "de": "Official"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            },
+                                            {
+                                                "value": "temp",
+                                                "label": "Temp",
+                                                "localizedLabels": {
+                                                    "de": "Temp"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            },
+                                            {
+                                                "value": "nickname",
+                                                "label": "Nickname",
+                                                "localizedLabels": {
+                                                    "de": "Nickname"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            },
+                                            {
+                                                "value": "anonymous",
+                                                "label": "Anonymous",
+                                                "localizedLabels": {
+                                                    "de": "Anonymous"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            },
+                                            {
+                                                "value": "old",
+                                                "label": "Old",
+                                                "localizedLabels": {
+                                                    "de": "Old"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            }
+                                        ],
+                                        "terminology": "http://hl7.org/fhir/name-use"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "name_unstrukturiert",
+                                "name": "Name unstrukturiert",
+                                "localizedName": "Name unstrukturiert",
+                                "rmType": "DV_TEXT",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Name unstrukturiert"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Name in unstrukturierter Form als Freitext."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Name']/items[at0001]/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "name_strukturiert",
+                                "name": "Name strukturiert",
+                                "localizedName": "Name strukturiert",
+                                "rmType": "CLUSTER",
+                                "nodeId": "at0002",
+                                "min": 1,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Name strukturiert"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Name in strukturierter Form."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Name']/items[at0002]",
+                                "children": [
+                                    {
+                                        "id": "präfix",
+                                        "name": "Präfix",
+                                        "localizedName": "Präfix",
+                                        "rmType": "DV_TEXT",
+                                        "min": 0,
+                                        "max": 1,
+                                        "localizedNames": {
+                                            "de": "Präfix"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": "Das von der Person verwendete Präfix oder Titel."
+                                        },
+                                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Name']/items[at0002]/items[at0017,'Präfix']/value",
+                                        "inputs": [
+                                            {
+                                                "type": "TEXT"
+                                            }
+                                        ],
+                                        "annotations": {
+                                            "comment": "z.B. \"Mr\", \"Mrs\", \"Ms\", \"Dr\", \"Lord\"."
+                                        }
+                                    },
+                                    {
+                                        "id": "vorname",
+                                        "name": "Vorname",
+                                        "localizedName": "Vorname",
+                                        "rmType": "DV_TEXT",
+                                        "min": 1,
+                                        "max": 1,
+                                        "localizedNames": {
+                                            "de": "Vorname"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": "Vorname"
+                                        },
+                                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Name']/items[at0002]/items[at0003]/value",
+                                        "inputs": [
+                                            {
+                                                "type": "TEXT"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "weiterer_vorname",
+                                        "name": "Weiterer Vorname",
+                                        "localizedName": "Weiterer Vorname",
+                                        "rmType": "DV_TEXT",
+                                        "min": 0,
+                                        "max": -1,
+                                        "localizedNames": {
+                                            "de": "Weiterer Vorname"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": "Zweiter Vorname oder zweite Namen."
+                                        },
+                                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Name']/items[at0002]/items[at0004]/value",
+                                        "inputs": [
+                                            {
+                                                "type": "TEXT"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "nachname",
+                                        "name": "Nachname",
+                                        "localizedName": "Nachname",
+                                        "rmType": "DV_TEXT",
+                                        "min": 1,
+                                        "max": 1,
+                                        "localizedNames": {
+                                            "de": "Nachname"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": "Familienname oder Nachname."
+                                        },
+                                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Name']/items[at0002]/items[at0005]/value",
+                                        "inputs": [
+                                            {
+                                                "type": "TEXT"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "namenszusatz",
+                                        "name": "Namenszusatz",
+                                        "localizedName": "Namenszusatz",
+                                        "rmType": "DV_TEXT",
+                                        "min": 0,
+                                        "max": 1,
+                                        "localizedNames": {
+                                            "de": "Namenszusatz"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": "Zusätzlicher Begriff, der nach einem Personennamen verwendet wird."
+                                        },
+                                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Name']/items[at0002]/items[at0018,'Namenszusatz']/value",
+                                        "inputs": [
+                                            {
+                                                "type": "TEXT"
+                                            }
+                                        ],
+                                        "annotations": {
+                                            "comment": "z.B. \"Snr\"."
+                                        }
+                                    }
+                                ],
+                                "cardinalities": [
+                                    {
+                                        "min": 2,
+                                        "max": -1,
+                                        "ids": [
+                                            "präfix",
+                                            "vorname",
+                                            "weiterer_vorname",
+                                            "nachname",
+                                            "namenszusatz"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "gültigkeitszeitraum",
+                                "name": "Gültigkeitszeitraum",
+                                "localizedName": "Gültigkeitszeitraum",
+                                "rmType": "DV_INTERVAL<DV_DATE_TIME>",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Gültigkeitszeitraum"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Das Datumsintervall, in dem dieser Name gültig war."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Name']/items[at0014]/value",
+                                "children": [
+                                    {
+                                        "id": "upper",
+                                        "name": "upper",
+                                        "localizedName": "upper",
+                                        "rmType": "DV_DATE_TIME",
+                                        "min": 1,
+                                        "max": 1,
+                                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Name']/items[at0014]/value/upper",
+                                        "inputs": [
+                                            {
+                                                "type": "DATETIME"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "lower",
+                                        "name": "lower",
+                                        "localizedName": "lower",
+                                        "rmType": "DV_DATE_TIME",
+                                        "min": 1,
+                                        "max": 1,
+                                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Name']/items[at0014]/value/lower",
+                                        "inputs": [
+                                            {
+                                                "type": "DATETIME"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "geburtsname",
+                        "name": "Geburtsname",
+                        "localizedName": "Geburtsname",
+                        "rmType": "CLUSTER",
+                        "nodeId": "openEHR-EHR-CLUSTER.person_name.v0",
+                        "min": 0,
+                        "max": 1,
+                        "localizedNames": {
+                            "de": "Geburtsname"
+                        },
+                        "localizedDescriptions": {
+                            "de": "Details des Personennamens einer Privatperson, eines Versorgers oder einer Dritten Person."
+                        },
+                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Geburtsname']",
+                        "children": [
+                            {
+                                "id": "namensart",
+                                "name": "Namensart",
+                                "localizedName": "Namensart",
+                                "rmType": "DV_CODED_TEXT",
+                                "min": 1,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Namensart"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Art des beschriebenen Namens."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Geburtsname']/items[at0006]/value",
+                                "inputs": [
+                                    {
+                                        "suffix": "code",
+                                        "type": "CODED_TEXT",
+                                        "list": [
+                                            {
+                                                "value": "at0020",
+                                                "label": "Registrierter Name",
+                                                "localizedLabels": {
+                                                    "de": "Registrierter Name"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Der Name, unter dem die Person offiziell registriert ist."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0008",
+                                                "label": "Früherer Name",
+                                                "localizedLabels": {
+                                                    "de": "Früherer Name"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Von der Person früher benutzter Name."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0009",
+                                                "label": "Geburtsname",
+                                                "localizedLabels": {
+                                                    "de": "Geburtsname"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Der Person bei Geburt gegebener Name."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0010",
+                                                "label": "AKA",
+                                                "localizedLabels": {
+                                                    "de": "AKA"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Die Person ist auch bekannt als."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0011",
+                                                "label": "Alias",
+                                                "localizedLabels": {
+                                                    "de": "Alias"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Ein Anderer von der Person benutzter Name."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0012",
+                                                "label": "Mädchenname",
+                                                "localizedLabels": {
+                                                    "de": "Mädchenname"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Der Name der bis zur Heirat benutzt wurde."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0019",
+                                                "label": "Berufsname",
+                                                "localizedLabels": {
+                                                    "de": "Berufsname"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Der Name, den die Person für geschäftliche oder berufliche Zwecke verwendet."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0021",
+                                                "label": "Berichtsname",
+                                                "localizedLabels": {
+                                                    "de": "Berichtsname"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Der Name der Person, wie er für die Berichterstellung verwendet werden soll, wenn er mit einer bestimmten Kennung verwendet wird."
+                                                }
+                                            },
+                                            {
+                                                "value": "maiden",
+                                                "label": "Name changed for Marriage",
+                                                "localizedLabels": {
+                                                    "de": "Name changed for Marriage"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            }
+                                        ],
+                                        "terminology": "http://hl7.org/fhir/name-use"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "name_strukturiert",
+                                "name": "Name strukturiert",
+                                "localizedName": "Name strukturiert",
+                                "rmType": "CLUSTER",
+                                "nodeId": "at0002",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Name strukturiert"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Name in strukturierter Form."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Geburtsname']/items[at0002]",
+                                "children": [
+                                    {
+                                        "id": "präfix",
+                                        "name": "Präfix",
+                                        "localizedName": "Präfix",
+                                        "rmType": "DV_TEXT",
+                                        "min": 0,
+                                        "max": 1,
+                                        "localizedNames": {
+                                            "de": "Präfix"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": "Das von der Person verwendete Präfix oder Titel."
+                                        },
+                                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Geburtsname']/items[at0002]/items[at0017,'Präfix']/value",
+                                        "inputs": [
+                                            {
+                                                "type": "TEXT"
+                                            }
+                                        ],
+                                        "annotations": {
+                                            "comment": "z.B. \"Mr\", \"Mrs\", \"Ms\", \"Dr\", \"Lord\"."
+                                        }
+                                    },
+                                    {
+                                        "id": "vorname",
+                                        "name": "Vorname",
+                                        "localizedName": "Vorname",
+                                        "rmType": "DV_TEXT",
+                                        "min": 1,
+                                        "max": 1,
+                                        "localizedNames": {
+                                            "de": "Vorname"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": "Vorname"
+                                        },
+                                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Geburtsname']/items[at0002]/items[at0003]/value",
+                                        "inputs": [
+                                            {
+                                                "type": "TEXT"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "nachname",
+                                        "name": "Nachname",
+                                        "localizedName": "Nachname",
+                                        "rmType": "DV_TEXT",
+                                        "min": 1,
+                                        "max": 1,
+                                        "localizedNames": {
+                                            "de": "Nachname"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": "Familienname oder Nachname."
+                                        },
+                                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Geburtsname']/items[at0002]/items[at0005]/value",
+                                        "inputs": [
+                                            {
+                                                "type": "TEXT"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "namenszusatz",
+                                        "name": "Namenszusatz",
+                                        "localizedName": "Namenszusatz",
+                                        "rmType": "DV_TEXT",
+                                        "min": 0,
+                                        "max": 1,
+                                        "localizedNames": {
+                                            "de": "Namenszusatz"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": "Zusätzlicher Begriff, der nach einem Personennamen verwendet wird."
+                                        },
+                                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Geburtsname']/items[at0002]/items[at0018,'Namenszusatz']/value",
+                                        "inputs": [
+                                            {
+                                                "type": "TEXT"
+                                            }
+                                        ],
+                                        "annotations": {
+                                            "comment": "z.B. \"Snr\"."
+                                        }
+                                    }
+                                ],
+                                "cardinalities": [
+                                    {
+                                        "min": 2,
+                                        "max": -1,
+                                        "ids": [
+                                            "präfix",
+                                            "vorname",
+                                            "nachname",
+                                            "namenszusatz"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "gültigkeitszeitraum",
+                                "name": "Gültigkeitszeitraum",
+                                "localizedName": "Gültigkeitszeitraum",
+                                "rmType": "DV_INTERVAL<DV_DATE_TIME>",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Gültigkeitszeitraum"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Das Datumsintervall, in dem dieser Name gültig war."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Geburtsname']/items[at0014]/value",
+                                "children": [
+                                    {
+                                        "id": "upper",
+                                        "name": "upper",
+                                        "localizedName": "upper",
+                                        "rmType": "DV_DATE_TIME",
+                                        "min": 1,
+                                        "max": 1,
+                                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Geburtsname']/items[at0014]/value/upper",
+                                        "inputs": [
+                                            {
+                                                "type": "DATETIME"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "id": "lower",
+                                        "name": "lower",
+                                        "localizedName": "lower",
+                                        "rmType": "DV_DATE_TIME",
+                                        "min": 1,
+                                        "max": 1,
+                                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_name.v0,'Geburtsname']/items[at0014]/value/lower",
+                                        "inputs": [
+                                            {
+                                                "type": "DATETIME"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "daten_zur_geburt",
+                        "name": "Daten zur Geburt",
+                        "localizedName": "Daten zur Geburt",
+                        "rmType": "CLUSTER",
+                        "nodeId": "openEHR-EHR-CLUSTER.person_birth_data_iso.v0",
+                        "min": 1,
+                        "max": 1,
+                        "localizedNames": {
+                            "de": "Daten zur Geburt"
+                        },
+                        "localizedDescriptions": {
+                            "de": "demografische Daten die Geburt betreffend"
+                        },
+                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_birth_data_iso.v0]",
+                        "children": [
+                            {
+                                "id": "geburtsdatum",
+                                "name": "Geburtsdatum",
+                                "localizedName": "Geburtsdatum",
+                                "rmType": "DV_DATE",
+                                "min": 1,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Geburtsdatum"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Das Geburtsdatum der Person."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.person_birth_data_iso.v0]/items[at0001]/value",
+                                "inputs": [
+                                    {
+                                        "type": "DATE"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "angaben_zum_tod",
+                        "name": "Angaben zum Tod",
+                        "localizedName": "Angaben zum Tod",
+                        "rmType": "CLUSTER",
+                        "nodeId": "at0024",
+                        "min": 0,
+                        "max": 1,
+                        "localizedNames": {
+                            "de": "Angaben zum Tod"
+                        },
+                        "localizedDescriptions": {
+                            "de": "*"
+                        },
+                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[at0024]",
+                        "children": [
+                            {
+                                "id": "verstorben",
+                                "name": "Verstorben?",
+                                "localizedName": "Verstorben?",
+                                "rmType": "DV_BOOLEAN",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Verstorben?"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "*"
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[at0024]/items[at0025]/value",
+                                "inputs": [
+                                    {
+                                        "type": "BOOLEAN"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "angaben_zum_tod",
+                                "name": "Angaben zum Tod",
+                                "localizedName": "Angaben zum Tod",
+                                "rmType": "CLUSTER",
+                                "nodeId": "openEHR-EHR-CLUSTER.death_details.v1",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Angaben zum Tod"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Angaben über den Tod einer Person, die mit übergeordneten Datenelementen für die Registrierung übereinstimmen zB. Sterberegister."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[at0024]/items[openEHR-EHR-CLUSTER.death_details.v1]",
+                                "children": [
+                                    {
+                                        "id": "sterbedatum",
+                                        "name": "Sterbedatum",
+                                        "localizedName": "Sterbedatum",
+                                        "rmType": "DV_DATE_TIME",
+                                        "min": 0,
+                                        "max": 1,
+                                        "localizedNames": {
+                                            "de": "Sterbedatum"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": "Der Zeitpunkt, an dem die Person verstorben ist."
+                                        },
+                                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[at0024]/items[openEHR-EHR-CLUSTER.death_details.v1]/items[at0001]/value",
+                                        "inputs": [
+                                            {
+                                                "type": "DATETIME"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "adresse_straßenanschrift",
+                        "name": "Adresse Straßenanschrift",
+                        "localizedName": "Adresse Straßenanschrift",
+                        "rmType": "CLUSTER",
+                        "nodeId": "openEHR-EHR-CLUSTER.address_cc.v0",
+                        "min": 0,
+                        "max": -1,
+                        "localizedNames": {
+                            "de": "Adresse Straßenanschrift"
+                        },
+                        "localizedDescriptions": {
+                            "de": "Details zur Adresse abgestimmt mit FHIR-Ressource."
+                        },
+                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Straßenanschrift']",
+                        "children": [
+                            {
+                                "id": "verwendung",
+                                "name": "Verwendung",
+                                "localizedName": "Verwendung",
+                                "rmType": "DV_CODED_TEXT",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Verwendung"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Der Zweck der Adresse"
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Straßenanschrift']/items[at0001]/value",
+                                "inputs": [
+                                    {
+                                        "suffix": "code",
+                                        "type": "CODED_TEXT",
+                                        "list": [
+                                            {
+                                                "value": "at0002",
+                                                "label": "Heimat",
+                                                "localizedLabels": {
+                                                    "de": "Heimat"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Anschrift der Heimat."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0003",
+                                                "label": "Arbeit",
+                                                "localizedLabels": {
+                                                    "de": "Arbeit"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Anschrift der Arbeitsstelle."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0004",
+                                                "label": "Vorläufig",
+                                                "localizedLabels": {
+                                                    "de": "Vorläufig"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Vorläufige Anschrift."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0005",
+                                                "label": "Alt",
+                                                "localizedLabels": {
+                                                    "de": "Alt"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Alte Anschrift."
+                                                }
+                                            },
+                                            {
+                                                "value": "home",
+                                                "label": "Home",
+                                                "localizedLabels": {
+                                                    "de": "Home"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            },
+                                            {
+                                                "value": "work",
+                                                "label": "Work",
+                                                "localizedLabels": {
+                                                    "de": "Work"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            },
+                                            {
+                                                "value": "temp",
+                                                "label": "Temporary",
+                                                "localizedLabels": {
+                                                    "de": "Temporary"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            },
+                                            {
+                                                "value": "old",
+                                                "label": "Old / Incorrect",
+                                                "localizedLabels": {
+                                                    "de": "Old / Incorrect"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            },
+                                            {
+                                                "value": "billing",
+                                                "label": "Billing",
+                                                "localizedLabels": {
+                                                    "de": "Billing"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            }
+                                        ],
+                                        "terminology": "http://hl7.org/fhir/address-use"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "typ_der_adresse",
+                                "name": "Typ der Adresse",
+                                "localizedName": "Typ der Adresse",
+                                "rmType": "DV_CODED_TEXT",
+                                "min": 1,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Typ der Adresse"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Unterscheidet zwischen physischen Adressen (diejenigen, die Sie besuchen können) und Postadressen (z.B. Postfächer und Pflegeadressen). Die meisten Adressen sind beides."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Straßenanschrift']/items[at0006]/value",
+                                "inputs": [
+                                    {
+                                        "suffix": "code",
+                                        "type": "CODED_TEXT",
+                                        "list": [
+                                            {
+                                                "value": "at0007",
+                                                "label": "Postadressen",
+                                                "localizedLabels": {
+                                                    "de": "Postadressen"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Postalischer Typ der Anschrift."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0008",
+                                                "label": "Physisch",
+                                                "localizedLabels": {
+                                                    "de": "Physisch"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Physischen Typ der Anschrift."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0009",
+                                                "label": "Beides",
+                                                "localizedLabels": {
+                                                    "de": "Beides"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Adresse, die sowohl physisch als auch postalisch ist."
+                                                }
+                                            },
+                                            {
+                                                "value": "postal",
+                                                "label": "Postal",
+                                                "localizedLabels": {
+                                                    "de": "Postal"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            },
+                                            {
+                                                "value": "physical",
+                                                "label": "Physical",
+                                                "localizedLabels": {
+                                                    "de": "Physical"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            },
+                                            {
+                                                "value": "both",
+                                                "label": "Postal & Physical",
+                                                "localizedLabels": {
+                                                    "de": "Postal & Physical"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            }
+                                        ],
+                                        "terminology": "http://hl7.org/fhir/address-type"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "text",
+                                "name": "Text",
+                                "localizedName": "Text",
+                                "rmType": "DV_TEXT",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Text"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Eine Darstellung der Adresse im Volltext."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Straßenanschrift']/items[at0010]/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "straße",
+                                "name": "Straße",
+                                "localizedName": "Straße",
+                                "rmType": "DV_TEXT",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Straße"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Diese Komponente enthält die Hausnummer, Wohnungsnummer, Straßenname, Straßenrichtung, Postfachnummer, Zustellhinweise und ähnliche Adressinformationen."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Straßenanschrift']/items[at0011,'Straße']/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "hausnummer",
+                                "name": "Hausnummer",
+                                "localizedName": "Hausnummer",
+                                "rmType": "DV_TEXT",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Hausnummer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Diese Komponente enthält die Hausnummer, Wohnungsnummer, Straßenname, Straßenrichtung, Postfachnummer, Zustellhinweise und ähnliche Adressinformationen."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Straßenanschrift']/items[at0011,'Hausnummer']/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "adresszusatz",
+                                "name": "Adresszusatz",
+                                "localizedName": "Adresszusatz",
+                                "rmType": "DV_TEXT",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Adresszusatz"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Diese Komponente enthält die Hausnummer, Wohnungsnummer, Straßenname, Straßenrichtung, Postfachnummer, Zustellhinweise und ähnliche Adressinformationen."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Straßenanschrift']/items[at0011,'Adresszusatz']/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "gemeindeschluessel",
+                                "name": "Gemeindeschluessel",
+                                "localizedName": "Gemeindeschluessel",
+                                "rmType": "DV_TEXT",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Gemeindeschluessel"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Diese Komponente enthält die Hausnummer, Wohnungsnummer, Straßenname, Straßenrichtung, Postfachnummer, Zustellhinweise und ähnliche Adressinformationen."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Straßenanschrift']/items[at0011,'Gemeindeschluessel']/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "stadt",
+                                "name": "Stadt",
+                                "localizedName": "Stadt",
+                                "rmType": "DV_TEXT",
+                                "min": 1,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Stadt"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Der Name der Stadt, des Ortes, des Dorfes oder einer anderen Gemeinde oder eines Lieferzentrums."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Straßenanschrift']/items[at0012]/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "bezirk",
+                                "name": "Bezirk",
+                                "localizedName": "Bezirk",
+                                "rmType": "DV_TEXT",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Bezirk"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Der Name des Verwaltungsgebiets (Landkreis)."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Straßenanschrift']/items[at0013]/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "postleitzahl",
+                                "name": "Postleitzahl",
+                                "localizedName": "Postleitzahl",
+                                "rmType": "DV_TEXT",
+                                "min": 1,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Postleitzahl"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Eine Postleitzahl, die eine durch den Postdienst definierte Region bezeichnet."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Straßenanschrift']/items[at0014]/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "land",
+                                "name": "Land",
+                                "localizedName": "Land",
+                                "rmType": "DV_TEXT",
+                                "min": 1,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Land"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Land - eine Nation, wie allgemein verstanden oder allgemein akzeptiert."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Straßenanschrift']/items[at0015]/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "beginn_der_gültigkeitsdauer",
+                                "name": "Beginn der Gültigkeitsdauer",
+                                "localizedName": "Beginn der Gültigkeitsdauer",
+                                "rmType": "DV_DATE_TIME",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Beginn der Gültigkeitsdauer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Der Beginn der Periode. Die Eingrenzung ist inklusive."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Straßenanschrift']/items[at0016]/value",
+                                "inputs": [
+                                    {
+                                        "type": "DATETIME"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "ende_der_gültigkeitsdauer",
+                                "name": "Ende der Gültigkeitsdauer",
+                                "localizedName": "Ende der Gültigkeitsdauer",
+                                "rmType": "DV_DATE_TIME",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Ende der Gültigkeitsdauer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Das Ende der Periode. Wenn das Ende der Periode fehlt, ist die Periode noch nicht abgeschlossen. Der Beginn kann in der Vergangenheit und das Enddatum in der Zukunft liegen, was bedeutet, dass der Zeitraum voraussichtlich zu diesem Zeitpunkt endet."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Straßenanschrift']/items[at0017]/value",
+                                "inputs": [
+                                    {
+                                        "type": "DATETIME"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "adresse_postfach",
+                        "name": "Adresse Postfach",
+                        "localizedName": "Adresse Postfach",
+                        "rmType": "CLUSTER",
+                        "nodeId": "openEHR-EHR-CLUSTER.address_cc.v0",
+                        "min": 0,
+                        "max": 1,
+                        "localizedNames": {
+                            "de": "Adresse Postfach"
+                        },
+                        "localizedDescriptions": {
+                            "de": "Details zur Adresse abgestimmt mit FHIR-Ressource."
+                        },
+                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Postfach']",
+                        "children": [
+                            {
+                                "id": "verwendung",
+                                "name": "Verwendung",
+                                "localizedName": "Verwendung",
+                                "rmType": "DV_CODED_TEXT",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Verwendung"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Der Zweck der Adresse"
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Postfach']/items[at0001]/value",
+                                "inputs": [
+                                    {
+                                        "suffix": "code",
+                                        "type": "CODED_TEXT",
+                                        "list": [
+                                            {
+                                                "value": "at0002",
+                                                "label": "Heimat",
+                                                "localizedLabels": {
+                                                    "de": "Heimat"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Anschrift der Heimat."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0003",
+                                                "label": "Arbeit",
+                                                "localizedLabels": {
+                                                    "de": "Arbeit"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Anschrift der Arbeitsstelle."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0004",
+                                                "label": "Vorläufig",
+                                                "localizedLabels": {
+                                                    "de": "Vorläufig"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Vorläufige Anschrift."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0005",
+                                                "label": "Alt",
+                                                "localizedLabels": {
+                                                    "de": "Alt"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Alte Anschrift."
+                                                }
+                                            },
+                                            {
+                                                "value": "home",
+                                                "label": "Home",
+                                                "localizedLabels": {
+                                                    "de": "Home"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            },
+                                            {
+                                                "value": "work",
+                                                "label": "Work",
+                                                "localizedLabels": {
+                                                    "de": "Work"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            },
+                                            {
+                                                "value": "temp",
+                                                "label": "Temporary",
+                                                "localizedLabels": {
+                                                    "de": "Temporary"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            },
+                                            {
+                                                "value": "old",
+                                                "label": "Old / Incorrect",
+                                                "localizedLabels": {
+                                                    "de": "Old / Incorrect"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            },
+                                            {
+                                                "value": "billing",
+                                                "label": "Billing",
+                                                "localizedLabels": {
+                                                    "de": "Billing"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            }
+                                        ],
+                                        "terminology": "http://hl7.org/fhir/address-use"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "typ_der_adresse",
+                                "name": "Typ der Adresse",
+                                "localizedName": "Typ der Adresse",
+                                "rmType": "DV_CODED_TEXT",
+                                "min": 1,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Typ der Adresse"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Unterscheidet zwischen physischen Adressen (diejenigen, die Sie besuchen können) und Postadressen (z.B. Postfächer und Pflegeadressen). Die meisten Adressen sind beides."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Postfach']/items[at0006]/value",
+                                "inputs": [
+                                    {
+                                        "suffix": "code",
+                                        "type": "CODED_TEXT",
+                                        "list": [
+                                            {
+                                                "value": "at0007",
+                                                "label": "Postadressen",
+                                                "localizedLabels": {
+                                                    "de": "Postadressen"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Postalischer Typ der Anschrift."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0008",
+                                                "label": "Physisch",
+                                                "localizedLabels": {
+                                                    "de": "Physisch"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Physischen Typ der Anschrift."
+                                                }
+                                            },
+                                            {
+                                                "value": "at0009",
+                                                "label": "Beides",
+                                                "localizedLabels": {
+                                                    "de": "Beides"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": "Adresse, die sowohl physisch als auch postalisch ist."
+                                                }
+                                            },
+                                            {
+                                                "value": "postal",
+                                                "label": "Postal",
+                                                "localizedLabels": {
+                                                    "de": "Postal"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            },
+                                            {
+                                                "value": "physical",
+                                                "label": "Physical",
+                                                "localizedLabels": {
+                                                    "de": "Physical"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            },
+                                            {
+                                                "value": "both",
+                                                "label": "Postal & Physical",
+                                                "localizedLabels": {
+                                                    "de": "Postal & Physical"
+                                                },
+                                                "localizedDescriptions": {
+                                                    "de": ""
+                                                }
+                                            }
+                                        ],
+                                        "terminology": "http://hl7.org/fhir/address-type"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "text",
+                                "name": "Text",
+                                "localizedName": "Text",
+                                "rmType": "DV_TEXT",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Text"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Eine Darstellung der Adresse im Volltext."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Postfach']/items[at0010]/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "straße",
+                                "name": "Straße",
+                                "localizedName": "Straße",
+                                "rmType": "DV_TEXT",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Straße"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Diese Komponente enthält die Hausnummer, Wohnungsnummer, Straßenname, Straßenrichtung, Postfachnummer, Zustellhinweise und ähnliche Adressinformationen."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Postfach']/items[at0011,'Straße']/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "hausnummer",
+                                "name": "Hausnummer",
+                                "localizedName": "Hausnummer",
+                                "rmType": "DV_TEXT",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Hausnummer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Diese Komponente enthält die Hausnummer, Wohnungsnummer, Straßenname, Straßenrichtung, Postfachnummer, Zustellhinweise und ähnliche Adressinformationen."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Postfach']/items[at0011,'Hausnummer']/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "adresszusatz",
+                                "name": "Adresszusatz",
+                                "localizedName": "Adresszusatz",
+                                "rmType": "DV_TEXT",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Adresszusatz"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Diese Komponente enthält die Hausnummer, Wohnungsnummer, Straßenname, Straßenrichtung, Postfachnummer, Zustellhinweise und ähnliche Adressinformationen."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Postfach']/items[at0011,'Adresszusatz']/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "gemeindeschluessel",
+                                "name": "Gemeindeschluessel",
+                                "localizedName": "Gemeindeschluessel",
+                                "rmType": "DV_TEXT",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Gemeindeschluessel"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Diese Komponente enthält die Hausnummer, Wohnungsnummer, Straßenname, Straßenrichtung, Postfachnummer, Zustellhinweise und ähnliche Adressinformationen."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Postfach']/items[at0011,'Gemeindeschluessel']/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "stadt",
+                                "name": "Stadt",
+                                "localizedName": "Stadt",
+                                "rmType": "DV_TEXT",
+                                "min": 1,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Stadt"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Der Name der Stadt, des Ortes, des Dorfes oder einer anderen Gemeinde oder eines Lieferzentrums."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Postfach']/items[at0012]/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "bezirk",
+                                "name": "Bezirk",
+                                "localizedName": "Bezirk",
+                                "rmType": "DV_TEXT",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Bezirk"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Der Name des Verwaltungsgebiets (Landkreis)."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Postfach']/items[at0013]/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "postleitzahl",
+                                "name": "Postleitzahl",
+                                "localizedName": "Postleitzahl",
+                                "rmType": "DV_TEXT",
+                                "min": 1,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Postleitzahl"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Eine Postleitzahl, die eine durch den Postdienst definierte Region bezeichnet."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Postfach']/items[at0014]/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "land",
+                                "name": "Land",
+                                "localizedName": "Land",
+                                "rmType": "DV_TEXT",
+                                "min": 1,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Land"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Land - eine Nation, wie allgemein verstanden oder allgemein akzeptiert."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Postfach']/items[at0015]/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "beginn_der_gültigkeitsdauer",
+                                "name": "Beginn der Gültigkeitsdauer",
+                                "localizedName": "Beginn der Gültigkeitsdauer",
+                                "rmType": "DV_DATE_TIME",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Beginn der Gültigkeitsdauer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Der Beginn der Periode. Die Eingrenzung ist inklusive."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Postfach']/items[at0016]/value",
+                                "inputs": [
+                                    {
+                                        "type": "DATETIME"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "ende_der_gültigkeitsdauer",
+                                "name": "Ende der Gültigkeitsdauer",
+                                "localizedName": "Ende der Gültigkeitsdauer",
+                                "rmType": "DV_DATE_TIME",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Ende der Gültigkeitsdauer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Das Ende der Periode. Wenn das Ende der Periode fehlt, ist die Periode noch nicht abgeschlossen. Der Beginn kann in der Vergangenheit und das Enddatum in der Zukunft liegen, was bedeutet, dass der Zeitraum voraussichtlich zu diesem Zeitpunkt endet."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/data[at0001]/items[openEHR-EHR-CLUSTER.address_cc.v0,'Adresse Postfach']/items[at0017]/value",
+                                "inputs": [
+                                    {
+                                        "type": "DATETIME"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": "subject",
+                        "name": "subject",
+                        "rmType": "PARTY_PROXY",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/subject",
+                        "inputs": [
+                            {
+                                "suffix": "id",
+                                "type": "TEXT"
+                            },
+                            {
+                                "suffix": "id_scheme",
+                                "type": "TEXT"
+                            },
+                            {
+                                "suffix": "id_namespace",
+                                "type": "TEXT"
+                            },
+                            {
+                                "suffix": "name",
+                                "type": "TEXT"
+                            }
+                        ],
+                        "inContext": true
+                    },
+                    {
+                        "id": "language",
+                        "name": "language",
+                        "rmType": "CODE_PHRASE",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/language",
+                        "inContext": true
+                    },
+                    {
+                        "id": "encoding",
+                        "name": "encoding",
+                        "rmType": "CODE_PHRASE",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.person_data.v0]/encoding",
+                        "inContext": true
+                    }
+                ]
+            },
+            {
+                "id": "versicherungsinformationen",
+                "name": "Versicherungsinformationen",
+                "localizedName": "Versicherungsinformationen",
+                "rmType": "ADMIN_ENTRY",
+                "nodeId": "openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0",
+                "min": 0,
+                "max": -1,
+                "localizedNames": {
+                    "de": "Versicherungsinformationen"
+                },
+                "localizedDescriptions": {
+                    "de": "Zur Abbildung von Versicherungsinformationen eines Patienten"
+                },
+                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]",
+                "children": [
+                    {
+                        "id": "name_der_versicherung",
+                        "name": "Name der Versicherung",
+                        "localizedName": "Name der Versicherung",
+                        "rmType": "DV_TEXT",
+                        "min": 0,
+                        "max": 1,
+                        "localizedNames": {
+                            "de": "Name der Versicherung"
+                        },
+                        "localizedDescriptions": {
+                            "de": "Name der Versicherung, z.B. AOK Niedersachsen, Techniker Krankenkasse etc."
+                        },
+                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0011]/value",
+                        "inputs": [
+                            {
+                                "type": "TEXT"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "versicherungstyp",
+                        "name": "Versicherungstyp",
+                        "localizedName": "Versicherungstyp",
+                        "rmType": "DV_CODED_TEXT",
+                        "min": 1,
+                        "max": 1,
+                        "localizedNames": {
+                            "de": "Versicherungstyp"
+                        },
+                        "localizedDescriptions": {
+                            "de": "Versicherungstyp des Patienten (selbst; gesetzliche Krankenversicherung; private Krankenversicherung; Berufsgenossenschaft; unentgeltliche truppenärztliche Versorgung)"
+                        },
+                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0002]/value",
+                        "inputs": [
+                            {
+                                "suffix": "code",
+                                "type": "CODED_TEXT",
+                                "list": [
+                                    {
+                                        "value": "GKV",
+                                        "label": "Gesetzliche Krankenversicherung",
+                                        "localizedLabels": {
+                                            "de": "Gesetzliche Krankenversicherung"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": ""
+                                        }
+                                    },
+                                    {
+                                        "value": "PKV",
+                                        "label": "Private Krankenversicherung",
+                                        "localizedLabels": {
+                                            "de": "Private Krankenversicherung"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": ""
+                                        }
+                                    },
+                                    {
+                                        "value": "ZANR",
+                                        "label": "Zahnarztnummer",
+                                        "localizedLabels": {
+                                            "de": "Zahnarztnummer"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": ""
+                                        }
+                                    },
+                                    {
+                                        "value": "KZVA",
+                                        "label": "KZVAbrechnungsnummer",
+                                        "localizedLabels": {
+                                            "de": "KZVAbrechnungsnummer"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": ""
+                                        }
+                                    }
+                                ],
+                                "terminology": "http://fhir.de/CodeSystem/identifier-type-de-basis"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "versicherungsnummer",
+                        "name": "Versicherungsnummer",
+                        "localizedName": "Versicherungsnummer",
+                        "rmType": "ELEMENT",
+                        "nodeId": "at0006",
+                        "min": 1,
+                        "max": 1,
+                        "localizedNames": {
+                            "de": "Versicherungsnummer"
+                        },
+                        "localizedDescriptions": {
+                            "de": "Nummer, die der (Kranken-)Versicherung des Patienten zugewiesen wurde. Diese findet sich z.B. auf der Mitgliedskarte der Krankenkasse."
+                        },
+                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0006]",
+                        "children": [
+                            {
+                                "id": "text_value",
+                                "name": "Versicherungsnummer",
+                                "localizedName": "Versicherungsnummer",
+                                "rmType": "DV_TEXT",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Versicherungsnummer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Nummer, die der (Kranken-)Versicherung des Patienten zugewiesen wurde. Diese findet sich z.B. auf der Mitgliedskarte der Krankenkasse."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0006]/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ],
+                                "inContext": true
+                            },
+                            {
+                                "id": "coded_text_value",
+                                "name": "Versicherungsnummer",
+                                "localizedName": "Versicherungsnummer",
+                                "rmType": "DV_CODED_TEXT",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Versicherungsnummer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Nummer, die der (Kranken-)Versicherung des Patienten zugewiesen wurde. Diese findet sich z.B. auf der Mitgliedskarte der Krankenkasse."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0006]/value",
+                                "inputs": [
+                                    {
+                                        "suffix": "code",
+                                        "type": "TEXT"
+                                    },
+                                    {
+                                        "suffix": "value",
+                                        "type": "TEXT"
+                                    }
+                                ],
+                                "inContext": true
+                            },
+                            {
+                                "id": "multimedia_value",
+                                "name": "Versicherungsnummer",
+                                "localizedName": "Versicherungsnummer",
+                                "rmType": "DV_MULTIMEDIA",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Versicherungsnummer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Nummer, die der (Kranken-)Versicherung des Patienten zugewiesen wurde. Diese findet sich z.B. auf der Mitgliedskarte der Krankenkasse."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0006]/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ],
+                                "inContext": true
+                            },
+                            {
+                                "id": "parsable_value",
+                                "name": "Versicherungsnummer",
+                                "localizedName": "Versicherungsnummer",
+                                "rmType": "DV_PARSABLE",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Versicherungsnummer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Nummer, die der (Kranken-)Versicherung des Patienten zugewiesen wurde. Diese findet sich z.B. auf der Mitgliedskarte der Krankenkasse."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0006]/value",
+                                "inputs": [
+                                    {
+                                        "suffix": "value",
+                                        "type": "TEXT"
+                                    },
+                                    {
+                                        "suffix": "formalism",
+                                        "type": "TEXT"
+                                    }
+                                ],
+                                "inContext": true
+                            },
+                            {
+                                "id": "state_value",
+                                "name": "Versicherungsnummer",
+                                "localizedName": "Versicherungsnummer",
+                                "rmType": "DV_STATE",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Versicherungsnummer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Nummer, die der (Kranken-)Versicherung des Patienten zugewiesen wurde. Diese findet sich z.B. auf der Mitgliedskarte der Krankenkasse."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0006]/value",
+                                "inputs": [
+                                    {
+                                        "suffix": "code",
+                                        "type": "TEXT"
+                                    },
+                                    {
+                                        "suffix": "value",
+                                        "type": "TEXT"
+                                    }
+                                ],
+                                "inContext": true
+                            },
+                            {
+                                "id": "boolean_value",
+                                "name": "Versicherungsnummer",
+                                "localizedName": "Versicherungsnummer",
+                                "rmType": "DV_BOOLEAN",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Versicherungsnummer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Nummer, die der (Kranken-)Versicherung des Patienten zugewiesen wurde. Diese findet sich z.B. auf der Mitgliedskarte der Krankenkasse."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0006]/value",
+                                "inputs": [
+                                    {
+                                        "type": "BOOLEAN"
+                                    }
+                                ],
+                                "inContext": true
+                            },
+                            {
+                                "id": "identifier_value",
+                                "name": "Versicherungsnummer",
+                                "localizedName": "Versicherungsnummer",
+                                "rmType": "DV_IDENTIFIER",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Versicherungsnummer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Nummer, die der (Kranken-)Versicherung des Patienten zugewiesen wurde. Diese findet sich z.B. auf der Mitgliedskarte der Krankenkasse."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0006]/value",
+                                "inputs": [
+                                    {
+                                        "suffix": "id",
+                                        "type": "TEXT"
+                                    },
+                                    {
+                                        "suffix": "type",
+                                        "type": "TEXT"
+                                    },
+                                    {
+                                        "suffix": "issuer",
+                                        "type": "TEXT"
+                                    },
+                                    {
+                                        "suffix": "assigner",
+                                        "type": "TEXT"
+                                    }
+                                ],
+                                "inContext": true
+                            },
+                            {
+                                "id": "uri_value",
+                                "name": "Versicherungsnummer",
+                                "localizedName": "Versicherungsnummer",
+                                "rmType": "DV_URI",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Versicherungsnummer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Nummer, die der (Kranken-)Versicherung des Patienten zugewiesen wurde. Diese findet sich z.B. auf der Mitgliedskarte der Krankenkasse."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0006]/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ],
+                                "inContext": true
+                            },
+                            {
+                                "id": "ehr_uri_value",
+                                "name": "Versicherungsnummer",
+                                "localizedName": "Versicherungsnummer",
+                                "rmType": "DV_EHR_URI",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Versicherungsnummer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Nummer, die der (Kranken-)Versicherung des Patienten zugewiesen wurde. Diese findet sich z.B. auf der Mitgliedskarte der Krankenkasse."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0006]/value",
+                                "inputs": [
+                                    {
+                                        "type": "TEXT"
+                                    }
+                                ],
+                                "inContext": true
+                            },
+                            {
+                                "id": "duration_value",
+                                "name": "Versicherungsnummer",
+                                "localizedName": "Versicherungsnummer",
+                                "rmType": "DV_DURATION",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Versicherungsnummer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Nummer, die der (Kranken-)Versicherung des Patienten zugewiesen wurde. Diese findet sich z.B. auf der Mitgliedskarte der Krankenkasse."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0006]/value",
+                                "inputs": [
+                                    {
+                                        "suffix": "year",
+                                        "type": "INTEGER",
+                                        "validation": {
+                                            "range": {
+                                                "min": 0,
+                                                "minOp": ">="
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "suffix": "month",
+                                        "type": "INTEGER",
+                                        "validation": {
+                                            "range": {
+                                                "min": 0,
+                                                "minOp": ">="
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "suffix": "day",
+                                        "type": "INTEGER",
+                                        "validation": {
+                                            "range": {
+                                                "min": 0,
+                                                "minOp": ">="
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "suffix": "week",
+                                        "type": "INTEGER",
+                                        "validation": {
+                                            "range": {
+                                                "min": 0,
+                                                "minOp": ">="
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "suffix": "hour",
+                                        "type": "INTEGER",
+                                        "validation": {
+                                            "range": {
+                                                "min": 0,
+                                                "minOp": ">="
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "suffix": "minute",
+                                        "type": "INTEGER",
+                                        "validation": {
+                                            "range": {
+                                                "min": 0,
+                                                "minOp": ">="
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "suffix": "second",
+                                        "type": "INTEGER",
+                                        "validation": {
+                                            "range": {
+                                                "min": 0,
+                                                "minOp": ">="
+                                            }
+                                        }
+                                    }
+                                ],
+                                "inContext": true
+                            },
+                            {
+                                "id": "quantity_value",
+                                "name": "Versicherungsnummer",
+                                "localizedName": "Versicherungsnummer",
+                                "rmType": "DV_QUANTITY",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Versicherungsnummer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Nummer, die der (Kranken-)Versicherung des Patienten zugewiesen wurde. Diese findet sich z.B. auf der Mitgliedskarte der Krankenkasse."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0006]/value",
+                                "inputs": [
+                                    {
+                                        "suffix": "magnitude",
+                                        "type": "DECIMAL"
+                                    },
+                                    {
+                                        "suffix": "unit",
+                                        "type": "TEXT"
+                                    }
+                                ],
+                                "inContext": true
+                            },
+                            {
+                                "id": "count_value",
+                                "name": "Versicherungsnummer",
+                                "localizedName": "Versicherungsnummer",
+                                "rmType": "DV_COUNT",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Versicherungsnummer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Nummer, die der (Kranken-)Versicherung des Patienten zugewiesen wurde. Diese findet sich z.B. auf der Mitgliedskarte der Krankenkasse."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0006]/value",
+                                "inputs": [
+                                    {
+                                        "type": "INTEGER"
+                                    }
+                                ],
+                                "inContext": true
+                            },
+                            {
+                                "id": "proportion_value",
+                                "name": "Versicherungsnummer",
+                                "localizedName": "Versicherungsnummer",
+                                "rmType": "DV_PROPORTION",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Versicherungsnummer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Nummer, die der (Kranken-)Versicherung des Patienten zugewiesen wurde. Diese findet sich z.B. auf der Mitgliedskarte der Krankenkasse."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0006]/value",
+                                "inputs": [
+                                    {
+                                        "suffix": "numerator",
+                                        "type": "DECIMAL"
+                                    },
+                                    {
+                                        "suffix": "denominator",
+                                        "type": "DECIMAL"
+                                    }
+                                ],
+                                "inContext": true,
+                                "proportionTypes": [
+                                    "ratio",
+                                    "unitary",
+                                    "percent",
+                                    "fraction",
+                                    "integer_fraction"
+                                ]
+                            },
+                            {
+                                "id": "date_time_value",
+                                "name": "Versicherungsnummer",
+                                "localizedName": "Versicherungsnummer",
+                                "rmType": "DV_DATE_TIME",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Versicherungsnummer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Nummer, die der (Kranken-)Versicherung des Patienten zugewiesen wurde. Diese findet sich z.B. auf der Mitgliedskarte der Krankenkasse."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0006]/value",
+                                "inputs": [
+                                    {
+                                        "type": "DATETIME"
+                                    }
+                                ],
+                                "inContext": true
+                            },
+                            {
+                                "id": "time_value",
+                                "name": "Versicherungsnummer",
+                                "localizedName": "Versicherungsnummer",
+                                "rmType": "DV_TIME",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Versicherungsnummer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Nummer, die der (Kranken-)Versicherung des Patienten zugewiesen wurde. Diese findet sich z.B. auf der Mitgliedskarte der Krankenkasse."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0006]/value",
+                                "inputs": [
+                                    {
+                                        "type": "TIME"
+                                    }
+                                ],
+                                "inContext": true
+                            },
+                            {
+                                "id": "ordinal_value",
+                                "name": "Versicherungsnummer",
+                                "localizedName": "Versicherungsnummer",
+                                "rmType": "DV_ORDINAL",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Versicherungsnummer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Nummer, die der (Kranken-)Versicherung des Patienten zugewiesen wurde. Diese findet sich z.B. auf der Mitgliedskarte der Krankenkasse."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0006]/value",
+                                "inputs": [
+                                    {
+                                        "type": "CODED_TEXT"
+                                    }
+                                ],
+                                "inContext": true
+                            },
+                            {
+                                "id": "date_value",
+                                "name": "Versicherungsnummer",
+                                "localizedName": "Versicherungsnummer",
+                                "rmType": "DV_DATE",
+                                "min": 0,
+                                "max": 1,
+                                "localizedNames": {
+                                    "de": "Versicherungsnummer"
+                                },
+                                "localizedDescriptions": {
+                                    "de": "Nummer, die der (Kranken-)Versicherung des Patienten zugewiesen wurde. Diese findet sich z.B. auf der Mitgliedskarte der Krankenkasse."
+                                },
+                                "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0006]/value",
+                                "inputs": [
+                                    {
+                                        "type": "DATE"
+                                    }
+                                ],
+                                "inContext": true
+                            }
+                        ]
+                    },
+                    {
+                        "id": "institutionskennzeichen_der_krankenkasse",
+                        "name": "Institutionskennzeichen der Krankenkasse",
+                        "localizedName": "Institutionskennzeichen der Krankenkasse",
+                        "rmType": "DV_COUNT",
+                        "min": 1,
+                        "max": 1,
+                        "localizedNames": {
+                            "de": "Institutionskennzeichen der Krankenkasse"
+                        },
+                        "localizedDescriptions": {
+                            "de": "z.B. Techniker Krankenkasse 106577501"
+                        },
+                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/data[at0001]/items[at0010]/value",
+                        "inputs": [
+                            {
+                                "type": "INTEGER"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "subject",
+                        "name": "subject",
+                        "rmType": "PARTY_PROXY",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/subject",
+                        "inputs": [
+                            {
+                                "suffix": "id",
+                                "type": "TEXT"
+                            },
+                            {
+                                "suffix": "id_scheme",
+                                "type": "TEXT"
+                            },
+                            {
+                                "suffix": "id_namespace",
+                                "type": "TEXT"
+                            },
+                            {
+                                "suffix": "name",
+                                "type": "TEXT"
+                            }
+                        ],
+                        "inContext": true
+                    },
+                    {
+                        "id": "language",
+                        "name": "language",
+                        "rmType": "CODE_PHRASE",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/language",
+                        "inContext": true
+                    },
+                    {
+                        "id": "encoding",
+                        "name": "encoding",
+                        "rmType": "CODE_PHRASE",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/content[openEHR-EHR-ADMIN_ENTRY.versicherungsinformationen.v0]/encoding",
+                        "inContext": true
+                    }
+                ]
+            },
+            {
+                "id": "composer",
+                "name": "composer",
+                "rmType": "PARTY_PROXY",
+                "min": 1,
+                "max": 1,
+                "aqlPath": "/composer",
+                "inputs": [
+                    {
+                        "suffix": "id",
+                        "type": "TEXT"
+                    },
+                    {
+                        "suffix": "id_scheme",
+                        "type": "TEXT"
+                    },
+                    {
+                        "suffix": "id_namespace",
+                        "type": "TEXT"
+                    },
+                    {
+                        "suffix": "name",
+                        "type": "TEXT"
+                    }
+                ],
+                "inContext": true
+            },
+            {
+                "id": "language",
+                "name": "language",
+                "rmType": "CODE_PHRASE",
+                "min": 1,
+                "max": 1,
+                "aqlPath": "/language",
+                "inContext": true
+            },
+            {
+                "id": "territory",
+                "name": "territory",
+                "rmType": "CODE_PHRASE",
+                "min": 1,
+                "max": 1,
+                "aqlPath": "/territory",
+                "inContext": true
+            }
+        ]
+    }
+}
