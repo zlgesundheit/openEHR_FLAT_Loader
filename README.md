@@ -33,7 +33,7 @@ The idea of the tools [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/
 
 _Process-Overview:_
 
-![BPMN-Process-Overview](/ETLProcess/HowTo/Figures/Process_Overview_Screenshot.jpg)
+![BPMN-Process-Overview](/HowTo/IMG/00_etl_process_openEHR_py-svg.png)
 
 ---
 ## Manual (Usage, Example and openEHR) **-- Work in Progress --**

@@ -129,6 +129,7 @@ def generateExamples():
     Danach kann also zu jedem Pfad im Pfad-Dict nicht nur der Pfad (pathString) sondern auch Beispiele abgerufen werden (exampleValueDict). 
     
     Implementierung fast aller rmTypes mit Beispielen hat beim Verständnis des der Strukturen des Webtemplates sehr geholfen.
+    
     Inzwischen bietet die FLAT-API der EHRBase allerdings einen Example-Endpunkt:
     {{host}}/rest/ecis/v1/template/:template_id/example?format=FLAT
 
