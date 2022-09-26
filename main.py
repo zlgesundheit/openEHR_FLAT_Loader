@@ -135,6 +135,8 @@ def generateExamples():
 
     """
 
+    print("Upload OPT and download Web Template + Example Composition")
+
     # Upload OPT to openEHR-Repo if necessary
     webTemp = handleOPT.main(config,manualTaskDir,OPTDirPath)
 
