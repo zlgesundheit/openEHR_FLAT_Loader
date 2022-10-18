@@ -19,9 +19,9 @@ The efforts are organized in three work groups, namely:
 
 TP1 includes data management aspects, openEHR-utilization and the openEHR_FLAT_Loader.
 
-##### Documentation:
-The Manual about the ETL-Loader is in the Docs-Folder of this Repo.
-There is general documentation covering the project/infrastructure -> [zlg-docs](https://gitlab.gwdg.de/medinf/ivf/zukunftslabor-gesundheit/docs-zlg) `Documentation is work in progress`
+### Documentation:
+The manual can be found here: https://c100-115.cloud.gwdg.de/documentation/platform/etl_tools/flat_loader.html
+The linked documentation is implemented using mdbook and can be found in this internal repo -> [zlg-docs](https://gitlab.gwdg.de/medinf/ivf/zukunftslabor-gesundheit/docs-zlg).
 
 ---
 ## About openEHR and the ETL-Process
