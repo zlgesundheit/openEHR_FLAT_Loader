@@ -20,7 +20,7 @@ The efforts are organized in three work groups, namely:
 TP1 includes data management aspects, openEHR-utilization and the openEHR_FLAT_Loader.
 
 ### Documentation:
-The manual can be found here: https://c100-115.cloud.gwdg.de/documentation/platform/etl_tools/flat_loader.html
+The manual can be found here: https://c100-115.cloud.gwdg.de/documentation/platform/etl_tools/flat_loader.html  
 The linked documentation is implemented using mdbook and can be found in this internal repo -> [zlg-docs](https://gitlab.gwdg.de/medinf/ivf/zukunftslabor-gesundheit/docs-zlg).
 
 ---
