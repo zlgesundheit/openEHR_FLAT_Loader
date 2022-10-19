@@ -36,12 +36,8 @@ _Process-Overview:_
 ![BPMN-Process-Overview](/HowTo/IMG/00_etl_process_openEHR_py-svg.png)
 
 ---
-## Manual (Usage, Example and openEHR) **-- Work in Progress --**
-A guide on how to use the tool and explanation of the context (openEHR, data curation) is currently being developed.  
+## Manual (Usage, Example and openEHR)
 
-For now this README describes the Import-Process in sufficient detail, the full manual can later be found [in the HowTo-Folder](/ETLProcess/HowTo/MANUAL_openEHR_FLAT_Loader.md)
-
----
 ### _Prerequisites:_
 Setup:
 - You need an openEHR-Repo that supports the FLAT-Format and WebTemplates 
