@@ -4,12 +4,11 @@
 
 Current:
 * [Jendrik Richter, 0000-0002-3254-7380](https://orcid.org/0000-0002-3254-7380)
+
+Past:
 * [Jan Janosch Schneider]()
 * [Mareike Joseph]()
 * [Marcel Mast]()
-
-Past:
-* 
 
 ## Other contributors
 
