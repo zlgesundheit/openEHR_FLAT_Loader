@@ -101,11 +101,8 @@ def buildAndUploadCompositions():
         print ("EHR Creation is disabled in Config.ini")
         pass
 
-    print ("Test2")
-
     # Send resource to server
     if config.directupload == "1":
-        print ("Test")
         csv_dataframe = handleConfig.readCSVasDataFrame(config.inputCSV)
         anzahl_eintraege = len(csv_dataframe.index)
 
