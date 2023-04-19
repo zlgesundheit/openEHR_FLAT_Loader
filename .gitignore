@@ -19,6 +19,7 @@ __pycache__
 /Scripts/__pycache__
 /Scripts/__pycache__/
 config.ini
+/config.ini
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
