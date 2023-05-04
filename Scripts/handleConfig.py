@@ -33,7 +33,8 @@ class config():
 
     def __init__(self):
         try:
-            parser.read('config.ini')
+            config_file = open('config.ini', encoding="utf-8")
+            parser.readfp(config_file)
         except:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
