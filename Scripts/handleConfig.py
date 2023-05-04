@@ -9,6 +9,7 @@ import os.path
 from os import getcwd
 import sys
 import traceback
+import csv
 # Third party imports
 import pandas as pd
 from chardet import detect
@@ -59,6 +60,12 @@ def getAuthHeader(username, pw) -> str:
     authHeader = "Basic " + base64.b64encode((username+":"+pw).encode('ascii')).decode()
     return authHeader
 
+def get_delimiter(file_path, bytes = 4096):
+    sniffer = csv.Sniffer()
+    data = open(file_path, "r").read(bytes)
+    delimiter = sniffer.sniff(data).delimiter
+    return delimiter
+
 def readCSVasDataFrame(inputCSV):
     '''Read CSV as Dataframe'''
     # Compose Path
@@ -71,7 +78,8 @@ def readCSVasDataFrame(inputCSV):
 
     # Read CSV-File  
     try: 
-        dataDF = pd.read_csv(csvPath, header=0, delimiter=";", dtype = str, encoding = guessed_encoding)
+        
+        dataDF = pd.read_csv(csvPath, header=0, delimiter=get_delimiter(csvPath), dtype = str, encoding = guessed_encoding) #";"
     except:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
