@@ -19,11 +19,8 @@ The efforts are organized in three work groups, namely:
 
 TP1 includes data management aspects, openEHR-utilization and the openEHR_FLAT_Loader.
 
-### Documentation:
-The manual can be found here: https://c100-115.cloud.gwdg.de/documentation/platform/etl_tools/flat_loader.html  
-The linked documentation is implemented using mdbook and can be found in this internal repo -> [zlg-docs](https://gitlab.gwdg.de/medinf/ivf/zukunftslabor-gesundheit/docs-zlg).
+##### Documentation:
 
----
 ## About openEHR and the ETL-Process
 OpenEHR is a technology framework for the handling of medical data in the form of Electronic Health Records. The main point of the openEHR-Approach is the differentiation between logical modeling (in forms of archetypes/templates) and the physical storage (based on item-identifiers that are used in the technical background of these templates).
 
@@ -33,11 +30,11 @@ The idea of the tools [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/
 
 _Process-Overview:_
 
-![BPMN-Process-Overview](/HowTo/IMG/00_etl_process_openEHR_py-svg.png)
+![BPMN-Process-Overview](/ETLProcess/HowTo/Figures/Process_Overview_Screenshot.jpg)
+
+Find an example with short explanatory README in /HowTo/Beispieldatensatz
 
 ---
-## Manual (Usage, Example and openEHR)
-
 ### _Prerequisites:_
 Setup:
 - You need an openEHR-Repo that supports the FLAT-Format and WebTemplates 
@@ -49,7 +46,7 @@ Setup:
 - You need a UTF-8 encoded CSV-File with your data.
 
 General Procedure:  
-1. Clone the FLAT-Loader  
+1. Clone the FLAT-Loader-Repo 
     1.1 Copy OPT and CSV to the Flat-Loader (/Input)  
     1.2 Set correct Auth-Data and File-Names in config.ini  
 2. Generate Mapping (ETProcess/ManualTasks)   
@@ -184,7 +181,7 @@ At least the file needs to contain the following columns:
 
 ---
 #### _Disclaimer_ 
-This Tool is not a finished product. Use with caution and also take care of privacy needs regarding your data sets. 
+This tool is not a finished product. Use with caution and also take care of privacy needs regarding your data sets. 
 If you find any problems when using this tool feel free to contact us or create an issue.
 
 ---
