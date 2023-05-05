@@ -79,7 +79,7 @@ def readCSVasDataFrame(inputCSV):
     # Read CSV-File  
     try: 
         
-        dataDF = pd.read_csv(csvPath, header=0, delimiter=get_delimiter(csvPath), dtype = str, encoding = guessed_encoding) #";"
+        dataDF = pd.read_csv(csvPath, header=0, delimiter=";", dtype = str, encoding = guessed_encoding) #";" # get_delimiter(csvPath)
     except:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
