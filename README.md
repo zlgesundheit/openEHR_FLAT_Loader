@@ -32,7 +32,7 @@ _Process-Overview:_
 
 ![BPMN-Process-Overview](/HowTo/IMG/00_etl_process_openEHR_py-svg.png)
 
-Find an example with short explanatory README in /HowTo/Beispieldatensatz
+Find an example with short explanatory README in [/HowTo/Beispieldatensatz](/HowTo/Beispieldatensatz)
 
 ---
 ### _Prerequisites:_
