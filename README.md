@@ -30,25 +30,25 @@ The idea of the tools [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/
 
 _Process-Overview:_
 
-![BPMN-Process-Overview](/ETLProcess/HowTo/Figures/Process_Overview_Screenshot.jpg)
+![BPMN-Process-Overview](/HowTo/IMG/00_etl_process_openEHR_py-svg.png)
 
 Find an example with short explanatory README in /HowTo/Beispieldatensatz
 
 ---
 ### _Prerequisites:_
 Setup:
+- Check your python installation using e.g. in cmd with `python --version`. You may have to add path variables for python. In case `py --version` works, consider changing the command in the .bat-Files
 - You need an openEHR-Repo that supports the FLAT-Format and WebTemplates 
     - e.g. [EHRBase](https://github.com/ehrbase/ehrbase): A dockered version of the EHRBase can be found from different public sources.
-- You may also setup a NUM Portal to manage your data and projects more easily as well as making it accessible to researcher.
-    - NUM Portal offers FAIR-Search, Role-based User Management, etc.
 - You need a Template (Operational Template = .opt-File) for the data you want to store.
     - e.g. download a template from a Clinical Knowledge Manager (CKM)
-- You need a UTF-8 encoded CSV-File with your data.
+- You need CSV-File (we recommend ";" as delimiter) with your data.
 
 General Procedure:  
 1. Clone the FLAT-Loader-Repo 
-    1.1 Copy OPT and CSV to the Flat-Loader (/Input)  
-    1.2 Set correct Auth-Data and File-Names in config.ini  
+    1.1 Copy CSV to the Flat-Loader (/ETLProcess/Input) 
+    1.2 Copy OPT to OPTs-Folder (/OPTs)
+    1.3 Set correct Auth-Data and File-Names in config.ini  
 2. Generate Mapping (ETProcess/ManualTasks)   
 3. Fill the Mapping (see the WebTemplate of your  for Details)  
     3.1 Add missing Metadata to the CSV or in the Mapping-File  
@@ -61,6 +61,7 @@ Dependencies:
 - Project was developed and tested on Windows using Python 3.8.10 
 - For dependencies see [License and Dependencies](#license-and-dependencies)
 
+---
 ---
 ## Steps in more Detail
 ### Create a Mapping-Table:
