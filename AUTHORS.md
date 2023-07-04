@@ -12,8 +12,8 @@ Past:
 
 ## Other contributors
 
-Ordered alphabetically (by surname):
-
 * Lena Elgert
 * Bianca Frenzel
 * Kim Katrin Sommer
+* Philip Hufeland
+* Kristina Scheuermann
