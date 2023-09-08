@@ -19,8 +19,6 @@ The efforts are organized in three work groups, namely:
 
 TP1 includes data management aspects, openEHR-utilization and the openEHR_FLAT_Loader.
 
-##### Documentation:
-
 ## About openEHR and the ETL-Process
 OpenEHR is a technology framework for the handling of medical data in the form of Electronic Health Records. The main point of the openEHR-Approach is the differentiation between logical modeling (in forms of archetypes/templates) and the physical storage (based on item-identifiers that are used in the technical background of these templates).
 
@@ -42,13 +40,13 @@ Setup:
     - e.g. [EHRBase](https://github.com/ehrbase/ehrbase): A dockered version of the EHRBase can be found from different public sources.
 - You need a Template (Operational Template = .opt-File) for the data you want to store.
     - e.g. download a template from a Clinical Knowledge Manager (CKM)
-- You need CSV-File (we recommend ";" as delimiter) with your data.
+- You need a CSV-File (we recommend ";" as delimiter) with your data.
 
 General Procedure:  
-1. Clone the FLAT-Loader-Repo 
-    1.1 Copy CSV to the Flat-Loader (/ETLProcess/Input) 
-    1.2 Copy OPT to OPTs-Folder (/OPTs)
-    1.3 Set correct Auth-Data and File-Names in config.ini  
+1. Clone the FLAT-Loader-Repo  
+    1.1 Copy CSV to the Flat-Loader (/ETLProcess/Input)  
+    1.2 Copy OPT to OPTs-Folder (/OPTs)  
+    1.3 Set correct Auth-Data and File-Names in config.ini   
 2. Generate Mapping (ETProcess/ManualTasks)   
 3. Fill the Mapping (see the WebTemplate of your  for Details)  
     3.1 Add missing Metadata to the CSV or in the Mapping-File  
@@ -135,7 +133,6 @@ What to do if you need to map data fields that are not present in your source da
 ### 2. To build (and upload) Resources 
     
 Set Config-Variables: 
-
     - The config.ini-File allows you to select options 
         - `createehrs = 1` -> Tool will create EHRs in the repository 
             - This needs the names of the column(s) in the csv: `subjectidcolumn` and `subjectnamespacecolumn` or `ehrId`
@@ -150,28 +147,12 @@ Start the Tool:
 Enjoy the uploaded Compositions at your openEHR-Repository.
 
 ---
-### 3. Create an Example-Composition for a given Template
-Preparation:  
-    - Place your Template (.opt-File) in the Input-Folder under /OPT
-    - Edit the config.ini and at least set:
-        - templatename
-        - targetrepoadress  (Base adress of the openEHR-Server e.g. `http://141.5.100.199/ehrbase`)
-        - targetauthheader  (Base64 encode of "username:password")  
-
-Start the Tool:  
-    - Run Tool using the runFlatLoader.bat on Windows (otherwise run main.py)
-        - Run Example-Creation Task of the Tool by typing `3` and hit `Enter`
-
-Find and enjoy your Example-Composition:
-    - You will find the Compositions (FLAT and Canonical) in Directory "ManualTasks" named according to the Template Name.
-
----
 #### Typical Data CSV
 The source data needs to be provided in the form of a .csv-File.
 
 At least the file needs to contain the following columns:
-- Subject Id Column (concrete column-name specified in config.ini)
-- Subject Namespace Column (concrete column-name specified in config.ini)
+- Subject Id Column (column-name specified in config.ini)
+- Subject Namespace Column (column-name specified in config.ini)
 - ehrId Column (which might be empty when no EHRs exist yet)
 
 | subject-id-column | ehrId | subject_namespace | data-column1 | data-column2 | 
