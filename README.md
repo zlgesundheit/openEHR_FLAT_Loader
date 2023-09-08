@@ -87,6 +87,24 @@ Dependencies:
         - You can now map the `Items/Paths from the Template` to `Columns in your Data` by selecting CSV-Items from the Dropdown in Column B
         - On the Sheets "FLAT_Paths" and "CSV_Items" you find some additional information about both parts of the mapping
 
+---
+### 2. To build (and upload) Resources 
+    
+Set Config-Variables: 
+    - The config.ini-File allows you to select options 
+        - `createehrs = 1` -> Tool will create EHRs in the repository 
+            - This needs the names of the column(s) in the csv: `subjectidcolumn` and `subjectnamespacecolumn` or `ehrId`
+            - ehrIds for these entrys will be stored in column `ehrId` in the CSV
+        - `directupload = 1` -> Tool will upload the build resources for the corresponding `ehrId` in the csv
+    
+Start the Tool:  
+
+    - Run Tool using the runFlatLoader.bat on Windows (otherwise run main.py)
+        - Run Step 2 of the Tool by typing `2` and hit `Enter`
+
+Enjoy the uploaded Compositions at your openEHR-Repository.
+
+### FAQ and Hints:
 What to do if you need to map data fields that are not present in your source data?
 - Mandatory data fields are marked with "Pflichtfeld" in the Mapping-Table
 - openEHR-Compositions need to hold metadata that you shall add to your Data/.csv-File so you can map it
@@ -128,23 +146,6 @@ What to do if you need to map data fields that are not present in your source da
     - After adding the additional metadata to the Data/.csv-File re-run step 1 of the tool.
         - Note that the Mapping-Table-File in ManualTasks-Directory is overwritten when re-running.
         - You may duplicate the mapping before. (The old mapping will not include newly added .csv-Columns in the Dropdowns..)
-
----
-### 2. To build (and upload) Resources 
-    
-Set Config-Variables: 
-    - The config.ini-File allows you to select options 
-        - `createehrs = 1` -> Tool will create EHRs in the repository 
-            - This needs the names of the column(s) in the csv: `subjectidcolumn` and `subjectnamespacecolumn` or `ehrId`
-            - ehrIds for these entrys will be stored in column `ehrId` in the CSV
-        - `directupload = 1` -> Tool will upload the build resources for the corresponding `ehrId` in the csv
-    
-Start the Tool:  
-
-    - Run Tool using the runFlatLoader.bat on Windows (otherwise run main.py)
-        - Run Step 2 of the Tool by typing `2` and hit `Enter`
-
-Enjoy the uploaded Compositions at your openEHR-Repository.
 
 ---
 #### Typical Data CSV
