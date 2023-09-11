@@ -40,12 +40,16 @@ def main(webTemp, templateName):
     print ("PathExport is running:")
 
     pathArray = []
+    elements = []
     try:
         path = webTemp['tree']['id']
         pathIsMandatoryFlag = True 
 
         # Durchlaufe den Baum
-        pathArray = goLow(path, pathArray, pathIsMandatoryFlag, webTemp['tree']['children'])
+        pathArrayElements = goLow(path, pathArray, pathIsMandatoryFlag, webTemp['tree']['children'], elements)
+        pathArray = pathArrayElements[0]
+        elements = pathArrayElements[1]
+
 
         # Gib some Output
         print ( indent + "Anzahl extrahierter Pfade: " + str( len(pathArray) ) )
@@ -59,12 +63,12 @@ def main(webTemp, templateName):
         raise SystemExit
 
     print(indent + "Extracted FLAT-Paths from the WebTemplate")
-    return pathArray
+    return pathArray, elements
 
 ############################### Methods ###############################
 
 # Rekursiv den Baum durchlaufen
-def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
+def goLow(parentPath, pathArray, pathIsMandatoryFlag, children, elements):
     self = children
 
     for element in self:
@@ -83,7 +87,7 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
 
         # Bei weiteren 'children' tiefer gehen    
         if 'children' in element:
-            pathArray = goLow(suffixPath, pathArray, localMandatoryFlag, element['children'])
+            pathArray = goLow(suffixPath, pathArray, localMandatoryFlag, element['children'], elements)[0]
         
         # Falls Element Inputs hat oder weder Inputs noch Children, dann ist es ein Blatt
         elif 'inputs' in element or element['rmType'] == "CODE_PHRASE":
@@ -141,8 +145,9 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
                 path.suffixList = []         
 
             pathArray.append(path)
+            elements.append(element)
 
-    return pathArray
+    return pathArray, elements
 
 if __name__ == '__main__':
     main()
