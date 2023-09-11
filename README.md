@@ -105,9 +105,9 @@ Start the Tool:
 Enjoy the uploaded Compositions at your openEHR-Repository.
 
 ### FAQ and Hints:
-What to do if you need to map data fields that are not present in your source data?
+##### What to do if you need to map data fields that are not present in your source data?
+You will have to enrich your data with some needed metadata. About that please note:
 - Mandatory data fields are marked with "Pflichtfeld" in the Mapping-Table
-- openEHR-Compositions need to hold metadata that you shall add to your Data/.csv-File so you can map it
 - Common Metadata:
     - "<path>/composer|name": "jendrik.richter@med.uni-goettingen.de",
     - "<path>/language|code": "de",
@@ -115,10 +115,10 @@ What to do if you need to map data fields that are not present in your source da
     - "<path>/territory|code": "DE",
     - "<path>/territory|terminology": "ISO_3166-1"
 - Other Metadata:
-    - You can find terminologies like `openehr` in the HowTo-Folder or online. 
-        - The use of SNOMED CT and LOINC for fields with CODED_TEXTs should have been taken care of by the Template Modeller .
-        - The ETLer should just be able to use the information given in the template plus some additonal openEHR-Peculiarities.
-    - Example:
+    - You can find terminologies like `openehr` or ISO-ValueSets online. 
+    - Often you need values from LOINC or SNOMED.
+    - Find local-ValueSets in the WebTemplate!
+    - Examples:
         Category:
         - "<path>/category|value": "event"
         - "<path>/category|code": 433
@@ -133,19 +133,23 @@ What to do if you need to map data fields that are not present in your source da
         "<path>/encoding|code": "UTF-8",
         "<path>/encoding|terminology": "IANA_character-sets"
         - IANA character sets or the openEHR-Specification are pretty handy here -> find in HowTo-Folder or online
-    
-    - ATTENTION! In the ManualTasks-Directory there is a file called <Template-Name>_WebTemplate.json
-        - This file holds human-readable information about the structure of the Composition, it´s datatypes, CODE- and Value-Sets, Terminologies and more.
-        - Search for information in the WebTemplate if you feel you are missing vital information  
-          about missing metadata or data formats in the columns you have to add in your Data/.csv-File
-    - For Questions about terminology you may contact the modellers of your specific openEHR-Template. 
 
-    - Please note, that some elements have some metadata fields that only need to be present if the element itself is present.
-        - Those are marked as "Bedingt Pflichtelement" in the Mapping-Table
+##### I don´t have any information about the OPT. Where can i find some helpful information?
+- In the ManualTasks-Directory there is a file called <Template-Name>_WebTemplate.json
+    - This file holds human-readable information about the structure of the Composition, it´s datatypes, CODE- and Value-Sets, Terminologies and more.
+    - Search for information in the WebTemplate if you feel you are missing vital information about missing metadata or data formats in the columns you have to add in your Data/.csv-File
+- If you have access to the Clinical Knowledge Manager the OPT is coming from, you can also visit the CKM-Website and have a look at additional information about your Template.
+- For Questions about terminology you may contact the modellers of your specific openEHR-Template. 
 
-    - After adding the additional metadata to the Data/.csv-File re-run step 1 of the tool.
-        - Note that the Mapping-Table-File in ManualTasks-Directory is overwritten when re-running.
-        - You may duplicate the mapping before. (The old mapping will not include newly added .csv-Columns in the Dropdowns..)
+##### Why does the server reply with 400:Bad Request and indicates attribute values are missing?
+- Please note, that some elements have some metadata fields that only need to be present if the element itself is present.
+    - Those are marked as "Bedingt Pflichtelement" (conditionally mandatory) in the Mapping-Table
+    - E.g. if you map an encoding and language for a data field, but the data field is not present for a specific patient the metadata might be present, but the attriibute/data itself is missing. In this case you may add a column that only holds encoding (code+terminology) and language (code+terminology) information **IF** the data is present for that data row/patient.
+
+##### I did a lot of work adding mapping information, but after running step 1 again the mapping is empty!?
+- After adding the additional metadata to the Data/.csv-File re-run step 1 of the tool (to have new columns in the dropdown). You may add Column Names manually, if you don´t care about having the column names in the dropdown selector.
+    - Note that the Mapping-Table-File in ManualTasks-Directory is overwritten when re-running.
+    - You may duplicate the mapping before. (The old mapping will not include newly added .csv-Columns in the Dropdowns..)
 
 ---
 #### Typical Data CSV
