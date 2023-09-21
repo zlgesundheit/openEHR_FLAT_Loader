@@ -75,7 +75,7 @@ def readCSVasDataFrame(inputCSV):
     guessed_encoding = guessCSVencoding(csvPath)
     if guessed_encoding == 'windows-1255':
         guessed_encoding = "ANSI"
-
+    print(f"encoding is {guessed_encoding} for file with the path {csvPath}")
     # Read CSV-File  
     try: 
         

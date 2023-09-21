@@ -31,6 +31,7 @@ import os
 # Third party imports
 # Local application imports
 from Scripts import pathObjectClass
+from Scripts import util
 
 indent = "\t"
 
@@ -148,6 +149,25 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children, elements):
             elements.append(element)
 
     return pathArray, elements
+
+def map_aql_path_and_name_of_elmnt(web_temp, aql_path_of_element):
+    for eintrag in web_temp:
+        if isinstance(eintrag, dict):
+            for key, value in eintrag.items():
+                if key == "aqlPath" and aql_path_of_element == util.remove_and_statements(value):
+                    return eintrag.get("name")
+                elif isinstance(value, list):
+                    result = map_aql_path_and_name_of_elmnt(value, aql_path_of_element)
+                    if result:
+                        return result
+                elif isinstance(value, dict):
+                    result = map_aql_path_and_name_of_elmnt([value], aql_path_of_element)
+                    if result:
+                        return result
+    return None
+
+
+
 
 if __name__ == '__main__':
     main()

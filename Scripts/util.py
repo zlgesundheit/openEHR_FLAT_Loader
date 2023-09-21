@@ -8,27 +8,97 @@
 
 import os.path
 import sys
+import re
 import requests
 import traceback
+
+from Scripts import handleWebTemplate
 
 import json
 import csv
 import pandas as pd
 
-def storeRespAsCSV(workdir, subfolder, resp, filename):
+def find_quantity_value(obj):
+    # Check if obj is a dictionary
+    if isinstance(obj, dict):
+        # Check if the dictionary has "_type" key set to "DV_QUANTITY" and contains both "magnitude" and "units" keys
+        if "_type" in obj and obj["_type"] == "DV_QUANTITY" and "magnitude" in obj and "units" in obj:
+            # Return the combination of "magnitude" and "units"
+            return obj["magnitude"], obj["units"]
+    return None
+
+def find_named_value(obj):
+    # Check if obj is a dictionary
+    if isinstance(obj, dict):
+        # Iterate through key-value pairs in the dictionary
+        for key, value in obj.items():
+            # Check if the current key is "value" or "name"
+            if key == "value" or key == "name":
+                # If the key is "value" or "name," return the associated value
+                return value
+            # If the value is a dictionary or a list, recursively call the function
+            elif isinstance(value, (dict, list)):
+                result = find_named_value(value)
+                if result is not None:
+                    return result
+    return None
+
+def find_value(obj):
+    # Check if obj is a dictionary
+    if isinstance(obj, dict):
+        # Call find_quantity_value to check for DV_QUANTITY and return its value
+        quantity_value = find_quantity_value(obj)
+        if quantity_value is not None:
+            return quantity_value
+        # Call find_named_value to search for "value" or "name" and return its value
+        named_value = find_named_value(obj)
+        if named_value is not None:
+            return named_value
+    # Check if obj is a list
+    elif isinstance(obj, list):
+        # Iterate through list items and recursively call the function
+        for item in obj:
+            result = find_value(item)
+            if result is not None:
+                return result
+    # If no matching values are found, return None to indicate that the value was not found
+    return None
+
+
+
+def process_rows(all_compositions_as_list, column_names):
+    all_compositions_as_df = pd.DataFrame(all_compositions_as_list, columns=column_names)
+    for index, composition in all_compositions_as_df.iterrows():
+        for col in composition.index:
+            if isinstance(composition[col], dict):
+                value = find_value(composition[col])
+                if value is not None:
+                    if isinstance(value, tuple):
+                        all_compositions_as_df.rename(columns={col: f"{col} (in {value[1]})"}, inplace=True)
+                        composition[col] = value[0]
+                    else:
+                        composition[col] = value
+    return all_compositions_as_df
+
+def storeRespAsCSV(workdir, subfolder, resp, filename, web_temp_elmnts):
     # Get Lists of Column-Names and Rows
     column_names = []
     for elmnt in resp.get('columns'):
-        column_names.append((elmnt['path']))
+        name_elmnt_webtemplate = handleWebTemplate.map_aql_path_and_name_of_elmnt(web_temp_elmnts, elmnt['path'])
+        column_names.append(name_elmnt_webtemplate)
+        if elmnt['path'] == "/content[openEHR-EHR-SECTION.adhoc.v1]/items[openEHR-EHR-EVALUATION.absence.v2]/language":
+            pass
 
     rows = resp.get('rows')
-
-    # Create Pandas DF from Lists
-    df = pd.DataFrame(rows, columns=column_names)
+    processed_rows = process_rows(rows, column_names)
 
     # Store DF as CSV
-    df.to_csv(os.path.join(workdir, subfolder, filename), encoding="utf-8", index = False, quoting=csv.QUOTE_ALL)
-    print(f"Stored File {filename} in Folder csv_input")
+    path_to_store = os.path.join(workdir, subfolder)
+    if not os.path.exists(path_to_store):
+        print(f"Create Folder {path_to_store}")
+        os.makedirs(path_to_store)
+    processed_rows.to_csv(os.path.join(path_to_store, filename), encoding="utf-8", index = False, quoting=csv.QUOTE_ALL, sep=";")
+    print(f"Stored File {filename} in Folder {path_to_store}")
 
 def sendAqlRequest(ehrUrl, authHeader, limit, aqlQuery):
 
@@ -97,3 +167,9 @@ def load_env_file(dotenv_path, override=False):
     else:
         for key, value in dotenv_vars.items():
             os.environ.setdefault(key, value)
+
+def remove_and_statements(input_string):
+    # Regex-Pattern zum Ersetzen von " and ..." durch "]"
+    pattern = r' and [^\]]*\''
+    adjusted_string = re.sub(pattern, "",input_string)
+    return adjusted_string
