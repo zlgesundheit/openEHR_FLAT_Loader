@@ -28,6 +28,7 @@ def find_quantity_value(obj):
     return None
 
 def find_named_value(obj):
+    """TODO: Check what is meant by 'named'-value"""
     # Check if obj is a dictionary
     if isinstance(obj, dict):
         # Iterate through key-value pairs in the dictionary
@@ -67,6 +68,7 @@ def find_value(obj):
 
 
 def process_rows(all_compositions_as_list, column_names):
+    '''TODO: Rename function and variables and comment'''
     all_compositions_as_df = pd.DataFrame(all_compositions_as_list, columns=column_names)
     for index, composition in all_compositions_as_df.iterrows():
         for col in composition.index:
@@ -86,8 +88,6 @@ def storeRespAsCSV(workdir, subfolder, resp, filename, web_temp_elmnts):
     for elmnt in resp.get('columns'):
         name_elmnt_webtemplate = handleWebTemplate.map_aql_path_and_name_of_elmnt(web_temp_elmnts, elmnt['path'])
         column_names.append(name_elmnt_webtemplate)
-        if elmnt['path'] == "/content[openEHR-EHR-SECTION.adhoc.v1]/items[openEHR-EHR-EVALUATION.absence.v2]/language":
-            pass
 
     rows = resp.get('rows')
     processed_rows = process_rows(rows, column_names)

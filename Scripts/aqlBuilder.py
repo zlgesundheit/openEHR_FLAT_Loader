@@ -14,7 +14,7 @@ print(config.templateName)
 webTemp = handleOPT.main(config,manualTaskDir,OPTDirPath)
 
 # Extrahiere Pfade in Array von Pfadobjekten
-web_temp_elmnts = handleWebTemplate.main(webTemp, config.templateName)[1]
+web_temp_elmnts = handleWebTemplate.main(webTemp, config.templateName)[1] # TODO: return of andleWebTemplate.main() is array, little bit ugly
 
 aql_path_values = [d["aqlPath"] for d in web_temp_elmnts]
 
