@@ -12,7 +12,7 @@ import re
 import requests
 import traceback
 
-from Scripts import handleWebTemplate
+from Scripts import handleWebTemplate, handleConfig
 
 import json
 import csv
@@ -28,13 +28,12 @@ def find_quantity_value(obj):
     return None
 
 def find_named_value(obj):
-    """TODO: Check what is meant by 'named'-value"""
     # Check if obj is a dictionary
     if isinstance(obj, dict):
         # Iterate through key-value pairs in the dictionary
         for key, value in obj.items():
-            # Check if the current key is "value" or "name"
-            if key == "value" or key == "name":
+            # Check if the current key is "value" or "name" or "magnitude"
+            if key == "value" or key == "name" or key == "magnitude":
                 # If the key is "value" or "name," return the associated value
                 return value
             # If the value is a dictionary or a list, recursively call the function
@@ -173,3 +172,10 @@ def remove_and_statements(input_string):
     pattern = r' and [^\]]*\''
     adjusted_string = re.sub(pattern, "",input_string)
     return adjusted_string
+
+def get_templates_from_server(config: handleConfig.config) -> list:
+    """Querys all templates distinct from the given server in the config, which contain a compositions"""
+    aql_string = "SELECT DISTINCT c/archetype_details/template_id/value as TemplateID FROM EHR e CONTAINS COMPOSITION c"
+    all_templates = sendAqlRequest(config.targetAdress, config.targetAuthHeader, "9999999999999", aql_string)
+    flat_list_all_templates = [item for sublist in all_templates["rows"] for item in sublist]
+    return flat_list_all_templates

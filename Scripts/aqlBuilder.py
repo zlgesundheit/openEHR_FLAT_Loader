@@ -1,32 +1,22 @@
 import os
-from Scripts import handleConfig, handleOPT, handleWebTemplate
-import requests
+from Scripts import handleOPT, handleWebTemplate
 from Scripts import util
 
 def main(config,manualTaskDir):
-    #os.chdir("..")
     workdir = os.getcwd()
 
-    #config = handleConfig.config()
-    #OPTDirPath      = os.path.join(workdir, 'OPTs')
-    #manualTaskDir   = os.path.join(workdir, 'ETLProcess', 'ManualTasks', config.templateName)
-    print(config.templateName)
+    all_templates = util.get_templates_from_server(config)
+    print("Please select one of the given templates to which you want to have all compositions from the server.")
 
-    ### User muss Template-Namen angeben (in Config oder TODO lieber abfragen)
-    ### TODO User startet Step_x.bat  (Vorher in config: serveradresse + authinfo)
-    ### TODO Dann: Vom angegebenen Server werden alle Templates abgefragt und der Nutzer 
-    ### kann aus einer Liste auswählen zu welchem template er Daten abfragen will.
-    ### Eingabe in config speichern oder direkt verwenden
+    print_all_templates(all_templates)
+    template_name = input("Template: ")
+    config.templateName = template_name
+
     webTemp = handleOPT.get_webtemplate(config,manualTaskDir)
 
     # Extrahiere Pfade in Array von Pfadobjekten
-    web_temp_elmnts = handleWebTemplate.main(webTemp, config.templateName) # TODO: return of andleWebTemplate.main() is array, little bit ugly
+    web_temp_elmnts = handleWebTemplate.main(webTemp, config.templateName)
 
-    ### TODO Muss man das nochmal anfassen
-    ### TODO Hier könnten die bestehenden pfadobjekte um ein "aqlPfad" attribut erweitert werden -> erledigt
-    ### -> das müsste IN der handlewebtemplate entsprechend beim auslesen hinzugefügt werden -> erledigt
-    ### Das hieße, dass man auch nur die AQL-Pfade hat, von Elementen wo Daten drin stehen, z.B. nicht von CLustern, o.ä.
-    ### TODO Das kann auch hintenraus Filter-Arbeit einsparen -> nochmal abgleichen wie das im openehr2csv code derzeit läuft
     aql_path_values = [d.aql_path for d in web_temp_elmnts]
 
 
@@ -48,3 +38,9 @@ def generate_aql(aql_path_values):
     adjusted_aql_string = util.remove_and_statements(aql_string)
 
     return adjusted_aql_string
+
+def print_all_templates(all_templates: list) -> None:
+    """Prints each entry of a list of templates in the cli, so that each entry is on a single line."""
+    for template in all_templates:
+        print(template)
+
