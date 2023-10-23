@@ -46,7 +46,7 @@ def main():
 
     # Run Scripts for the argument that was passed
     if (len(sys.argv) <= 1):
-        print("Use arguments '-generateMapping', '-buildAndUploadCompositions' or '-generateExamples'.")
+        print("Use arguments '-generateMapping', '-buildAndUploadCompositions' or '-generateExamples'. or '-openehr2csv'")
         raise SystemExit
     else:
         print("Used Argument: " + sys.argv[1])

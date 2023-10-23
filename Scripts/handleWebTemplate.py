@@ -41,16 +41,12 @@ def main(webTemp, templateName):
     print ("PathExport is running:")
 
     pathArray = []
-    elements = []
     try:
         path = webTemp['tree']['id']
         pathIsMandatoryFlag = True 
 
         # Durchlaufe den Baum
-        pathArrayElements = goLow(path, pathArray, pathIsMandatoryFlag, webTemp['tree']['children'], elements)
-        pathArray = pathArrayElements[0]
-        elements = pathArrayElements[1]
-
+        pathArray = goLow(path, pathArray, pathIsMandatoryFlag, webTemp['tree']['children'])
 
         # Gib some Output
         print ( indent + "Anzahl extrahierter Pfade: " + str( len(pathArray) ) )
@@ -64,12 +60,12 @@ def main(webTemp, templateName):
         raise SystemExit
 
     print(indent + "Extracted FLAT-Paths from the WebTemplate")
-    return pathArray, elements
+    return pathArray
 
 ############################### Methods ###############################
 
 # Rekursiv den Baum durchlaufen
-def goLow(parentPath, pathArray, pathIsMandatoryFlag, children, elements):
+def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
     self = children
 
     for element in self:
@@ -88,7 +84,7 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children, elements):
 
         # Bei weiteren 'children' tiefer gehen    
         if 'children' in element:
-            pathArray = goLow(suffixPath, pathArray, localMandatoryFlag, element['children'], elements)[0]
+            pathArray = goLow(suffixPath, pathArray, localMandatoryFlag, element['children'])
         
         # Falls Element Inputs hat oder weder Inputs noch Children, dann ist es ein Blatt
         elif 'inputs' in element or element['rmType'] == "CODE_PHRASE":
@@ -97,6 +93,7 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children, elements):
 
             path.id = element['id']
             path.pathString = suffixPath
+            path.aql_path = element['aqlPath']
             if 'inputs' in element: # Bei CODE_PHRASE keine inputs -> 2 Suffixe mit Text
                 path.inputs = element['inputs']
             path.rmType = element['rmType']
@@ -146,24 +143,15 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children, elements):
                 path.suffixList = []         
 
             pathArray.append(path)
-            elements.append(element)
 
-    return pathArray, elements
+    return pathArray
 
-def map_aql_path_and_name_of_elmnt(web_temp, aql_path_of_element):
-    for eintrag in web_temp:
-        if isinstance(eintrag, dict):
-            for key, value in eintrag.items():
-                if key == "aqlPath" and aql_path_of_element == util.remove_and_statements(value):
-                    return eintrag.get("name")
-                elif isinstance(value, list):
-                    result = map_aql_path_and_name_of_elmnt(value, aql_path_of_element)
-                    if result:
-                        return result
-                elif isinstance(value, dict):
-                    result = map_aql_path_and_name_of_elmnt([value], aql_path_of_element)
-                    if result:
-                        return result
+def map_aql_path_and_id_of_path_object(list_of_path_objects, aql_path_of_element):
+    for path_object in list_of_path_objects:
+        assert isinstance(path_object, pathObjectClass.pathObject), ("Make sure you pass a list of path_objects in "
+                                                          "map_aql_path_and_id_of_path_object")
+        if util.remove_and_statements(path_object.aql_path)  == aql_path_of_element:
+            return path_object.id
     return None
 
 

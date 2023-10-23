@@ -86,7 +86,7 @@ def storeRespAsCSV(workdir, subfolder, resp, filename, web_temp_elmnts):
     # Get Lists of Column-Names and Rows
     column_names = []
     for elmnt in resp.get('columns'):
-        name_elmnt_webtemplate = handleWebTemplate.map_aql_path_and_name_of_elmnt(web_temp_elmnts, elmnt['path'])
+        name_elmnt_webtemplate = handleWebTemplate.map_aql_path_and_id_of_path_object(web_temp_elmnts, elmnt['path'])
         column_names.append(name_elmnt_webtemplate)
 
     rows = resp.get('rows')
