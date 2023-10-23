@@ -19,8 +19,6 @@ The efforts are organized in three work groups, namely:
 
 TP1 includes data management aspects, openEHR-utilization and the openEHR_FLAT_Loader.
 
-##### Documentation:
-
 ## About openEHR and the ETL-Process
 OpenEHR is a technology framework for the handling of medical data in the form of Electronic Health Records. The main point of the openEHR-Approach is the differentiation between logical modeling (in forms of archetypes/templates) and the physical storage (based on item-identifiers that are used in the technical background of these templates).
 
@@ -42,13 +40,13 @@ Setup:
     - e.g. [EHRBase](https://github.com/ehrbase/ehrbase): A dockered version of the EHRBase can be found from different public sources.
 - You need a Template (Operational Template = .opt-File) for the data you want to store.
     - e.g. download a template from a Clinical Knowledge Manager (CKM)
-- You need CSV-File (we recommend ";" as delimiter) with your data.
+- You need a CSV-File (we recommend ";" as delimiter) with your data.
 
 General Procedure:  
-1. Clone the FLAT-Loader-Repo 
-    1.1 Copy CSV to the Flat-Loader (/ETLProcess/Input) 
-    1.2 Copy OPT to OPTs-Folder (/OPTs)
-    1.3 Set correct Auth-Data and File-Names in config.ini  
+1. Clone the FLAT-Loader-Repo  
+    1.1 Copy CSV to the Flat-Loader (/ETLProcess/Input)  
+    1.2 Copy OPT to OPTs-Folder (/OPTs)  
+    1.3 Set correct Auth-Data and File-Names in config.ini   
 2. Generate Mapping (ETProcess/ManualTasks)   
 3. Fill the Mapping (see the WebTemplate of your  for Details)  
     3.1 Add missing Metadata to the CSV or in the Mapping-File  
@@ -89,9 +87,27 @@ Dependencies:
         - You can now map the `Items/Paths from the Template` to `Columns in your Data` by selecting CSV-Items from the Dropdown in Column B
         - On the Sheets "FLAT_Paths" and "CSV_Items" you find some additional information about both parts of the mapping
 
-What to do if you need to map data fields that are not present in your source data?
+---
+### 2. To build (and upload) Resources 
+    
+Set Config-Variables: 
+    - The config.ini-File allows you to select options 
+        - `createehrs = 1` -> Tool will create EHRs in the repository 
+            - This needs the names of the column(s) in the csv: `subjectidcolumn` and `subjectnamespacecolumn` or `ehrId`
+            - ehrIds for these entrys will be stored in column `ehrId` in the CSV
+        - `directupload = 1` -> Tool will upload the build resources for the corresponding `ehrId` in the csv
+    
+Start the Tool:  
+
+    - Run Tool using the runFlatLoader.bat on Windows (otherwise run main.py)
+        - Run Step 2 of the Tool by typing `2` and hit `Enter`
+
+Enjoy the uploaded Compositions at your openEHR-Repository.
+
+### FAQ and Hints:
+##### What to do if you need to map data fields that are not present in your source data?
+You will have to enrich your data with some needed metadata. About that please note:
 - Mandatory data fields are marked with "Pflichtfeld" in the Mapping-Table
-- openEHR-Compositions need to hold metadata that you shall add to your Data/.csv-File so you can map it
 - Common Metadata:
     - "<path>/composer|name": "jendrik.richter@med.uni-goettingen.de",
     - "<path>/language|code": "de",
@@ -99,10 +115,10 @@ What to do if you need to map data fields that are not present in your source da
     - "<path>/territory|code": "DE",
     - "<path>/territory|terminology": "ISO_3166-1"
 - Other Metadata:
-    - You can find terminologies like `openehr` in the HowTo-Folder or online. 
-        - The use of SNOMED CT and LOINC for fields with CODED_TEXTs should have been taken care of by the Template Modeller .
-        - The ETLer should just be able to use the information given in the template plus some additonal openEHR-Peculiarities.
-    - Example:
+    - You can find terminologies like `openehr` or ISO-ValueSets online. 
+    - Often you need values from LOINC or SNOMED.
+    - Find local-ValueSets in the WebTemplate!
+    - Examples:
         Category:
         - "<path>/category|value": "event"
         - "<path>/category|code": 433
@@ -117,61 +133,31 @@ What to do if you need to map data fields that are not present in your source da
         "<path>/encoding|code": "UTF-8",
         "<path>/encoding|terminology": "IANA_character-sets"
         - IANA character sets or the openEHR-Specification are pretty handy here -> find in HowTo-Folder or online
-    
-    - ATTENTION! In the ManualTasks-Directory there is a file called <Template-Name>_WebTemplate.json
-        - This file holds human-readable information about the structure of the Composition, it´s datatypes, CODE- and Value-Sets, Terminologies and more.
-        - Search for information in the WebTemplate if you feel you are missing vital information  
-          about missing metadata or data formats in the columns you have to add in your Data/.csv-File
-    - For Questions about terminology you may contact the modellers of your specific openEHR-Template. 
 
-    - Please note, that some elements have some metadata fields that only need to be present if the element itself is present.
-        - Those are marked as "Bedingt Pflichtelement" in the Mapping-Table
+##### I don´t have any information about the OPT. Where can i find some helpful information?
+- In the ManualTasks-Directory there is a file called <Template-Name>_WebTemplate.json
+    - This file holds human-readable information about the structure of the Composition, it´s datatypes, CODE- and Value-Sets, Terminologies and more.
+    - Search for information in the WebTemplate if you feel you are missing vital information about missing metadata or data formats in the columns you have to add in your Data/.csv-File
+- If you have access to the Clinical Knowledge Manager the OPT is coming from, you can also visit the CKM-Website and have a look at additional information about your Template.
+- For Questions about terminology you may contact the modellers of your specific openEHR-Template. 
 
-    - After adding the additional metadata to the Data/.csv-File re-run step 1 of the tool.
-        - Note that the Mapping-Table-File in ManualTasks-Directory is overwritten when re-running.
-        - You may duplicate the mapping before. (The old mapping will not include newly added .csv-Columns in the Dropdowns..)
+##### Why does the server reply with 400:Bad Request and indicates attribute values are missing?
+- Please note, that some elements have some metadata fields that only need to be present if the element itself is present.
+    - Those are marked as "Bedingt Pflichtelement" (conditionally mandatory) in the Mapping-Table
+    - E.g. if you map an encoding and language for a data field, but the data field is not present for a specific patient the metadata might be present, but the attriibute/data itself is missing. In this case you may add a column that only holds encoding (code+terminology) and language (code+terminology) information **IF** the data is present for that data row/patient.
 
----
-### 2. To build (and upload) Resources 
-    
-Set Config-Variables: 
-
-    - The config.ini-File allows you to select options 
-        - `createehrs = 1` -> Tool will create EHRs in the repository 
-            - This needs the names of the column(s) in the csv: `subjectidcolumn` and `subjectnamespacecolumn` or `ehrId`
-            - ehrIds for these entrys will be stored in column `ehrId` in the CSV
-        - `directupload = 1` -> Tool will upload the build resources for the corresponding `ehrId` in the csv
-    
-Start the Tool:  
-
-    - Run Tool using the runFlatLoader.bat on Windows (otherwise run main.py)
-        - Run Step 2 of the Tool by typing `2` and hit `Enter`
-
-Enjoy the uploaded Compositions at your openEHR-Repository.
-
----
-### 3. Create an Example-Composition for a given Template
-Preparation:  
-    - Place your Template (.opt-File) in the Input-Folder under /OPT
-    - Edit the config.ini and at least set:
-        - templatename
-        - targetrepoadress  (Base adress of the openEHR-Server e.g. `http://141.5.100.199/ehrbase`)
-        - targetauthheader  (Base64 encode of "username:password")  
-
-Start the Tool:  
-    - Run Tool using the runFlatLoader.bat on Windows (otherwise run main.py)
-        - Run Example-Creation Task of the Tool by typing `3` and hit `Enter`
-
-Find and enjoy your Example-Composition:
-    - You will find the Compositions (FLAT and Canonical) in Directory "ManualTasks" named according to the Template Name.
+##### I did a lot of work adding mapping information, but after running step 1 again the mapping is empty!?
+- After adding the additional metadata to the Data/.csv-File re-run step 1 of the tool (to have new columns in the dropdown). You may add Column Names manually, if you don´t care about having the column names in the dropdown selector.
+    - Note that the Mapping-Table-File in ManualTasks-Directory is overwritten when re-running.
+    - You may duplicate the mapping before. (The old mapping will not include newly added .csv-Columns in the Dropdowns..)
 
 ---
 #### Typical Data CSV
 The source data needs to be provided in the form of a .csv-File.
 
 At least the file needs to contain the following columns:
-- Subject Id Column (concrete column-name specified in config.ini)
-- Subject Namespace Column (concrete column-name specified in config.ini)
+- Subject Id Column (column-name specified in config.ini)
+- Subject Namespace Column (column-name specified in config.ini)
 - ehrId Column (which might be empty when no EHRs exist yet)
 
 | subject-id-column | ehrId | subject_namespace | data-column1 | data-column2 | 
