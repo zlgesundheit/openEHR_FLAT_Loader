@@ -1,3 +1,11 @@
+# Context: Use Case Cardiology from HiGHmed
+# Environment: Better Repo (Only relevant for AQL-Syntax)
+#
+# Developed and tested with Python 3.10.4
+#
+# Lennart Graf (UMG)
+#########################################################################
+
 import os
 from Scripts import handleOPT, handleWebTemplate
 from Scripts import util

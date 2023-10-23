@@ -3,7 +3,7 @@
 #
 # Developed and tested with Python 3.10.4
 #
-# Jendrik Richter (UMG)
+# Jendrik Richter and Lennart Graf (UMG)
 #########################################################################
 
 import os.path
