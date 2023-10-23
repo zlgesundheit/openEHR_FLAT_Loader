@@ -31,6 +31,7 @@ import os
 # Third party imports
 # Local application imports
 from Scripts import pathObjectClass
+from Scripts import util
 
 indent = "\t"
 
@@ -92,6 +93,7 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
 
             path.id = element['id']
             path.pathString = suffixPath
+            path.aql_path = element['aqlPath']
             if 'inputs' in element: # Bei CODE_PHRASE keine inputs -> 2 Suffixe mit Text
                 path.inputs = element['inputs']
             path.rmType = element['rmType']
@@ -143,6 +145,17 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
             pathArray.append(path)
 
     return pathArray
+
+def map_aql_path_and_id_of_path_object(list_of_path_objects, aql_path_of_element):
+    for path_object in list_of_path_objects:
+        assert isinstance(path_object, pathObjectClass.pathObject), ("Make sure you pass a list of path_objects in "
+                                                          "map_aql_path_and_id_of_path_object")
+        if util.remove_and_statements(path_object.aql_path)  == aql_path_of_element:
+            return path_object.id
+    return None
+
+
+
 
 if __name__ == '__main__':
     main()

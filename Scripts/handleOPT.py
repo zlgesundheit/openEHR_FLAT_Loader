@@ -28,6 +28,14 @@ def main(config, manualTaskDir, OPTDirPath):
     # Upload OPT to server
     uploadOPT(config.templateName, optFile, config.targetAdress, config.targetopenEHRAPIadress, config.targetAuthHeader)
 
+    webTemp = get_webtemplate(config, manualTaskDir)
+
+    print (indent + "OPT exists at server and WebTemplate has been downloaded")
+    return webTemp
+
+############################### Methods ###############################
+
+def get_webtemplate(config, manualTaskDir):
     # Query
     json_resp = queryWebtemplate(config.templateName, config.targetAdress, config.targetflatAPIadress, config.targetAuthHeader)
 
@@ -38,10 +46,7 @@ def main(config, manualTaskDir, OPTDirPath):
     # Save WebTemplate to Manual Tasks Directory because it is so damn important for the mapping task
     storeWebTemplate(manualTaskDir, config.templateName, webTemp)
 
-    print (indent + "OPT exists at server and WebTemplate has been downloaded")
     return webTemp
-
-############################### Methods ###############################
 
 def readOPTfromInput(OPTDirPath, templateName):
     """Read File with specific name from OPT-Folder"""

@@ -20,6 +20,7 @@ __pycache__
 /Scripts/__pycache__/
 config.ini
 /config.ini
+/compositions_as_csvs
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

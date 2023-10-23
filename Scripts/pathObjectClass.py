@@ -15,7 +15,8 @@ class pathObject:
     pathString:str = None
     maxIndexNumber:int = None
     rmType:str = None
-    suffixList:list = None 
+    suffixList:list = None
+    aql_path: str = None
 
     hasSuffix:bool = None
     hasIndex:bool = None

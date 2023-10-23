@@ -24,6 +24,7 @@ from Scripts import handleWebTemplate
 from Scripts import buildMapping
 from Scripts import handleUpload
 from Scripts import buildExampleComp
+from Scripts import aqlBuilder
 
 #Init Config-Object
 config = handleConfig.config()
@@ -45,7 +46,7 @@ def main():
 
     # Run Scripts for the argument that was passed
     if (len(sys.argv) <= 1):
-        print("Use arguments '-generateMapping', '-buildAndUploadCompositions' or '-generateExamples'.")
+        print("Use arguments '-generateMapping', '-buildAndUploadCompositions' or '-generateExamples'. or '-openehr2csv'")
         raise SystemExit
     else:
         print("Used Argument: " + sys.argv[1])
@@ -63,6 +64,9 @@ def main():
     # Argument: -generateExamples
     elif (sys.argv[1] == '-generateExamples'):
         generateExamples()
+    # Argument: openehr2csv
+    elif (sys.argv[1] == '-openehr2csv'):
+        openehr2csv()
     # Terminate
 
 ############################### Methods ###############################
@@ -121,6 +125,9 @@ def buildAndUploadCompositions():
         print ("Direct Upload is disabled in Config.ini")
         pass
     
+def openehr2csv():
+    aqlBuilder.main(config,manualTaskDir)
+
 def generateExamples():
     """ Beispiele werden generiert, wenn die Pfade aus dem WebTemplate ausgelesen werden. Zu jedem Pfad wird abhängig vom Datentyp/rmType ein Beispielwert erzeugt.
     Danach kann also zu jedem Pfad im Pfad-Dict nicht nur der Pfad (pathString) sondern auch Beispiele abgerufen werden (exampleValueDict). 
