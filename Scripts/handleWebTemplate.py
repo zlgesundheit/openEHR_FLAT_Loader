@@ -38,6 +38,15 @@ indent = "\t"
 ############################### Main ###############################
 
 def main(webTemp, templateName):
+    """
+
+    Args:
+      webTemp: param templateName:
+      templateName: 
+
+    Returns:
+
+    """
     print ("PathExport is running:")
 
     pathArray = []
@@ -66,6 +75,17 @@ def main(webTemp, templateName):
 
 # Rekursiv den Baum durchlaufen
 def traverse_tree_recursive(parentPath, pathArray, pathIsMandatoryFlag, children):
+    """
+
+    Args:
+      parentPath: param pathArray:
+      pathIsMandatoryFlag: param children:
+      pathArray: 
+      children: 
+
+    Returns:
+
+    """
     self = children
 
     for element in self:
@@ -147,6 +167,15 @@ def traverse_tree_recursive(parentPath, pathArray, pathIsMandatoryFlag, children
     return pathArray
 
 def map_aql_path_and_id_of_path_object(list_of_path_objects, aql_path_of_element):
+    """
+
+    Args:
+      list_of_path_objects: param aql_path_of_element:
+      aql_path_of_element: 
+
+    Returns:
+
+    """
     for path_object in list_of_path_objects:
         assert isinstance(path_object, pathObjectClass.pathObject), ("Make sure you pass a list of path_objects in "
                                                           "map_aql_path_and_id_of_path_object")

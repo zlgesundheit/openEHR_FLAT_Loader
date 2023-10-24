@@ -39,12 +39,21 @@ from numpy import float32
 # Local application imports
 
 class exampleGenerator:
+    """ """
     exampleValueDict:dict 
 
     def __init__(self):
         pass
 
 def create_example_value_dict(self, value):
+    """
+
+    Args:
+      value: 
+
+    Returns:
+
+    """
     example_value_dict = {}
     if value == "DV_TEXT":
         if hasattr(self,'inputs'):
@@ -147,6 +156,16 @@ def create_example_value_dict(self, value):
     return example_value_dict
 
 def set_boundary(boundary, operator, changer):
+    """
+
+    Args:
+      boundary: param operator:
+      changer: 
+      operator: 
+
+    Returns:
+
+    """
     final_boundary = None
     if      operator == "=" or operator == "<=" or operator == ">=": final_boundary = boundary
     elif    operator == ">": final_boundary = boundary + changer
@@ -154,6 +173,14 @@ def set_boundary(boundary, operator, changer):
     return final_boundary
 
 def get_numbertype_format(number_type):
+    """
+
+    Args:
+      number_type: 
+
+    Returns:
+
+    """
     if   number_type == "INTEGER":  changer = int(1) # Integer
     elif number_type == "DECIMAL":  changer = Decimal(1.1) # Double
     elif number_type == "REAL":     changer = float32(1.01)  # Single Precision Floating-Point needed (32-bit)
@@ -165,6 +192,7 @@ def get_numbertype_format(number_type):
     return changer
 
 def get_example_ico_base64encoded():
+    """ """
     workdir = os.getcwd()
     filepath = os.path.join(workdir, "0_Docs", "DV_Multimedia_Example", "icon_base64_encoded.txt")
     f = open( filepath, "r")
@@ -172,6 +200,15 @@ def get_example_ico_base64encoded():
     return base64_encoded_example_ico
 
 def get_rand_number_with_validationcheck(entry, changer):
+    """
+
+    Args:
+      entry: param changer:
+      changer: 
+
+    Returns:
+
+    """
     if 'validation' in entry:
         if 'min' in entry['validation']['range'] and 'max' in entry['validation']['range']:
             final_lower = set_boundary( entry['validation']['range']['min'], entry['validation']['range']['minOp'], changer)

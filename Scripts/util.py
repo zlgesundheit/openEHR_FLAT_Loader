@@ -19,6 +19,14 @@ import csv
 import pandas as pd
 
 def find_quantity_value(obj):
+    """
+
+    Args:
+      obj: 
+
+    Returns:
+
+    """
     # Check if obj is a dictionary
     if isinstance(obj, dict):
         # Check if the dictionary has "_type" key set to "DV_QUANTITY" and contains both "magnitude" and "units" keys
@@ -28,6 +36,14 @@ def find_quantity_value(obj):
     return None
 
 def find_named_value(obj):
+    """
+
+    Args:
+      obj: 
+
+    Returns:
+
+    """
     # Check if obj is a dictionary
     if isinstance(obj, dict):
         # Iterate through key-value pairs in the dictionary
@@ -44,6 +60,14 @@ def find_named_value(obj):
     return None
 
 def find_value(obj):
+    """
+
+    Args:
+      obj: 
+
+    Returns:
+
+    """
     # Check if obj is a dictionary
     if isinstance(obj, dict):
         # Call find_quantity_value to check for DV_QUANTITY and return its value
@@ -67,7 +91,15 @@ def find_value(obj):
 
 
 def process_rows(all_compositions_as_list, column_names):
-    '''TODO: Rename function and variables and comment'''
+    """TODO: Rename function and variables and comment
+
+    Args:
+      all_compositions_as_list: param column_names:
+      column_names: 
+
+    Returns:
+
+    """
     all_compositions_as_df = pd.DataFrame(all_compositions_as_list, columns=column_names)
     for index, composition in all_compositions_as_df.iterrows():
         for col in composition.index:
@@ -82,6 +114,18 @@ def process_rows(all_compositions_as_list, column_names):
     return all_compositions_as_df
 
 def store_resp_as_csv(workdir, subfolder, resp, filename, web_temp_elmnts):
+    """
+
+    Args:
+      workdir: param subfolder:
+      resp: param filename:
+      web_temp_elmnts: param subfolder:
+      filename: 
+      subfolder: 
+
+    Returns:
+
+    """
     # Get Lists of Column-Names and Rows
     column_names = []
     for elmnt in resp.get('columns'):
@@ -100,6 +144,17 @@ def store_resp_as_csv(workdir, subfolder, resp, filename, web_temp_elmnts):
     print(f"Stored File {filename} in Folder {path_to_store}")
 
 def send_aql_request(ehrUrl, authHeader, limit, aqlQuery):
+    """
+
+    Args:
+      ehrUrl: param authHeader:
+      limit: param aqlQuery:
+      authHeader: param aqlQuery:
+      aqlQuery: 
+
+    Returns:
+
+    """
 
     payload = json.dumps({
         "q": aqlQuery,
@@ -132,7 +187,15 @@ def send_aql_request(ehrUrl, authHeader, limit, aqlQuery):
         raise SystemExit
 
 def read_file(dirPath, filename):
-    """Read File with specific name from path"""
+    """Read File with specific name from path
+
+    Args:
+      dirPath: param filename:
+      filename: 
+
+    Returns:
+
+    """
     filePath = os.path.join(dirPath, filename)
     try:
         f = open(filePath, "r", encoding='utf-8')
@@ -148,6 +211,15 @@ def read_file(dirPath, filename):
     return file
 
 def load_env_file(dotenv_path, override=False):
+    """
+
+    Args:
+      dotenv_path: param override:  (Default value = False)
+      override: Default value = False)
+
+    Returns:
+
+    """
     with open(dotenv_path) as file_obj:
         lines = file_obj.read().splitlines()  # Removes \n from lines
 
@@ -168,13 +240,31 @@ def load_env_file(dotenv_path, override=False):
             os.environ.setdefault(key, value)
 
 def remove_and_statements(input_string):
+    """
+
+    Args:
+      input_string: 
+
+    Returns:
+
+    """
     # Regex-Pattern zum Ersetzen von " and ..." durch "]"
     pattern = r' and [^\]]*\''
     adjusted_string = re.sub(pattern, "",input_string)
     return adjusted_string
 
 def get_templates_from_server(config: handleConfig.config) -> list:
-    """Querys all templates distinct from the given server in the config, which contain a compositions"""
+    """Querys all templates distinct from the given server in the config, which contain a compositions
+
+    Args:
+      config: handleConfig.config:
+      config: handleConfig.config:
+      config: handleConfig.config:
+      config: handleConfig.config: 
+
+    Returns:
+
+    """
     aql_string = "SELECT DISTINCT c/archetype_details/template_id/value as TemplateID FROM EHR e CONTAINS COMPOSITION c"
     all_templates = send_aql_request(config.targetAdress, config.targetAuthHeader, "9999999999999", aql_string)
     flat_list_all_templates = [item for sublist in all_templates["rows"] for item in sublist]

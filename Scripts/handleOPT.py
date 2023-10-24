@@ -20,6 +20,16 @@ workdir = os.getcwd()
 ############################### Main ###############################
 
 def main(config, manualTaskDir, OPTDirPath):
+    """
+
+    Args:
+      config: param manualTaskDir:
+      OPTDirPath: 
+      manualTaskDir: 
+
+    Returns:
+
+    """
     print("\nHandleOPT is running:")
 
     # Read OPT from Input Folder
@@ -36,6 +46,15 @@ def main(config, manualTaskDir, OPTDirPath):
 ############################### Methods ###############################
 
 def get_webtemplate(config, manualTaskDir):
+    """
+
+    Args:
+      config: param manualTaskDir:
+      manualTaskDir: 
+
+    Returns:
+
+    """
     # Query
     json_resp = query_webtemplate(config.templateName, config.targetAdress, config.targetflatAPIadress, config.targetAuthHeader)
 
@@ -49,7 +68,15 @@ def get_webtemplate(config, manualTaskDir):
     return webTemp
 
 def read_local_opt(OPTDirPath, templateName):
-    """Read File with specific name from OPT-Folder"""
+    """Read File with specific name from OPT-Folder
+
+    Args:
+      OPTDirPath: param templateName:
+      templateName: 
+
+    Returns:
+
+    """
     filePath = os.path.join(OPTDirPath, templateName +'.opt')
     try:
         f = open(filePath, "r", encoding='utf-8')
@@ -65,7 +92,16 @@ def read_local_opt(OPTDirPath, templateName):
     return optFile
 
 def opt_exists(templateName, base, targetAuthHeader) -> int:
-    """Query an Operational Template from specific openEHR-Repo and return Status Code"""
+    """Query an Operational Template from specific openEHR-Repo and return Status Code
+
+    Args:
+      templateName: param base:
+      targetAuthHeader: 
+      base: 
+
+    Returns:
+
+    """
     
     try:
         # Check if OPT is already present at the server
@@ -86,7 +122,18 @@ def opt_exists(templateName, base, targetAuthHeader) -> int:
         raise SystemExit
 
 def upload_opt(templateName, optFile, targetAdress, targetopenEHRAPIadress, targetAuthHeader) -> None:
-    """Upload an Operational Template to a specific openEHR-Repo if it does not exist yet."""
+    """Upload an Operational Template to a specific openEHR-Repo if it does not exist yet.
+
+    Args:
+      templateName: param optFile:
+      targetAdress: param targetopenEHRAPIadress:
+      targetAuthHeader: 
+      optFile: 
+      targetopenEHRAPIadress: 
+
+    Returns:
+
+    """
     base = targetAdress + targetopenEHRAPIadress
     
     checkOPTExist_RespCode= opt_exists(templateName, base, targetAuthHeader)
@@ -106,7 +153,17 @@ def upload_opt(templateName, optFile, targetAdress, targetopenEHRAPIadress, targ
         print( indent + "OPT already exists at this server")
 
 def query_webtemplate(templateName, targetAdress, targetflatAPIadress, targetAuthHeader) -> str:
-    """Query a webtemplate from a specific openEHR-Repo."""
+    """Query a webtemplate from a specific openEHR-Repo.
+
+    Args:
+      templateName: param targetAdress:
+      targetflatAPIadress: param targetAuthHeader:
+      targetAdress: 
+      targetAuthHeader: 
+
+    Returns:
+
+    """
     queryPath = targetAdress + targetflatAPIadress + "template/" + templateName
     try:
         response = requests.get(queryPath, headers = {'Authorization':targetAuthHeader})
@@ -122,7 +179,16 @@ def query_webtemplate(templateName, targetAdress, targetflatAPIadress, targetAut
     return json_resp
 
 def store_webtemplate(manualTaskDir, templateName, webTemp) -> None:
-    """Store a JSON-String as a file"""
+    """Store a JSON-String as a file
+
+    Args:
+      manualTaskDir: param templateName:
+      webTemp: 
+      templateName: 
+
+    Returns:
+
+    """
     filePath = os.path.join(manualTaskDir, templateName + '_WebTemplate.json')
     try:
         with open(filePath, 'w', encoding="utf-8") as templateFile:
