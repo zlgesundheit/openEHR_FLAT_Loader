@@ -24,7 +24,7 @@ from Scripts import handleWebTemplate
 from Scripts import buildMapping
 from Scripts import handleUpload
 from Scripts import buildExampleComp
-from Scripts import aqlBuilder
+from Scripts import csv_export
 
 #Init Config-Object
 config = handleConfig.config()
@@ -126,7 +126,7 @@ def buildAndUploadCompositions():
         pass
     
 def openehr2csv():
-    aqlBuilder.main(config,manualTaskDir)
+    csv_export.main(config,manualTaskDir)
 
 def generateExamples():
     """ Beispiele werden generiert, wenn die Pfade aus dem WebTemplate ausgelesen werden. Zu jedem Pfad wird abhängig vom Datentyp/rmType ein Beispielwert erzeugt.

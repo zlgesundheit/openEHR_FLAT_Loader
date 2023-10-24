@@ -27,6 +27,18 @@ def find_quantity_value(obj):
             return obj["magnitude"], obj["units"]
     return None
 
+def find_code_phrase_value(obj):
+    t=1
+    # Check if obj is a dictionary
+    if "_type" in obj and obj["_type"] == "DV_CODED_TEXT":
+        return find_code_phrase_value(obj["defining_code"])
+    if isinstance(obj, dict) or isinstance(obj, pd.Series):
+        # Check if the dictionary has "_type" key set to "CODE_PHRASE" and contains "code" and "terminology"
+        if "_type" in obj and obj["_type"] == "CODE_PHRASE" and "code_string" in obj and "terminology_id" in obj:
+            # Return the combination of "code" and "terminology"
+            return obj["code_string"]
+    return None
+
 def find_named_value(obj):
     # Check if obj is a dictionary
     if isinstance(obj, dict):
@@ -45,8 +57,11 @@ def find_named_value(obj):
 
 def find_value(obj):
     # Check if obj is a dictionary
-    if isinstance(obj, dict):
+    if isinstance(obj, dict) or isinstance(obj, pd.Series):
         # Call find_quantity_value to check for DV_QUANTITY and return its value
+        code_phrase_value = find_code_phrase_value(obj)
+        if code_phrase_value is not None:
+            return code_phrase_value
         quantity_value = find_quantity_value(obj)
         if quantity_value is not None:
             return quantity_value
@@ -69,17 +84,29 @@ def find_value(obj):
 def process_rows(all_compositions_as_list, column_names):
     '''TODO: Rename function and variables and comment'''
     all_compositions_as_df = pd.DataFrame(all_compositions_as_list, columns=column_names)
+    all_compositions_as_df = rename_duplicate_columns(all_compositions_as_df)
     for index, composition in all_compositions_as_df.iterrows():
-        for col in composition.index:
-            if isinstance(composition[col], dict):
-                value = find_value(composition[col])
+        composition = pd.Series(composition)
+
+        for index, col in composition.items():
+            if index == "language":
+                test=1
+            if isinstance(col, dict) or isinstance(col, pd.Series):
+                value = find_value(col)
                 if value is not None:
                     if isinstance(value, tuple):
-                        all_compositions_as_df.rename(columns={col: f"{col} (in {value[1]})"}, inplace=True)
-                        composition[col] = value[0]
+                        all_compositions_as_df.rename(columns={index: f"{index} (in {value[1]})"}, inplace=True)
+                        composition[index] = value[0]
                     else:
-                        composition[col] = value
+                        composition[index] = value
     return all_compositions_as_df
+def rename_duplicate_columns(df):
+    cols = pd.Series(df.columns)
+    for dup in cols[cols.duplicated()].unique():
+        cols[cols[cols == dup].index.values.tolist()] = [dup + str(i + 1) if i != 0 else dup for i in range(sum(cols == dup))]
+    df.columns = cols
+    return df
+
 
 def store_resp_as_csv(workdir, subfolder, resp, filename, web_temp_elmnts):
     # Get Lists of Column-Names and Rows
@@ -96,7 +123,7 @@ def store_resp_as_csv(workdir, subfolder, resp, filename, web_temp_elmnts):
     if not os.path.exists(path_to_store):
         print(f"Create Folder {path_to_store}")
         os.makedirs(path_to_store)
-    processed_rows.to_csv(os.path.join(path_to_store, filename), encoding="utf-8", index = False, quoting=csv.QUOTE_ALL, sep=";")
+    processed_rows.to_csv(os.path.join(path_to_store, filename), encoding="UTF-8", index = False, quoting=csv.QUOTE_ALL, sep=";")
     print(f"Stored File {filename} in Folder {path_to_store}")
 
 def send_aql_request(ehrUrl, authHeader, limit, aqlQuery):
