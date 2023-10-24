@@ -28,8 +28,8 @@ def main(workdir, pathArray, templateName, baseUrl, repo_auth, type):
     
     outdir = os.path.join(workdir,'ExampleCompositions', templateName)
     if not os.path.isdir(outdir):
-        createDir(outdir)
-    buildExample(outdir, pathArray, templateName, baseUrl, repo_auth, type)
+        create_dir(outdir)
+    build_example_comp(outdir, pathArray, templateName, baseUrl, repo_auth, type)
 
     print ("Examples have been built and can be found in Output-Dir \n")
 
@@ -54,9 +54,9 @@ def queryExampleComp(outdir, templateName, baseUrl, repo_auth):
     return exampleComp
 
 # TODO Man koennte die If-Bedinung in die for-Schleife packen und damit Code-Zeilen einsparen, da Up/Download und Speichern für Min/Max gleich sind. Ist jetzt gerade aber anders gelaufen.
-def buildExample(outdir, pathArray, templateName, baseUrl, repo_auth, type):
+def build_example_comp(outdir, pathArray, templateName, baseUrl, repo_auth, type):
     # Create Example EHR
-    ehrId = handleUpload.createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, "examplePatient", "openEHR_FLAT_Loader")
+    ehrId = handleUpload.create_ehr_with_specific_subjectid(baseUrl, repo_auth, "examplePatient", "openEHR_FLAT_Loader")
 
     #Build Minimal Resource-Dict mit nur allen Pflichtpfaden
     if type == "min":
@@ -82,23 +82,23 @@ def buildExample(outdir, pathArray, templateName, baseUrl, repo_auth, type):
 
         # Store FLAT Example-Composition
         filename = templateName + "-min_flat_example" + ".json"
-        storeStringAsFile(dict, outdir, filename)
+        store_string_as_file(dict, outdir, filename)
 
         print ("\t" + f'FLAT Minimal-Example-Composition erstellt und im Ordner "Output" gespeichert. \n')
 
         # Upload FLAT Example-Comp
         flat_res = dict #json.dumps(dict)
         
-        compId, cnt = handleUpload.uploadResourceToEhrId(baseUrl, repo_auth, ehrId, flat_res, templateName, comp_created_count = 0)
+        compId, cnt = handleUpload.upload_comp_to_ehrid(baseUrl, repo_auth, ehrId, flat_res, templateName, comp_created_count = 0)
 
         print(compId)
 
         # Download Canonical Composition
-        canonical_json = getCanonicalJSONComp(baseUrl, repo_auth, compId)
+        canonical_json = get_comp_by_compid(baseUrl, repo_auth, compId)
 
         # Store Canonical Composition
         filename = templateName + "-min_canonical_example"+ ".json"
-        storeStringAsFile(canonical_json, outdir, filename)
+        store_string_as_file(canonical_json, outdir, filename)
 
         print ("\t" + f'CANONICAL Minimal-Example-Composition erstellt und im Ordner "Output" gespeichert. \n')
     #Build Maximal Resource-Dict mit allen Pfaden
@@ -127,29 +127,29 @@ def buildExample(outdir, pathArray, templateName, baseUrl, repo_auth, type):
 
         # Store Maximal FLAT Resource-Dict
         filename = templateName + "-max_flat_example" + ".json"
-        storeStringAsFile(dict, outdir, filename)
+        store_string_as_file(dict, outdir, filename)
 
         print ("\t" + f'FLAT Maximal-Example-Composition erstellt und im Ordner "Output" gespeichert. \n')
 
         # Upload FLAT Maximal Composition
         flat_res = dict #json.dumps(dict)
 
-        compId, cnt = handleUpload.uploadResourceToEhrId(baseUrl, repo_auth, ehrId, flat_res, templateName, comp_created_count = 0)
+        compId, cnt = handleUpload.upload_comp_to_ehrid(baseUrl, repo_auth, ehrId, flat_res, templateName, comp_created_count = 0)
 
         # Download CANONICAL Maximal Composition
-        canonical_json = getCanonicalJSONComp(baseUrl, repo_auth, compId)
+        canonical_json = get_comp_by_compid(baseUrl, repo_auth, compId)
 
         # Store CANONICAL Maximal Composition 
-        storeStringAsFile(canonical_json, outdir, templateName + "-max_canonical_example" + ".json")
+        store_string_as_file(canonical_json, outdir, templateName + "-max_canonical_example" + ".json")
 
         print ("\t" + f'CANONICAL Maximal-Example-Composition erstellt und im Ordner "Output" gespeichert. \n')
 
-def storeStringAsFile(string, dirPath, filename):
+def store_string_as_file(string, dirPath, filename):
     filePath = os.path.join(dirPath, filename)
     with open(filePath,"w", encoding = 'UTF-8') as resFile:
         json.dump(string, resFile, default=convert, indent=4, ensure_ascii=False)
 
-def getCanonicalJSONComp(baseUrl, repo_auth, compId):
+def get_comp_by_compid(baseUrl, repo_auth, compId):
     '''Request to get a composition via rest/openehr/v1 Endpoint'''
     
     url = f'{baseUrl}/rest/ecis/v1/composition/{compId}?format=JSON'
@@ -172,7 +172,7 @@ def convert(o):
     if isinstance(o, np.int64): return o.item()  
     raise TypeError
 
-def createDir(path):
+def create_dir(path):
     access_rights = 0o755
     try:
         os.mkdir(path, access_rights)

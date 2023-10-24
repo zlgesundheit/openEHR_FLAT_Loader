@@ -77,7 +77,7 @@ def generateMapping():
     # Extrahiere Pfade in Array von Pfadobjekten 
     pathArray = handleWebTemplate.main(webTemp, config.templateName)
 
-    csv_dataframe = handleConfig.readCSVasDataFrame(config.inputCSV)
+    csv_dataframe = handleConfig.read_csv_as_df(config.inputCSV)
 
     # Baue Mapping
     buildMapping.main(manualTaskDir,config.templateName, csv_dataframe, pathArray, allindexesareone = config.allindexesareone)
@@ -87,7 +87,7 @@ def buildAndUploadCompositions():
 
     # Create EHRs for all patients in csv
     if config.createehrs == "1":  # EHRCreation could be an extra-parameter
-        csv_dataframe = csv_dataframe = handleConfig.readCSVasDataFrame(config.inputCSV)
+        csv_dataframe = csv_dataframe = handleConfig.read_csv_as_df(config.inputCSV)
         anzahl_eintraege = len(csv_dataframe.index)
 
         # Check for existence of columns: ehrId, namespace-column from config, subjectID-column from config -> else error-message and systemexit
@@ -107,7 +107,7 @@ def buildAndUploadCompositions():
 
     # Send resource to server
     if config.directupload == "1":
-        csv_dataframe = handleConfig.readCSVasDataFrame(config.inputCSV)
+        csv_dataframe = handleConfig.read_csv_as_df(config.inputCSV)
         anzahl_eintraege = len(csv_dataframe.index)
 
         print ("Upload "+ str(anzahl_eintraege) +" Compositions:")
@@ -116,7 +116,7 @@ def buildAndUploadCompositions():
         for res in resArray:
             # Wird dann in buildComp auffgerufen, liest hier die aktuelle CSV mit ehrIds ein
             ehrId = csv_dataframe['ehrId'][quick_and_dirty_index]
-            compositionUid, comp_created_count = handleUpload.uploadResourceToEhrId(config.targetAdress, config.targetAuthHeader, ehrId, res, config.templateName, comp_created_count)
+            compositionUid, comp_created_count = handleUpload.upload_comp_to_ehrid(config.targetAdress, config.targetAuthHeader, ehrId, res, config.templateName, comp_created_count)
             quick_and_dirty_index += 1
 
         print (str(comp_created_count) + " / " + str(anzahl_eintraege) + " Compositions have been created successfully.\n" )    
@@ -146,10 +146,10 @@ def generateExamples():
 
     # Query Example and store in 
     exampleComp = buildExampleComp.queryExampleComp(workdir, config.templateName, config.targetAdress, config.targetAuthHeader)
-    buildExampleComp.storeStringAsFile(exampleComp, manualTaskDir, config.templateName + "CompositionExample" + ".json")
+    buildExampleComp.store_string_as_file(exampleComp, manualTaskDir, config.templateName + "CompositionExample" + ".json")
 
     # Store Webtemplate in Example-Folder
-    buildExampleComp.storeStringAsFile(webTemp, manualTaskDir, config.templateName + "_WebTemplate" + ".json")
+    buildExampleComp.store_string_as_file(webTemp, manualTaskDir, config.templateName + "_WebTemplate" + ".json")
 
     print("\n")
     print("OPT is uploaded to the Repository and an Example-Composition is stored in the ManualTasks-Folder.")

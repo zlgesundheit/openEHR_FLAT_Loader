@@ -13,7 +13,7 @@ import json
 import warnings
 import traceback #debug
 import sys
-import re
+
 # Third party imports
 import pandas as pd
 import numpy as np
@@ -24,40 +24,40 @@ from Scripts import pathObjectClass
 
 # openpyxl does not support Validation in Excel-Files and sends a warning
 warnings.filterwarnings('ignore', category=UserWarning, module='openpyxl')
-indent = "    "
+indent = "\t"
 workdir = os.getcwd()
 
 ############################### Main ###############################
 
 class knownIndex():
     id = None
-    realIndex = None
-    mappedIndex = None
-    indexCounter = None
+    real_index = None
+    mapped_index = None
+    index_counter = None
 
-    def __init__(self, id, indexString):
+    def __init__(self, id, index_string):
         self.id = id
-        self.realIndex = None
-        self.indexString = indexString
-        self.indexCounter = [0] * len(indexString)
+        self.real_index = None
+        self.indexString = index_string
+        self.index_counter = [0] * len(index_string)
         pass
 
 def main(config,manualTaskDir,outputDir):
     print(os.linesep + "BuildComp is running.")
     
     # Read CSV as data frame
-    csv_dataframe = handleConfig.readCSVasDataFrame(config.inputCSV)
+    csv_dataframe = handleConfig.read_csv_as_df(config.inputCSV)
 
     # Read Excel-File as data frame
-    mapTabDF = xlsxAsDataFrame(manualTaskDir,config.templateName)
+    mapping_tab_df = xlsx_as_df(manualTaskDir,config.templateName)
 
     resArray = []
     try:
-        if mappingIsEmpty(mapTabDF):
+        if mapping_empty(mapping_tab_df):
             error_msg = "The Mapping is empty (in buildComp.py)"
             raise Exception(error_msg)
 
-        elif not mappingIsEmpty(mapTabDF):
+        elif not mapping_empty(mapping_tab_df):
 
             # Fuer jede Row/Zeile in CSV = eine Ressource
             for csvIndex, csvRow in csv_dataframe.iterrows():
@@ -65,7 +65,7 @@ def main(config,manualTaskDir,outputDir):
                 dict = {}
 
                 # Fuer jeden FLAT_Pfad
-                for xlsxIndex, xlsxRow in mapTabDF.iterrows():
+                for xlsxIndex, xlsxRow in mapping_tab_df.iterrows():
                     path = xlsxRow['FLAT-Path (Data field in later composition - if mapped)']
                     indexString = str(xlsxRow['Index(e)'])
                     indexArray = indexString.split(",")
@@ -75,35 +75,35 @@ def main(config,manualTaskDir,outputDir):
                     pathObj = pathObjectClass.pathObject()
                     
                     # Gemappte Spalten auslesen
-                    gemappteSpalteAusCSV = mapTabDF['Map CSV-Column to Path (Dropdown-Selector)'][xlsxIndex]
-                    metadatumAusSpalteD = mapTabDF['Set Metadata directly (optional)'][xlsxIndex]
+                    gemappteSpalteAusCSV = mapping_tab_df['Map CSV-Column to Path (Dropdown-Selector)'][xlsxIndex]
+                    metadatumAusSpalteD = mapping_tab_df['Set Metadata directly (optional)'][xlsxIndex]
 
                     # Wenn die Zeile gemappt wurde, dann soll sie entsprechend (mit den korrekten Indexen) angelegt werden.
                     if str(metadatumAusSpalteD) != "nan":
-                        pathObj.pathString = path
-                        pathObj.mappedCSVColumn = metadatumAusSpalteD #Achtung, das setzen der Column-Variable setzt auch den isMapped Bool...
+                        pathObj.path_string = path
+                        pathObj.mapped_to_csv_column = metadatumAusSpalteD #Achtung, das setzen der Column-Variable setzt auch den isMapped Bool...
 
                         # Dict mit KEY = PFAD und VALUE = Value aus der CSV aus Spalte D  
-                        if pathObj and pathObj.isMapped:
+                        if pathObj and pathObj.is_mapped:
                             if indexString != "nan":
-                                pathString = setIndexesInPath(path, indexString)
+                                pathString = set_indexes_in_path(path, indexString)
                             else:
                                 pathString = path
                             dict[pathString] = metadatumAusSpalteD
 
                     elif str(gemappteSpalteAusCSV) != "nan":
-                        pathObj.pathString = path
-                        pathObj.mappedCSVColumn = gemappteSpalteAusCSV
+                        pathObj.path_string = path
+                        pathObj.mapped_to_csv_column = gemappteSpalteAusCSV
 
                         # Dict mit KEY = PFAD und VALUE = Value aus der CSV aus der gemappten Spalte    
-                        if pathObj and pathObj.isMapped and str(csv_dataframe[ pathObj.mappedCSVColumn ][csvIndex]) != "nan":
+                        if pathObj and pathObj.is_mapped and str(csv_dataframe[ pathObj.mapped_to_csv_column ][csvIndex]) != "nan":
 
                             if indexString != "nan":
-                                pathString = setIndexesInPath(path, indexString)
+                                pathString = set_indexes_in_path(path, indexString)
                             else:
                                 pathString = path
 
-                            dict[pathString] = csv_dataframe[ pathObj.mappedCSVColumn ][csvIndex]
+                            dict[pathString] = csv_dataframe[ pathObj.mapped_to_csv_column ][csvIndex]
 
                     else:
                         pass
@@ -119,7 +119,7 @@ def main(config,manualTaskDir,outputDir):
         raise SystemExit
 
     # Erstellte Compositions im Output-Ordner speichern
-    storeDictArrayAsRes(outputDir, resArray, config.templateName)
+    store_dict_array_as_res(outputDir, resArray, config.templateName)
 
     print(indent + "buildComp finished.\n")
 
@@ -127,12 +127,12 @@ def main(config,manualTaskDir,outputDir):
 
 ############################### Methods ###############################
 
-def setIndexesInPath(path, indexes):
+def set_indexes_in_path(path, indexes):
     for i in range(0, len(indexes)):
         path = path.replace("<<index>>", str(indexes[i]), 1)
     return path
 
-def storeDictArrayAsRes(outputDir,dictArray, templateName):
+def store_dict_array_as_res(outputDir,dictArray, templateName):
     '''Dump Dicts as JSON-String in Files'''
     anzahl_eintraege = len(dictArray)
     print ("    Erstelle "+ str(anzahl_eintraege) + " Composition-Ressourcen.")
@@ -151,7 +151,7 @@ def storeDictArrayAsRes(outputDir,dictArray, templateName):
             raise SystemExit
     print (indent + str(i) + " / " + str(anzahl_eintraege) + f' Ressourcen erstellt und im Ordner "Output" gespeichert.')
 
-def xlsxAsDataFrame(manualTaskDir,templateName):
+def xlsx_as_df(manualTaskDir,templateName):
     '''Read Mapping as Dataframe'''
     xlsxPath = os.path.join(manualTaskDir, templateName + '_MAPPING.xlsx')
     try:
@@ -170,7 +170,7 @@ def convert(o):
     if isinstance(o, np.int64): return o.item()  
     raise TypeError
 
-def mappingIsEmpty(mapTabDF):
+def mapping_empty(mapTabDF):
     '''Checken ob das Mapping leer ist, also nur "nan"-Eintraege vorhanden sind'''
     empty = True
     # Checken ob CSV-Column (C) leer ist

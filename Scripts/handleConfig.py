@@ -20,6 +20,7 @@ workdir = os.getcwd()
 config_path = os.path.join(workdir, 'config.ini')
 
 class config():
+    # Init mit Beispielwerten/Defaults
     targetAdress = 'http://141.5.100.115/ehrbase'
     targetAuthHeader = 'Basic ZWhyYmFzZS11c2VyOlN1cGVyU2VjcmV0UGFzc3dvcmQ='  
     targetopenEHRAPIadress = '/rest/openehr/v1/'
@@ -66,13 +67,13 @@ def get_delimiter(file_path, bytes = 4096):
     delimiter = sniffer.sniff(data).delimiter
     return delimiter
 
-def readCSVasDataFrame(inputCSV):
+def read_csv_as_df(inputCSV):
     '''Read CSV as Dataframe'''
     # Compose Path
     csvPath = os.path.join(workdir, 'ETLProcess', 'Input', inputCSV + '.csv')
 
     # Guess Encoding
-    guessed_encoding = guessCSVencoding(csvPath)
+    guessed_encoding = guess_csv_encoding(csvPath)
     if guessed_encoding == 'windows-1255':
         guessed_encoding = "ANSI"
     print(f"encoding is {guessed_encoding} for file with the path {csvPath}")
@@ -89,7 +90,7 @@ def readCSVasDataFrame(inputCSV):
 
     return dataDF
 
-def guessCSVencoding(filepath):
+def guess_csv_encoding(filepath):
     # look at the first ten thousand bytes to guess the character encoding
     try:
         with open(filepath, 'rb') as rawdata:

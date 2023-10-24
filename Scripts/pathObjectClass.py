@@ -12,22 +12,22 @@ from Scripts import exampleGeneratorClass
 
 class pathObject:
     id:str = None
-    pathString:str = None
-    maxIndexNumber:int = None
-    rmType:str = None
-    suffixList:list = None
+    path_string:str = None
+    max_index:int = None
+    rmtype:str = None
+    suffix_list:list = None
     aql_path: str = None
 
-    hasSuffix:bool = None
-    hasIndex:bool = None
-    isMandatory:bool = None
-    isCondMandatory:bool = None
+    has_suffix:bool = None
+    has_index:bool = None
+    is_mandatory:bool = None
+    is_conditional:bool = None
 
-    isMapped:bool = None
-    mappedCSVColumn:str = None
+    is_mapped:bool = None
+    mapped_to_csv_column:str = None
     
-    indexPathDict:dict = None
-    exampleValueDict:dict = None
+    index_path_dict:dict = None
+    example_value_dict:dict = None
 
     def __init__(self):
         pass
@@ -80,14 +80,14 @@ class pathObject:
 
     def isEqual(self, pathObject) -> bool:
         """ Vergleicht zwei Pfadobjekte hinsichtlich ID und pathString. """
-        if self.id == pathObject.id and self.pathString == pathObject.pathString:
+        if self.id == pathObject.id and self.path_string == pathObject.pathString:
             return True
         else:
             return False
 
     def contains(self, potentiallyContainedPath) -> bool:
         """ Prüft, ob ein Teilstring in einem anderen Teilstring enthalten ist. """
-        if self.pathString in potentiallyContainedPath.pathString:
+        if self.path_string in potentiallyContainedPath.pathString:
             return True
         else:
             return False
@@ -96,10 +96,10 @@ class pathObject:
         """ String Repräsentation der Klasse, welche einige Attribute des 'pathObject' auf der Kommandozeile ausgibt. """
         printOutput = (
             f'\tID: \t\t{self.id}\n'
-            f'\tPfad: \t\t{self.pathString}\n'
-            f'\tPflicht: \t{self.isMandatory}\n'
-            f'\tIndexe: \t{self.maxIndexNumber}\n'
-            f'\tSuffixe: \t{self.hasSuffix}'
+            f'\tPfad: \t\t{self.path_string}\n'
+            f'\tPflicht: \t{self.is_mandatory}\n'
+            f'\tIndexe: \t{self.max_index}\n'
+            f'\tSuffixe: \t{self.has_suffix}'
         )
         return str(printOutput)
 

@@ -81,7 +81,7 @@ def process_rows(all_compositions_as_list, column_names):
                         composition[col] = value
     return all_compositions_as_df
 
-def storeRespAsCSV(workdir, subfolder, resp, filename, web_temp_elmnts):
+def store_resp_as_csv(workdir, subfolder, resp, filename, web_temp_elmnts):
     # Get Lists of Column-Names and Rows
     column_names = []
     for elmnt in resp.get('columns'):
@@ -99,7 +99,7 @@ def storeRespAsCSV(workdir, subfolder, resp, filename, web_temp_elmnts):
     processed_rows.to_csv(os.path.join(path_to_store, filename), encoding="utf-8", index = False, quoting=csv.QUOTE_ALL, sep=";")
     print(f"Stored File {filename} in Folder {path_to_store}")
 
-def sendAqlRequest(ehrUrl, authHeader, limit, aqlQuery):
+def send_aql_request(ehrUrl, authHeader, limit, aqlQuery):
 
     payload = json.dumps({
         "q": aqlQuery,
@@ -131,7 +131,7 @@ def sendAqlRequest(ehrUrl, authHeader, limit, aqlQuery):
         print(traceback.format_exc())
         raise SystemExit
 
-def readFile(dirPath, filename):
+def read_file(dirPath, filename):
     """Read File with specific name from path"""
     filePath = os.path.join(dirPath, filename)
     try:
@@ -176,6 +176,6 @@ def remove_and_statements(input_string):
 def get_templates_from_server(config: handleConfig.config) -> list:
     """Querys all templates distinct from the given server in the config, which contain a compositions"""
     aql_string = "SELECT DISTINCT c/archetype_details/template_id/value as TemplateID FROM EHR e CONTAINS COMPOSITION c"
-    all_templates = sendAqlRequest(config.targetAdress, config.targetAuthHeader, "9999999999999", aql_string)
+    all_templates = send_aql_request(config.targetAdress, config.targetAuthHeader, "9999999999999", aql_string)
     flat_list_all_templates = [item for sublist in all_templates["rows"] for item in sublist]
     return flat_list_all_templates

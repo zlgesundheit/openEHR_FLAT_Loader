@@ -23,10 +23,10 @@ def main(config, manualTaskDir, OPTDirPath):
     print("\nHandleOPT is running:")
 
     # Read OPT from Input Folder
-    optFile = readOPTfromInput(OPTDirPath, config.templateName)
+    optFile = read_local_opt(OPTDirPath, config.templateName)
 
     # Upload OPT to server
-    uploadOPT(config.templateName, optFile, config.targetAdress, config.targetopenEHRAPIadress, config.targetAuthHeader)
+    upload_opt(config.templateName, optFile, config.targetAdress, config.targetopenEHRAPIadress, config.targetAuthHeader)
 
     webTemp = get_webtemplate(config, manualTaskDir)
 
@@ -37,18 +37,18 @@ def main(config, manualTaskDir, OPTDirPath):
 
 def get_webtemplate(config, manualTaskDir):
     # Query
-    json_resp = queryWebtemplate(config.templateName, config.targetAdress, config.targetflatAPIadress, config.targetAuthHeader)
+    json_resp = query_webtemplate(config.templateName, config.targetAdress, config.targetflatAPIadress, config.targetAuthHeader)
 
     # We load the webTemplate-Part of the Response in a nice tree structure
     webTemplateResp = json.dumps(json_resp['webTemplate'], ensure_ascii=False)
     webTemp = json.loads(webTemplateResp)
 
     # Save WebTemplate to Manual Tasks Directory because it is so damn important for the mapping task
-    storeWebTemplate(manualTaskDir, config.templateName, webTemp)
+    store_webtemplate(manualTaskDir, config.templateName, webTemp)
 
     return webTemp
 
-def readOPTfromInput(OPTDirPath, templateName):
+def read_local_opt(OPTDirPath, templateName):
     """Read File with specific name from OPT-Folder"""
     filePath = os.path.join(OPTDirPath, templateName +'.opt')
     try:
@@ -64,7 +64,7 @@ def readOPTfromInput(OPTDirPath, templateName):
         f.close()
     return optFile
 
-def checkOPTExistence(templateName, base, targetAuthHeader) -> int:
+def opt_exists(templateName, base, targetAuthHeader) -> int:
     """Query an Operational Template from specific openEHR-Repo and return Status Code"""
     
     try:
@@ -85,11 +85,11 @@ def checkOPTExistence(templateName, base, targetAuthHeader) -> int:
         print(traceback.format_exc())
         raise SystemExit
 
-def uploadOPT(templateName, optFile, targetAdress, targetopenEHRAPIadress, targetAuthHeader) -> None:
+def upload_opt(templateName, optFile, targetAdress, targetopenEHRAPIadress, targetAuthHeader) -> None:
     """Upload an Operational Template to a specific openEHR-Repo if it does not exist yet."""
     base = targetAdress + targetopenEHRAPIadress
     
-    checkOPTExist_RespCode= checkOPTExistence(templateName, base, targetAuthHeader)
+    checkOPTExist_RespCode= opt_exists(templateName, base, targetAuthHeader)
     if  checkOPTExist_RespCode != 200:
         try:
             # Send OPT to Server
@@ -105,7 +105,7 @@ def uploadOPT(templateName, optFile, targetAdress, targetopenEHRAPIadress, targe
     elif checkOPTExist_RespCode == 200:
         print( indent + "OPT already exists at this server")
 
-def queryWebtemplate(templateName, targetAdress, targetflatAPIadress, targetAuthHeader) -> str:
+def query_webtemplate(templateName, targetAdress, targetflatAPIadress, targetAuthHeader) -> str:
     """Query a webtemplate from a specific openEHR-Repo."""
     queryPath = targetAdress + targetflatAPIadress + "template/" + templateName
     try:
@@ -121,7 +121,7 @@ def queryWebtemplate(templateName, targetAdress, targetflatAPIadress, targetAuth
         raise SystemExit
     return json_resp
 
-def storeWebTemplate(manualTaskDir, templateName, webTemp) -> None:
+def store_webtemplate(manualTaskDir, templateName, webTemp) -> None:
     """Store a JSON-String as a file"""
     filePath = os.path.join(manualTaskDir, templateName + '_WebTemplate.json')
     try:

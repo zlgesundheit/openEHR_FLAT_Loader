@@ -13,6 +13,8 @@ from Scripts import pathObjectClass
 from Scripts import handleConfig
 
 import sys
+
+# TODO check unused imports
 #sys.setrecursionlimit(10000)
 
 indent = "\t"
@@ -32,16 +34,16 @@ def main(manualTaskDir,templateName, csv_dataframe, pathArray, allindexesareone)
     worksheetCSVPaths = workbook.add_worksheet('CSV_Items')
 
     # Set Appearance
-    mandatory_cell_format, cond_mandatory_cell_format = setAppearances(workbook, worksheetAutoIndexedMapping, worksheetPaths, worksheetCSVPaths)
+    mandatory_cell_format, cond_mandatory_cell_format = set_appearances(workbook, worksheetAutoIndexedMapping, worksheetPaths, worksheetCSVPaths)
 
     numberOfCSVitems = len(csv_dataframe.columns)
 
     # Compose CSV_Items Worksheet
-    composeCSVitemWorksheet(csv_dataframe, worksheetCSVPaths)
+    compose_csv_item_worksheet(csv_dataframe, worksheetCSVPaths)
     # Compose FLAT_Path Worksheet
-    composeFlatPathsWorksheet(pathArray, worksheetPaths)
+    compose_flatpath_worksheet(pathArray, worksheetPaths)
     # Compose Auto-indexed Mapping Worksheet
-    composeAutoIndexedWS(worksheetAutoIndexedMapping, pathArray, numberOfCSVitems, allindexesareone, mandatory_cell_format, cond_mandatory_cell_format)
+    compose_mapping_worksheet(worksheetAutoIndexedMapping, pathArray, numberOfCSVitems, allindexesareone, mandatory_cell_format, cond_mandatory_cell_format)
 
     workbook.close()
     print ("Generated the (empty) Mapping-Table")
@@ -49,7 +51,7 @@ def main(manualTaskDir,templateName, csv_dataframe, pathArray, allindexesareone)
 
 ############################### Methods ###############################
 
-def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems, allindexesareone, mandatory_cell_format, cond_mandatory_cell_format):
+def compose_mapping_worksheet(worksheetMapping, pathArray, numberOfCSVitems, allindexesareone, mandatory_cell_format, cond_mandatory_cell_format):
     '''Composes mapping-worksheet based on index-values from userinput.'''
 
     # add paths + dropdown list
@@ -70,13 +72,13 @@ def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems, allindex
             # Wenn Suffix dann pro Suffix einen Pfad
             if path.hasSuffix:
                 for suffix in path.suffixList:
-                    addPathWithSuffix(path.pathString, suffix, row, worksheetMapping, numberOfCSVitems, formatting)
-                    addMandatoryColumnEntry(path, row, worksheetMapping, formatting)
+                    add_path_with_suffix(path.pathString, suffix, row, worksheetMapping, numberOfCSVitems, formatting)
+                    add_mandatory_column_entry(path, row, worksheetMapping, formatting)
                     row += 1
             elif not path.hasSuffix:
-                addPathWithoutSuffix(path.pathString, row, worksheetMapping, numberOfCSVitems, formatting)
+                add_path_without_suffix(path.pathString, row, worksheetMapping, numberOfCSVitems, formatting)
                 # Pflichtangabe
-                addMandatoryColumnEntry(path, row, worksheetMapping, formatting)
+                add_mandatory_column_entry(path, row, worksheetMapping, formatting)
                 row += 1
         # Falls Path Index hat
         elif path.hasIndex:   # how to get the index number that shall not be quieried?
@@ -112,15 +114,15 @@ def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems, allindex
                         if path.hasSuffix:
                             for suffix in path.suffixList:
                                 #addPathWithSuffix(String_with_0_index, suffix, row, worksheetMapping, numberOfCSVitems, formatting)
-                                addPathWithSuffix(path.pathString, suffix, row, worksheetMapping, numberOfCSVitems, formatting)
-                                addMandatoryColumnEntry(path, row, worksheetMapping, formatting)
+                                add_path_with_suffix(path.pathString, suffix, row, worksheetMapping, numberOfCSVitems, formatting)
+                                add_mandatory_column_entry(path, row, worksheetMapping, formatting)
                                 worksheetMapping.write('B'+str(row+1),str(j), formatting)
                                 row += 1
                         elif not path.hasSuffix:
                             #addPathWithoutSuffix(String_with_0_index, row, worksheetMapping, numberOfCSVitems, formatting)
-                            addPathWithoutSuffix(path.pathString, row, worksheetMapping, numberOfCSVitems, formatting)
+                            add_path_without_suffix(path.pathString, row, worksheetMapping, numberOfCSVitems, formatting)
                             # Pflichtangabe
-                            addMandatoryColumnEntry(path, row, worksheetMapping, formatting)
+                            add_mandatory_column_entry(path, row, worksheetMapping, formatting)
                             worksheetMapping.write('B'+str(row+1),str(j), formatting)
                             row += 1
             
@@ -147,13 +149,13 @@ def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems, allindex
                         #if not String_with_0_index in alreadyAddedPath:
                         if path.hasSuffix:
                             for suffix in path.suffixList:
-                                addPathWithSuffix(String_with_0_index, suffix, row, worksheetMapping, numberOfCSVitems, formatting)
-                                addMandatoryColumnEntry(path, row, worksheetMapping, formatting)
+                                add_path_with_suffix(String_with_0_index, suffix, row, worksheetMapping, numberOfCSVitems, formatting)
+                                add_mandatory_column_entry(path, row, worksheetMapping, formatting)
                                 worksheetMapping.write('B'+str(row+1),str(j)+","+str(i), formatting)
                                 row += 1
                         elif not path.hasSuffix:
-                            addPathWithoutSuffix(String_with_0_index, row, worksheetMapping, numberOfCSVitems, formatting)
-                            addMandatoryColumnEntry(path, row, worksheetMapping, formatting)
+                            add_path_without_suffix(String_with_0_index, row, worksheetMapping, numberOfCSVitems, formatting)
+                            add_mandatory_column_entry(path, row, worksheetMapping, formatting)
                             worksheetMapping.write('B'+str(row+1),str(j)+","+str(i), formatting)
                             row += 1
                             #alreadyAddedPath.append(String_with_0_index)
@@ -169,13 +171,13 @@ def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems, allindex
                             #if not String_with_0_index in alreadyAddedPath:
                             if path.hasSuffix:
                                 for suffix in path.suffixList:
-                                    addPathWithSuffix(String_with_0_index, suffix, row, worksheetMapping, numberOfCSVitems, formatting)
-                                    addMandatoryColumnEntry(path, row, worksheetMapping, formatting)
+                                    add_path_with_suffix(String_with_0_index, suffix, row, worksheetMapping, numberOfCSVitems, formatting)
+                                    add_mandatory_column_entry(path, row, worksheetMapping, formatting)
                                     worksheetMapping.write('B'+str(row+1),str(j)+","+str(i)+","+str(k), formatting)
                                     row += 1
                             elif not path.hasSuffix:
-                                addPathWithoutSuffix(String_with_0_index, row, worksheetMapping, numberOfCSVitems, formatting)
-                                addMandatoryColumnEntry(path, row, worksheetMapping, formatting)
+                                add_path_without_suffix(String_with_0_index, row, worksheetMapping, numberOfCSVitems, formatting)
+                                add_mandatory_column_entry(path, row, worksheetMapping, formatting)
                                 worksheetMapping.write('B'+str(row+1),str(j)+","+str(i)+","+str(k), formatting)
                                 row += 1
                                 #alreadyAddedPath.append(String_with_0_index)
@@ -194,13 +196,13 @@ def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems, allindex
                                 #if not String_with_0_index in alreadyAddedPath:
                                 if path.hasSuffix:
                                     for suffix in path.suffixList:
-                                        addPathWithSuffix(String_with_0_index, suffix, row, worksheetMapping, numberOfCSVitems, formatting)
-                                        addMandatoryColumnEntry(path, row, worksheetMapping, formatting)
+                                        add_path_with_suffix(String_with_0_index, suffix, row, worksheetMapping, numberOfCSVitems, formatting)
+                                        add_mandatory_column_entry(path, row, worksheetMapping, formatting)
                                         worksheetMapping.write('B'+str(row+1),str(m)+","+str(j)+","+str(i)+","+str(k), formatting)
                                         row += 1
                                 elif not path.hasSuffix:
-                                    addPathWithoutSuffix(String_with_0_index, row, worksheetMapping, numberOfCSVitems, formatting)
-                                    addMandatoryColumnEntry(path, row, worksheetMapping, formatting)
+                                    add_path_without_suffix(String_with_0_index, row, worksheetMapping, numberOfCSVitems, formatting)
+                                    add_mandatory_column_entry(path, row, worksheetMapping, formatting)
                                     worksheetMapping.write('B'+str(row+1),str(m)+","+str(j)+","+str(i)+","+str(k), formatting)
                                     row += 1
                                     #alreadyAddedPath.append(String_with_0_index)
@@ -214,15 +216,15 @@ def composeAutoIndexedWS(worksheetMapping, pathArray, numberOfCSVitems, allindex
     
     # End of Auto-indexed-Mapping Sheet
 
-def addPathWithSuffix(pathString, suffix, row, worksheetMapping, numberOfCSVitems, formatting):
+def add_path_with_suffix(pathString, suffix, row, worksheetMapping, numberOfCSVitems, formatting):
     worksheetMapping.write('C'+str(row+1),pathString + "|" + suffix, formatting)
     worksheetMapping.data_validation('D'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
 
-def addPathWithoutSuffix(pathString, row, worksheetMapping, numberOfCSVitems, formatting):
+def add_path_without_suffix(pathString, row, worksheetMapping, numberOfCSVitems, formatting):
     worksheetMapping.write('C'+str(row+1),pathString, formatting)
     worksheetMapping.data_validation('D'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
 
-def addMandatoryColumnEntry(path, row, worksheetMapping, formatting):
+def add_mandatory_column_entry(path, row, worksheetMapping, formatting):
     # Pflichtangabe
     if path.isMandatory:
         worksheetMapping.write('A'+str(row+1)," P ", formatting)
@@ -230,15 +232,15 @@ def addMandatoryColumnEntry(path, row, worksheetMapping, formatting):
     if path.isCondMandatory:
         worksheetMapping.write('A'+str(row+1),"bP", formatting)
 
-def setNextIndex(realPathString, resultArray, indexArray, i):
+def set_next_index(realPathString, resultArray, indexArray, i):
     if not "<<index>>" in realPathString:
         return realPathString
     for j in range(0, indexArray[i]):
         nuuuuPath = realPathString.replace('<<index>>',(str(j)),1)
         print(nuuuuPath)
-        nuuuuPath = setNextIndex(nuuuuPath, resultArray, indexArray, i + 1)
+        nuuuuPath = set_next_index(nuuuuPath, resultArray, indexArray, i + 1)
 
-def composeCSVitemWorksheet(df, worksheetCSVPaths):
+def compose_csv_item_worksheet(df, worksheetCSVPaths):
     '''Worksheet mit Infos zu den Daten / CSV'''
     i = 1
     for col in df.columns:
@@ -251,7 +253,7 @@ def composeCSVitemWorksheet(df, worksheetCSVPaths):
             worksheetCSVPaths.write(i, 1, "NaN")
         i += 1
 
-def composeFlatPathsWorksheet(pathArray, worksheetPaths):
+def compose_flatpath_worksheet(pathArray, worksheetPaths):
     '''Worksheet mit Infos zu den FLAT-Pfaden'''
     j = 1
     nrMandatoryPaths = 0
@@ -267,7 +269,7 @@ def composeFlatPathsWorksheet(pathArray, worksheetPaths):
         j += 1
     print( indent + "Anzahl der Pflichtpfade (ohne Suffixe): " + str(nrMandatoryPaths) )
 
-def setAppearances(workbook, worksheetAutoIndexedMapping, worksheetPaths, worksheetCSVPaths):
+def set_appearances(workbook, worksheetAutoIndexedMapping, worksheetPaths, worksheetCSVPaths):
     # Allgemein
     # https://xlsxwriter.readthedocs.io/format.html#set_align
 
@@ -316,38 +318,3 @@ def setAppearances(workbook, worksheetAutoIndexedMapping, worksheetPaths, worksh
 
 if __name__ == '__main__':
     main()
-
-
-"""
-elif path.maxIndexNumber > 1:
-    #[5,3,3] = IndexArray
-    resultArray = []
-    final_path = setNextIndex(path.pathString, resultArray, indexArray, 0)
-"""
-
-"""
-s = iter(pathString.split("<<index>>"))
-(next(s) + "".join(str(y)+x for x,y in zip(s,myList)))
-"""
-""" 
-Funktionierende Version die nur daran scheitert, dass Python nicht robust genug ist und die Stacks verwirft und dann None returned.
-Das Problem ist das Konstrukt: Zuviele Stacks weil er in der For-Loop die Reku
-def foo(step=0):
-    for i in range(step, 4):
-        print step
-        foo(step+1)
-
-def setNextIndex(realPathString, indexArray, i):
-    if not "<<index>>" in realPathString:
-        return realPathString
-    for j in range(0, indexArray[i]):
-        nuuuuPath = realPathString.replace('<<index>>',(str(j)),1)
-        print(nuuuuPath)
-        nuuuuPath = setNextIndex(nuuuuPath, indexArray, i + 1)
-
-tail-calling is certainly not just for lists; any tree structure wins. Try traversing a tree without recursive calls in a loop; 
-you wind up modeling the stack by hand. Finally, your argument that Python was never designed this way is certainly true, 
-but does little to convince me that it's a god design.
-
-Seeing a recursion in a loop looks quite strange. It looks to me like hammering a screw or screwing a nail.
-"""

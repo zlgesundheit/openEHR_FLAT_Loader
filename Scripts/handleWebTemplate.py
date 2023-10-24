@@ -46,7 +46,7 @@ def main(webTemp, templateName):
         pathIsMandatoryFlag = True 
 
         # Durchlaufe den Baum
-        pathArray = goLow(path, pathArray, pathIsMandatoryFlag, webTemp['tree']['children'])
+        pathArray = traverse_tree_recursive(path, pathArray, pathIsMandatoryFlag, webTemp['tree']['children'])
 
         # Gib some Output
         print ( indent + "Anzahl extrahierter Pfade: " + str( len(pathArray) ) )
@@ -65,7 +65,7 @@ def main(webTemp, templateName):
 ############################### Methods ###############################
 
 # Rekursiv den Baum durchlaufen
-def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
+def traverse_tree_recursive(parentPath, pathArray, pathIsMandatoryFlag, children):
     self = children
 
     for element in self:
@@ -84,7 +84,7 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
 
         # Bei weiteren 'children' tiefer gehen    
         if 'children' in element:
-            pathArray = goLow(suffixPath, pathArray, localMandatoryFlag, element['children'])
+            pathArray = traverse_tree_recursive(suffixPath, pathArray, localMandatoryFlag, element['children'])
         
         # Falls Element Inputs hat oder weder Inputs noch Children, dann ist es ein Blatt
         elif 'inputs' in element or element['rmType'] == "CODE_PHRASE":
@@ -92,55 +92,55 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
             path = pathObjectClass.pathObject()
 
             path.id = element['id']
-            path.pathString = suffixPath
+            path.path_string = suffixPath
             path.aql_path = element['aqlPath']
             if 'inputs' in element: # Bei CODE_PHRASE keine inputs -> 2 Suffixe mit Text
                 path.inputs = element['inputs']
-            path.rmType = element['rmType']
+            path.rmtype = element['rmType']
             # Ganzer Pfad ist Pflicht (traegt true oder false ein)
-            path.isMandatory = localMandatoryFlag
+            path.is_mandatory = localMandatoryFlag
             # Bedingt Pflicht (nur wenn das Element existiert)
             if not localMandatoryFlag and element['min'] == 1:
-                path.isCondMandatory = True
+                path.is_conditional = True
 
             case4 = ["DV_TEXT", "DV_BOOLEAN", "DV_URI", "DV_EHR_URI", "DV_DATE_TIME", "DV_DATE", "DV_TIME"]
 
             # Case 1: PARTY_PROXY -> id, id_scheme, id_namespace, name
             if (element['rmType'] == "PARTY_PROXY"):
-                path.suffixList = ['id','id_scheme','id_namespace','name']
+                path.suffix_list = ['id','id_scheme','id_namespace','name']
             # Case 2: DV_IDENTIFIER -> id, type, issuer, assigner
             elif (element['rmType'] == "DV_IDENTIFIER"):
-                path.suffixList = ['id','type','issuer','assigner']
+                path.suffix_list = ['id','type','issuer','assigner']
             # Case 3: DV_QUANTITY
             elif (element['rmType'] == "DV_QUANTITY"):
-                path.suffixList = ['magnitude','unit']
+                path.suffix_list = ['magnitude','unit']
             # Case 4: DV_TEXT, DV_BOOLEAN, DV_URI, DV_EHR_URI,DV_DATE_TIME, DV_DATE, DV_TIME -> No Suffix
             elif element['rmType'] in case4:
-                path.suffixList = []
+                path.suffix_list = []
             # Case 5: DV_MULTIMEDIA -> none + mediatype + alternatetext + size
             elif element['rmType'] == "DV_MULTIMEDIA":
-                path.suffixList = ['','mediatype','alternatetext','size']
+                path.suffix_list = ['','mediatype','alternatetext','size']
             # Case 6: DV_PROPORTION -> numerator, denominator, type
             elif element['rmType'] == "DV_PROPORTION":
-                path.suffixList = ['numerator','denominator','type']
+                path.suffix_list = ['numerator','denominator','type']
             # Case 7: CODE_PHRASE
             elif (element['rmType'] == "CODE_PHRASE"):
-                path.suffixList = ['code','terminology']
+                path.suffix_list = ['code','terminology']
             # Case 8: DV_COUNT
             elif (element['rmType'] == "DV_COUNT"):
-                path.suffixList = ['value']
+                path.suffix_list = ['value']
             # Case 9: DV_ORDINAL
             elif (element['rmType'] == "DV_ORDINAL"):
-                path.suffixList = ['value','code','ordinal']
+                path.suffix_list = ['value','code','ordinal']
             # Case 10: DV_CODED_TEXT 
             elif (element['rmType'] == "DV_CODED_TEXT"):
-                path.suffixList = ['value','code','terminology']
+                path.suffix_list = ['value','code','terminology']
             # Case 11: DV_PARSABLE -> value, formalism
             elif (element['rmType'] == "DV_PARSABLE"):
-                path.suffixList = ['value','formalism']
+                path.suffix_list = ['value','formalism']
             # Case 12: DV_DURATION -> year,month,day,week,hour,minute,second	
             elif (element['rmType'] == "DV_DURATION"):
-                path.suffixList = []         
+                path.suffix_list = []         
 
             pathArray.append(path)
 
@@ -153,9 +153,6 @@ def map_aql_path_and_id_of_path_object(list_of_path_objects, aql_path_of_element
         if util.remove_and_statements(path_object.aql_path)  == aql_path_of_element:
             return path_object.id
     return None
-
-
-
 
 if __name__ == '__main__':
     main()

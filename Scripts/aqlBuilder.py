@@ -29,8 +29,8 @@ def main(config,manualTaskDir):
 
 
     adjusted_aql_string = generate_aql(aql_path_values)
-    resp = util.sendAqlRequest(config.targetAdress, config.targetAuthHeader, "9999999999999", adjusted_aql_string)
-    util.storeRespAsCSV(workdir, "compositions_as_csvs", resp, config.templateName+".csv", web_temp_elmnts)
+    resp = util.send_aql_request(config.targetAdress, config.targetAuthHeader, "9999999999999", adjusted_aql_string)
+    util.store_resp_as_csv(workdir, "compositions_as_csvs", resp, config.templateName+".csv", web_temp_elmnts)
 
 def generate_aql(aql_path_values):
     assert len(aql_path_values) > 0, "The webtemplate does not contain any aql paths"

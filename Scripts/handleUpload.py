@@ -19,7 +19,7 @@ import numpy as np
 def main():
     pass  
 
-def uploadResourceToEhrId(baseUrl, repo_auth, ehrId, resource, templateName, comp_created_count):
+def upload_comp_to_ehrid(baseUrl, repo_auth, ehrId, resource, templateName, comp_created_count):
     
     url = f'{baseUrl}/rest/ecis/v1/composition/?format=FLAT&ehrId={ehrId}&templateId={templateName}'
 
@@ -67,14 +67,14 @@ def createEHRsForAllPatients(baseUrl, repo_auth, csv_dataframe, patient_id_colum
         subject_namespace = csv_dataframe[subject_namespace_column_name][index]
 
         # Create ehr with subject id = identifizierenden ID und subject namespace = z.B. "ucc_sha1_h_dathe"
-        ehr_id = createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_namespace)
+        ehr_id = create_ehr_with_specific_subjectid(baseUrl, repo_auth, subject_id, subject_namespace)
         csv_dataframe['ehrId'][index] = ehr_id
         if (ehr_id != None):
             ehr_counter += 1
 
     return csv_dataframe, ehr_counter
 
-def createNewEHRwithSpecificSubjectId(baseUrl, repo_auth, subject_id, subject_namespace):
+def create_ehr_with_specific_subjectid(baseUrl, repo_auth, subject_id, subject_namespace):
     url = f'{baseUrl}/rest/openehr/v1/ehr'
     
     payload = json.dumps({
