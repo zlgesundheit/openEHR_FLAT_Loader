@@ -11,6 +11,7 @@ from decimal import *
 from Scripts import exampleGeneratorClass
 
 class pathObject:
+    """ """
     id:str = None
     path_string:str = None
     max_index:int = None
@@ -79,14 +80,28 @@ class pathObject:
             super().__setattr__(name, value)
 
     def isEqual(self, pathObject) -> bool:
-        """ Vergleicht zwei Pfadobjekte hinsichtlich ID und pathString. """
+        """Vergleicht zwei Pfadobjekte hinsichtlich ID und pathString.
+
+        Args:
+          pathObject: 
+
+        Returns:
+
+        """
         if self.id == pathObject.id and self.path_string == pathObject.pathString:
             return True
         else:
             return False
 
     def contains(self, potentiallyContainedPath) -> bool:
-        """ Prüft, ob ein Teilstring in einem anderen Teilstring enthalten ist. """
+        """Prüft, ob ein Teilstring in einem anderen Teilstring enthalten ist.
+
+        Args:
+          potentiallyContainedPath: 
+
+        Returns:
+
+        """
         if self.path_string in potentiallyContainedPath.pathString:
             return True
         else:

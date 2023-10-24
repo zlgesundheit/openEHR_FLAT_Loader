@@ -23,6 +23,18 @@ workdir = os.getcwd()
 ############################### Main ###############################
 
 def main(manualTaskDir,templateName, csv_dataframe, pathArray, allindexesareone):
+    """
+
+    Args:
+      manualTaskDir: param templateName:
+      csv_dataframe: param pathArray:
+      allindexesareone: 
+      templateName: 
+      pathArray: 
+
+    Returns:
+
+    """
     print("MappingListGen is running:")
     
     # Create Excel-File
@@ -52,7 +64,19 @@ def main(manualTaskDir,templateName, csv_dataframe, pathArray, allindexesareone)
 ############################### Methods ###############################
 
 def compose_mapping_worksheet(worksheetMapping, pathArray, numberOfCSVitems, allindexesareone, mandatory_cell_format, cond_mandatory_cell_format):
-    '''Composes mapping-worksheet based on index-values from userinput.'''
+    """Composes mapping-worksheet based on index-values from userinput.
+
+    Args:
+      worksheetMapping: param pathArray:
+      numberOfCSVitems: param allindexesareone:
+      mandatory_cell_format: param cond_mandatory_cell_format:
+      pathArray: 
+      allindexesareone: 
+      cond_mandatory_cell_format: 
+
+    Returns:
+
+    """
 
     # add paths + dropdown list
     local_indexPathDict = {}
@@ -217,14 +241,50 @@ def compose_mapping_worksheet(worksheetMapping, pathArray, numberOfCSVitems, all
     # End of Auto-indexed-Mapping Sheet
 
 def add_path_with_suffix(pathString, suffix, row, worksheetMapping, numberOfCSVitems, formatting):
+    """
+
+    Args:
+      pathString: param suffix:
+      row: param worksheetMapping:
+      numberOfCSVitems: param formatting:
+      suffix: 
+      worksheetMapping: 
+      formatting: 
+
+    Returns:
+
+    """
     worksheetMapping.write('C'+str(row+1),pathString + "|" + suffix, formatting)
     worksheetMapping.data_validation('D'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
 
 def add_path_without_suffix(pathString, row, worksheetMapping, numberOfCSVitems, formatting):
+    """
+
+    Args:
+      pathString: param row:
+      worksheetMapping: param numberOfCSVitems:
+      formatting: 
+      row: 
+      numberOfCSVitems: 
+
+    Returns:
+
+    """
     worksheetMapping.write('C'+str(row+1),pathString, formatting)
     worksheetMapping.data_validation('D'+str(row+1), {'validate': 'list','source': '=CSV_Items!$A$2:$A$' + str(numberOfCSVitems +1)})
 
 def add_mandatory_column_entry(path, row, worksheetMapping, formatting):
+    """
+
+    Args:
+      path: param row:
+      worksheetMapping: param formatting:
+      row: 
+      formatting: 
+
+    Returns:
+
+    """
     # Pflichtangabe
     if path.isMandatory:
         worksheetMapping.write('A'+str(row+1)," P ", formatting)
@@ -233,6 +293,17 @@ def add_mandatory_column_entry(path, row, worksheetMapping, formatting):
         worksheetMapping.write('A'+str(row+1),"bP", formatting)
 
 def set_next_index(realPathString, resultArray, indexArray, i):
+    """
+
+    Args:
+      realPathString: param resultArray:
+      indexArray: param i:
+      resultArray: 
+      i: 
+
+    Returns:
+
+    """
     if not "<<index>>" in realPathString:
         return realPathString
     for j in range(0, indexArray[i]):
@@ -241,7 +312,15 @@ def set_next_index(realPathString, resultArray, indexArray, i):
         nuuuuPath = set_next_index(nuuuuPath, resultArray, indexArray, i + 1)
 
 def compose_csv_item_worksheet(df, worksheetCSVPaths):
-    '''Worksheet mit Infos zu den Daten / CSV'''
+    """Worksheet mit Infos zu den Daten / CSV
+
+    Args:
+      df: param worksheetCSVPaths:
+      worksheetCSVPaths: 
+
+    Returns:
+
+    """
     i = 1
     for col in df.columns:
         # Write CSV-Column Names
@@ -254,7 +333,15 @@ def compose_csv_item_worksheet(df, worksheetCSVPaths):
         i += 1
 
 def compose_flatpath_worksheet(pathArray, worksheetPaths):
-    '''Worksheet mit Infos zu den FLAT-Pfaden'''
+    """Worksheet mit Infos zu den FLAT-Pfaden
+
+    Args:
+      pathArray: param worksheetPaths:
+      worksheetPaths: 
+
+    Returns:
+
+    """
     j = 1
     nrMandatoryPaths = 0
     for path in pathArray:
@@ -270,6 +357,17 @@ def compose_flatpath_worksheet(pathArray, worksheetPaths):
     print( indent + "Anzahl der Pflichtpfade (ohne Suffixe): " + str(nrMandatoryPaths) )
 
 def set_appearances(workbook, worksheetAutoIndexedMapping, worksheetPaths, worksheetCSVPaths):
+    """
+
+    Args:
+      workbook: param worksheetAutoIndexedMapping:
+      worksheetPaths: param worksheetCSVPaths:
+      worksheetAutoIndexedMapping: 
+      worksheetCSVPaths: 
+
+    Returns:
+
+    """
     # Allgemein
     # https://xlsxwriter.readthedocs.io/format.html#set_align
 

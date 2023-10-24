@@ -11,6 +11,15 @@ from Scripts import handleOPT, handleWebTemplate
 from Scripts import util
 
 def main(config,manualTaskDir):
+    """
+
+    Args:
+      config: param manualTaskDir:
+      manualTaskDir: 
+
+    Returns:
+
+    """
     workdir = os.getcwd()
 
     all_templates = util.get_templates_from_server(config)
@@ -33,6 +42,14 @@ def main(config,manualTaskDir):
     util.store_resp_as_csv(workdir, "compositions_as_csvs", resp, config.templateName+".csv", web_temp_elmnts)
 
 def generate_aql(aql_path_values):
+    """
+
+    Args:
+      aql_path_values: 
+
+    Returns:
+
+    """
     assert len(aql_path_values) > 0, "The webtemplate does not contain any aql paths"
     aql_string = "SELECT "
 
@@ -48,7 +65,16 @@ def generate_aql(aql_path_values):
     return adjusted_aql_string
 
 def print_all_templates(all_templates: list) -> None:
-    """Prints each entry of a list of templates in the cli, so that each entry is on a single line."""
+    """Prints each entry of a list of templates in the cli, so that each entry is on a single line.
+
+    Args:
+      all_templates: list:
+      all_templates: list:
+      all_templates: list: 
+
+    Returns:
+
+    """
     for template in all_templates:
         print(template)
 

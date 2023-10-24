@@ -39,6 +39,7 @@ outputDir       = os.path.join(workdir, 'ETLProcess', 'Output', config.templateN
 
 ############################### Main ###############################
 def main():
+    """Takes start parameter from command line call. Runs selected scripts for selected feature."""
     global guessed_encoding
 
     # Check if all directories exist otherwise create them
@@ -46,7 +47,7 @@ def main():
 
     # Run Scripts for the argument that was passed
     if (len(sys.argv) <= 1):
-        print("Use arguments '-generateMapping', '-buildAndUploadCompositions' or '-generateExamples'. or '-openehr2csv'")
+        print("Use arguments '-generateMapping', '-buildAndUploadCompositions', '-generateExamples' or '-openehr2csv'.")
         raise SystemExit
     else:
         print("Used Argument: " + sys.argv[1])
@@ -63,6 +64,7 @@ def main():
         buildAndUploadCompositions()
     # Argument: -generateExamples
     elif (sys.argv[1] == '-generateExamples'):
+        # TODO this is actually the setup step that uploads an OPT to the server. Rename when deleting exampleGenerator.
         generateExamples()
     # Argument: openehr2csv
     elif (sys.argv[1] == '-openehr2csv'):
@@ -71,6 +73,8 @@ def main():
 
 ############################### Methods ###############################
 def generateMapping():
+    """Queries WebTemplate and extracts Path-Values to create Excel-Mapping-File."""
+
     # Upload OPT to openEHR-Repo if necessary
     webTemp = handleOPT.main(config,manualTaskDir,OPTDirPath)
 
@@ -83,6 +87,7 @@ def generateMapping():
     buildMapping.main(manualTaskDir,config.templateName, csv_dataframe, pathArray, allindexesareone = config.allindexesareone)
 
 def buildAndUploadCompositions():
+    """ """
     resArray = buildComp.main(config,manualTaskDir,outputDir)
 
     # Create EHRs for all patients in csv
@@ -126,16 +131,23 @@ def buildAndUploadCompositions():
         pass
     
 def openehr2csv():
+    """Generates and runs an AQL-Query to export all data of a specific Template into a CSV-File."""
     csv_export.main(config,manualTaskDir)
 
 def generateExamples():
-    """ Beispiele werden generiert, wenn die Pfade aus dem WebTemplate ausgelesen werden. Zu jedem Pfad wird abhängig vom Datentyp/rmType ein Beispielwert erzeugt.
-    Danach kann also zu jedem Pfad im Pfad-Dict nicht nur der Pfad (pathString) sondern auch Beispiele abgerufen werden (exampleValueDict). 
+    """Beispiele werden generiert, wenn die Pfade aus dem WebTemplate ausgelesen werden. Zu jedem Pfad wird abhängig vom Datentyp/rmType ein Beispielwert erzeugt.
+    Danach kann also zu jedem Pfad im Pfad-Dict nicht nur der Pfad (pathString) sondern auch Beispiele abgerufen werden (exampleValueDict).
     
     Implementierung fast aller rmTypes mit Beispielen hat beim Verständnis des der Strukturen des Webtemplates sehr geholfen.
     
     Inzwischen bietet die FLAT-API der EHRBase allerdings einen Example-Endpunkt:
     {{host}}/rest/ecis/v1/template/:template_id/example?format=FLAT
+
+    Args:
+        None
+
+    Returns:
+        None
 
     """
 
@@ -163,13 +175,16 @@ def generateExamples():
     # Build Maximal Example
     buildExampleComp.main(workdir, pathArray, config.templateName, config.targetAdress, config.targetAuthHeader, "max")
     """
+
 def printInfoText():
+    """Prints CLI 'Welcome'-Message and short explanation of what the Tool/Scripts do."""
     print("    Welcome to the openEHR_FLAT_Loader-Commandline-Tool!")
     print("    Given an existing template, this tool allows you to transform tabular data into the interoperable openEHR format."
         + "       Variables for template, data/csv-file and repository can be specified in config.ini."
     )
 
 def checkIfDirsExists():
+    """ """
     if not os.path.isdir(manualTaskDir):
         createDir(manualTaskDir)
 
@@ -177,6 +192,16 @@ def checkIfDirsExists():
         createDir(outputDir)
 
 def createDir(path):
+    """
+
+    Args:
+      path:
+
+    Returns:
+
+    Raises:
+        OSError: Error with creating the folder.
+    """
     access_rights = 0o755
     try:
         os.mkdir(path, access_rights)

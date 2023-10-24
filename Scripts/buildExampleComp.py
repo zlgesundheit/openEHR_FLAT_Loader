@@ -23,6 +23,19 @@ from Scripts import handleUpload
 ############################### Main ###############################
 
 def main(workdir, pathArray, templateName, baseUrl, repo_auth, type):
+    """
+
+    Args:
+      workdir: param pathArray:
+      templateName: param baseUrl:
+      repo_auth: param type:
+      pathArray: 
+      baseUrl: 
+      type: 
+
+    Returns:
+
+    """
 
     print ("BuildExampleComp started building Example Compositions")
     
@@ -36,6 +49,17 @@ def main(workdir, pathArray, templateName, baseUrl, repo_auth, type):
 ############################### Methods ###############################
 
 def queryExampleComp(outdir, templateName, baseUrl, repo_auth):
+    """
+
+    Args:
+      outdir: param templateName:
+      baseUrl: param repo_auth:
+      templateName: 
+      repo_auth: 
+
+    Returns:
+
+    """
     url = f'{baseUrl}/rest/ecis/v1/template/{templateName}/example?format=FLAT'
 
     ##payload needs to be json! Otherwise it will just do nothin and run forever
@@ -55,6 +79,19 @@ def queryExampleComp(outdir, templateName, baseUrl, repo_auth):
 
 # TODO Man koennte die If-Bedinung in die for-Schleife packen und damit Code-Zeilen einsparen, da Up/Download und Speichern für Min/Max gleich sind. Ist jetzt gerade aber anders gelaufen.
 def build_example_comp(outdir, pathArray, templateName, baseUrl, repo_auth, type):
+    """
+
+    Args:
+      outdir: param pathArray:
+      templateName: param baseUrl:
+      repo_auth: param type:
+      pathArray: 
+      baseUrl: 
+      type: 
+
+    Returns:
+
+    """
     # Create Example EHR
     ehrId = handleUpload.create_ehr_with_specific_subjectid(baseUrl, repo_auth, "examplePatient", "openEHR_FLAT_Loader")
 
@@ -145,12 +182,31 @@ def build_example_comp(outdir, pathArray, templateName, baseUrl, repo_auth, type
         print ("\t" + f'CANONICAL Maximal-Example-Composition erstellt und im Ordner "Output" gespeichert. \n')
 
 def store_string_as_file(string, dirPath, filename):
+    """
+
+    Args:
+      string: param dirPath:
+      filename: 
+      dirPath: 
+
+    Returns:
+
+    """
     filePath = os.path.join(dirPath, filename)
     with open(filePath,"w", encoding = 'UTF-8') as resFile:
         json.dump(string, resFile, default=convert, indent=4, ensure_ascii=False)
 
 def get_comp_by_compid(baseUrl, repo_auth, compId):
-    '''Request to get a composition via rest/openehr/v1 Endpoint'''
+    """Request to get a composition via rest/openehr/v1 Endpoint
+
+    Args:
+      baseUrl: param repo_auth:
+      compId: 
+      repo_auth: 
+
+    Returns:
+
+    """
     
     url = f'{baseUrl}/rest/ecis/v1/composition/{compId}?format=JSON'
     headers = {
@@ -169,10 +225,26 @@ def get_comp_by_compid(baseUrl, repo_auth, compId):
 
 # Workaround because Pandas uses some panda data types that are NOT serializable. Use like json.dumps(dictArray[0]), default=convert)
 def convert(o):
+    """
+
+    Args:
+      o: 
+
+    Returns:
+
+    """
     if isinstance(o, np.int64): return o.item()  
     raise TypeError
 
 def create_dir(path):
+    """
+
+    Args:
+      path: 
+
+    Returns:
+
+    """
     access_rights = 0o755
     try:
         os.mkdir(path, access_rights)

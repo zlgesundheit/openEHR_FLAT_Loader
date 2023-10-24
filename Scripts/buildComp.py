@@ -30,6 +30,7 @@ workdir = os.getcwd()
 ############################### Main ###############################
 
 class knownIndex():
+    """TODO: Check if this class is still needed."""
     id = None
     real_index = None
     mapped_index = None
@@ -43,6 +44,17 @@ class knownIndex():
         pass
 
 def main(config,manualTaskDir,outputDir):
+    """Main of buildComp.py. Reads CSV and Excel-Mapping-File to create a resource per CSV-line returned as a Dictionary
+
+    Args:
+      config: Config-Values from Config-File
+      manualTaskDir: Mapping-Directory
+      outputDir: Output-Directory
+
+    Returns:
+      : Array of Compositions
+
+    """
     print(os.linesep + "BuildComp is running.")
     
     # Read CSV as data frame
@@ -128,12 +140,30 @@ def main(config,manualTaskDir,outputDir):
 ############################### Methods ###############################
 
 def set_indexes_in_path(path, indexes):
+    """
+
+    Args:
+      path: param indexes:
+      indexes: 
+
+    Returns:
+
+    """
     for i in range(0, len(indexes)):
         path = path.replace("<<index>>", str(indexes[i]), 1)
     return path
 
 def store_dict_array_as_res(outputDir,dictArray, templateName):
-    '''Dump Dicts as JSON-String in Files'''
+    """Dump Dicts as JSON-String in Files
+
+    Args:
+      outputDir: param dictArray:
+      templateName: 
+      dictArray: 
+
+    Returns:
+
+    """
     anzahl_eintraege = len(dictArray)
     print ("    Erstelle "+ str(anzahl_eintraege) + " Composition-Ressourcen.")
     i = 0
@@ -152,7 +182,15 @@ def store_dict_array_as_res(outputDir,dictArray, templateName):
     print (indent + str(i) + " / " + str(anzahl_eintraege) + f' Ressourcen erstellt und im Ordner "Output" gespeichert.')
 
 def xlsx_as_df(manualTaskDir,templateName):
-    '''Read Mapping as Dataframe'''
+    """Read Mapping as Dataframe
+
+    Args:
+      manualTaskDir: param templateName:
+      templateName: 
+
+    Returns:
+
+    """
     xlsxPath = os.path.join(manualTaskDir, templateName + '_MAPPING.xlsx')
     try:
         mapTabDF = pd.read_excel(xlsxPath, "Auto-indexed Mapping", header=0, engine='openpyxl', dtype=str) 
@@ -166,12 +204,26 @@ def xlsx_as_df(manualTaskDir,templateName):
     return mapTabDF
 
 def convert(o):
-    '''Workaround because Pandas uses some panda data types that are NOT serializable. Use like json.dumps(dictArray[0]), default=convert)'''
+    """Workaround because Pandas uses some panda data types that are NOT serializable. Use like json.dumps(dictArray[0]), default=convert)
+
+    Args:
+      o: 
+
+    Returns:
+
+    """
     if isinstance(o, np.int64): return o.item()  
     raise TypeError
 
 def mapping_empty(mapTabDF):
-    '''Checken ob das Mapping leer ist, also nur "nan"-Eintraege vorhanden sind'''
+    """Checken ob das Mapping leer ist, also nur "nan"-Eintraege vorhanden sind
+
+    Args:
+      mapTabDF: 
+
+    Returns:
+
+    """
     empty = True
     # Checken ob CSV-Column (C) leer ist
     for i in mapTabDF['Map CSV-Column to Path (Dropdown-Selector)']:
