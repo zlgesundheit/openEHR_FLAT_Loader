@@ -92,11 +92,11 @@ def main(config,manualTaskDir,outputDir):
 
                     # Wenn die Zeile gemappt wurde, dann soll sie entsprechend (mit den korrekten Indexen) angelegt werden.
                     if str(metadatumAusSpalteD) != "nan":
-                        pathObj.path_string = path
-                        pathObj.mapped_to_csv_column = metadatumAusSpalteD #Achtung, das setzen der Column-Variable setzt auch den isMapped Bool...
+                        pathObj.pathString = path
+                        pathObj.mappedCSVColumn = metadatumAusSpalteD #Achtung, das setzen der Column-Variable setzt auch den isMapped Bool...
 
                         # Dict mit KEY = PFAD und VALUE = Value aus der CSV aus Spalte D  
-                        if pathObj and pathObj.is_mapped:
+                        if pathObj.isMapped:
                             if indexString != "nan":
                                 pathString = set_indexes_in_path(path, indexString)
                             else:
@@ -104,18 +104,18 @@ def main(config,manualTaskDir,outputDir):
                             dict[pathString] = metadatumAusSpalteD
 
                     elif str(gemappteSpalteAusCSV) != "nan":
-                        pathObj.path_string = path
-                        pathObj.mapped_to_csv_column = gemappteSpalteAusCSV
+                        pathObj.pathString = path
+                        pathObj.mappedCSVColumn = gemappteSpalteAusCSV
 
-                        # Dict mit KEY = PFAD und VALUE = Value aus der CSV aus der gemappten Spalte    
-                        if pathObj and pathObj.is_mapped and str(csv_dataframe[ pathObj.mapped_to_csv_column ][csvIndex]) != "nan":
-
+                        # Dict mit KEY = PFAD und VALUE = Value aus der CSV aus der gemappten Spalte  
+                        if pathObj.isMapped and str(csv_dataframe[pathObj.mappedCSVColumn][csvIndex]) != "nan":
+                            
                             if indexString != "nan":
                                 pathString = set_indexes_in_path(path, indexString)
                             else:
                                 pathString = path
 
-                            dict[pathString] = csv_dataframe[ pathObj.mapped_to_csv_column ][csvIndex]
+                            dict[pathString] = csv_dataframe[ pathObj.mappedCSVColumn ][csvIndex]
 
                     else:
                         pass

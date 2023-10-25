@@ -12,19 +12,19 @@ from decimal import *
 class pathObject:
     """ """
     id:str = None
-    path_string:str = None
-    max_index:int = None
-    rmtype:str = None
-    suffix_list:list = None
+    pathString:str = None
+    rmType:str = None
+    suffixList:list = None
     aql_path: str = None
 
+    max_index:int = None
     has_suffix:bool = None
     has_index:bool = None
     is_mandatory:bool = None
     is_conditional:bool = None
 
-    is_mapped:bool = None
-    mapped_to_csv_column:str = None
+    isMapped:bool = None
+    mappedCSVColumn:str = None
     
     index_path_dict:dict = None
 
@@ -82,7 +82,7 @@ class pathObject:
         Returns:
 
         """
-        if self.id == pathObject.id and self.path_string == pathObject.pathString:
+        if self.id == pathObject.id and self.pathString == pathObject.pathString:
             return True
         else:
             return False
@@ -96,7 +96,7 @@ class pathObject:
         Returns:
 
         """
-        if self.path_string in potentiallyContainedPath.pathString:
+        if self.pathString in potentiallyContainedPath.pathString:
             return True
         else:
             return False
@@ -105,7 +105,7 @@ class pathObject:
         """ String Repräsentation der Klasse, welche einige Attribute des 'pathObject' auf der Kommandozeile ausgibt. """
         printOutput = (
             f'\tID: \t\t{self.id}\n'
-            f'\tPfad: \t\t{self.path_string}\n'
+            f'\tPfad: \t\t{self.pathString}\n'
             f'\tPflicht: \t{self.is_mandatory}\n'
             f'\tIndexe: \t{self.max_index}\n'
             f'\tSuffixe: \t{self.has_suffix}'

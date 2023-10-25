@@ -24,7 +24,6 @@ from Scripts import handleWebTemplate
 from Scripts import buildMapping
 from Scripts import handleUpload
 from Scripts import queryExampleComp
-from Scripts import aqlBuilder
 from Scripts import csv_export
 
 #Init Config-Object
@@ -113,6 +112,7 @@ def build_and_upload_compositions():
 
     # Send resource to server
     if config.directupload == "1":
+        # TODO Check if CSV can be read successfully -> e.g. may be hindered if CSV is opened -> ErrorHandling. Do this in function
         csv_dataframe = handleConfig.read_csv_as_df(config.inputCSV)
         anzahl_eintraege = len(csv_dataframe.index)
 
