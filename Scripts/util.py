@@ -36,6 +36,18 @@ def find_quantity_value(obj):
             return obj["magnitude"], obj["units"]
     return None
 
+def find_code_phrase_value(obj):
+    t=1
+    # Check if obj is a dictionary
+    if "_type" in obj and obj["_type"] == "DV_CODED_TEXT":
+        return find_code_phrase_value(obj["defining_code"])
+    if isinstance(obj, dict) or isinstance(obj, pd.Series):
+        # Check if the dictionary has "_type" key set to "CODE_PHRASE" and contains "code" and "terminology"
+        if "_type" in obj and obj["_type"] == "CODE_PHRASE" and "code_string" in obj and "terminology_id" in obj:
+            # Return the combination of "code" and "terminology"
+            return obj["code_string"]
+    return None
+
 def find_named_value(obj):
     """
 
@@ -70,8 +82,11 @@ def find_value(obj):
 
     """
     # Check if obj is a dictionary
-    if isinstance(obj, dict):
+    if isinstance(obj, dict) or isinstance(obj, pd.Series):
         # Call find_quantity_value to check for DV_QUANTITY and return its value
+        code_phrase_value = find_code_phrase_value(obj)
+        if code_phrase_value is not None:
+            return code_phrase_value
         quantity_value = find_quantity_value(obj)
         if quantity_value is not None:
             return quantity_value
@@ -91,28 +106,46 @@ def find_value(obj):
 
 
 
-def process_rows(all_compositions_as_list, column_names):
-    """TODO: Rename function and variables and comment
-
+def transform_rows_from_compositions_to_dataframe(rows_from_compositions_as_list, column_names):
+    """
     Args:
-      all_compositions_as_list: param column_names:
-      column_names: 
+      rows_from_compositions_as_list: All rows of a composition giving back by the server
+      column_names: the actual column names of the entries in the list
 
     Returns:
-
+      processed_dataframe: transformed rows of compositions to dataframe
     """
-    all_compositions_as_df = pd.DataFrame(all_compositions_as_list, columns=column_names)
-    for index, composition in all_compositions_as_df.iterrows():
-        for col in composition.index:
-            if isinstance(composition[col], dict):
-                value = find_value(composition[col])
+    processed_dataframe = pd.DataFrame(rows_from_compositions_as_list, columns=column_names)
+    processed_dataframe = rename_duplicate_columns(processed_dataframe)
+    for index, composition in processed_dataframe.iterrows():
+        composition = pd.Series(composition)
+        for column_name, column_content in composition.items():
+            if isinstance(column_content, dict) or isinstance(column_content, pd.Series):
+                value = find_value(column_content)
                 if value is not None:
                     if isinstance(value, tuple):
-                        all_compositions_as_df.rename(columns={col: f"{col} (in {value[1]})"}, inplace=True)
-                        composition[col] = value[0]
+                        unit = value[1]
+                        new_col_name = f"Unit for column '{column_name}'"
+
+                        # Adds the new column if it does not already exist
+                        # Position of the new unit-column: 1 after the value column
+                        if new_col_name not in processed_dataframe.columns:
+                            processed_dataframe.insert(processed_dataframe.columns.get_loc(column_name)
+                                                          + 1, new_col_name, unit)
+
+                        # Update the values in the new column
+                        processed_dataframe.at[index, new_col_name] = unit
+                        composition[column_name] = value[0]
                     else:
-                        composition[col] = value
-    return all_compositions_as_df
+                        composition[column_name] = value
+    return processed_dataframe
+def rename_duplicate_columns(df):
+    cols = pd.Series(df.columns)
+    for dup in cols[cols.duplicated()].unique():
+        cols[cols[cols == dup].index.values.tolist()] = [dup + str(i + 1) if i != 0 else dup for i in range(sum(cols == dup))]
+    df.columns = cols
+    return df
+
 
 def store_resp_as_csv(workdir, subfolder, resp, filename, web_temp_elmnts):
     """
@@ -134,14 +167,14 @@ def store_resp_as_csv(workdir, subfolder, resp, filename, web_temp_elmnts):
         column_names.append(name_elmnt_webtemplate)
 
     rows = resp.get('rows')
-    processed_rows = process_rows(rows, column_names)
+    processed_rows = transform_rows_from_compositions_to_dataframe(rows, column_names)
 
     # Store DF as CSV
     path_to_store = os.path.join(workdir, subfolder)
     if not os.path.exists(path_to_store):
         print(f"Create Folder {path_to_store}")
         os.makedirs(path_to_store)
-    processed_rows.to_csv(os.path.join(path_to_store, filename), encoding="utf-8", index = False, quoting=csv.QUOTE_ALL, sep=";")
+    processed_rows.to_csv(os.path.join(path_to_store, filename), encoding="UTF-8", index = False, quoting=csv.QUOTE_ALL, sep=";")
     print(f"Stored File {filename} in Folder {path_to_store}")
 
 def send_aql_request(ehrUrl, authHeader, limit, aqlQuery):
@@ -240,18 +273,18 @@ def load_env_file(dotenv_path, override=False):
         for key, value in dotenv_vars.items():
             os.environ.setdefault(key, value)
 
-def remove_and_statements(input_string):
+def remove_and_statements(aql_path):
     """
 
     Args:
-      input_string: 
+      aql_path: aql path which contains a 'and statement'
 
     Returns:
-
+      adjusted_string: aql_path without 'and statement'
     """
     # Regex-Pattern zum Ersetzen von " and ..." durch "]"
     pattern = r' and [^\]]*\''
-    adjusted_string = re.sub(pattern, "",input_string)
+    adjusted_string = re.sub(pattern, "",aql_path)
     return adjusted_string
 
 def get_templates_from_server(config: handleConfig.config) -> list:

@@ -25,6 +25,7 @@ from Scripts import buildMapping
 from Scripts import handleUpload
 from Scripts import queryExampleComp
 from Scripts import aqlBuilder
+from Scripts import csv_export
 
 #Init Config-Object
 config = handleConfig.config()
@@ -132,7 +133,7 @@ def build_and_upload_compositions():
     
 def export_openehr2csv():
     """Generates and runs an AQL-Query to export all data of a specific Template into a CSV-File."""
-    aqlBuilder.main(config,manualTaskDir)
+    csv_export.main(config,manualTaskDir)
 
 def setup_new_template():
     """Queries example composition from FLAT-API example endpoint of ehrbase. TODO Also query Better Example Endpoint. Idenntify which is present.
@@ -180,7 +181,7 @@ def create_dir(path):
     """
 
     Args:
-      path: 
+      path:
 
     Returns:
 
