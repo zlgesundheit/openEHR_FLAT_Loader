@@ -1,5 +1,5 @@
 # Class "pathObject" to represent a path in a WebTemplate 
-# including all relevant information about cardinality, suffixes, data type, example values, ...
+# including all relevant information about cardinality, suffixes, data type, ...
 #
 # Jendrik Richter, Jan Janosch Schneider
 #
@@ -8,7 +8,6 @@
 from decimal import *
 # Third party imports
 # Local application imports
-from Scripts import exampleGeneratorClass
 
 class pathObject:
     """ """
@@ -28,7 +27,6 @@ class pathObject:
     mapped_to_csv_column:str = None
     
     index_path_dict:dict = None
-    example_value_dict:dict = None
 
     def __init__(self):
         pass
@@ -69,12 +67,8 @@ class pathObject:
             else:
                 super(pathObject, self).__setattr__("hasIndex", False)
                 super(pathObject, self).__setattr__("maxIndexNumber", 0)
-        # Wenn der rmType gesetzt wird: Setze exampleValueDict mit key: volle pfadnamen ( mit Suffix(en) ) und value: example-wert abhaengig von "rmType" und "type" des Inputs/Suffix
         elif name == "rmType":
             super(pathObject, self).__setattr__("rmType", value)
-            ### EXAMPLE GENERATION --> outcomment the two following lines to generate own examples
-            #exampleValueDict = exampleGeneratorClass.createExampleValueDict(self, value)
-            #super(pathObject, self).__setattr__("exampleValueDict", exampleValueDict)
         # Wird keiner der Fälle oben genutzt, dann wird die Variable einfach wie immer gesetzt
         else:
             super().__setattr__(name, value)
@@ -117,17 +111,3 @@ class pathObject:
             f'\tSuffixe: \t{self.has_suffix}'
         )
         return str(printOutput)
-
-# Test
-"""
-##%
-path = pathObject( )
-path.pathString = "natars_tzusatz/schmerzerfassung/beliebiges_ereignis:<<index>>/spezifisches_symptom_anzeichen:<<index>>/symptom_krankheitsanzeichen/schmerzstärke:<<index>>"
-path.rmType = "DV_DATE_TIME"
-print(path.pathString)
-print(path.maxIndexNumber)
-
-print(path.exampleValueDict)
-
-print(path)
-"""

@@ -17,6 +17,7 @@ from Scripts import handleWebTemplate, handleConfig
 import json
 import csv
 import pandas as pd
+import numpy as np
 
 def find_quantity_value(obj):
     """
@@ -269,3 +270,61 @@ def get_templates_from_server(config: handleConfig.config) -> list:
     all_templates = send_aql_request(config.targetAdress, config.targetAuthHeader, "9999999999999", aql_string)
     flat_list_all_templates = [item for sublist in all_templates["rows"] for item in sublist]
     return flat_list_all_templates
+
+def store_string_as_file(string, dirPath, filename):
+    """Stores given string in specified directory with specified filename
+
+    Args:
+      string: param dirPath:
+      filename: 
+      dirPath: 
+
+    Returns:
+        None
+
+    """
+    filePath = os.path.join(dirPath, filename)
+    with open(filePath,"w", encoding = 'UTF-8') as resFile:
+        json.dump(string, resFile, default=convert, indent=4, ensure_ascii=False)
+
+# Workaround because Pandas uses some panda data types that are NOT serializable. Use like json.dumps(dictArray[0]), default=convert)
+def convert(o):
+    """Helper function that converst panda data types that are not serializable
+
+    Args:
+      o: pandas int that is not serializable
+
+    Returns:
+      int64: Given item as np.int64
+
+    Raises:
+      TypeError
+    """
+    if isinstance(o, np.int64): return o.item()  
+    raise TypeError
+
+# TODO Unused at the moment
+def get_comp_by_compid(baseUrl, repo_auth, compId):
+    """Request to get a composition via rest/openehr/v1 Endpoint
+
+    Args:
+      baseUrl: Host-URL
+      compId: Composition ID
+      repo_auth: Auth-Header (base64) username:password
+
+    Returns:
+      composition as string
+    """
+    
+    url = f'{baseUrl}/rest/ecis/v1/composition/{compId}?format=JSON'
+    headers = {
+    'Authorization' : repo_auth,
+    }
+
+    response = requests.get(url, headers=headers)
+
+    # TODO Error Handling wenn response.status nicht in 200,201 oder anderen okayen..
+
+    response_text_json = json.loads(response.text)
+
+    return response_text_json['composition']

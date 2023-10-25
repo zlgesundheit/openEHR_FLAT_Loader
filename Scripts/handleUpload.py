@@ -80,7 +80,7 @@ def convert(o):
     if isinstance(o, np.int64): return o.item()  
     raise TypeError
 
-def createEHRsForAllPatients(baseUrl, repo_auth, csv_dataframe, patient_id_column_name, subject_namespace_column_name, ehr_counter):
+def create_all_ehr(baseUrl, repo_auth, csv_dataframe, patient_id_column_name, subject_namespace_column_name, ehr_counter):
     """Nimmt CSV und Spaltenname der identifizierenden ID / Primaerschluessel des Datensatzes entgegen, um fuer jeden Patienten ein EHR zu erstellen.
        Ein Check, ob die EHR zu der ID bereits existiert ist notwendig.
 

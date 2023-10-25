@@ -23,7 +23,7 @@ from Scripts import buildComp
 from Scripts import handleWebTemplate
 from Scripts import buildMapping
 from Scripts import handleUpload
-from Scripts import buildExampleComp
+from Scripts import queryExampleComp
 from Scripts import aqlBuilder
 
 #Init Config-Object
@@ -43,11 +43,11 @@ def main():
     global guessed_encoding
 
     # Check if all directories exist otherwise create them
-    checkIfDirsExists()
+    dir_exists()
 
     # Run Scripts for the argument that was passed
     if (len(sys.argv) <= 1):
-        print("Use arguments '-generateMapping', '-buildAndUploadCompositions', '-generateExamples' or '-openehr2csv'.")
+        print("Use arguments '-setup_new_template, -generateMapping', '-buildAndUploadCompositions' or '-openehr2csv'.")
         raise SystemExit
     else:
         print("Used Argument: " + sys.argv[1])
@@ -55,24 +55,23 @@ def main():
     # Argument: -generateMapping
     if (sys.argv[1] == '-generateMapping'):
         # Show Explanatory Text on how to use the tool and what steps to perform to the User
-        printInfoText()
-        generateMapping()
+        print_welcome_text()
+        generate_mapping()
     # Argument: -buildAndUploadCompositions
     elif (sys.argv[1] == '-buildAndUploadCompositions'):
         # Show Explanatory Text on how to use the tool and what steps to perform to the User
-        printInfoText()
-        buildAndUploadCompositions()
-    # Argument: -generateExamples
-    elif (sys.argv[1] == '-generateExamples'):
-        # TODO this is actually the setup step that uploads an OPT to the server. Rename when deleting exampleGenerator.
-        generateExamples()
+        print_welcome_text()
+        build_and_upload_compositions()
+    # Argument: -setup_new_template
+    elif (sys.argv[1] == '-setup_new_template'):
+        setup_new_template()
     # Argument: openehr2csv
     elif (sys.argv[1] == '-openehr2csv'):
-        openehr2csv()
+        export_openehr2csv()
     # Terminate
 
 ############################### Methods ###############################
-def generateMapping():
+def generate_mapping():
     """Queries WebTemplate and extracts Path-Values to create Excel-Mapping-File."""
 
     # Upload OPT to openEHR-Repo if necessary
@@ -86,8 +85,9 @@ def generateMapping():
     # Baue Mapping
     buildMapping.main(manualTaskDir,config.templateName, csv_dataframe, pathArray, allindexesareone = config.allindexesareone)
 
-def buildAndUploadCompositions():
-    """ """
+def build_and_upload_compositions():
+    """Generates compositions using CSV-Data and supplied Mapping-Information from Excel-File. 
+       If activated in config those are uploaded to the specified directory. """
     resArray = buildComp.main(config,manualTaskDir,outputDir)
 
     # Create EHRs for all patients in csv
@@ -102,7 +102,7 @@ def buildAndUploadCompositions():
 
         print (f'Create {anzahl_eintraege} EHRs:')
         ehr_counter = 0
-        csv_dataframe, ehr_counter = handleUpload.createEHRsForAllPatients(config.targetAdress, config.targetAuthHeader, csv_dataframe, config.subjectidcolumn , config.subjectnamespacecolumn, ehr_counter)
+        csv_dataframe, ehr_counter = handleUpload.create_all_ehr(config.targetAdress, config.targetAuthHeader, csv_dataframe, config.subjectidcolumn , config.subjectnamespacecolumn, ehr_counter)
         print ("EHRs for " + str(ehr_counter) + " / " + str(anzahl_eintraege) + " Subjects have been created successfully.\n")
         csvPath = sourceDataCsvFP
         csv_dataframe.to_csv(csvPath, sep=";", index = False, encoding = "UTF-8")
@@ -130,17 +130,12 @@ def buildAndUploadCompositions():
         print ("Direct Upload is disabled in Config.ini")
         pass
     
-def openehr2csv():
+def export_openehr2csv():
     """Generates and runs an AQL-Query to export all data of a specific Template into a CSV-File."""
     aqlBuilder.main(config,manualTaskDir)
 
-def generateExamples():
-    """Beispiele werden generiert, wenn die Pfade aus dem WebTemplate ausgelesen werden. Zu jedem Pfad wird abhängig vom Datentyp/rmType ein Beispielwert erzeugt.
-    Danach kann also zu jedem Pfad im Pfad-Dict nicht nur der Pfad (pathString) sondern auch Beispiele abgerufen werden (exampleValueDict).
-    
-    Implementierung fast aller rmTypes mit Beispielen hat beim Verständnis des der Strukturen des Webtemplates sehr geholfen.
-    
-    Inzwischen bietet die FLAT-API der EHRBase allerdings einen Example-Endpunkt:
+def setup_new_template():
+    """Queries example composition from FLAT-API example endpoint of ehrbase. TODO Also query Better Example Endpoint. Idenntify which is present.
     {{host}}/rest/ecis/v1/template/:template_id/example?format=FLAT
 
     Args:
@@ -151,47 +146,37 @@ def generateExamples():
 
     """
 
-    print("Upload OPT and download Web Template + Example Composition")
+    print(f"Upload OPT {config.templateName} and download WebTemplate + Example-Composition")
 
     # Upload OPT to openEHR-Repo if necessary
     webTemp = handleOPT.main(config,manualTaskDir,OPTDirPath)
 
-    # Query Example and store in 
-    exampleComp = buildExampleComp.queryExampleComp(workdir, config.templateName, config.targetAdress, config.targetAuthHeader)
-    buildExampleComp.store_string_as_file(exampleComp, manualTaskDir, config.templateName + "CompositionExample" + ".json")
-
+    # Query Example Comp 
+    exampleComp = queryExampleComp.query_example_composition(config.templateName, config.targetAdress, config.targetAuthHeader)
+    # Store example comp in ManualTaskFolder
+    queryExampleComp.store_string_as_file(exampleComp, manualTaskDir, config.templateName + "CompositionExample" + ".json")
     # Store Webtemplate in Example-Folder
-    buildExampleComp.store_string_as_file(webTemp, manualTaskDir, config.templateName + "_WebTemplate" + ".json")
+    queryExampleComp.store_string_as_file(webTemp, manualTaskDir, config.templateName + "_WebTemplate" + ".json")
 
-    print("\n")
-    print("OPT is uploaded to the Repository and an Example-Composition is stored in the ManualTasks-Folder.")
+    print("\nOPT is uploaded to the Repository and an Example-Composition is stored in the ManualTasks-Folder.")
+    print("\nDone.")
 
-    """
-    # Extrahiere Pfade in Array von Pfadobjekten 
-    pathArray = handleWebTemplate.main(webTemp, config.templateName)
-
-    # Build Minimal Example
-    buildExampleComp.main(workdir, pathArray, config.templateName, config.targetAdress, config.targetAuthHeader, "min")
-    # Build Maximal Example
-    buildExampleComp.main(workdir, pathArray, config.templateName, config.targetAdress, config.targetAuthHeader, "max")
-    """
-
-def printInfoText():
+def print_welcome_text():
     """Prints CLI 'Welcome'-Message and short explanation of what the Tool/Scripts do."""
     print("    Welcome to the openEHR_FLAT_Loader-Commandline-Tool!")
     print("    Given an existing template, this tool allows you to transform tabular data into the interoperable openEHR format."
         + "       Variables for template, data/csv-file and repository can be specified in config.ini."
     )
 
-def checkIfDirsExists():
+def dir_exists():
     """ """
     if not os.path.isdir(manualTaskDir):
-        createDir(manualTaskDir)
+        create_dir(manualTaskDir)
 
     if not os.path.isdir(outputDir):
-        createDir(outputDir)
+        create_dir(outputDir)
 
-def createDir(path):
+def create_dir(path):
     """
 
     Args:
