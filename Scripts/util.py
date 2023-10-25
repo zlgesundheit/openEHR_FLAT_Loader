@@ -105,33 +105,39 @@ def find_value(obj):
 
 
 
-def process_rows(all_compositions_as_list, column_names):
-    """TODO: Rename function and variables and comment
-
+def transform_rows_from_compositions_to_dataframe(rows_from_compositions_as_list, column_names):
+    """
     Args:
-      all_compositions_as_list: param column_names:
-      column_names: 
+      rows_from_compositions_as_list: All rows of a composition giving back by the server
+      column_names: the actual column names of the entries in the list
 
     Returns:
-
+      processed_dataframe: transformed rows of compositions to dataframe
     """
-    all_compositions_as_df = pd.DataFrame(all_compositions_as_list, columns=column_names)
-    all_compositions_as_df = rename_duplicate_columns(all_compositions_as_df)
-    for index, composition in all_compositions_as_df.iterrows():
+    processed_dataframe = pd.DataFrame(rows_from_compositions_as_list, columns=column_names)
+    processed_dataframe = rename_duplicate_columns(processed_dataframe)
+    for index, composition in processed_dataframe.iterrows():
         composition = pd.Series(composition)
-
-        for index, col in composition.items():
-            if index == "language":
-                test=1
-            if isinstance(col, dict) or isinstance(col, pd.Series):
-                value = find_value(col)
+        for column_name, column_content in composition.items():
+            if isinstance(column_content, dict) or isinstance(column_content, pd.Series):
+                value = find_value(column_content)
                 if value is not None:
                     if isinstance(value, tuple):
-                        all_compositions_as_df.rename(columns={index: f"{index} (in {value[1]})"}, inplace=True)
-                        composition[index] = value[0]
+                        unit = value[1]
+                        new_col_name = f"Unit for column '{column_name}'"
+
+                        # Adds the new column if it does not already exist
+                        # Position of the new unit-column: 1 after the value column
+                        if new_col_name not in processed_dataframe.columns:
+                            processed_dataframe.insert(processed_dataframe.columns.get_loc(column_name)
+                                                          + 1, new_col_name, unit)
+
+                        # Update the values in the new column
+                        processed_dataframe.at[index, new_col_name] = unit
+                        composition[column_name] = value[0]
                     else:
-                        composition[index] = value
-    return all_compositions_as_df
+                        composition[column_name] = value
+    return processed_dataframe
 def rename_duplicate_columns(df):
     cols = pd.Series(df.columns)
     for dup in cols[cols.duplicated()].unique():
@@ -160,7 +166,7 @@ def store_resp_as_csv(workdir, subfolder, resp, filename, web_temp_elmnts):
         column_names.append(name_elmnt_webtemplate)
 
     rows = resp.get('rows')
-    processed_rows = process_rows(rows, column_names)
+    processed_rows = transform_rows_from_compositions_to_dataframe(rows, column_names)
 
     # Store DF as CSV
     path_to_store = os.path.join(workdir, subfolder)
@@ -266,18 +272,18 @@ def load_env_file(dotenv_path, override=False):
         for key, value in dotenv_vars.items():
             os.environ.setdefault(key, value)
 
-def remove_and_statements(input_string):
+def remove_and_statements(aql_path):
     """
 
     Args:
-      input_string: 
+      aql_path: aql path which contains a 'and statement'
 
     Returns:
-
+      adjusted_string: aql_path without 'and statement'
     """
     # Regex-Pattern zum Ersetzen von " and ..." durch "]"
     pattern = r' and [^\]]*\''
-    adjusted_string = re.sub(pattern, "",input_string)
+    adjusted_string = re.sub(pattern, "",aql_path)
     return adjusted_string
 
 def get_templates_from_server(config: handleConfig.config) -> list:
