@@ -36,16 +36,18 @@ def find_quantity_value(obj):
             return obj["magnitude"], obj["units"]
     return None
 
-def find_code_phrase_value(obj):
-    t=1
+def find_coded_text_value(obj):
     # Check if obj is a dictionary
     if "_type" in obj and obj["_type"] == "DV_CODED_TEXT":
-        return find_code_phrase_value(obj["defining_code"])
-    if isinstance(obj, dict) or isinstance(obj, pd.Series):
-        # Check if the dictionary has "_type" key set to "CODE_PHRASE" and contains "code" and "terminology"
-        if "_type" in obj and obj["_type"] == "CODE_PHRASE" and "code_string" in obj and "terminology_id" in obj:
-            # Return the combination of "code" and "terminology"
-            return obj["code_string"]
+        clear_text_value = obj["value"]
+        obj = obj["defining_code"]
+        if isinstance(obj, dict) or isinstance(obj, pd.Series):
+            # Check if the dictionary has "_type" key set to "CODE_PHRASE" and contains "code" and "terminology"
+            if "_type" in obj and obj["_type"] == "CODE_PHRASE" and "code_string" in obj and "terminology_id" in obj:
+                # Return the combination of "code" and "terminology"
+                code_string = obj["code_string"]
+                terminology = obj["terminology_id"]["value"]
+                return clear_text_value, code_string, terminology
     return None
 
 def find_named_value(obj):
@@ -84,12 +86,12 @@ def find_value(obj):
     # Check if obj is a dictionary
     if isinstance(obj, dict) or isinstance(obj, pd.Series):
         # Call find_quantity_value to check for DV_QUANTITY and return its value
-        code_phrase_value = find_code_phrase_value(obj)
-        if code_phrase_value is not None:
-            return code_phrase_value
+        coded_text_value = find_coded_text_value(obj)
+        if coded_text_value is not None:
+            return "coded_text", coded_text_value
         quantity_value = find_quantity_value(obj)
         if quantity_value is not None:
-            return quantity_value
+            return "quantity_value", quantity_value
         # Call find_named_value to search for "value" or "name" and return its value
         named_value = find_named_value(obj)
         if named_value is not None:
@@ -103,42 +105,110 @@ def find_value(obj):
                 return result
     # If no matching values are found, return None to indicate that the value was not found
     return None
+def process_coded_text_value(value, column_name, index, processed_dataframe):
+    """
+    Process a 'coded_text' value within a dataframe. A "DV_CODED_TEXT" is a structure within an openehr archetype.
 
+    Args:
+        value: The coded text value.
+        column_name: The name of the column in the dataframe.
+        index: The row index in the dataframe.
+        processed_dataframe: The dataframe being processed.
+
+    Returns:
+        clear_text_value: The clear text value extracted from 'value'.
+    """
+    value = value[1]  # Remove metainformation "coded_text" from value
+    clear_text_value = value[0]
+    code_string = value[1]
+    terminology = value[2]
+    new_col_name_code_string = f"code for column '{column_name}'"
+    new_col_name_terminology = f"terminology for column '{column_name}'"
+
+    if new_col_name_terminology not in processed_dataframe.columns:
+        processed_dataframe.insert(processed_dataframe.columns.get_loc(column_name) + 1, new_col_name_terminology,
+                                   terminology)
+    if new_col_name_code_string not in processed_dataframe.columns:
+        processed_dataframe.insert(processed_dataframe.columns.get_loc(column_name) + 1, new_col_name_code_string,
+                                   code_string)
+
+    processed_dataframe.at[index, new_col_name_code_string] = code_string
+    processed_dataframe.at[index, new_col_name_terminology] = terminology
+    return clear_text_value
+
+
+def process_quantity_value(value, column_name, index, processed_dataframe):
+    """
+    Process a 'quantity_value' within a dataframe.
+
+    Args:
+        value: The quantity value.
+        column_name: The name of the column in the dataframe.
+        index: The row index in the dataframe.
+        processed_dataframe: The dataframe being processed.
+
+    Returns:
+        magnitude: The magnitude extracted from 'value'.
+    """
+    value = value[1]  # Remove metainformation "coded_text" from value
+    magnitude = value[0]
+    unit = value[1]
+    new_col_name = f"unit for column '{column_name}'"
+
+    if new_col_name not in processed_dataframe.columns:
+        processed_dataframe.insert(processed_dataframe.columns.get_loc(column_name) + 1, new_col_name, unit)
+
+    processed_dataframe.at[index, new_col_name] = unit
+    return magnitude
+
+
+def find_and_process_value(column_content, column_name, index, processed_dataframe):
+    """
+    Find and process a value within a dataframe based on its type.
+
+    Args:
+        column_content: The content of a column.
+        column_name: The name of the column in the dataframe.
+        index: The row index in the dataframe.
+        processed_dataframe: The dataframe being processed.
+
+    Returns:
+        The processed value or the original value.
+    """
+    value = find_value(column_content)
+    if value is not None:
+        if value[0] == "coded_text":
+            return process_coded_text_value(value, column_name, index, processed_dataframe)
+        elif value[0] == "quantity_value":
+            return process_quantity_value(value, column_name, index, processed_dataframe)
+    return value
 
 
 def transform_rows_from_compositions_to_dataframe(rows_from_compositions_as_list, column_names):
     """
+    Transform rows from compositions into a dataframe including the seperation of quantity values and coded texts
+    into new columns when its needed.
+
     Args:
-      rows_from_compositions_as_list: All rows of a composition giving back by the server
-      column_names: the actual column names of the entries in the list
+        rows_from_compositions_as_list: All rows of a composition given by the server.
+        column_names: The actual column names of the entries in the list.
 
     Returns:
-      processed_dataframe: transformed rows of compositions to dataframe
+        processed_dataframe: Transformed rows of compositions into a dataframe.
     """
     processed_dataframe = pd.DataFrame(rows_from_compositions_as_list, columns=column_names)
     processed_dataframe = rename_duplicate_columns(processed_dataframe)
+
     for index, composition in processed_dataframe.iterrows():
         composition = pd.Series(composition)
         for column_name, column_content in composition.items():
-            if isinstance(column_content, dict) or isinstance(column_content, pd.Series):
-                value = find_value(column_content)
-                if value is not None:
-                    if isinstance(value, tuple):
-                        unit = value[1]
-                        new_col_name = f"Unit for column '{column_name}'"
+            if isinstance(column_content, dict):
+                composition[column_name] = find_and_process_value(column_content, column_name, index,
+                                                                  processed_dataframe)
 
-                        # Adds the new column if it does not already exist
-                        # Position of the new unit-column: 1 after the value column
-                        if new_col_name not in processed_dataframe.columns:
-                            processed_dataframe.insert(processed_dataframe.columns.get_loc(column_name)
-                                                          + 1, new_col_name, unit)
-
-                        # Update the values in the new column
-                        processed_dataframe.at[index, new_col_name] = unit
-                        composition[column_name] = value[0]
-                    else:
-                        composition[column_name] = value
     return processed_dataframe
+
+
 def rename_duplicate_columns(df):
     cols = pd.Series(df.columns)
     for dup in cols[cols.duplicated()].unique():
