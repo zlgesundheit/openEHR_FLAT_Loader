@@ -21,13 +21,9 @@ def main(config,manualTaskDir):
 
     """
     workdir = os.getcwd()
-
-    all_templates = util.get_templates_from_server(config)
-    print("Please select one of the given templates to which you want to have all compositions from the server.")
-
-    print_all_templates(all_templates)
-    template_name = input("Template: ")
-    config.templateName = template_name
+    template_from_config = input("Select the given template from config (y/n)?")
+    if template_from_config != "y":
+       manual_template_from_cli(config)
 
     webTemp = handleOPT.get_webtemplate(config,manualTaskDir)
 
@@ -40,7 +36,13 @@ def main(config,manualTaskDir):
     adjusted_aql_string = generate_aql(aql_path_values)
     resp = util.send_aql_request(config.targetAdress, config.targetAuthHeader, "9999999999999", adjusted_aql_string)
     util.store_resp_as_csv(workdir, "compositions_as_csvs", resp, config.templateName+".csv", web_temp_elmnts)
+def manual_template_from_cli(config):
+    all_templates = util.get_templates_from_server(config)
+    print("Please select one of the given templates to which you want to have all compositions from the server.")
 
+    print_all_templates(all_templates)
+    template_name = input("Template: ")
+    config.templateName = template_name
 def generate_aql(aql_path_values):
     """
 

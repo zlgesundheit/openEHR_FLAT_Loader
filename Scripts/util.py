@@ -176,7 +176,7 @@ def find_and_process_value(column_content, column_name, index, processed_datafra
         The processed value or the original value.
     """
     value = find_value(column_content)
-    if value is not None:
+    if value is not None and isinstance(value, tuple):
         if value[0] == "coded_text":
             return process_coded_text_value(value, column_name, index, processed_dataframe)
         elif value[0] == "quantity_value":
