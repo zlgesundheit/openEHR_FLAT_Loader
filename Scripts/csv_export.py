@@ -7,7 +7,7 @@
 #########################################################################
 
 import os
-from Scripts import handleOPT, handleWebTemplate
+from Scripts import handleOPT, handleWebTemplate, handleConfig
 from Scripts import util
 
 def main(config,manualTaskDir):
@@ -42,7 +42,7 @@ def manual_template_from_cli(config):
 
     print_all_templates(all_templates)
     template_name = input("Template: ")
-    config.templateName = template_name
+    handleConfig.set_template_name(template_name)
 def generate_aql(aql_path_values):
     """
 
@@ -79,4 +79,3 @@ def print_all_templates(all_templates: list) -> None:
     """
     for template in all_templates:
         print(template)
-

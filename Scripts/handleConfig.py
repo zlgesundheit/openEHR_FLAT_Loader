@@ -61,6 +61,22 @@ class config():
         self.subjectnamespacecolumn  = parser['DEFAULT']['subjectnamespacecolumn']
         self.allindexesareone        = parser['DEFAULT']['allindexesareone']
 
+def set_template_name(template_name):
+    """Sets the Template-Name
+    Args:
+        templateName: Template-Name
+    Returns:
+        None
+    """
+    parser = configparser.ConfigParser()
+    config_file = open('config.ini', encoding="utf-8")
+    parser.read_file(config_file)
+    parser.set(section="DEFAULT", option='templatename', value=template_name)
+    config_file.close()  # Schließen Sie die Datei, nachdem Sie sie gelesen haben
+
+    with open('config.ini', 'w', encoding="utf-8") as config_file:
+        parser.write(config_file)
+
 # Get AuthHeaders
 def get_auth_header(username, pw) -> str:
     """ Computes Auth-Header in base64.

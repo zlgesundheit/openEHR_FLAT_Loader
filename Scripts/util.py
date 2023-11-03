@@ -238,6 +238,7 @@ def store_resp_as_csv(workdir, subfolder, resp, filename, web_temp_elmnts):
 
     rows = resp.get('rows')
     processed_rows = transform_rows_from_compositions_to_dataframe(rows, column_names)
+    processed_rows = delete_empty_subject_columns(processed_rows)
 
     # Store DF as CSV
     path_to_store = os.path.join(workdir, subfolder)
@@ -431,3 +432,13 @@ def get_comp_by_compid(baseUrl, repo_auth, compId):
     response_text_json = json.loads(response.text)
 
     return response_text_json['composition']
+
+
+def delete_empty_subject_columns(df_with_subject_columns):
+    processed_df = pd.DataFrame(df_with_subject_columns)
+    for column in df_with_subject_columns:
+        if re.match("^subject\d*$", column):
+            # proof whether matched column is empty or not
+            if processed_df[column].isnull().values.any():
+                processed_df = processed_df.drop(column, axis=1)
+    return processed_df
