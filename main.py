@@ -25,6 +25,7 @@ from Scripts import buildMapping
 from Scripts import handleUpload
 from Scripts import queryExampleComp
 from Scripts import csv_export
+from Scripts import util
 
 #Init Config-Object
 config = handleConfig.config()
@@ -34,7 +35,8 @@ workdir = getcwd()
 # TODO Set all Paths here or in configHandler? centralized and pass them to the other scripts. SinglePointOfChange
 OPTDirPath      = os.path.join(workdir, 'OPTs')
 sourceDataCsvFP = os.path.join(workdir, 'ETLProcess','Input', config.inputCSV + '.csv')
-manualTaskDir   = os.path.join(workdir, 'ETLProcess', 'ManualTasks', config.templateName)
+manualTaskDir   = util.create_manueal_task_dir(workdir, config.templateName) # It is necessary to be able to access
+                                                                             # this function in csv_export.
 outputDir       = os.path.join(workdir, 'ETLProcess', 'Output', config.templateName)
 
 ############################### Main ###############################
@@ -133,7 +135,7 @@ def build_and_upload_compositions():
     
 def export_openehr2csv():
     """Generates and runs an AQL-Query to export all data of a specific Template into a CSV-File."""
-    csv_export.main(config,manualTaskDir)
+    csv_export.main(config)
 
 def setup_new_template():
     """Queries example composition from FLAT-API example endpoint of ehrbase. TODO Also query Better Example Endpoint. Idenntify which is present.

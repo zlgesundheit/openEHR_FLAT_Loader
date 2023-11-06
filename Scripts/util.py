@@ -442,3 +442,5 @@ def delete_empty_subject_columns(df_with_subject_columns):
             if processed_df[column].isnull().values.any():
                 processed_df = processed_df.drop(column, axis=1)
     return processed_df
+def create_manueal_task_dir(workdir, template_name):
+    return os.path.join(workdir, 'ETLProcess', 'ManualTasks', template_name)
