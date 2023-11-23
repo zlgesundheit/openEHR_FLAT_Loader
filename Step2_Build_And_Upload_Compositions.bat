@@ -1,5 +1,5 @@
 @echo off
-python "%~dp0%\main.py" -buildAndUploadCompositions Rem /?  2> NUL
+python "%~dp0%\main.py" -buildAndUploadCompositions Rem /?
 
 Rem Kommentar
 Rem IF NOT %ERRORLEVEL%==9009 ECHO "Tool finished. Find the generated files in 'ManualTasks' or 'Output' Directory"
