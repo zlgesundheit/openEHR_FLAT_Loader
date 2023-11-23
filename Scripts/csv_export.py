@@ -7,10 +7,10 @@
 #########################################################################
 
 import os
-from Scripts import handleOPT, handleWebTemplate
+from Scripts import handleOPT, handleWebTemplate, handleConfig
 from Scripts import util
 
-def main(config,manualTaskDir):
+def main(config):
     """
 
     Args:
@@ -21,15 +21,17 @@ def main(config,manualTaskDir):
 
     """
     workdir = os.getcwd()
+    template_from_config = input("Select the given template from config (y/n)?")
+    template_list = util.get_templates_from_server(config)
+    if template_from_config != "y":
+        manual_template_from_cli(config, template_list)
+        config = handleConfig.config()
 
-    all_templates = util.get_templates_from_server(config)
-    print("Please select one of the given templates to which you want to have all compositions from the server.")
-
-    print_all_templates(all_templates)
-    template_name = input("Template: ")
-    config.templateName = template_name
-
-    webTemp = handleOPT.get_webtemplate(config,manualTaskDir)
+    assert input_in_template_list(config.templateName, template_list), ("The input didn't match any of the given "
+                                                                         "templates. Please try again and select one of "
+                                                                        "templates from the list.")
+    manual_task_dir =  util.create_manueal_task_dir(workdir, config.templateName)
+    webTemp = handleOPT.get_webtemplate(config, manual_task_dir)
 
     # Extrahiere Pfade in Array von Pfadobjekten
     web_temp_elmnts = handleWebTemplate.main(webTemp, config.templateName)
@@ -40,7 +42,12 @@ def main(config,manualTaskDir):
     adjusted_aql_string = generate_aql(aql_path_values)
     resp = util.send_aql_request(config.targetAdress, config.targetAuthHeader, "9999999999999", adjusted_aql_string)
     util.store_resp_as_csv(workdir, "compositions_as_csvs", resp, config.templateName+".csv", web_temp_elmnts)
+def manual_template_from_cli(config, template_list):
+    print("Please select one of the given templates to which you want to have all compositions from the server.")
 
+    print_all_templates(template_list)
+    template_name = input("Template: ")
+    handleConfig.set_template_name(template_name)
 def generate_aql(aql_path_values):
     """
 
@@ -78,3 +85,8 @@ def print_all_templates(all_templates: list) -> None:
     for template in all_templates:
         print(template)
 
+def input_in_template_list(input, template_list):
+    if input in template_list:
+        return True
+    else:
+        return False
