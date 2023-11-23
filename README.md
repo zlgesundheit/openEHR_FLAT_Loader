@@ -182,10 +182,10 @@ The following third party libraries or contents are part of the openEHR_FLAT_Loa
 
 **Dependencies:**
 * openpyxl, Copyright (c) 2010 openpyxl, MIT Licence, https://github.com/fluidware/openpyxl/blob/master/LICENCE
-* Pandas / Numpy
+* pandas
 * xlsxwriter
-* requests
 * chardet
+* requests
 
 **Part of Python Standard Libs:**
 * json
