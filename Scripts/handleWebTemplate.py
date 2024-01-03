@@ -38,6 +38,15 @@ indent = "\t"
 ############################### Main ###############################
 
 def main(webTemp, templateName):
+    """
+
+    Args:
+      webTemp: param templateName:
+      templateName: 
+
+    Returns:
+
+    """
     print ("PathExport is running:")
 
     pathArray = []
@@ -46,7 +55,7 @@ def main(webTemp, templateName):
         pathIsMandatoryFlag = True 
 
         # Durchlaufe den Baum
-        pathArray = goLow(path, pathArray, pathIsMandatoryFlag, webTemp['tree']['children'])
+        pathArray = traverse_tree_recursive(path, pathArray, pathIsMandatoryFlag, webTemp['tree']['children'])
 
         # Gib some Output
         print ( indent + "Anzahl extrahierter Pfade: " + str( len(pathArray) ) )
@@ -65,7 +74,18 @@ def main(webTemp, templateName):
 ############################### Methods ###############################
 
 # Rekursiv den Baum durchlaufen
-def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
+def traverse_tree_recursive(parentPath, pathArray, pathIsMandatoryFlag, children):
+    """
+
+    Args:
+      parentPath: param pathArray:
+      pathIsMandatoryFlag: param children:
+      pathArray: 
+      children: 
+
+    Returns:
+
+    """
     self = children
 
     for element in self:
@@ -84,7 +104,7 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
 
         # Bei weiteren 'children' tiefer gehen    
         if 'children' in element:
-            pathArray = goLow(suffixPath, pathArray, localMandatoryFlag, element['children'])
+            pathArray = traverse_tree_recursive(suffixPath, pathArray, localMandatoryFlag, element['children'])
         
         # Falls Element Inputs hat oder weder Inputs noch Children, dann ist es ein Blatt
         elif 'inputs' in element or element['rmType'] == "CODE_PHRASE":
@@ -98,10 +118,10 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
                 path.inputs = element['inputs']
             path.rmType = element['rmType']
             # Ganzer Pfad ist Pflicht (traegt true oder false ein)
-            path.isMandatory = localMandatoryFlag
+            path.is_mandatory = localMandatoryFlag
             # Bedingt Pflicht (nur wenn das Element existiert)
             if not localMandatoryFlag and element['min'] == 1:
-                path.isCondMandatory = True
+                path.is_conditional = True
 
             case4 = ["DV_TEXT", "DV_BOOLEAN", "DV_URI", "DV_EHR_URI", "DV_DATE_TIME", "DV_DATE", "DV_TIME"]
 
@@ -147,15 +167,21 @@ def goLow(parentPath, pathArray, pathIsMandatoryFlag, children):
     return pathArray
 
 def map_aql_path_and_id_of_path_object(list_of_path_objects, aql_path_of_element):
+    """
+
+    Args:
+      list_of_path_objects: param aql_path_of_element:
+      aql_path_of_element: 
+
+    Returns:
+
+    """
     for path_object in list_of_path_objects:
         assert isinstance(path_object, pathObjectClass.pathObject), ("Make sure you pass a list of path_objects in "
                                                           "map_aql_path_and_id_of_path_object")
         if util.remove_and_statements(path_object.aql_path)  == aql_path_of_element:
             return path_object.id
     return None
-
-
-
 
 if __name__ == '__main__':
     main()

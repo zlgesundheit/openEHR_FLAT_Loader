@@ -20,6 +20,13 @@ workdir = os.getcwd()
 config_path = os.path.join(workdir, 'config.ini')
 
 class config():
+    """ Represents a configparser-Config. Values are read from config.ini 
+    
+    Raises: 
+        Catch-them-all Systemexit (on reading config.ini)
+    """
+
+    # Init mit Beispielwerten/Defaults
     targetAdress = 'http://141.5.100.115/ehrbase'
     targetAuthHeader = 'Basic ZWhyYmFzZS11c2VyOlN1cGVyU2VjcmV0UGFzc3dvcmQ='  
     targetopenEHRAPIadress = '/rest/openehr/v1/'
@@ -54,31 +61,76 @@ class config():
         self.subjectnamespacecolumn  = parser['DEFAULT']['subjectnamespacecolumn']
         self.allindexesareone        = parser['DEFAULT']['allindexesareone']
 
+def set_template_name(template_name):
+    """Sets the Template-Name
+    Args:
+        templateName: Template-Name
+    Returns:
+        None
+    """
+    parser = configparser.ConfigParser()
+    config_file = open('config.ini', encoding="utf-8")
+    parser.read_file(config_file)
+    parser.set(section="DEFAULT", option='templatename', value=template_name)
+    config_file.close()  # Schließen Sie die Datei, nachdem Sie sie gelesen haben
+
+    with open('config.ini', 'w', encoding="utf-8") as config_file:
+        parser.write(config_file)
+
 # Get AuthHeaders
-def getAuthHeader(username, pw) -> str:
-    """Return the base64 encoded auth header for a given username and passwort."""
+def get_auth_header(username, pw) -> str:
+    """ Computes Auth-Header in base64.
+
+    Args:
+      username: Username at the openEHR-CDR-Server
+      pw: password for the user
+
+    Returns:
+      authHeader: Encoded in base64
+
+    """
     authHeader = "Basic " + base64.b64encode((username+":"+pw).encode('ascii')).decode()
     return authHeader
 
 def get_delimiter(file_path, bytes = 4096):
+    """Determines the delimiter used in a file.
+
+    Args:
+      file_path: Path to the files that shall be analyzed
+      bytes: (Default value = 4096)
+
+    Returns:
+      str: Delimiter-String
+
+    """
     sniffer = csv.Sniffer()
     data = open(file_path, "r").read(bytes)
     delimiter = sniffer.sniff(data).delimiter
     return delimiter
 
-def readCSVasDataFrame(inputCSV):
-    '''Read CSV as Dataframe'''
+def read_csv_as_df(inputCSV):
+    """Read CSV as Dataframe
+
+    Args:
+      inputCSV: CSV-File as Input
+
+    Returns:
+      Pandas-Dataframe: CSV as Dataframe
+
+    Raises:
+      Catch-them-all SystemExit
+      
+    """
     # Compose Path
     csvPath = os.path.join(workdir, 'ETLProcess', 'Input', inputCSV + '.csv')
 
     # Guess Encoding
-    guessed_encoding = guessCSVencoding(csvPath)
+    guessed_encoding = guess_csv_encoding(csvPath)
     if guessed_encoding == 'windows-1255':
         guessed_encoding = "ANSI"
     print(f"encoding is {guessed_encoding} for file with the path {csvPath}")
     # Read CSV-File  
     try: 
-        
         dataDF = pd.read_csv(csvPath, header=0, delimiter=";", dtype = str, encoding = guessed_encoding) #";" # get_delimiter(csvPath)
     except:
         exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -89,7 +141,19 @@ def readCSVasDataFrame(inputCSV):
 
     return dataDF
 
-def guessCSVencoding(filepath):
+def guess_csv_encoding(filepath):
+    """ Tries to detect the encoding of a file by reading first 10k characters
+
+    Args:
+      filepath: Path to the file that shall be analyzed
+
+    Returns:
+      str: Encoding-String like (ANSI or UTF-8)
+
+    Raises:
+      Catch-them-all SystemExit
+
+    """
     # look at the first ten thousand bytes to guess the character encoding
     try:
         with open(filepath, 'rb') as rawdata:
