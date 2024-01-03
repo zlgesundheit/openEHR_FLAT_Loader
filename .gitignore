@@ -21,6 +21,8 @@ __pycache__
 config.ini
 /config.ini
 /compositions_as_csvs
+/HowTo/ZLG1-ExampleDataSet23
+test_BuildComp.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
