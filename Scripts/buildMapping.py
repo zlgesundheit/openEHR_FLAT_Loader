@@ -84,9 +84,9 @@ def compose_mapping_worksheet(worksheetMapping, pathArray, numberOfCSVitems, all
     row = 1
     alreadyAddedPath = []
     for path in pathArray:
-        if path.isMandatory:
+        if path.is_mandatory:
             formatting = mandatory_cell_format
-        elif path.isCondMandatory:
+        elif path.is_conditional:
             formatting = cond_mandatory_cell_format
         else:
             formatting = None
@@ -286,10 +286,10 @@ def add_mandatory_column_entry(path, row, worksheetMapping, formatting):
 
     """
     # Pflichtangabe
-    if path.isMandatory:
+    if path.is_mandatory:
         worksheetMapping.write('A'+str(row+1)," P ", formatting)
     # Bedingt Pflichtelement
-    if path.isCondMandatory:
+    if path.is_conditional:
         worksheetMapping.write('A'+str(row+1),"bP", formatting)
 
 def set_next_index(realPathString, resultArray, indexArray, i):
@@ -347,11 +347,11 @@ def compose_flatpath_worksheet(pathArray, worksheetPaths):
     for path in pathArray:
         worksheetPaths.write(j, 0, path.pathString)
         worksheetPaths.write(j, 1, path.rmType)
-        if path.isMandatory:
+        if path.is_mandatory:
             worksheetPaths.write(j, 2, "Pflichtpfad")
             nrMandatoryPaths += 1
         # Bedingt Pflichtelement
-        if path.isCondMandatory:
+        if path.is_conditional:
             worksheetPaths.write('C'+str(j),"bedingt Pflicht")
         j += 1
     print( indent + "Anzahl der Pflichtpfade (ohne Suffixe): " + str(nrMandatoryPaths) )

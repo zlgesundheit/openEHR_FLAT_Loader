@@ -1,0 +1,436 @@
+{
+    "templateId": "Blutdruck",
+    "version": "2.3",
+    "defaultLanguage": "de",
+    "languages": [
+        "de"
+    ],
+    "tree": {
+        "id": "blutdruck",
+        "name": "Blutdruck",
+        "localizedName": "Blutdruck",
+        "rmType": "COMPOSITION",
+        "nodeId": "openEHR-EHR-COMPOSITION.registereintrag.v1",
+        "min": 1,
+        "max": 1,
+        "localizedNames": {
+            "de": "Blutdruck"
+        },
+        "localizedDescriptions": {
+            "de": "Generische Zusammenstellung zur Darstellung eines Datensatzes für Forschungszwecke."
+        },
+        "children": [
+            {
+                "id": "category",
+                "name": "category",
+                "localizedName": "category",
+                "rmType": "DV_CODED_TEXT",
+                "min": 1,
+                "max": 1,
+                "aqlPath": "/category",
+                "inputs": [
+                    {
+                        "suffix": "code",
+                        "type": "CODED_TEXT",
+                        "list": [
+                            {
+                                "value": "433",
+                                "label": "event",
+                                "localizedLabels": {
+                                    "de": "event"
+                                }
+                            }
+                        ],
+                        "terminology": "openehr"
+                    }
+                ],
+                "inContext": true
+            },
+            {
+                "id": "context",
+                "name": "context",
+                "localizedName": "context",
+                "rmType": "EVENT_CONTEXT",
+                "min": 1,
+                "max": 1,
+                "aqlPath": "/context",
+                "children": [
+                    {
+                        "id": "status",
+                        "name": "Status",
+                        "localizedName": "Status",
+                        "rmType": "DV_CODED_TEXT",
+                        "nodeId": "at0004",
+                        "min": 1,
+                        "max": 1,
+                        "localizedNames": {
+                            "de": "Status"
+                        },
+                        "localizedDescriptions": {
+                            "de": "Status der gelieferten Daten für den Registereintrag. Hinweis: Dies ist nicht der Status einzelner Komponenten."
+                        },
+                        "aqlPath": "/context/other_context[at0001]/items[at0004]/value",
+                        "inputs": [
+                            {
+                                "suffix": "code",
+                                "type": "CODED_TEXT",
+                                "list": [
+                                    {
+                                        "value": "at0010",
+                                        "label": "registriert",
+                                        "localizedLabels": {
+                                            "de": "registriert"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": "*"
+                                        }
+                                    },
+                                    {
+                                        "value": "at0011",
+                                        "label": "vorläufig",
+                                        "localizedLabels": {
+                                            "de": "vorläufig"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": "*"
+                                        }
+                                    },
+                                    {
+                                        "value": "at0012",
+                                        "label": "final",
+                                        "localizedLabels": {
+                                            "de": "final"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": "*"
+                                        }
+                                    },
+                                    {
+                                        "value": "at0013",
+                                        "label": "geändert",
+                                        "localizedLabels": {
+                                            "de": "geändert"
+                                        },
+                                        "localizedDescriptions": {
+                                            "de": "*"
+                                        }
+                                    }
+                                ],
+                                "terminology": "local"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "kategorie",
+                        "name": "Kategorie",
+                        "localizedName": "Kategorie",
+                        "rmType": "DV_TEXT",
+                        "nodeId": "at0005",
+                        "min": 1,
+                        "max": -1,
+                        "localizedNames": {
+                            "de": "Kategorie"
+                        },
+                        "localizedDescriptions": {
+                            "de": "Die Klassifikation des Registereintrags (z.B. Typ der Observation des FHIR-Profils)."
+                        },
+                        "aqlPath": "/context/other_context[at0001]/items[at0005]/value",
+                        "inputs": [
+                            {
+                                "type": "TEXT"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "start_time",
+                        "name": "start_time",
+                        "rmType": "DV_DATE_TIME",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/context/start_time",
+                        "inputs": [
+                            {
+                                "type": "DATETIME"
+                            }
+                        ],
+                        "inContext": true
+                    },
+                    {
+                        "id": "setting",
+                        "name": "setting",
+                        "rmType": "DV_CODED_TEXT",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/context/setting",
+                        "inputs": [
+                            {
+                                "suffix": "code",
+                                "type": "TEXT"
+                            },
+                            {
+                                "suffix": "value",
+                                "type": "TEXT"
+                            }
+                        ],
+                        "inContext": true
+                    }
+                ]
+            },
+            {
+                "id": "blutdruck",
+                "name": "Blutdruck",
+                "localizedName": "Blutdruck",
+                "rmType": "OBSERVATION",
+                "nodeId": "openEHR-EHR-OBSERVATION.blood_pressure.v2",
+                "min": 0,
+                "max": 1,
+                "localizedNames": {
+                    "de": "Blutdruck"
+                },
+                "localizedDescriptions": {
+                    "de": "Die lokale Messung des arteriellen Blutdrucks als Surrogat für den arteriellen Druck in der systemischen Zirkulation."
+                },
+                "aqlPath": "/content[openEHR-EHR-OBSERVATION.blood_pressure.v2]",
+                "children": [
+                    {
+                        "id": "systolisch",
+                        "name": "Systolisch",
+                        "localizedName": "Systolisch",
+                        "rmType": "DV_QUANTITY",
+                        "nodeId": "at0004",
+                        "min": 0,
+                        "max": 1,
+                        "localizedNames": {
+                            "de": "Systolisch"
+                        },
+                        "localizedDescriptions": {
+                            "de": "Der höchste arterielle Blutdruck eines Zyklus - gemessen in der systolischen oder Kontraktionsphase des Herzens."
+                        },
+                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.blood_pressure.v2]/data[at0001]/events[at0006]/data[at0003]/items[at0004]/value",
+                        "inputs": [
+                            {
+                                "suffix": "magnitude",
+                                "type": "DECIMAL",
+                                "validation": {
+                                    "precision": {
+                                        "min": 0,
+                                        "minOp": ">=",
+                                        "max": 0,
+                                        "maxOp": "<="
+                                    },
+                                    "range": {
+                                        "min": 0.0,
+                                        "minOp": ">=",
+                                        "max": 1000.0,
+                                        "maxOp": "<"
+                                    }
+                                }
+                            },
+                            {
+                                "suffix": "unit",
+                                "type": "CODED_TEXT",
+                                "list": [
+                                    {
+                                        "value": "mm[Hg]",
+                                        "label": "mm[Hg]",
+                                        "validation": {
+                                            "precision": {
+                                                "min": 0,
+                                                "minOp": ">=",
+                                                "max": 0,
+                                                "maxOp": "<="
+                                            },
+                                            "range": {
+                                                "min": 0.0,
+                                                "minOp": ">=",
+                                                "max": 1000.0,
+                                                "maxOp": "<"
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        ],
+                        "annotations": {
+                            "271649006": "Systolic blood pressure",
+                            "8480-6": "Systolic blood pressure"
+                        }
+                    },
+                    {
+                        "id": "diastolisch",
+                        "name": "Diastolisch",
+                        "localizedName": "Diastolisch",
+                        "rmType": "DV_QUANTITY",
+                        "nodeId": "at0005",
+                        "min": 0,
+                        "max": 1,
+                        "localizedNames": {
+                            "de": "Diastolisch"
+                        },
+                        "localizedDescriptions": {
+                            "de": "Der minimale systemische arterielle Blutdruck eines Zyklus - gemessen in der diastolischen oder Entspannungsphase des Herzens."
+                        },
+                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.blood_pressure.v2]/data[at0001]/events[at0006]/data[at0003]/items[at0005]/value",
+                        "inputs": [
+                            {
+                                "suffix": "magnitude",
+                                "type": "DECIMAL",
+                                "validation": {
+                                    "precision": {
+                                        "min": 0,
+                                        "minOp": ">=",
+                                        "max": 0,
+                                        "maxOp": "<="
+                                    },
+                                    "range": {
+                                        "min": 0.0,
+                                        "minOp": ">=",
+                                        "max": 1000.0,
+                                        "maxOp": "<"
+                                    }
+                                }
+                            },
+                            {
+                                "suffix": "unit",
+                                "type": "CODED_TEXT",
+                                "list": [
+                                    {
+                                        "value": "mm[Hg]",
+                                        "label": "mm[Hg]",
+                                        "validation": {
+                                            "precision": {
+                                                "min": 0,
+                                                "minOp": ">=",
+                                                "max": 0,
+                                                "maxOp": "<="
+                                            },
+                                            "range": {
+                                                "min": 0.0,
+                                                "minOp": ">=",
+                                                "max": 1000.0,
+                                                "maxOp": "<"
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        ],
+                        "annotations": {
+                            "271650006": "Diastolic blood pressure (observable entity)",
+                            "8462-4": "Diastolic blood pressure"
+                        }
+                    },
+                    {
+                        "id": "time",
+                        "name": "time",
+                        "rmType": "DV_DATE_TIME",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.blood_pressure.v2]/data[at0001]/events[at0006]/time",
+                        "inputs": [
+                            {
+                                "type": "DATETIME"
+                            }
+                        ],
+                        "inContext": true
+                    },
+                    {
+                        "id": "subject",
+                        "name": "subject",
+                        "rmType": "PARTY_PROXY",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.blood_pressure.v2]/subject",
+                        "inputs": [
+                            {
+                                "suffix": "id",
+                                "type": "TEXT"
+                            },
+                            {
+                                "suffix": "id_scheme",
+                                "type": "TEXT"
+                            },
+                            {
+                                "suffix": "id_namespace",
+                                "type": "TEXT"
+                            },
+                            {
+                                "suffix": "name",
+                                "type": "TEXT"
+                            }
+                        ],
+                        "inContext": true
+                    },
+                    {
+                        "id": "language",
+                        "name": "language",
+                        "rmType": "CODE_PHRASE",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.blood_pressure.v2]/language",
+                        "inContext": true
+                    },
+                    {
+                        "id": "encoding",
+                        "name": "encoding",
+                        "rmType": "CODE_PHRASE",
+                        "min": 1,
+                        "max": 1,
+                        "aqlPath": "/content[openEHR-EHR-OBSERVATION.blood_pressure.v2]/encoding",
+                        "inContext": true
+                    }
+                ],
+                "annotations": {
+                    "comment": "Häufig wird der Ausdruck 'Blutdruck' zur Bezeichung der Messung des brachialen Ateriendrucks im Oberarm verwendet.",
+                    "85354-9": "Blood pressure panel with all children optional",
+                    "75367002": "Blood pressure (observable entity)"
+                }
+            },
+            {
+                "id": "composer",
+                "name": "composer",
+                "rmType": "PARTY_PROXY",
+                "min": 1,
+                "max": 1,
+                "aqlPath": "/composer",
+                "inputs": [
+                    {
+                        "suffix": "id",
+                        "type": "TEXT"
+                    },
+                    {
+                        "suffix": "id_scheme",
+                        "type": "TEXT"
+                    },
+                    {
+                        "suffix": "id_namespace",
+                        "type": "TEXT"
+                    },
+                    {
+                        "suffix": "name",
+                        "type": "TEXT"
+                    }
+                ],
+                "inContext": true
+            },
+            {
+                "id": "language",
+                "name": "language",
+                "rmType": "CODE_PHRASE",
+                "min": 1,
+                "max": 1,
+                "aqlPath": "/language",
+                "inContext": true
+            },
+            {
+                "id": "territory",
+                "name": "territory",
+                "rmType": "CODE_PHRASE",
+                "min": 1,
+                "max": 1,
+                "aqlPath": "/territory",
+                "inContext": true
+            }
+        ]
+    }
+}
