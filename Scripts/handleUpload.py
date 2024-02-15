@@ -57,7 +57,7 @@ def upload_comp_to_ehrid(baseUrl, repo_auth, ehrId, resource, templateName, comp
 
         if response.status_code == 201:
             comp_created_count +=1
-
+        print('\n Composition-Number: ' + str(comp_created_count-1) + ' (starting count at zero)')
         return resp_json["compositionUid"], comp_created_count
         
     except:
