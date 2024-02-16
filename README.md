@@ -17,6 +17,14 @@ To transform data from different sources (e.g. SQL-DB, CSV, etc.) into openEHR-R
 
 The idea of the tools [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/-/tree/a58c9f479ab9d5f6ebad10906963949a806ad7c4)-Builder as well as this  [**openEHR_FLAT_Loader**](https://github.com/zlgesundheit/openEHR_FLAT_Loader) is to build these openEHR-Resources using a Mapping (manually supplied by the user) from DataFields to TemplateFields. With this mapping the ressources can than be generated and uploaded.
 
+#### About "clinical trial data" versus "routine or sensor data"
+Please note, that the early tool development was focused on simple and structured data sets, which include a number of e.g. categorical values or some measurements like for example clinical trial data. With routine care data or sensor data the structure of the data and also the amount of data to be mapped may vary largely. Therefore the transformation and import process of the FLATLoader may not fit out of the box. 
+
+_Data Structure Example:_
+The data you have may look similar to the following bloodpressure example:  
+  
+![Data-Structure-Example](/HowTo/IMG/data_structure_example.png)
+
 _Process-Overview:_
 
 ![BPMN-Process-Overview](/HowTo/IMG/00_etl_process_openEHR_py-svg.png)
