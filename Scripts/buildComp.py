@@ -98,7 +98,7 @@ def main(config,manualTaskDir,outputDir):
                         # Dict mit KEY = PFAD und VALUE = Value aus der CSV aus Spalte D  
                         if pathObj.isMapped:
                             if indexString != "nan":
-                                pathString = set_indexes_in_path(path, indexString)
+                                pathString = set_indexes_in_path(path, indexArray)
                             else:
                                 pathString = path
                             dict[pathString] = metadatumAusSpalteD
@@ -111,7 +111,7 @@ def main(config,manualTaskDir,outputDir):
                         if pathObj.isMapped and str(csv_dataframe[pathObj.mappedCSVColumn][csvIndex]) != "nan":
                             
                             if indexString != "nan":
-                                pathString = set_indexes_in_path(path, indexString)
+                                pathString = set_indexes_in_path(path, indexArray)
                             else:
                                 pathString = path
 
