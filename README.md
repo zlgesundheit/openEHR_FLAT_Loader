@@ -6,16 +6,24 @@ ETL-Scripts to transform Source-Data into openEHR-Compositions (for a given Temp
 2. [Generate openEHR-Compositions](#steps-in-detail) from Source-Data by
     1. generating a Mapping-Table in xlsx/Excel-Format
     2. providing Mapping-Information (`CSV <> Template`)
-    3. generating Compositions based on
+    3. generating Compositions based on the mapping
 3. [Upload generated Compositions](#to-build-and-upload-resources) to an openEHR-Repository
 4. [Export/Download all Data for a specific Template](#export-all-data-of-a-template)
 
 ### About openEHR and the ETL-Process
 OpenEHR is a technology framework for the handling of medical data in the form of Electronic Health Records. The main point of the openEHR-Approach is the differentiation between logical modeling (in forms of archetypes/templates) and the physical storage (based on item-identifiers that are used in the technical background of these templates).
 
-To transform data from different sources (e.g. SQL-DB, CSV, etc.) into openEHR-Resources an ETL-Job a specific openEHR-Template has to be created. The Template defines which data points (from which archetypes) are part of this data entry - template are later instantiated in form of resources which are send and stored by the openEHR-Server/openEHR-Repository.
+To transform data from different sources (e.g. SQL-DB, CSV, etc.) into openEHR-Resources an ETL-Job and specific openEHR-Template has to be created. The Template defines which data points (from which archetypes) are part of a data entry (called composition) - templates are later instantiated in form of compositions which are send to and stored by the openEHR-Server/openEHR-Repository.
 
-The idea of the tools [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/-/tree/a58c9f479ab9d5f6ebad10906963949a806ad7c4)-Builder as well as this  [**openEHR_FLAT_Loader**](https://github.com/zlgesundheit/openEHR_FLAT_Loader) is to build these openEHR-Resources using a Mapping (manually supplied by the user) from DataFields to TemplateFields. With this mapping the ressources can than be generated and uploaded.
+The idea of the tools [**HaMSTR**](https://gitlab.plri.de/tute/HAMSTRETLBuilder/-/tree/a58c9f479ab9d5f6ebad10906963949a806ad7c4)-Builder as well as this  [**openEHR_FLAT_Loader**](https://github.com/zlgesundheit/openEHR_FLAT_Loader) is to build these openEHR-Compositions using a Mapping (manually supplied by the user) from DataFields to TemplateFields. With this mapping the ressources can than be generated and uploaded.
+
+#### About "clinical trial data" versus "routine or sensor data"
+Please note, that the early tool development was focused on simple data sets, which include a number of e.g. categorical values or some measurements like for example clinical trial data. With routine care data or sensor data the structure of the data and also the amount of data to be mapped may vary largely. Therefore the transformation and import process of the FLATLoader may not fit your use case out of the box. 
+
+_Data Structure Example:_
+The data you have may look similar to the following bloodpressure example:  
+  
+![Data-Structure-Example](/HowTo/IMG/data_structure_example.png)
 
 _Process-Overview:_
 
